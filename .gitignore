@@ -13,6 +13,8 @@ yarn-error.log
 *.log
 package-lock.json
 
+.env*.local
+
 .npmrc
 
 02-dump.sql
