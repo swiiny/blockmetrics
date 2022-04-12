@@ -2,7 +2,7 @@
   "type": "module",
   "name": "block-metrics-api",
   "version": "0.0.1",
-  "description": "The server used to fulfill block metrics database",
+  "description": "The api used to send metrics to the block-metrics service",
   "main": "server.js",
   "dependencies": {
     "async": "^3.2.2",
