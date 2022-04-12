@@ -1,0 +1,57 @@
+version: "0.1"
+
+services:
+    frontend:
+        container_name: frontend
+        ports:
+            - $FRONTEND_PORT:$FRONTEND_PORT
+        build:
+            context: ./frontend
+            dockerfile: Dockerfile
+        env_file:
+            - .env
+        volumes:
+            - ./frontend:/app
+            - /app/node_modules
+            - /app/.next
+        command: npm run dev
+        restart: unless-stopped
+
+    database:
+        container_name: database
+        platform: linux/x86_64
+        image: mysql:8.0
+        command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci
+        environment:
+            MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+        ports:
+            - $DB_PORT:$DB_PORT
+        volumes:
+            - my-db:/var/lib/mysql
+            - ./database:/docker-entrypoint-initdb.d
+
+    server:
+        container_name: server
+        build: ./server
+        env_file:
+            - .env
+        environment:
+            PORT: $SERVER_PORT
+        ports:
+            - $SERVER_PORT:$SERVER_PORT
+        restart: always
+
+    api:
+        container_name: api
+        build: ./api
+        env_file:
+            - .env
+        environment:
+            PORT: $API_PORT
+        ports:
+            - $API_PORT:$API_PORT
+        restart: always
+
+volumes:
+    my-db:
+    my-node-db:
