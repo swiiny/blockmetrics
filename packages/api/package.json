@@ -1,0 +1,39 @@
+{
+  "type": "module",
+  "name": "block-metrics-api",
+  "version": "0.0.1",
+  "description": "The server used to fulfill block metrics database",
+  "main": "server.js",
+  "dependencies": {
+    "async": "^3.2.2",
+    "axios": "^0.21.4",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "express-rate-limit": "^6.3.0",
+    "helmet": "^5.0.2",
+    "moralis": "^1.3.2",
+    "mysql": "^2.18.1",
+    "mysql2": "^2.3.3",
+    "request": "^2.88.2",
+    "requests": "^0.3.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.13.0",
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-import": "^2.26.0"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/JeremyTheintz/block-metrics.git"
+  },
+  "author": "Jeremy Theintz",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/JeremyTheintz/block-metrics/issues"
+  },
+  "homepage": "https://github.com/JeremyTheintz/block-metrics#readme"
+}
