@@ -1,0 +1,63 @@
+
+
+.test {
+    content: '';
+    /*
+    work with <div class="wave"></div>
+    */
+}
+
+body {
+  height: 100vh;
+  background-color: #000;
+  overflow: hidden;
+}
+
+.wave,
+.wave::before,
+.wave::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 250vw;
+  height: 250vw;
+  margin-left: -125vw;
+  transform-origin: 50% 50%;
+  background-color: transparent;
+  border-radius: 38% 42%;
+  box-shadow: inset 0 0 10vw #79DCEF80;
+  -webkit-animation: spin 320s infinite linear;
+          animation: spin 320s infinite linear;
+  mix-blend-mode: multiply;
+}
+
+.wave::before {
+  width: 105%;
+  height: 95%;
+  margin-top: -125vw;
+  transform-origin: 49% 51%;
+  border-radius: 40% 38%;
+  box-shadow: inset 0 0 10vw #0D9BD780;
+  -webkit-animation: spin 200s infinite linear;
+          animation: spin 200s infinite linear;
+}
+
+.wave::after {
+  width: 102%;
+  height: 98%;
+  margin-top: -125vw;
+  transform-origin: 51% 49%;
+  border-radius: 54% 42%;
+  box-shadow: inset 0 0 10vw #0D9BD780;
+  -webkit-animation: spin 180s infinite linear;
+          animation: spin 180s infinite linear;
+}
+
+@-webkit-keyframes spin {
+  100% { transform: rotate(360deg); }
+}
+
+@keyframes spin {
+  100% { transform: rotate(360deg); }
+}
