@@ -2,8 +2,9 @@ import express from "express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import { createDbPool } from "./pools/dbPool";
-import { getBlockchains } from "./functions";
+import { createDbPool } from "./utils/pool";
+import { getBlockchains } from "./utils/fetch";
+import { parseParams } from "./utils/utils";
 
 const BASE_URL_V1 = "/v1/api";
 
@@ -25,7 +26,6 @@ const corsOptions = {
 const app = express();
 
 app.use(cors(corsOptions));
-
 app.use(helmet());
 app.use(limiter);
 
@@ -36,7 +36,7 @@ app.use(limiter);
 // - offset: unsigned number less than limit
 // - limit: unsigned number greater than offset
 app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
-	const { sortBy, desc, offset = 0, limit = 30 } = req.query;
+	const { sortBy, desc = true, offset = 0, limit = 30 } = req.query;
 
 	try {
 		const params = parseParams(sortBy, desc, offset, limit);
@@ -56,6 +56,7 @@ app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
 		}
 	} catch (err) {
 		console.error("/get/blockchains", err);
+
 		res.status(500).send("Error fetching blockchains data");
 		return;
 	}
