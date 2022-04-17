@@ -17,5 +17,4 @@ package-lock.json
 
 .npmrc
 
-02-dump.sql
 test_files/
