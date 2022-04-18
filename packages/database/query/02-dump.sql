@@ -1,4 +1,4 @@
-USE db;
+USE blockmetrics;
 
 CREATE TABLE IF NOT EXISTS `blockmetrics`.`Blockchain` (
   `id` INT NOT NULL,

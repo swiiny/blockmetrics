@@ -2,9 +2,8 @@ import express from "express";
 import helmet from "helmet";
 import rateLimit from "express-rate-limit";
 import cors from "cors";
-import { createDbPool } from "./utils/pool";
-import { getBlockchains } from "./utils/fetch";
-import { parseParams } from "./utils/utils";
+import { getBlockchains } from "./utils/fetch.js";
+import { createDbPool } from "./utils/pool.js";
 
 const BASE_URL_V1 = "/v1/api";
 

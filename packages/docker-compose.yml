@@ -27,8 +27,8 @@ services:
         ports:
             - $DB_PORT:$DB_PORT
         volumes:
-            - my-db:/var/lib/mysql
-            - ./database:/docker-entrypoint-initdb.d
+            - blockmetrics-db:/var/lib/mysql
+            - ./database/query:/docker-entrypoint-initdb.d
 
     server:
         container_name: server
@@ -53,5 +53,4 @@ services:
         restart: always
 
 volumes:
-    my-db:
-    my-node-db:
+    blockmetrics-db:
