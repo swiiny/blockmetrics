@@ -2,50 +2,9 @@ import axios from "axios";
 
 export const ETHERSCAN_API_URL = "https://api.etherscan.io/api";
 export const BSCSCAN_API_URL = "https://api.bscscan.com/api";
-export const POLYGONSCAN_API_URL = "https://api.etherscan.io/api";
+export const POLYGONSCAN_API_URL = "https://api.polygonscan.com/api";
 
 const AVALANCHE_C_CHAIN_STATS_URL = "https://avascan.info/api/v1/home/statistics";
-
-export async function getEthNodeCount() {
-	try {
-		const url = `${ETHERSCAN_API_URL}?module=stats&action=nodecount&apikey=${process.env.ETHERSCAN_API_KEY}`;
-
-		const res = await axios.get(url);
-
-		return res.data.result.TotalNodeCount;
-	} catch (err) {
-		console.error("getEthNodeCount", err);
-		return null;
-	}
-}
-
-export async function getBscNodeCount() {
-	try {
-		const url = `${BSCSCAN_API_URL}?module=stats&action=validators&apikey=${process.env.BSCSCAN_API_URL}`;
-
-		const res = await axios.get(url);
-
-		console.log("getBscNodeCount", res.data.result);
-
-		return res.data.result.length;
-	} catch (err) {
-		console.error("getBscNodeCount", err);
-		return null;
-	}
-}
-
-export async function getPolygonNodeCount() {
-	try {
-		// const url = `${ETHERSCAN_API_URL}?module=stats&action=nodecount&apikey=${process.env.ETHERSCAN_API_KEY}`;
-
-		// const res = await axios.get(url);
-
-		return 25;
-	} catch (err) {
-		console.error("getEthNodeCount", err);
-		return null;
-	}
-}
 
 export async function getAvalancheStats() {
 	try {
