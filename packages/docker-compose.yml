@@ -39,7 +39,7 @@ services:
             PORT: $SERVER_PORT
         ports:
             - $SERVER_PORT:$SERVER_PORT
-        restart: always
+        restart: on-failure:10
 
     api:
         container_name: api
@@ -50,7 +50,7 @@ services:
             PORT: $API_PORT
         ports:
             - $API_PORT:$API_PORT
-        restart: always
+        restart: on-failure:10
 
 volumes:
     blockmetrics-db:
