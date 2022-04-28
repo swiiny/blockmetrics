@@ -11,7 +11,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 - [ ] Create awesome UI
 - [ ] Improve UX
 
-### Before start development
+### Before start development :white_check_mark:
 - [x] Setup file structure
 - [x] Create Dockerfiles
     - [x] Database
@@ -20,7 +20,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
     - [x] Frontend
 - [x] Setup docker-compose file
 
-### Database
+### Database :white_check_mark:
 - [x] Create schema using MySQLWorkbench
 - [x] Export SQL
 - [x] Import SQL into the database
