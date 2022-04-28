@@ -4,11 +4,11 @@ The best place to get data about blockchain and a tool to compare them according
 The main objective is to offer everyone an easy way to understand what a blockchain is, what the implications of its use are and to be able to make a conscious choice before using one blockcahin than another.
 
 ## TODO
-### Global
+### Global :white_check_mark:
 - [x] Buy block-metrics domain name
 
 ### UI/UX
-- [ ] Create awesome UI
+- [ ] Create awesome UI :construction:
 - [ ] Improve UX
 
 ### Before start development :white_check_mark:
@@ -27,7 +27,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 ### Server
 - [x] Init server.js file
-- [ ] Fetch blockchains data and fill the db with
+- [ ] Fetch blockchains data and fill the db with :construction:
 - [ ] Setup data update cycle
 
 ### API
