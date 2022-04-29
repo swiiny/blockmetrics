@@ -4,3 +4,8 @@ dev:
 
 down:
 	docker-compose down -v
+
+reset: 
+	docker system prune -a -f
+	docker volume prune -f
+	
