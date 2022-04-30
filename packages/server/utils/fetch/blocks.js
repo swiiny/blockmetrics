@@ -43,6 +43,7 @@ export async function fetchEthBlocks(con) {
 
 			let block = 'not null';
 			let index = lastBlockCheck;
+			let lastBlockTimestamp = 0;
 
 			while (block) {
 				let startTime = Date.now();
@@ -75,6 +76,10 @@ export async function fetchEthBlocks(con) {
 
 				logsActivated && console.log(blockchainName + ' tx added to db: ' + resolvedTxPromises.length);
 
+				// calculate time between this block and the last one
+				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000;
+				lastBlockTimestamp = block.timestamp;
+
 				const promises = [
 					updatableCon.query(udpdateBlockCount, [index, id]),
 					updatableCon.query(increaseTxCount, [transactions.length, id]),
@@ -89,7 +94,8 @@ export async function fetchEthBlocks(con) {
 							]),
 							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
 						])
-						.flat(1)
+						.flat(1),
+					updatableCon.query(updateTimeBetweenBlocks, [timeBetweenTwoBlocks, id])
 				];
 
 				await Promise.all(promises);
@@ -150,6 +156,7 @@ export async function fetchPolygonBlocks(con) {
 
 			let block = await provider.getBlock(lastBlockCheck);
 			let index = lastBlockCheck;
+			let lastBlockTimestamp = 0;
 
 			while (block) {
 				let startTime = Date.now();
@@ -183,6 +190,10 @@ export async function fetchPolygonBlocks(con) {
 
 				logsActivated && console.log(blockchainName + ' tx added to db: ' + resolvedTxPromises.length);
 
+				// calculate time between this block and the last one
+				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000;
+				lastBlockTimestamp = block.timestamp;
+
 				const promises = [
 					updatableCon.query(udpdateBlockCount, [index, id]),
 					updatableCon.query(increaseTxCount, [transactions.length, id]),
@@ -197,7 +208,8 @@ export async function fetchPolygonBlocks(con) {
 							]),
 							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
 						])
-						.flat(1)
+						.flat(1),
+					updatableCon.query(updateTimeBetweenBlocks, [timeBetweenTwoBlocks, id])
 				];
 
 				await Promise.all(promises);
@@ -259,6 +271,8 @@ export async function fetchBSCBlocks() {
 			let block = await provider.getBlock(lastBlockCheck);
 			let index = lastBlockCheck;
 
+			let lastBlockTimestamp = 0;
+
 			while (block) {
 				let startTime = Date.now();
 
@@ -291,6 +305,10 @@ export async function fetchBSCBlocks() {
 
 				logsActivated && console.log(blockchainName + ' tx added to db: ' + resolvedTxPromises.length);
 
+				// calculate time between this block and the last one
+				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000 || 0;
+				lastBlockTimestamp = block.timestamp;
+
 				const promises = [
 					updatableCon.query(udpdateBlockCount, [index, id]),
 					updatableCon.query(increaseTxCount, [transactions.length, id]),
@@ -305,7 +323,8 @@ export async function fetchBSCBlocks() {
 							]),
 							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
 						])
-						.flat(1)
+						.flat(1),
+					updatableCon.query(updateTimeBetweenBlocks, [timeBetweenTwoBlocks, id])
 				];
 
 				await Promise.all(promises);
