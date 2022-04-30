@@ -27,11 +27,10 @@ CREATE TABLE IF NOT EXISTS `blockmetrics`.`blockchain` (
   `note` TINYINT NULL DEFAULT NULL,
   `power_consumption` INT NULL DEFAULT NULL,
   `node_count` INT UNSIGNED NULL DEFAULT NULL,
-  `account_count` INT UNSIGNED NULL DEFAULT NULL,
-  `hashrate` INT NULL DEFAULT NULL,
-  `average_block_time` FLOAT NULL DEFAULT NULL,
+  `hashrate` DOUBLE NULL DEFAULT NULL,
+  `time_between_blocks` FLOAT NULL DEFAULT NULL,
   `token_count` INT UNSIGNED NULL DEFAULT NULL,
-  `transactions_count` INT UNSIGNED NOT NULL DEFAULT 0,
+  `transaction_count` INT UNSIGNED NOT NULL DEFAULT 0,
   `gas_price` INT NULL DEFAULT NULL,
   `description_en` TEXT NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
@@ -82,10 +81,10 @@ COLLATE = utf8mb4_0900_ai_ci;
 -- Table `blockmetrics`.`account`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `blockmetrics`.`account` (
-  `id` VARCHAR(255) NOT NULL,
   `public_address` VARCHAR(255) NOT NULL,
   `first_action_at` DATETIME NULL,
   `last_action_at` DATETIME NULL,
+  `action_count` INT UNSIGNED NOT NULL DEFAULT 1,
   PRIMARY KEY (`public_address`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -93,16 +92,16 @@ COLLATE = utf8mb4_0900_ai_ci;
 
 
 -- -----------------------------------------------------
--- Table `blockmetrics`.`hashrate`
+-- Table `blockmetrics`.`hashrate_history`
 -- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `blockmetrics`.`hashrate` (
+CREATE TABLE IF NOT EXISTS `blockmetrics`.`hashrate_history` (
   `id` VARCHAR(255) NOT NULL,
   `blockchain_id` VARCHAR(255) NOT NULL,
-  `hashrate` INT NULL DEFAULT NULL,
+  `hashrate` DOUBLE NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
-  INDEX `fk_hashrate_blockchain_idx` (`blockchain_id` ASC) VISIBLE,
-  CONSTRAINT `fk_hashrate_blockchain`
+  INDEX `fk_hashrate_history_blockchain_idx` (`blockchain_id` ASC) VISIBLE,
+  CONSTRAINT `fk_hashrate_history_blockchain`
     FOREIGN KEY (`blockchain_id`)
     REFERENCES `blockmetrics`.`blockchain` (`id`))
 ENGINE = InnoDB
@@ -133,14 +132,37 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_0900_ai_ci;
 
+-- -----------------------------------------------------
+-- Table `blockmetrics`.`block_parsed`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `blockmetrics`.`block_parsed` (
+  `blockchain_id` VARCHAR(255) NOT NULL,
+  `number` INT NOT NULL DEFAULT 0,
+  INDEX `fk_block_parsed_blockchain1_idx` (`blockchain_id` ASC) VISIBLE,
+  PRIMARY KEY (`blockchain_id`),
+  CONSTRAINT `fk_block_parsed_blockchain1`
+    FOREIGN KEY (`blockchain_id`)
+    REFERENCES `blockmetrics`.`blockchain` (`id`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_0900_ai_ci;
 
-INSERT INTO `blockchain` (`id`, `name`, `logoUrl`, `note`, `power_consumption`, `node_count`, `account_count`, `hashrate`, `average_block_time`, `token_count`, `transactions_count`, `gas_price`, `description_en`, `created_at`, `updated_at`) VALUES
-('0bb6df38-231e-47d3-b427-88d16a65580e', 'Binance SC', '/assets/img/binance-smart-chain.svg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2022-04-19 11:47:09', '2022-04-19 11:47:09'),
-('1daa2a79-98cc-49a5-970a-0ad620a8b0d9', 'Bitcoin', '/assets/img/bitcoin.svg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2022-04-19 11:48:19', '2022-04-19 11:48:19'),
-('387123e4-6a73-44aa-b57e-79b5ed1246d4', 'Ethereum', '/assets/img/ethereum.svg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2022-04-19 11:46:20', '2022-04-19 11:46:20'),
-('4df0b4ad-2165-4543-a74b-7cdf46f9c5e3', 'Polygon', '/assets/img/polygon-pos.svg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2022-04-19 11:47:32', '2022-04-19 11:47:32'),
-('7fc003e2-680f-4e69-9741-b00c18d2e6dc', 'Avalanche', '/assets/img/avalanche.svg', NULL, NULL, NULL, NULL, NULL, NULL, NULL, 0, NULL, NULL, '2022-04-19 11:50:53', '2022-04-19 11:50:53');
 
+INSERT INTO `blockchain` (`id`, `name`, `logoUrl`, `note`, `power_consumption`, `node_count`, `hashrate`, `time_between_blocks`, `token_count`, `transaction_count`, `gas_price`, `description_en`, `created_at`, `updated_at`) VALUES
+('0bb6df38-231e-47d3-b427-88d16a65580e', 'Binance SC', '/assets/img/binance-smart-chain.svg', NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, '2022-04-19 11:47:09', '2022-04-19 11:47:09'),
+('1daa2a79-98cc-49a5-970a-0ad620a8b0d9', 'Bitcoin', '/assets/img/bitcoin.svg', NULL, 0, NULL, 0, NULL, 1, 0, NULL, NULL, '2022-04-19 11:48:19', '2022-04-19 11:48:19'),
+('387123e4-6a73-44aa-b57e-79b5ed1246d4', 'Ethereum', '/assets/img/ethereum.svg', NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, '2022-04-19 11:46:20', '2022-04-19 11:46:20'),
+('4df0b4ad-2165-4543-a74b-7cdf46f9c5e3', 'Polygon', '/assets/img/polygon-pos.svg', NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, '2022-04-19 11:47:32', '2022-04-19 11:47:32'),
+('7fc003e2-680f-4e69-9741-b00c18d2e6dc', 'Avalanche', '/assets/img/avalanche.svg', NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, '2022-04-19 11:50:53', '2022-04-19 11:50:53');
+
+INSERT INTO `block_parsed` (`blockchain_id`, `number`) VALUES
+('0bb6df38-231e-47d3-b427-88d16a65580e', 0),
+('1daa2a79-98cc-49a5-970a-0ad620a8b0d9', 0),
+('387123e4-6a73-44aa-b57e-79b5ed1246d4', 1000000),
+('4df0b4ad-2165-4543-a74b-7cdf46f9c5e3', 5000000),
+('7fc003e2-680f-4e69-9741-b00c18d2e6dc', 0);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

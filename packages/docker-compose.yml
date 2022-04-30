@@ -32,9 +32,14 @@ services:
 
     server:
         container_name: server
-        build: ./server
+        build:
+            context: ./server
+            dockerfile: Dockerfile
         env_file:
             - .env
+        volumes:
+            - ./server:/app
+            - /app/node_modules
         environment:
             PORT: $SERVER_PORT
         ports:
