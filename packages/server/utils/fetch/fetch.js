@@ -1,14 +1,8 @@
 import axios from "axios";
 
-export const ETHERSCAN_API_URL = "https://api.etherscan.io/api";
-export const BSCSCAN_API_URL = "https://api.bscscan.com/api";
-export const POLYGONSCAN_API_URL = "https://api.polygonscan.com/api";
-
-const AVALANCHE_C_CHAIN_STATS_URL = "https://avascan.info/api/v1/home/statistics";
-
 export async function getAvalancheStats() {
 	try {
-		const res = await axios.get(AVALANCHE_C_CHAIN_STATS_URL);
+		const res = await axios.get(process.env.AVALANCHE_C_CHAIN_STATS_URL);
 
 		// TODO : keep only used data
 		return {

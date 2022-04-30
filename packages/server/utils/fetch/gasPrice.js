@@ -1,9 +1,8 @@
 import axios from "axios";
-import { BSCSCAN_API_URL, ETHERSCAN_API_URL, POLYGONSCAN_API_URL } from "./fetch.js";
 
 export async function getEthGasPrice() {
 	try {
-		const url = `${ETHERSCAN_API_URL}?module=gastracker&action=gasoracle&apikey=${process.env.ETHERSCAN_API_KEY}`;
+		const url = `${process.env.ETHERSCAN_API_URL}?module=gastracker&action=gasoracle&apikey=${process.env.ETHERSCAN_API_KEY}`;
 
 		const res = await axios.get(url);
 
@@ -16,7 +15,7 @@ export async function getEthGasPrice() {
 
 export async function getBscGasPrice() {
 	try {
-		const url = `${BSCSCAN_API_URL}?module=gastracker&action=gasoracle&apikey=${process.env.BSCSCAN_API_KEY}`;
+		const url = `${process.env.BSCSCAN_API_URL}?module=gastracker&action=gasoracle&apikey=${process.env.BSCSCAN_API_KEY}`;
 
 		const res = await axios.get(url);
 
@@ -31,7 +30,7 @@ export async function getBscGasPrice() {
 
 export async function getPolygonGasPrice() {
 	try {
-		const url = `${POLYGONSCAN_API_URL}?module=gastracker&action=gasoracle&apikey=${process.env.POLYGONSCAN_API_KEY}`;
+		const url = `${process.env.POLYGONSCAN_API_URL}?module=gastracker&action=gasoracle&apikey=${process.env.POLYGONSCAN_API_KEY}`;
 
 		const res = await axios.get(url);
 

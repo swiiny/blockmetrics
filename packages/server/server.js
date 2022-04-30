@@ -1,30 +1,30 @@
-import cors from "cors";
-import express from "express";
-import rateLimit from "express-rate-limit";
-import helmet from "helmet";
-import { fetchBitcoinData, fetchBSCBlocks, fetchEthBlocks, fetchPolygonBlocks } from "./utils/fetch/blocks.js";
-import { getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from "./utils/fetch/gasPrice.js";
+import cors from 'cors';
+import express from 'express';
+import rateLimit from 'express-rate-limit';
+import helmet from 'helmet';
+import { fetchBitcoinData, fetchBSCBlocks, fetchEthBlocks, fetchPolygonBlocks } from './utils/fetch/blocks.js';
+import { getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from './utils/fetch/gasPrice.js';
 import {
 	getAvalancheNodeCount,
 	getBitcoinNodeCount,
 	getBscNodeCount,
 	getEthNodeCount,
 	getPolygonNodeCount
-} from "./utils/fetch/nodeCount.js";
-import { createDbPool } from "./utils/pool/pool.js";
-import { updateDbGasPrice } from "./utils/update/gasPrice.js";
-import { updateDbNodeCount } from "./utils/update/nodeCount.js";
+} from './utils/fetch/nodeCount.js';
+import { createDbPool } from './utils/pool/pool.js';
+import { updateDbGasPrice } from './utils/update/gasPrice.js';
+import { updateDbNodeCount } from './utils/update/nodeCount.js';
 
 // API v1 url prefix
-const BASE_URL_V1 = "/v1/server";
+const BASE_URL_V1 = '/v1/server';
 
 // chain uuid in the database
 export const chainId = {
-	ethereum: "387123e4-6a73-44aa-b57e-79b5ed1246d4",
-	bsc: "0bb6df38-231e-47d3-b427-88d16a65580e",
-	polygon: "4df0b4ad-2165-4543-a74b-7cdf46f9c5e3",
-	bitcoin: "1daa2a79-98cc-49a5-970a-0ad620a8b0d9",
-	avalanche: "7fc003e2-680f-4e69-9741-b00c18d2e6dc",
+	ethereum: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
+	bsc: '0bb6df38-231e-47d3-b427-88d16a65580e',
+	polygon: '4df0b4ad-2165-4543-a74b-7cdf46f9c5e3',
+	bitcoin: '1daa2a79-98cc-49a5-970a-0ad620a8b0d9',
+	avalanche: '7fc003e2-680f-4e69-9741-b00c18d2e6dc'
 };
 
 const limiter = rateLimit({
@@ -47,7 +47,7 @@ app.use(limiter);
 
 // fetch blockchains node count and update the database
 async function updateNodeCount() {
-	console.log("========== UPDATE NODE COUNT START ==========", Date.now());
+	console.log('========== UPDATE NODE COUNT START ==========', Date.now());
 
 	try {
 		const pool = await createDbPool();
@@ -112,19 +112,19 @@ async function updateNodeCount() {
 
 		con.release();
 
-		console.log("========== UPDATE NODE COUNT END ==========", Date.now());
+		console.log('========== UPDATE NODE COUNT END ==========', Date.now());
 
 		return 0;
 	} catch {
-		console.error("updateNodeCount", err);
-		console.log("========== UPDATE NODE COUNT END WITH ERROR ==========", Date.now());
+		console.error('updateNodeCount', err);
+		console.log('========== UPDATE NODE COUNT END WITH ERROR ==========', Date.now());
 		return 2;
 	}
 }
 
 // fetch blockchains gas price and update the database
 async function updateGasPrice() {
-	console.log("========== UPDATE GAS PRICE START ==========", Date.now());
+	console.log('========== UPDATE GAS PRICE START ==========', Date.now());
 	try {
 		const pool = await createDbPool();
 		const con = await pool.getConnection();
@@ -170,55 +170,32 @@ async function updateGasPrice() {
 
 		con.release();
 
-		console.log("========== UPDATE GAS PRICE END ==========", Date.now());
+		console.log('========== UPDATE GAS PRICE END ==========', Date.now());
 
 		return 0;
 	} catch (err) {
-		console.error("updateGasPrice", err);
+		console.error('updateGasPrice', err);
 
-		console.log("========== UPDATE GAS PRICE END WITH ERROR ==========", Date.now());
+		console.log('========== UPDATE GAS PRICE END WITH ERROR ==========', Date.now());
 
-		return 2;
-	}
-}
-
-async function updateAccountCount() {
-	console.log("========== UPDATE ACCOUNT COUNT START ==========", Date.now());
-
-	try {
-		const pool = await createDbPool();
-		const con = await pool.getConnection();
-
-		if (!con) {
-			return 1;
-		}
-
-		const promises = [
-			fetchEthBlocks(con).then(msg => console.log(msg)),
-			fetchPolygonBlocks(con).then(msg => console.log(msg)),
-			fetchBSCBlocks(con).then(msg => console.log(msg)),
-			fetchBitcoinData(con)
-		];
-
-		
-	} catch (err) {
-		console.error("updateAccountCount", err);
-		console.log("========== UPDATE ACCOUNT COUNT END WITH ERROR ==========", Date.now());
 		return 2;
 	}
 }
 
 app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
-	res.send("pong");
+	res.send('pong');
 });
 
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
-
 	// run on first launch
 	updateNodeCount();
 	updateGasPrice();
-	updateAccountCount();
+
+	fetchEthBlocks();
+	fetchPolygonBlocks();
+	fetchBSCBlocks();
+	fetchBitcoinData();
 
 	// update every minutes
 	// TODO : when production, increase the interval
