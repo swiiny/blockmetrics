@@ -158,11 +158,11 @@ INSERT INTO `blockchain` (`id`, `name`, `logoUrl`, `note`, `power_consumption`, 
 ('7fc003e2-680f-4e69-9741-b00c18d2e6dc', 'Avalanche', '/assets/img/avalanche.svg', NULL, 0, NULL, 0, NULL, 0, 0, NULL, NULL, '2022-04-19 11:50:53', '2022-04-19 11:50:53');
 
 INSERT INTO `block_parsed` (`blockchain_id`, `number`) VALUES
-('0bb6df38-231e-47d3-b427-88d16a65580e', 0),
+('0bb6df38-231e-47d3-b427-88d16a65580e', 5000000),
 ('1daa2a79-98cc-49a5-970a-0ad620a8b0d9', 0),
-('387123e4-6a73-44aa-b57e-79b5ed1246d4', 1000000),
+('387123e4-6a73-44aa-b57e-79b5ed1246d4', 5000000),
 ('4df0b4ad-2165-4543-a74b-7cdf46f9c5e3', 5000000),
-('7fc003e2-680f-4e69-9741-b00c18d2e6dc', 0);
+('7fc003e2-680f-4e69-9741-b00c18d2e6dc', 5000000);
 
 SET SQL_MODE=@OLD_SQL_MODE;
 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS;

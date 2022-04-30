@@ -2,7 +2,7 @@ import cors from "cors";
 import express from "express";
 import rateLimit from "express-rate-limit";
 import helmet from "helmet";
-import { fetchBitcoinData, fetchEthBlocks, fetchPolygonBlocks } from "./utils/fetch/blocks.js";
+import { fetchBitcoinData, fetchBSCBlocks, fetchEthBlocks, fetchPolygonBlocks } from "./utils/fetch/blocks.js";
 import { getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from "./utils/fetch/gasPrice.js";
 import {
 	getAvalancheNodeCount,
@@ -196,6 +196,7 @@ async function updateAccountCount() {
 		const promises = [
 			fetchEthBlocks(con).then(msg => console.log(msg)),
 			fetchPolygonBlocks(con).then(msg => console.log(msg)),
+			fetchBSCBlocks(con).then(msg => console.log(msg)),
 			fetchBitcoinData(con)
 		];
 

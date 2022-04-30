@@ -134,6 +134,67 @@ export async function fetchPolygonBlocks(con) {
     }
 }
 
+export async function fetchBSCBlocks(con) {
+    const id = chainId.bsc;
+    const blockchainName = "Binance SC";
+
+    try {    
+        const sql = `SELECT number FROM block_parsed WHERE blockchain_id = ?`;
+		const res = await con.query(sql, [id]);
+
+		if (res.length !== 0) {
+			const lastBlockCheck = res[0][0].number;
+
+			const provider = new ethers.providers.JsonRpcProvider("https://bscrpc.com");
+            
+
+			let block = await provider.getBlock(lastBlockCheck);
+			let index = lastBlockCheck;
+			
+			while (block) {
+				index++;
+				block = await provider.getBlockWithTransactions(index);
+				const transactions = block.transactions;
+	
+				const txPromises = transactions.map(({ from }) => provider.getCode(from).then(res => {
+					if (res === "0x") {
+						return {
+							public_address: from,
+							timestamp: block.timestamp,
+						}
+					} else {
+						return null;
+					}
+				})).filter(res => res !== null);
+
+				const resolvedTxPromises = await Promise.all(txPromises);
+               
+                logsActivated && console.log(blockchainName + " tx added to db: " + resolvedTxPromises.length);
+                
+				const promises = [
+					con.query(udpdateBlockCount, [index, id]),
+					con.query(increaseTxCount, [transactions.length, id]),
+					...resolvedTxPromises.map(({ public_address, timestamp }) => (
+						[
+							con.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
+							con.query(insertBlockchainHasAccount, [id, public_address])
+						]
+					)).flat(1),
+				];
+
+				await Promise.all(promises);
+			}
+
+            return blockchainName + " blocks fetched";
+		} else {
+            throw new Error("can't fetch block_parsed number for " + blockchainName);
+        }
+    } catch (err) {
+        console.error("fetchEthBlocks", err);
+        return blockchainName + " blocks error";
+    }
+}
+
 export async function fetchBitcoinData(con) {
     const id = chainId.bitcoin;
     const blockchainName = "Bitcoin";
@@ -145,7 +206,7 @@ export async function fetchBitcoinData(con) {
             const pool = await createDbPool();
             updatableCon = await pool.getConnection();
         } catch (err) {
-            console.error("fetchBitcoinBlocks can't upate connexion", err);
+            console.error("fetchBitcoinBlocks can't update connexion", err);
         }
     }
 
