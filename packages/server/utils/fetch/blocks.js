@@ -15,7 +15,7 @@ const updateTimeBetweenBlocks = `UPDATE blockchain SET time_between_blocks = ? W
 
 const logsActivated = false;
 
-export async function fetchEthBlocks(con) {
+export async function fetchEthBlocks() {
 	const id = chainId.ethereum;
 	const blockchainName = 'Ethereum';
 
@@ -37,9 +37,7 @@ export async function fetchEthBlocks(con) {
 		if (res.length !== 0) {
 			const lastBlockCheck = res[0][0].number;
 
-			const provider = new ethers.providers.JsonRpcProvider(
-				'https://eth-mainnet.alchemyapi.io/v2/' + process.env.ALCHEMY_ETHEREUM_KEY
-			);
+			const provider = new ethers.providers.JsonRpcProvider('https://eth-mainnet.alchemyapi.io/v2/' + process.env.ALCHEMY_ETHEREUM_KEY);
 
 			let block = 'not null';
 			let index = lastBlockCheck;
@@ -85,13 +83,7 @@ export async function fetchEthBlocks(con) {
 					updatableCon.query(increaseTxCount, [transactions.length, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
-							updatableCon.query(insertOrUpdateAccount, [
-								public_address,
-								timestamp,
-								timestamp,
-								timestamp,
-								id
-							]),
+							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
 							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
 						])
 						.flat(1),
@@ -100,15 +92,11 @@ export async function fetchEthBlocks(con) {
 
 				await Promise.all(promises);
 
-				console.log(
-					blockchainName +
-						' block n°' +
-						index +
-						' fetched and saved in db in ' +
-						(Date.now() - startTime) +
-						'ms'
-				);
+				console.log(blockchainName + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 			}
+
+			console.log(blockchainName + ' blocks fetched and saved in db');
+			updatableCon?.release();
 
 			setTimeout(() => {
 				console.log('> start fetching new blocks for ' + blockchainName);
@@ -123,12 +111,12 @@ export async function fetchEthBlocks(con) {
 		updatableCon?.release();
 
 		setTimeout(() => {
-			fetchEthBlocks(null);
+			fetchEthBlocks();
 		}, 1 * 60 * 1000);
 	}
 }
 
-export async function fetchPolygonBlocks(con) {
+export async function fetchPolygonBlocks() {
 	const id = chainId.polygon;
 	const blockchainName = 'Polygon';
 
@@ -150,9 +138,7 @@ export async function fetchPolygonBlocks(con) {
 		if (res.length !== 0) {
 			const lastBlockCheck = res[0][0].number;
 
-			const provider = new ethers.providers.JsonRpcProvider(
-				'https://polygon-mainnet.g.alchemy.com/v2/' + process.env.ALCHEMY_POLYGON_KEY
-			);
+			const provider = new ethers.providers.JsonRpcProvider('https://polygon-mainnet.g.alchemy.com/v2/' + process.env.ALCHEMY_POLYGON_KEY);
 
 			let block = await provider.getBlock(lastBlockCheck);
 			let index = lastBlockCheck;
@@ -199,13 +185,7 @@ export async function fetchPolygonBlocks(con) {
 					updatableCon.query(increaseTxCount, [transactions.length, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
-							updatableCon.query(insertOrUpdateAccount, [
-								public_address,
-								timestamp,
-								timestamp,
-								timestamp,
-								id
-							]),
+							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
 							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
 						])
 						.flat(1),
@@ -214,21 +194,15 @@ export async function fetchPolygonBlocks(con) {
 
 				await Promise.all(promises);
 
-				console.log(
-					blockchainName +
-						' block n°' +
-						index +
-						' fetched and saved in db in ' +
-						(Date.now() - startTime) +
-						'ms'
-				);
+				console.log(blockchainName + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 			}
 
 			console.log(blockchainName + ' blocks fetched');
+			updatableCon?.release();
 
 			setTimeout(() => {
 				console.log('> start fetching new blocks for ' + blockchainName);
-				fetchEthBlocks(updatableCon);
+				fetchEthBlocks();
 			}, 1 * 60 * 1000);
 		} else {
 			throw new Error("can't fetch block_parsed number for " + blockchainName);
@@ -239,7 +213,7 @@ export async function fetchPolygonBlocks(con) {
 		updatableCon?.release();
 
 		setTimeout(() => {
-			fetchPolygonBlocks(null);
+			fetchPolygonBlocks();
 		}, 1 * 60 * 1000);
 	}
 }
@@ -314,13 +288,7 @@ export async function fetchBSCBlocks() {
 					updatableCon.query(increaseTxCount, [transactions.length, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
-							updatableCon.query(insertOrUpdateAccount, [
-								public_address,
-								timestamp,
-								timestamp,
-								timestamp,
-								id
-							]),
+							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
 							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
 						])
 						.flat(1),
@@ -329,21 +297,15 @@ export async function fetchBSCBlocks() {
 
 				await Promise.all(promises);
 
-				console.log(
-					blockchainName +
-						' block n°' +
-						index +
-						' fetched and saved in db in ' +
-						(Date.now() - startTime) +
-						'ms'
-				);
+				console.log(blockchainName + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 			}
 
 			console.log(blockchainName + ' blocks fetched');
+			updatableCon?.release();
 
 			setTimeout(() => {
 				console.log('> start fetching new blocks for ' + blockchainName);
-				fetchEthBlocks(updatableCon);
+				fetchBSCBlocks();
 			}, 1 * 60 * 1000);
 		} else {
 			throw new Error("can't fetch block_parsed number for " + blockchainName);
@@ -354,12 +316,115 @@ export async function fetchBSCBlocks() {
 		updatableCon?.release();
 
 		setTimeout(() => {
-			fetchEthBlocks(null);
+			fetchBSCBlocks();
 		}, 1 * 60 * 1000);
 	}
 }
 
-export async function fetchBitcoinData(con) {
+export async function fetchAvalancheBlocks() {
+	const id = chainId.avalanche;
+	const blockchainName = 'Avlanche';
+
+	let updatableCon = null;
+
+	if (!updatableCon) {
+		try {
+			const pool = await createDbPool();
+			updatableCon = await pool.getConnection();
+		} catch (err) {
+			console.error("fetchAvalancheBlocks can't update connexion", err);
+		}
+	}
+
+	try {
+		const sql = `SELECT number FROM block_parsed WHERE blockchain_id = ?`;
+		const res = await updatableCon.query(sql, [id]);
+
+		if (res.length !== 0) {
+			const lastBlockCheck = res[0][0].number;
+
+			const provider = new ethers.providers.JsonRpcProvider('https://speedy-nodes-nyc.moralis.io/b74bed2fa0614bc73ae1f3e8/avalanche/mainnet');
+
+			let block = await provider.getBlock(lastBlockCheck);
+			let index = lastBlockCheck;
+
+			let lastBlockTimestamp = 0;
+
+			while (block) {
+				let startTime = Date.now();
+
+				index++;
+				block = await provider.getBlockWithTransactions(index);
+				const transactions = block.transactions;
+
+				/*const txPromises = transactions
+					.map(({ from }) =>
+						provider.getCode(from).then((res) => {
+							if (res === '0x') {
+								return {
+									public_address: from,
+									timestamp: block.timestamp
+								};
+							} else {
+								return null;
+							}
+						})
+					)
+					.filter((res) => res !== null);
+                    */
+
+				const txPromises = transactions.map(({ from }) => ({
+					public_address: from,
+					timestamp: block.timestamp
+				}));
+
+				const resolvedTxPromises = await Promise.all(txPromises);
+
+				logsActivated && console.log(blockchainName + ' tx added to db: ' + resolvedTxPromises.length);
+
+				// calculate time between this block and the last one
+				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000 || 0;
+				lastBlockTimestamp = block.timestamp;
+
+				const promises = [
+					updatableCon.query(udpdateBlockCount, [index, id]),
+					updatableCon.query(increaseTxCount, [transactions.length, id]),
+					...resolvedTxPromises
+						.map(({ public_address, timestamp }) => [
+							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
+							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
+						])
+						.flat(1),
+					updatableCon.query(updateTimeBetweenBlocks, [timeBetweenTwoBlocks, id])
+				];
+
+				await Promise.all(promises);
+
+				console.log(blockchainName + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
+			}
+
+			console.log(blockchainName + ' blocks fetched');
+			updatableCon?.release();
+
+			setTimeout(() => {
+				console.log('> start fetching new blocks for ' + blockchainName);
+				fetchAvalancheBlocks(updatableCon);
+			}, 1 * 60 * 1000);
+		} else {
+			throw new Error("can't fetch block_parsed number for " + blockchainName);
+		}
+	} catch (err) {
+		console.error('fetchBscBlocks', err);
+
+		updatableCon?.release();
+
+		setTimeout(() => {
+			fetchAvalancheBlocks();
+		}, 1 * 60 * 1000);
+	}
+}
+
+export async function fetchBitcoinData() {
 	const id = chainId.bitcoin;
 	const blockchainName = 'Bitcoin';
 
@@ -424,8 +489,10 @@ export async function fetchBitcoinData(con) {
 			console.log('next update in ' + timeBetweenNextUpdate + ' minutes');
 		}
 
+		updatableCon?.release();
+
 		setTimeout(() => {
-			fetchBitcoinData(updatableCon);
+			fetchBitcoinData();
 		}, timeBetweenNextUpdate * 60 * 1000);
 	} catch (err) {
 		console.error('fetchBitcoinBlocks', err);
@@ -433,7 +500,7 @@ export async function fetchBitcoinData(con) {
 		updatableCon?.release();
 
 		setTimeout(() => {
-			fetchBitcoinData(null);
+			fetchBitcoinData();
 		}, 1 * 60 * 1000);
 	}
 }

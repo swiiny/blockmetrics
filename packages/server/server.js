@@ -2,15 +2,9 @@ import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { fetchBitcoinData, fetchBSCBlocks, fetchEthBlocks, fetchPolygonBlocks } from './utils/fetch/blocks.js';
+import { fetchAvalancheBlocks, fetchBitcoinData, fetchBSCBlocks, fetchEthBlocks, fetchPolygonBlocks } from './utils/fetch/blocks.js';
 import { getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from './utils/fetch/gasPrice.js';
-import {
-	getAvalancheNodeCount,
-	getBitcoinNodeCount,
-	getBscNodeCount,
-	getEthNodeCount,
-	getPolygonNodeCount
-} from './utils/fetch/nodeCount.js';
+import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
 import { createDbPool } from './utils/pool/pool.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updateDbNodeCount } from './utils/update/nodeCount.js';
@@ -195,6 +189,7 @@ app.listen(process.env.SERVER_PORT, async () => {
 	fetchEthBlocks();
 	fetchPolygonBlocks();
 	fetchBSCBlocks();
+	fetchAvalancheBlocks();
 	fetchBitcoinData();
 
 	// update every minutes
