@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
 /*
  * update the new node count in the database for the given chain id
@@ -9,21 +9,21 @@ import crypto from "crypto";
 export async function updateDbNodeCount(con, id, count) {
 	try {
 		if (!count) {
-			throw new Error("Node count is not defined");
+			throw new Error('Node count is not defined');
 		}
 
 		const uuid = crypto.randomUUID();
 
-		await con.query(`INSERT INTO node_count_history (id, blockchain_id, node_count) VALUES (?,?,?)`, [
-			uuid,
-			id,
-			count
-		]);
-		await con.query(`UPDATE blockchain SET node_count = ? WHERE id = ?`, [count, id]);
+		const promises = [
+			con.query(`INSERT INTO node_count_history (id, blockchain_id, node_count) VALUES (?,?,?)`, [uuid, id, count]),
+			con.query(`UPDATE blockchain SET node_count = ? WHERE id = ?`, [count, id])
+		];
+
+		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {
-		console.error("updateDbNodeCount", id, count, err);
+		console.error('updateDbNodeCount', id, count, err);
 		return 1;
 	}
 }

@@ -1,4 +1,4 @@
-import crypto from "crypto";
+import crypto from 'crypto';
 
 /*
  * update the new gas price in the database for the given chain id
@@ -9,21 +9,21 @@ import crypto from "crypto";
 export async function updateDbGasPrice(con, id, gasPrice) {
 	try {
 		if (!gasPrice) {
-			throw new Error("Gas price is not defined");
+			throw new Error('Gas price is not defined');
 		}
 
 		const uuid = crypto.randomUUID();
 
-		await con.query(`INSERT INTO gas_price_history (id, blockchain_id, gas_price) VALUES (?,?,?)`, [
-			uuid,
-			id,
-			gasPrice
-		]);
-		await con.query(`UPDATE blockchain SET gas_price = ? WHERE id = ?`, [gasPrice, id]);
+		const promises = [
+			con.query(`INSERT INTO gas_price_history (id, blockchain_id, gas_price) VALUES (?,?,?)`, [uuid, id, gasPrice]),
+			con.query(`UPDATE blockchain SET gas_price = ? WHERE id = ?`, [gasPrice, id])
+		];
+
+		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {
-		console.error("updateDbGasPrice", id, gasPrice, err);
+		console.error('updateDbGasPrice', id, gasPrice, err);
 		return 1;
 	}
 }
