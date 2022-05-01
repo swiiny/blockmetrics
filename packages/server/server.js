@@ -2,7 +2,6 @@ import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { fetchAvalancheBlocks, fetchBitcoinData, fetchBSCBlocks, fetchEthBlocks, fetchPolygonBlocks } from './utils/fetch/blocks.js';
 import { getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from './utils/fetch/gasPrice.js';
 import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
 import { createDbPool } from './utils/pool/pool.js';
@@ -186,11 +185,13 @@ app.listen(process.env.SERVER_PORT, async () => {
 	updateNodeCount();
 	updateGasPrice();
 
-	fetchEthBlocks();
-	fetchPolygonBlocks();
-	fetchBSCBlocks();
-	fetchAvalancheBlocks();
+	/*
+	fetchEVMBlocksFor(chainId.ethereum, process.env.RPC_ETHEREUM_ALCHEMY, 'Ethereum');
+	fetchEVMBlocksFor(chainId.polygon, process.env.RPC_POLYGON_ALCHEMY, 'Polygon');
+	fetchEVMBlocksFor(chainId.bsc, process.env.RPC_BSC_MORALIS, 'Binance SC');
+	fetchEVMBlocksFor(chainId.avalanche, process.env.RPC_AVALANCHE_MORALIS, 'Avalanche');
 	fetchBitcoinData();
+	*/
 
 	// update every minutes
 	// TODO : when production, increase the interval
