@@ -1,7 +1,7 @@
 import axios from 'axios';
 import crypto from 'crypto';
 import { ethers } from 'ethers';
-import { chainId } from '../../server.js';
+import { chains } from '../../server.js';
 import { createDbPool } from '../pool/pool.js';
 import {
 	getLastBlockParsedFromBlockParsed,
@@ -19,15 +19,17 @@ import {
 const logsActivated = false;
 const blockValidationLogsActivated = false;
 
-export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
+export async function fetchEVMBlocksFor(chain) {
 	let updatableCon = null;
+
+	const { id, rpc, name } = chain;
 
 	if (!updatableCon) {
 		try {
 			const pool = await createDbPool();
 			updatableCon = await pool.getConnection();
 		} catch (err) {
-			console.error("fetchEVMBlocksFor can't update connexion for " + blockchainName, err);
+			console.error("fetchEVMBlocksFor can't update connexion for " + name, err);
 		}
 	}
 
@@ -78,7 +80,7 @@ export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
 
 				const resolvedTxPromises = await Promise.all(txPromises);
 
-				logsActivated && console.log(blockchainName + ' tx added to db: ' + resolvedTxPromises.length);
+				logsActivated && console.log(name + ' tx added to db: ' + resolvedTxPromises.length);
 
 				// calculate time between this block and the last one
 				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000;
@@ -100,33 +102,32 @@ export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
 
 				await Promise.all(promises);
 
-				blockValidationLogsActivated && console.log(blockchainName + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
+				blockValidationLogsActivated && console.log(name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 			}
 
-			console.log(blockchainName + ' blocks fetched and saved in db');
+			console.log(name + ' blocks fetched and saved in db');
 			updatableCon?.release();
 
 			setTimeout(() => {
-				console.log('> start fetching new blocks for ' + blockchainName);
-				fetchEVMBlocksFor(id, rpc, blockchainName);
+				console.log('> start fetching new blocks for ' + name);
+				fetchEVMBlocksFor(id, rpc, name);
 			}, 1 * 60 * 1000);
 		} else {
-			throw new Error("can't fetch block_parsed number for " + blockchainName);
+			throw new Error("can't fetch block_parsed number for " + name);
 		}
 	} catch (err) {
-		console.error('fetch blocks ' + blockchainName, err);
+		console.error('fetch blocks ' + name, err);
 
 		updatableCon?.release();
 
 		setTimeout(() => {
-			fetchEVMBlocksFor(id, rpc, blockchainName);
+			fetchEVMBlocksFor(id, rpc, name);
 		}, 1 * 60 * 1000);
 	}
 }
 
 export async function fetchBitcoinData() {
-	const id = chainId.bitcoin;
-	const blockchainName = 'Bitcoin';
+	const { id, name } = chains.bitcoin;
 
 	let updatableCon = null;
 
@@ -182,7 +183,7 @@ export async function fetchBitcoinData() {
 
 		await Promise.all(promises);
 
-		console.log(blockchainName + ' data fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
+		console.log(name + ' data fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 
 		const timeBetweenNextUpdate = minutes_between_blocks + 0.5;
 

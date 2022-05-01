@@ -2,22 +2,45 @@ import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { getAvalancheGasPrice, getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from './utils/fetch/gasPrice.js';
+import { fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
+import { updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
+import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
 import { createDbPool } from './utils/pool/pool.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updateDbNodeCount } from './utils/update/nodeCount.js';
 
-// API v1 url prefix
-const BASE_URL_V1 = '/v1/server';
-
 // chain uuid in the database
-export const chainId = {
-	ethereum: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
-	bsc: '0bb6df38-231e-47d3-b427-88d16a65580e',
-	polygon: '4df0b4ad-2165-4543-a74b-7cdf46f9c5e3',
-	bitcoin: '1daa2a79-98cc-49a5-970a-0ad620a8b0d9',
-	avalanche: '7fc003e2-680f-4e69-9741-b00c18d2e6dc'
+export const chains = {
+	ethereum: {
+		id: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
+		name: 'Ethereum',
+		coingeckoId: 'ethereum',
+		rpc: process.env.RPC_ETHEREUM_ALCHEMY
+	},
+	bsc: {
+		id: '0bb6df38-231e-47d3-b427-88d16a65580e',
+		name: 'Binance SC',
+		coingeckoId: 'binance-smart-chain',
+		rpc: process.env.RPC_BSC_MORALIS
+	},
+	polygon: {
+		id: '4df0b4ad-2165-4543-a74b-7cdf46f9c5e3',
+		name: 'Polygon',
+		coingeckoId: 'polygon-pos',
+		rpc: process.env.RPC_POLYGON_ALCHEMY
+	},
+	bitcoin: {
+		id: '1daa2a79-98cc-49a5-970a-0ad620a8b0d9',
+		name: 'Bitcoin',
+		coingeckoId: 'bitcoin'
+	},
+	avalanche: {
+		id: '7fc003e2-680f-4e69-9741-b00c18d2e6dc',
+		name: 'Avalanche',
+		coingeckoId: 'avalanche',
+		rpc: process.env.RPC_AVALANCHE_MORALIS
+	}
 };
 
 const limiter = rateLimit({
@@ -53,46 +76,46 @@ async function updateNodeCount() {
 		const promises = [
 			getEthNodeCount()
 				.then((res) => {
-					updateDbNodeCount(con, chainId.ethereum, res);
+					updateDbNodeCount(con, chains.ethereum.id, res);
 					return {
 						count: res,
-						id: chainId.ethereum
+						id: chains.ethereum.id
 					};
 				})
 				.catch((err) => null),
 			getBscNodeCount()
 				.then((res) => {
-					updateDbNodeCount(con, chainId.bsc, res);
+					updateDbNodeCount(con, chains.bsc.id, res);
 					return {
 						count: res,
-						id: chainId.bsc
+						id: chains.bsc.id
 					};
 				})
 				.catch((err) => null),
 			getPolygonNodeCount()
 				.then((res) => {
-					updateDbNodeCount(con, chainId.polygon, res);
+					updateDbNodeCount(con, chains.polygon.id, res);
 					return {
 						count: res,
-						id: chainId.polygon
+						id: chains.polygon.id
 					};
 				})
 				.catch((err) => null),
 			getAvalancheNodeCount()
 				.then((res) => {
-					updateDbNodeCount(con, chainId.avalanche, res);
+					updateDbNodeCount(con, chains.avalanche.id, res);
 					return {
 						count: res,
-						id: chainId.avalanche
+						id: chains.avalanche.id
 					};
 				})
 				.catch((err) => null),
 			getBitcoinNodeCount()
 				.then((res) => {
-					updateDbNodeCount(con, chainId.bitcoin, res);
+					updateDbNodeCount(con, chains.bitcoin.id, res);
 					return {
 						count: res,
-						id: chainId.bitcoin
+						id: chains.bitcoin.id
 					};
 				})
 				.catch((err) => null)
@@ -126,21 +149,16 @@ async function updateGasPrice() {
 			return 1;
 		}
 
-		getEthGasPrice().then((res) => {
-			updateDbGasPrice(con, chainId.ethereum, res);
-		});
+		const promises = Object.keys(chains)
+			.map((key) => chains[key])
+			.filter((chain) => chain.rpc)
+			.map(async (chain) => {
+				getGasPrice(chain.rpc).then((gasPrice) => {
+					updateDbGasPrice(con, chain.id, gasPrice);
+				});
+			});
 
-		getBscGasPrice().then((res) => {
-			updateDbGasPrice(con, chainId.bsc, res);
-		});
-
-		getPolygonGasPrice().then((res) => {
-			updateDbGasPrice(con, chainId.polygon, res);
-		});
-
-		getAvalancheGasPrice().then((res) => {
-			updateDbGasPrice(con, chainId.avalanche, res);
-		});
+		await Promise.all(promises);
 
 		con.release();
 
@@ -156,33 +174,33 @@ async function updateGasPrice() {
 	}
 }
 
-app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
-	res.send('pong');
-});
-
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
-	// run on first launch
-	/* 
-	The following code is commented out beacuse it works and not needed during development of other features
 
-	updateNodeCount();
+	const runWorkingFeatures = false;
+
+	if (runWorkingFeatures) {
+		// working features
+		updateNodeCount();
+		updateGasPrice();
+
+		fetchEVMBlocksFor(chains.ethereum);
+		fetchEVMBlocksFor(chains.polygon);
+		fetchEVMBlocksFor(chains.bsc);
+		fetchEVMBlocksFor(chains.avalanche);
+
+		fetchBitcoinData();
+
+		updateTokensCountForNetworks();
+
+		setInterval(() => {
+			updateGasPrice();
+		}, 60 * 1000);
+
+		setInterval(() => {
+			updateNodeCount();
+		}, 10 * 60 * 1000);
+	}
+
 	updateGasPrice();
-
-	fetchEVMBlocksFor(chainId.ethereum, process.env.RPC_ETHEREUM_ALCHEMY, 'Ethereum');
-	fetchEVMBlocksFor(chainId.polygon, process.env.RPC_POLYGON_ALCHEMY, 'Polygon');
-	fetchEVMBlocksFor(chainId.bsc, process.env.RPC_BSC_MORALIS, 'Binance SC');
-	fetchEVMBlocksFor(chainId.avalanche, process.env.RPC_AVALANCHE_MORALIS, 'Avalanche');
-
-	fetchBitcoinData();
-
-	updateTokensCountForNetworks();
-	*/
-
-	// update every minutes
-	// TODO : when production, increase the interval
-	setInterval(() => {
-		//updateNodeCount();
-		//updateGasPrice();
-	}, 60 * 1000);
 });
