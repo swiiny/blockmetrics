@@ -2,7 +2,7 @@ import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from './utils/fetch/gasPrice.js';
+import { getAvalancheGasPrice, getBscGasPrice, getEthGasPrice, getPolygonGasPrice } from './utils/fetch/gasPrice.js';
 import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
 import { createDbPool } from './utils/pool/pool.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
@@ -126,40 +126,21 @@ async function updateGasPrice() {
 			return 1;
 		}
 
-		const promises = [
-			getEthGasPrice()
-				.then((res) => {
-					updateDbGasPrice(con, chainId.ethereum, res);
-					return {
-						count: res,
-						id: chainId.ethereum
-					};
-				})
-				.catch((err) => null),
-			getBscGasPrice()
-				.then((res) => {
-					updateDbGasPrice(con, chainId.bsc, res);
-					return {
-						count: res,
-						id: chainId.bsc
-					};
-				})
-				.catch((err) => null),
-			getPolygonGasPrice()
-				.then((res) => {
-					updateDbGasPrice(con, chainId.polygon, res);
-					return {
-						count: res,
-						id: chainId.polygon
-					};
-				})
-				.catch((err) => null)
-		].filter((res) => res !== null);
+		getEthGasPrice().then((res) => {
+			updateDbGasPrice(con, chainId.ethereum, res);
+		});
 
-		/*
-  const resolvedPromises = await Promise.all(promises);
-	console.log("nodecount", resolvedPromises);
-  */
+		getBscGasPrice().then((res) => {
+			updateDbGasPrice(con, chainId.bsc, res);
+		});
+
+		getPolygonGasPrice().then((res) => {
+			updateDbGasPrice(con, chainId.polygon, res);
+		});
+
+		getAvalancheGasPrice().then((res) => {
+			updateDbGasPrice(con, chainId.avalanche, res);
+		});
 
 		con.release();
 
@@ -182,21 +163,24 @@ app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 	// run on first launch
+	/* 
+	The following code is commented out beacuse it works and not needed during development of other features
+
 	updateNodeCount();
 	updateGasPrice();
 
-	/*
 	fetchEVMBlocksFor(chainId.ethereum, process.env.RPC_ETHEREUM_ALCHEMY, 'Ethereum');
 	fetchEVMBlocksFor(chainId.polygon, process.env.RPC_POLYGON_ALCHEMY, 'Polygon');
 	fetchEVMBlocksFor(chainId.bsc, process.env.RPC_BSC_MORALIS, 'Binance SC');
 	fetchEVMBlocksFor(chainId.avalanche, process.env.RPC_AVALANCHE_MORALIS, 'Avalanche');
 	fetchBitcoinData();
+	updateTokensCountForNetworks();
 	*/
 
 	// update every minutes
 	// TODO : when production, increase the interval
 	setInterval(() => {
-		updateNodeCount();
-		updateGasPrice();
+		//updateNodeCount();
+		//updateGasPrice();
 	}, 60 * 1000);
 });

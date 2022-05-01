@@ -3,18 +3,20 @@ import crypto from 'crypto';
 import { ethers } from 'ethers';
 import { chainId } from '../../server.js';
 import { createDbPool } from '../pool/pool.js';
-
-const udpdateBlockCount = `UPDATE block_parsed SET number = ? WHERE blockchain_id = ?`;
-const increaseTxCount = `UPDATE blockchain SET transaction_count = transaction_count + ? WHERE id = ?`;
-const updateTxCount = `UPDATE blockchain SET transaction_count = ? WHERE id = ?`;
-const insertOrUpdateAccount = `INSERT INTO account (public_address, first_action_at, last_action_at) VALUES (?, FROM_UNIXTIME(?), FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE last_action_at = FROM_UNIXTIME(?), action_count = action_count + 1`;
-const insertBlockchainHasAccount = `INSERT IGNORE INTO blockchain_has_account (blockchain_id, account_public_address) VALUES (?, ?)`;
-const insertHashrate = `INSERT INTO hashrate_history (id, hashrate, blockchain_id) VALUES (?, ?, ?)`;
-const updateHashrate = `UPDATE blockchain SET hashrate = ? WHERE id = ?`;
-const updateTimeBetweenBlocks = `UPDATE blockchain SET time_between_blocks = ? WHERE id = ?`;
+import {
+	getLastBlockParsed,
+	increaseTxCount,
+	insertBlockchainHasAccount,
+	insertHashrate,
+	insertOrUpdateAccount,
+	udpdateBlockCount,
+	updateHashrate,
+	updateTimeBetweenBlocks,
+	updateTxCount
+} from '../sql.js';
 
 const logsActivated = false;
-const blockValidationLogsActivated = true;
+const blockValidationLogsActivated = false;
 
 export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
 	let updatableCon = null;
@@ -29,13 +31,10 @@ export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
 	}
 
 	try {
-		const sql = `SELECT number FROM block_parsed WHERE blockchain_id = ?`;
-		const res = await updatableCon.query(sql, [id]);
+		const res = await updatableCon.query(getLastBlockParsed, [id]);
 
 		if (res.length !== 0) {
 			const lastBlockCheck = res[0][0].number;
-
-			console.log('rpc', rpc);
 
 			const provider = new ethers.providers.JsonRpcProvider(rpc);
 
@@ -48,6 +47,11 @@ export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
 				index++;
 				block = await provider.getBlockWithTransactions(index);
 				const transactions = block.transactions;
+
+				//console.log('index', index);
+				if (index == 5000915) {
+					console.log('block 5000005', block);
+				}
 
 				/* function to know if an address is a contract or not
                 const txPromises = transactions
@@ -128,7 +132,7 @@ export async function fetchBitcoinData() {
 			const pool = await createDbPool();
 			updatableCon = await pool.getConnection();
 		} catch (err) {
-			console.error("fetchBitcoinBlocks can't update connexion", err);
+			console.error("fetchBitcoinData can't update connexion", err);
 		}
 	}
 
