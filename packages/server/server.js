@@ -173,7 +173,9 @@ app.listen(process.env.SERVER_PORT, async () => {
 	fetchEVMBlocksFor(chainId.polygon, process.env.RPC_POLYGON_ALCHEMY, 'Polygon');
 	fetchEVMBlocksFor(chainId.bsc, process.env.RPC_BSC_MORALIS, 'Binance SC');
 	fetchEVMBlocksFor(chainId.avalanche, process.env.RPC_AVALANCHE_MORALIS, 'Avalanche');
+
 	fetchBitcoinData();
+
 	updateTokensCountForNetworks();
 	*/
 

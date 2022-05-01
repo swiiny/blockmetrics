@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { chainId } from '../../server.js';
 import { createDbPool } from '../pool/pool.js';
-import { updateTokenCountInBlockain } from '../sql.js';
+import { updateTokenCountInBlockchain } from '../sql.js';
 
 const getCGTokenList = async () => {
 	try {
@@ -74,7 +74,7 @@ export const updateTokensCountForNetworks = async () => {
 		});
 
 		const promises = Object.keys(tokensCount).map((key) => {
-			return con.query(updateTokenCountInBlockain, [tokensCount[key], key]);
+			return con.query(updateTokenCountInBlockchain, [tokensCount[key], key]);
 		});
 
 		await Promise.all(promises);

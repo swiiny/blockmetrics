@@ -4,15 +4,16 @@ import { ethers } from 'ethers';
 import { chainId } from '../../server.js';
 import { createDbPool } from '../pool/pool.js';
 import {
-	getLastBlockParsed,
-	increaseTxCount,
+	getLastBlockParsedFromBlockParsed,
+	increaseTxCountInBlockchain,
 	insertBlockchainHasAccount,
-	insertHashrate,
+	insertHashrateInHashrateHistory,
 	insertOrUpdateAccount,
-	udpdateBlockCount,
-	updateHashrate,
-	updateTimeBetweenBlocks,
-	updateTxCount
+	udpdateBlockCountInBlockParsed,
+	updateDifficultyInBlockchain,
+	updateHashrateInBlockchain,
+	updateTimeBetweenBlocksInBlockchain,
+	updateTxCountInBlockchain
 } from '../sql.js';
 
 const logsActivated = false;
@@ -31,7 +32,7 @@ export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
 	}
 
 	try {
-		const res = await updatableCon.query(getLastBlockParsed, [id]);
+		const res = await updatableCon.query(getLastBlockParsedFromBlockParsed, [id]);
 
 		if (res.length !== 0) {
 			const lastBlockCheck = res[0][0].number;
@@ -83,16 +84,18 @@ export async function fetchEVMBlocksFor(id, rpc, blockchainName) {
 				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000;
 				lastBlockTimestamp = block.timestamp;
 
+				// TODO : improve blockchain update with a call to update all values
 				const promises = [
-					updatableCon.query(udpdateBlockCount, [index, id]),
-					updatableCon.query(increaseTxCount, [transactions.length, id]),
+					updatableCon.query(udpdateBlockCountInBlockParsed, [index, id]),
+					updatableCon.query(increaseTxCountInBlockchain, [transactions.length, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
 							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
 							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
 						])
 						.flat(1),
-					updatableCon.query(updateTimeBetweenBlocks, [timeBetweenTwoBlocks, id])
+					updatableCon.query(updateTimeBetweenBlocksInBlockchain, [timeBetweenTwoBlocks, id]),
+					updatableCon.query(updateDifficultyInBlockchain, [block.difficulty, id])
 				];
 
 				await Promise.all(promises);
@@ -167,12 +170,14 @@ export async function fetchBitcoinData() {
 
 		const hashrateUuid = crypto.randomUUID();
 
+		// TODO : improve blockchain update with a call to update all values
 		const promises = [
-			updatableCon.query(udpdateBlockCount, [n_blocks_total, id]),
-			updatableCon.query(updateTxCount, [n_tx, id]),
-			updatableCon.query(insertHashrate, [hashrateUuid, hash_rate, id]),
-			updatableCon.query(updateHashrate, [hash_rate, id]),
-			updatableCon.query(updateTimeBetweenBlocks, [minutes_between_blocks * 60, id])
+			updatableCon.query(udpdateBlockCountInBlockParsed, [n_blocks_total, id]),
+			updatableCon.query(updateTxCountInBlockchain, [n_tx, id]),
+			updatableCon.query(insertHashrateInHashrateHistory, [hashrateUuid, hash_rate, id]),
+			updatableCon.query(updateHashrateInBlockchain, [hash_rate, id]),
+			updatableCon.query(updateDifficultyInBlockchain, [difficulty, id]),
+			updatableCon.query(updateTimeBetweenBlocksInBlockchain, [minutes_between_blocks * 60, id])
 		];
 
 		await Promise.all(promises);
