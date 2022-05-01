@@ -201,6 +201,4 @@ app.listen(process.env.SERVER_PORT, async () => {
 			updateNodeCount();
 		}, 10 * 60 * 1000);
 	}
-
-	updateGasPrice();
 });
