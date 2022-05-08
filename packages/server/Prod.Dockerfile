@@ -2,14 +2,12 @@ FROM node:16.9.1
 
 RUN apk add --update npm
 
-RUN mkdir -p /server/app/
-WORKDIR /server/app
+RUN mkdir -p /app
+WORKDIR /app
 
-COPY package.json /server/app
+COPY . /app
 
 RUN npm install
-
-COPY . /server/app
 
 EXPOSE $PORT
 
