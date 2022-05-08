@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
 
-defaults:
+jobs:
   # define job to build and publish docker image
-  build-and-push-docker-image:
+  build-and-push-server-docker-image:
     name: Build Docker image and push to repositories
     # run only when code is compiling and tests are passing
     runs-on: ubuntu-latest
