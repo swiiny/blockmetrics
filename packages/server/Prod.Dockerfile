@@ -1,10 +1,12 @@
 FROM node:16.9.1-alpine
 
-WORKDIR /app
+WORKDIR /app/
 
-COPY . .
+COPY package.json /app/
 
 RUN npm install
+
+COPY . /app/
 
 EXPOSE $PORT
 
