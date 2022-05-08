@@ -1,6 +1,6 @@
-FROM node:16.9.1-alpine
+FROM node:16.9.1
 
-WORKDIR /
+WORKDIR /usr/app
 
 COPY . .
 
