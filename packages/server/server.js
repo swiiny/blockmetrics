@@ -174,6 +174,11 @@ async function updateGasPrice() {
 	}
 }
 
+// test endpoint, should respond the string "pong"
+app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
+	res.send("pong");
+});
+
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 
