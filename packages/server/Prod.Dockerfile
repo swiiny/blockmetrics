@@ -10,6 +10,4 @@ RUN npm install
 
 EXPOSE ${SERVER_PORT}
 
-ENV SERVER_PORT ${SERVER_PORT}
-
-CMD ["npm", "run", "start"]
+CMD ["SERVER_PORT=${SERVER_PORT}", "npm", "run", "start"]
