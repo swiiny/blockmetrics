@@ -43,6 +43,8 @@ export const chains = {
 	}
 };
 
+const BASE_URL_V1 = "v1/server"
+
 const limiter = rateLimit({
 	windowMs: 1000,
 	max: 50,
