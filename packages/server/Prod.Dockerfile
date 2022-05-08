@@ -2,10 +2,11 @@ FROM node:16.9.1-alpine
 
 WORKDIR /app
 
-COPY . .
-COPY ./package.json ./app
+COPY ./package*.json ./app
 
 RUN npm install
+
+COPY . .
 
 EXPOSE $PORT
 
