@@ -4,9 +4,8 @@ WORKDIR /app
 
 COPY ./packages/server .
 
-#RUN npm install
+RUN npm install
 
-#EXPOSE $PORT
+EXPOSE $PORT
 
-#CMD ["npm", "run", "start"]
-CMD ["ls"]
+CMD ["npm", "run", "start"]
