@@ -4,11 +4,9 @@ WORKDIR /app
 
 RUN /test.sh
 
-COPY ./package*.json ./app
+COPY ./packages/server .
 
 RUN npm install
-
-COPY . .
 
 EXPOSE $PORT
 
