@@ -5,9 +5,9 @@ WORKDIR /app
 #COPY ./packages/server .
 RUN echo "working well"
 
-RUN echo "ls" >> test.sh
+COPY . .
 
-RUN test.sh
+RUN sh test.sh
 
 RUN npm install
 
