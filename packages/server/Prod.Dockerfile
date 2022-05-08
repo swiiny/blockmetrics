@@ -2,9 +2,10 @@ FROM node:16.9.1-alpine
 
 WORKDIR /app
 
-RUN /test.sh
 
 COPY ./packages/server .
+
+RUN /test.sh
 
 RUN npm install
 
