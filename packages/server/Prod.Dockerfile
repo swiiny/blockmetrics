@@ -7,7 +7,7 @@ RUN echo "working well"
 
 RUN echo "ls" >> test.sh
 
-RUN /test.sh
+RUN test.sh
 
 RUN npm install
 
