@@ -1,11 +1,10 @@
-FROM node:16.9.1
+FROM node:16.9.1-alpine
 
-RUN apk add --update npm
-
-RUN mkdir -p /app
 WORKDIR /app
 
-COPY . /app
+COPY . .
+
+RUN ls
 
 RUN npm install
 
