@@ -7,10 +7,11 @@ RUN echo "working well"
 
 COPY . .
 
-RUN sh test.sh
+#RUN sh test.sh
 
-RUN npm install
+#RUN npm install
 
-EXPOSE $PORT
+#EXPOSE $PORT
 
-CMD ["npm", "run", "start"]
+#CMD ["npm", "run", "start"]
+CMD ["ls"]
