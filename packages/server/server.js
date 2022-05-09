@@ -39,7 +39,7 @@ export const chains = {
 		id: '7fc003e2-680f-4e69-9741-b00c18d2e6dc',
 		name: 'Avalanche',
 		coingeckoId: 'avalanche',
-		rpc: process.env.RPC_AVALANCHE_CHAINSTACK
+		rpc: process.env.AVAX_RPC_PUBLIC
 	}
 };
 
