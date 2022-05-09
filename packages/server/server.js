@@ -152,18 +152,15 @@ async function updateGasPrice() {
 		console.log('========== UPDATE GAS PRICE START ==========', Date.now());
 	}
 
+	const pool = await createDbPool();
+	let con;
+
 	try {
-		const pool = await createDbPool();
-		const con = await pool.getConnection();
-
-		if (!con) {
-			return 1;
-		}
-
 		const promises = Object.keys(chains)
 			.map((key) => chains[key])
 			.filter((chain) => chain.rpc)
-			.map(async (chain) => {
+			.map(async (chain) => {			
+				con = await pool.getConnection();
 				getGasPrice(chain.rpc).then((gasPrice) => {
 					updateDbGasPrice(con, chain.id, gasPrice);
 				});
@@ -171,7 +168,7 @@ async function updateGasPrice() {
 
 		await Promise.all(promises);
 
-		con.destroy();
+		con.release();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE GAS PRICE END ==========', Date.now());
@@ -230,30 +227,5 @@ async function startFetchData() {
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 
-	const runWorkingFeatures = false;
-
 	startFetchData();
-
-	if (runWorkingFeatures) {
-		// working features
-		updateNodeCount();
-		updateGasPrice();
-
-		fetchEVMBlocksFor(chains.ethereum);
-		fetchEVMBlocksFor(chains.polygon);
-		fetchEVMBlocksFor(chains.bsc);
-		fetchEVMBlocksFor(chains.avalanche);
-
-		fetchBitcoinData();
-
-		updateTokensCountForNetworks();
-
-		setInterval(() => {
-			updateGasPrice();
-		}, 60 * 1000);
-
-		setInterval(() => {
-			updateNodeCount();
-		}, 10 * 60 * 1000);
-	}
 });

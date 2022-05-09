@@ -42,7 +42,7 @@ export async function getPolygonNodeCount() {
 
 export async function getAvalancheNodeCount() {
 	try {
-		const { validators } = await getAvalancheStats();
+		const { validators } = await getAvalancheStats() || {};
 
 		return validators;
 	} catch (err) {
