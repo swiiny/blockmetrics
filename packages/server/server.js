@@ -188,9 +188,22 @@ async function startFetchData() {
 
 		res.release();
 
+		updateNodeCount();
+		updateGasPrice();
+		
 		fetchEVMBlocksFor(chains.ethereum);
 		fetchEVMBlocksFor(chains.polygon);
 		fetchEVMBlocksFor(chains.bsc);
+
+		fetchBitcoinData();
+
+		setInterval(() => {
+			updateGasPrice();
+		}, 60 * 1000);
+
+		setInterval(() => {
+			updateNodeCount();
+		}, 10 * 60 * 1000);
 	} catch {
 		setTimeout(() => {
 			startFetchData();

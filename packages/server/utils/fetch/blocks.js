@@ -33,11 +33,13 @@ export async function fetchEVMBlocksFor(chain) {
 		}
 	}
 
+	let lastBlockCheck;
+
 	try {
 		const res = await updatableCon.query(getLastBlockParsedFromBlockParsed, [id]);
 
 		if (res.length !== 0) {
-			const lastBlockCheck = res[0][0].number;
+			lastBlockCheck = res[0][0].number;
 
 			const provider = new ethers.providers.JsonRpcProvider(rpc);
 
@@ -116,7 +118,7 @@ export async function fetchEVMBlocksFor(chain) {
 			throw new Error("can't fetch block_parsed number for " + name);
 		}
 	} catch (err) {
-		console.error('fetch blocks ' + name, err);
+		console.error('fetch blocks n°' + lastBlockCheck + " on " + name, err);
 
 		updatableCon?.release();
 
