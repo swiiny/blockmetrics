@@ -44,7 +44,7 @@ const getTokensByNetworks = (tokenList) => {
 };
 
 export const updateTokensCountForNetworks = async () => {
-	if (process.env.DEBUG_LOGS) {
+	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('> start updating updateTokensCountForNetworks');		
 	}
 
@@ -77,7 +77,7 @@ export const updateTokensCountForNetworks = async () => {
 
 		con.release();
 
-		if (process.env.DEBUG_LOGS) {
+		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('> updateTokensCountForNetworks success, next update in 1 hour');		
 		}
 

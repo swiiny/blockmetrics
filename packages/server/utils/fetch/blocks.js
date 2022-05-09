@@ -74,7 +74,7 @@ export async function fetchEVMBlocksFor(chain) {
 
 				const resolvedTxPromises = await Promise.all(txPromises);
 
-				if (process.env.DEBUG_LOGS) {
+				if (process.env.DEBUG_LOGS === 'activated') {
 					console.log(name + ' tx added to db: ' + resolvedTxPromises.length);
 				}
 
@@ -98,19 +98,19 @@ export async function fetchEVMBlocksFor(chain) {
 
 				await Promise.all(promises);
 
-				if (process.env.DEBUG_LOGS) {
+				if (process.env.DEBUG_LOGS === 'activated') {
 					console.log(name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 				}
 			}
 
-			if (process.env.DEBUG_LOGS) {
+			if (process.env.DEBUG_LOGS === 'activated') {
 				console.log("All new " + name + ' blocks fetched and saved in db');
 			}
 
 			updatableCon?.release();
 
 			setTimeout(() => {
-				if (process.env.DEBUG_LOGS) {
+				if (process.env.DEBUG_LOGS === 'activated') {
 					console.log('> start fetching new blocks for ' + name);
 				}
 				fetchEVMBlocksFor({ id, rpc, name });
@@ -186,13 +186,13 @@ export async function fetchBitcoinData() {
 
 		await Promise.all(promises);
 
-		if (process.env.DEBUG_LOGS) {
+		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log(name + ' data fetched and saved in db in ' + (Date.now() - startTime) + 'ms');	
 		}
 
 		const timeBetweenNextUpdate = minutes_between_blocks + 0.5;
 
-		if (process.env.DEBUG_LOGS) {
+		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('Bitcoin data updated');
 			console.log('next update in ' + timeBetweenNextUpdate + ' minutes');
 		}

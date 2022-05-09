@@ -65,7 +65,7 @@ app.use(limiter);
 
 // fetch blockchains node count and update the database
 async function updateNodeCount() {
-	if (process.env.DEBUG_LOGS) {
+	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('========== UPDATE NODE COUNT START ==========', Date.now());
 	}
 
@@ -132,14 +132,14 @@ async function updateNodeCount() {
 
 		con.release();
 
-		if (process.env.DEBUG_LOGS) {
+		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE NODE COUNT END ==========', Date.now());		
 		}
 
 		return 0;
 	} catch {
 		console.error('updateNodeCount', err);
-		if (process.env.DEBUG_LOGS) {
+		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE NODE COUNT END WITH ERROR ==========', Date.now());
 		}
 		return 2;
@@ -148,7 +148,7 @@ async function updateNodeCount() {
 
 // fetch blockchains gas price and update the database
 async function updateGasPrice() {
-	if (process.env.DEBUG_LOGS) {
+	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('========== UPDATE GAS PRICE START ==========', Date.now());
 	}
 
@@ -173,7 +173,7 @@ async function updateGasPrice() {
 
 		con.release();
 
-		if (process.env.DEBUG_LOGS) {
+		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE GAS PRICE END ==========', Date.now());
 		}
 
@@ -181,7 +181,7 @@ async function updateGasPrice() {
 	} catch (err) {
 		console.error('updateGasPrice', err);
 
-		if (process.env.DEBUG_LOGS) {
+		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE GAS PRICE END WITH ERROR ==========', Date.now());
 		}
 
