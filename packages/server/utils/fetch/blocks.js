@@ -107,7 +107,7 @@ export async function fetchEVMBlocksFor(chain) {
 				console.log("All new " + name + ' blocks fetched and saved in db');
 			}
 
-			updatableCon?.release();
+			updatableCon?.destroy();
 
 			setTimeout(() => {
 				if (process.env.DEBUG_LOGS === 'activated') {
@@ -121,7 +121,7 @@ export async function fetchEVMBlocksFor(chain) {
 	} catch (err) {
 		console.error('fetch blocks n°' + lastBlockCheck + " on " + name, err);
 
-		updatableCon?.release();
+		updatableCon?.destroy();
 
 		setTimeout(() => {
 			fetchEVMBlocksFor({ id, rpc, name });
@@ -197,7 +197,7 @@ export async function fetchBitcoinData() {
 			console.log('next update in ' + timeBetweenNextUpdate + ' minutes');
 		}
 
-		updatableCon?.release();
+		updatableCon?.destroy();
 
 		setTimeout(() => {
 			fetchBitcoinData();
@@ -205,7 +205,7 @@ export async function fetchBitcoinData() {
 	} catch (err) {
 		console.error('fetchBitcoinBlocks', err);
 
-		updatableCon?.release();
+		updatableCon?.destroy();
 
 		setTimeout(() => {
 			fetchBitcoinData();

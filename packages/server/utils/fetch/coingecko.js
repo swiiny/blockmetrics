@@ -75,7 +75,7 @@ export const updateTokensCountForNetworks = async () => {
 
 		await Promise.all(promises);
 
-		con.release();
+		con.destroy();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('> updateTokensCountForNetworks success, next update in 1 hour');		

@@ -130,7 +130,7 @@ async function updateNodeCount() {
 	console.log("nodecount", resolvedPromises);
   */
 
-		con.release();
+		con.destroy();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE NODE COUNT END ==========', Date.now());		
@@ -171,7 +171,7 @@ async function updateGasPrice() {
 
 		await Promise.all(promises);
 
-		con.release();
+		con.destroy();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE GAS PRICE END ==========', Date.now());
@@ -199,7 +199,7 @@ async function startFetchData() {
 		const pool = await createDbPool();
 		const res = await pool.getConnection();
 
-		res.release();
+		res.destroy();
 
 		updateNodeCount();
 		updateGasPrice();
