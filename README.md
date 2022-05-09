@@ -46,7 +46,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 - [ ] About us
 
 ### DevOps
-- [ ] Setup DockerHub account
-- [ ] Setup Jelastic server
-- [ ] Setup Database
+- [x] Setup DockerHub account
+- [x] Setup Jelastic server
+- [x] Setup Database
 - [ ] Create CI/CD scripts
