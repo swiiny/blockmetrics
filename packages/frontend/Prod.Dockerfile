@@ -1,7 +1,6 @@
 FROM node:16.13.0-alpine
 
 ENV PORT 8080
-ENV NODE_ENV production
 
 RUN apk add --update npm
 
@@ -10,12 +9,14 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Installing dependencies
-COPY ./packages/frontend/package*.json /app
+COPY ./packages/frontend/package.json /app
 
 RUN npm install 
 
 # Copying source files
 COPY ./packages/frontend /app
+
+ENV NODE_ENV production
 
 # Building app
 RUN npm run build
