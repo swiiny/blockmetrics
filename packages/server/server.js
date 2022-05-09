@@ -210,6 +210,8 @@ async function startFetchData() {
 
 		fetchBitcoinData();
 
+		updateTokensCountForNetworks();
+
 		setInterval(() => {
 			updateGasPrice();
 		}, 60 * 1000);
