@@ -39,7 +39,7 @@ export const chains = {
 		id: '7fc003e2-680f-4e69-9741-b00c18d2e6dc',
 		name: 'Avalanche',
 		coingeckoId: 'avalanche',
-		rpc: process.env.RPC_AVALANCHE_MORALIS
+		rpc: process.env.RPC_AVALANCHE_CHAINSTACK
 	}
 };
 
@@ -207,6 +207,7 @@ async function startFetchData() {
 		fetchEVMBlocksFor(chains.ethereum);
 		fetchEVMBlocksFor(chains.polygon);
 		fetchEVMBlocksFor(chains.bsc);
+		fetchEVMBlocksFor(chains.avalanche);
 
 		fetchBitcoinData();
 
