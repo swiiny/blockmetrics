@@ -16,9 +16,6 @@ import {
 	updateTxCountInBlockchain
 } from '../sql.js';
 
-const logsActivated = false;
-const blockValidationLogsActivated = false;
-
 export async function fetchEVMBlocksFor(chain) {
 	let updatableCon = null;
 
@@ -53,12 +50,7 @@ export async function fetchEVMBlocksFor(chain) {
 				block = await provider.getBlockWithTransactions(index);
 				const transactions = block.transactions;
 
-				//console.log('index', index);
-				if (index == 5000915) {
-					console.log('block 5000005', block);
-				}
-
-				/* function to know if an address is a contract or not
+				/* function to know if an address is a contract or not to expensive but will do in the future
                 const txPromises = transactions
 					.map(({ from }) =>
 						provider.getCode(from).then((res) => {
@@ -82,7 +74,9 @@ export async function fetchEVMBlocksFor(chain) {
 
 				const resolvedTxPromises = await Promise.all(txPromises);
 
-				logsActivated && console.log(name + ' tx added to db: ' + resolvedTxPromises.length);
+				if (process.env.DEBUG_LOGS) {
+					console.log(name + ' tx added to db: ' + resolvedTxPromises.length);
+				}
 
 				// calculate time between this block and the last one
 				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000;
@@ -104,14 +98,21 @@ export async function fetchEVMBlocksFor(chain) {
 
 				await Promise.all(promises);
 
-				blockValidationLogsActivated && console.log(name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
+				if (process.env.DEBUG_LOGS) {
+					console.log(name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
+				}
 			}
 
-			console.log(name + ' blocks fetched and saved in db');
+			if (process.env.DEBUG_LOGS) {
+				console.log("All new " + name + ' blocks fetched and saved in db');
+			}
+
 			updatableCon?.release();
 
 			setTimeout(() => {
-				console.log('> start fetching new blocks for ' + name);
+				if (process.env.DEBUG_LOGS) {
+					console.log('> start fetching new blocks for ' + name);
+				}
 				fetchEVMBlocksFor({ id, rpc, name });
 			}, 1 * 60 * 1000);
 		} else {
@@ -185,11 +186,13 @@ export async function fetchBitcoinData() {
 
 		await Promise.all(promises);
 
-		console.log(name + ' data fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
+		if (process.env.DEBUG_LOGS) {
+			console.log(name + ' data fetched and saved in db in ' + (Date.now() - startTime) + 'ms');	
+		}
 
 		const timeBetweenNextUpdate = minutes_between_blocks + 0.5;
 
-		if (logsActivated) {
+		if (process.env.DEBUG_LOGS) {
 			console.log('Bitcoin data updated');
 			console.log('next update in ' + timeBetweenNextUpdate + ' minutes');
 		}

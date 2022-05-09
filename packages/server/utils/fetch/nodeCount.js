@@ -16,7 +16,7 @@ export async function getEthNodeCount() {
 
 export async function getBscNodeCount() {
 	try {
-		const url = `${process.env.BSCSCAN_API_URL}?module=stats&action=validators&apikey=${process.env.BSCSCAN_API_URL}`;
+		const url = `${process.env.BSCSCAN_API_URL}?module=stats&action=validators&apikey=${process.env.BSCSCAN_API_KEY}`;
 
 		const res = await axios.get(url);
 

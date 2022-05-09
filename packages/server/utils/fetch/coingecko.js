@@ -44,7 +44,9 @@ const getTokensByNetworks = (tokenList) => {
 };
 
 export const updateTokensCountForNetworks = async () => {
-	console.log('> start updating updateTokensCountForNetworks');
+	if (process.env.DEBUG_LOGS) {
+		console.log('> start updating updateTokensCountForNetworks');		
+	}
 
 	try {
 		const pool = await createDbPool();
@@ -74,7 +76,10 @@ export const updateTokensCountForNetworks = async () => {
 		await Promise.all(promises);
 
 		con.release();
-		console.log('> updateTokensCountForNetworks success, next update in 1 hour');
+
+		if (process.env.DEBUG_LOGS) {
+			console.log('> updateTokensCountForNetworks success, next update in 1 hour');		
+		}
 
 		// update tokens count each hour
 		setTimeout(updateTokensCountForNetworks, 60 * 60 * 1000);

@@ -65,7 +65,9 @@ app.use(limiter);
 
 // fetch blockchains node count and update the database
 async function updateNodeCount() {
-	console.log('========== UPDATE NODE COUNT START ==========', Date.now());
+	if (process.env.DEBUG_LOGS) {
+		console.log('========== UPDATE NODE COUNT START ==========', Date.now());
+	}
 
 	try {
 		const pool = await createDbPool();
@@ -130,19 +132,26 @@ async function updateNodeCount() {
 
 		con.release();
 
-		console.log('========== UPDATE NODE COUNT END ==========', Date.now());
+		if (process.env.DEBUG_LOGS) {
+			console.log('========== UPDATE NODE COUNT END ==========', Date.now());		
+		}
 
 		return 0;
 	} catch {
 		console.error('updateNodeCount', err);
-		console.log('========== UPDATE NODE COUNT END WITH ERROR ==========', Date.now());
+		if (process.env.DEBUG_LOGS) {
+			console.log('========== UPDATE NODE COUNT END WITH ERROR ==========', Date.now());
+		}
 		return 2;
 	}
 }
 
 // fetch blockchains gas price and update the database
 async function updateGasPrice() {
-	console.log('========== UPDATE GAS PRICE START ==========', Date.now());
+	if (process.env.DEBUG_LOGS) {
+		console.log('========== UPDATE GAS PRICE START ==========', Date.now());
+	}
+
 	try {
 		const pool = await createDbPool();
 		const con = await pool.getConnection();
@@ -164,13 +173,17 @@ async function updateGasPrice() {
 
 		con.release();
 
-		console.log('========== UPDATE GAS PRICE END ==========', Date.now());
+		if (process.env.DEBUG_LOGS) {
+			console.log('========== UPDATE GAS PRICE END ==========', Date.now());
+		}
 
 		return 0;
 	} catch (err) {
 		console.error('updateGasPrice', err);
 
-		console.log('========== UPDATE GAS PRICE END WITH ERROR ==========', Date.now());
+		if (process.env.DEBUG_LOGS) {
+			console.log('========== UPDATE GAS PRICE END WITH ERROR ==========', Date.now());
+		}
 
 		return 2;
 	}

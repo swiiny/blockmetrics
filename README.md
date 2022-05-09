@@ -50,3 +50,6 @@ The main objective is to offer everyone an easy way to understand what a blockch
 - [x] Setup Jelastic server
 - [x] Setup Database
 - [ ] Create CI/CD scripts
+
+#### Webhook to deploy an updated image from dockerhub to jelastic cloud
+`https://app.jpc.infomaniak.com/1.0/environment/control/rest/redeploycontainerbyid?envName=block-metrics&session=[ACCESS_TOKEN]&tag=latest&nodeId=[NODE_ID]&useExistingVolumes=true`
