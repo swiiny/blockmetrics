@@ -115,14 +115,15 @@ async function updateGasPrice() {
 		const promises = Object.keys(chains)
 			.map((key) => chains[key])
 			.filter((chain) => chain.rpc)
-			.map(async (chain) => {
+			.map(async (chain) => (
 				getGasPrice(chain.rpc).then((gasPrice) => {
 					updateDbGasPrice(con, chain.id, gasPrice);
-					con.destroy();
-				});
-			});
+				})
+			));
 
 		await Promise.all(promises);
+
+		con.release();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('========== UPDATE GAS PRICE END ==========', Date.now());
@@ -151,25 +152,29 @@ async function startFetchData() {
 
 		con.destroy();
 
-		updateNodeCount();
-		updateGasPrice();
-		
-		fetchEVMBlocksFor(chains.ethereum, pool);
-		fetchEVMBlocksFor(chains.polygon, pool);
-		fetchEVMBlocksFor(chains.bsc, pool);
-		fetchEVMBlocksFor(chains.avalanche, pool);
-
-		fetchBitcoinData(pool);
-
-		updateTokensCountForNetworks(pool);
-
-		setInterval(() => {
-			updateGasPrice();
-		}, 60 * 1000);
-
-		setInterval(() => {
+		if (process.env.NODE_ENV === 'production') {
 			updateNodeCount();
-		}, 10 * 60 * 1000);
+			updateGasPrice();
+			
+			fetchEVMBlocksFor(chains.ethereum, pool);
+			fetchEVMBlocksFor(chains.polygon, pool);
+			fetchEVMBlocksFor(chains.bsc, pool);
+			fetchEVMBlocksFor(chains.avalanche, pool);
+
+			fetchBitcoinData(pool);
+
+			updateTokensCountForNetworks(pool);
+
+			setInterval(() => {
+				updateGasPrice();
+			}, 60 * 1000);
+
+			setInterval(() => {
+				updateNodeCount();
+			}, 10 * 60 * 1000);
+		} else {
+			// dev stuff
+		}
 	} catch {
 		setTimeout(() => {
 			startFetchData();
