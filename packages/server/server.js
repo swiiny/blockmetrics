@@ -151,13 +151,14 @@ async function updateGasPrice() {
 	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('========== UPDATE GAS PRICE START ==========', Date.now());
 	}
-
+	
+	const pool = await createDbPool();
+	
 	try {
 		const promises = Object.keys(chains)
 			.map((key) => chains[key])
 			.filter((chain) => chain.rpc)
 			.map(async (chain) => {
-				const pool = await createDbPool();
 				const con = await pool.getConnection();
 
 				getGasPrice(chain.rpc).then((gasPrice) => {
