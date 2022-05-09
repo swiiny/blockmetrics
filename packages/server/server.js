@@ -22,7 +22,7 @@ export const chains = {
 		id: '0bb6df38-231e-47d3-b427-88d16a65580e',
 		name: 'Binance SC',
 		coingeckoId: 'binance-smart-chain',
-		rpc: process.env.RPC_BSC_MORALIS
+		rpc: process.env.RPC_BSC_PUBLIC_AGGREGATOR
 	},
 	polygon: {
 		id: '4df0b4ad-2165-4543-a74b-7cdf46f9c5e3',
@@ -181,10 +181,29 @@ app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
 	res.send("pong");
 });
 
+async function startFetchData() {
+	try {
+		const pool = await createDbPool();
+		const res = await pool.getConnection();
+
+		res.release();
+
+		fetchEVMBlocksFor(chains.ethereum);
+		fetchEVMBlocksFor(chains.polygon);
+		fetchEVMBlocksFor(chains.bsc);
+	} catch {
+		setTimeout(() => {
+			startFetchData();
+		}, 1 * 60 * 1000)
+	}
+}	
+
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 
 	const runWorkingFeatures = false;
+
+	startFetchData();
 
 	if (runWorkingFeatures) {
 		// working features

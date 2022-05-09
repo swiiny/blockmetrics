@@ -1,1 +1,1 @@
-CREATE DATABASE IF NOT EXISTS `blockmetrics`;
+CREATE DATABASE IF NOT EXISTS `2y32t_blockmetrics`;
