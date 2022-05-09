@@ -10,7 +10,7 @@ RUN mkdir -p /app
 WORKDIR /app
 
 # Installing dependencies
-COPY ./packages/frontend/package*.json /frontend/app/
+COPY ./packages/frontend/package*.json /app
 
 RUN npm install 
 
