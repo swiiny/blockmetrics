@@ -110,7 +110,7 @@ export async function fetchEVMBlocksFor(chain) {
 
 			setTimeout(() => {
 				console.log('> start fetching new blocks for ' + name);
-				fetchEVMBlocksFor(id, rpc, name);
+				fetchEVMBlocksFor({ id, rpc, name });
 			}, 1 * 60 * 1000);
 		} else {
 			throw new Error("can't fetch block_parsed number for " + name);
@@ -121,7 +121,7 @@ export async function fetchEVMBlocksFor(chain) {
 		updatableCon?.release();
 
 		setTimeout(() => {
-			fetchEVMBlocksFor(id, rpc, name);
+			fetchEVMBlocksFor({ id, rpc, name });
 		}, 1 * 60 * 1000);
 	}
 }
