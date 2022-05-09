@@ -123,7 +123,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 		updatableCon?.destroy();
 
 		setTimeout(() => {
-			fetchEVMBlocksFor({ id, rpc, name });
+			fetchEVMBlocksFor({ id, rpc, name }, pool);
 		}, 1 * 60 * 1000);
 	}
 }
