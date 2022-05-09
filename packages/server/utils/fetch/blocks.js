@@ -16,14 +16,13 @@ import {
 	updateTxCountInBlockchain
 } from '../sql.js';
 
-export async function fetchEVMBlocksFor(chain) {
+export async function fetchEVMBlocksFor(chain, pool) {
 	let updatableCon = null;
 
 	const { id, rpc, name } = chain;
 
 	if (!updatableCon) {
 		try {
-			const pool = await createDbPool();
 			updatableCon = await pool.getConnection();
 		} catch (err) {
 			console.error("fetchEVMBlocksFor can't update connexion for " + name, err);
@@ -107,7 +106,7 @@ export async function fetchEVMBlocksFor(chain) {
 				console.log("All new " + name + ' blocks fetched and saved in db');
 			}
 
-			updatableCon?.destroy();
+			updatableCon?.release();
 
 			setTimeout(() => {
 				if (process.env.DEBUG_LOGS === 'activated') {
@@ -129,14 +128,13 @@ export async function fetchEVMBlocksFor(chain) {
 	}
 }
 
-export async function fetchBitcoinData() {
+export async function fetchBitcoinData(pool) {
 	const { id, name } = chains.bitcoin;
 
 	let updatableCon = null;
 
 	if (!updatableCon) {
 		try {
-			const pool = await createDbPool();
 			updatableCon = await pool.getConnection();
 		} catch (err) {
 			console.error("fetchBitcoinData can't update connexion", err);
@@ -197,7 +195,7 @@ export async function fetchBitcoinData() {
 			console.log('next update in ' + timeBetweenNextUpdate + ' minutes');
 		}
 
-		updatableCon?.destroy();
+		updatableCon?.release();
 
 		setTimeout(() => {
 			fetchBitcoinData();

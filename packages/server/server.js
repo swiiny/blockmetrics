@@ -58,6 +58,7 @@ const corsOptions = {
 };
 
 const app = express();
+let pool;
 
 app.use(cors(corsOptions));
 app.use(helmet());
@@ -70,7 +71,6 @@ async function updateNodeCount() {
 	}
 
 	try {
-		const pool = await createDbPool();
 		const con = await pool.getConnection();
 
 		if (!con) {
@@ -78,57 +78,14 @@ async function updateNodeCount() {
 		}
 
 		const promises = [
-			getEthNodeCount()
-				.then((res) => {
-					updateDbNodeCount(con, chains.ethereum.id, res);
-					return {
-						count: res,
-						id: chains.ethereum.id
-					};
-				})
-				.catch((err) => null),
-			getBscNodeCount()
-				.then((res) => {
-					updateDbNodeCount(con, chains.bsc.id, res);
-					return {
-						count: res,
-						id: chains.bsc.id
-					};
-				})
-				.catch((err) => null),
-			getPolygonNodeCount()
-				.then((res) => {
-					updateDbNodeCount(con, chains.polygon.id, res);
-					return {
-						count: res,
-						id: chains.polygon.id
-					};
-				})
-				.catch((err) => null),
-			getAvalancheNodeCount()
-				.then((res) => {
-					updateDbNodeCount(con, chains.avalanche.id, res);
-					return {
-						count: res,
-						id: chains.avalanche.id
-					};
-				})
-				.catch((err) => null),
-			getBitcoinNodeCount()
-				.then((res) => {
-					updateDbNodeCount(con, chains.bitcoin.id, res);
-					return {
-						count: res,
-						id: chains.bitcoin.id
-					};
-				})
-				.catch((err) => null)
-		].filter((res) => res !== null);
+			getEthNodeCount().then((res) => updateDbNodeCount(con, chains.ethereum.id, res)).catch (() => null),
+			getBscNodeCount().then((res) => updateDbNodeCount(con, chains.bsc.id, res)).catch (() => null),
+			getPolygonNodeCount().then((res) => updateDbNodeCount(con, chains.polygon.id, res)).catch (() => null),
+			getAvalancheNodeCount().then((res) => updateDbNodeCount(con, chains.avalanche.id, res)).catch (() => null),
+			getBitcoinNodeCount().then((res) => updateDbNodeCount(con, chains.bitcoin.id, res)).catch (() => null)
+		]
 
-		/*
-  const resolvedPromises = await Promise.all(promises);
-	console.log("nodecount", resolvedPromises);
-  */
+		await Promise.all(promises);
 
 		con.destroy();
 
@@ -152,15 +109,13 @@ async function updateGasPrice() {
 		console.log('========== UPDATE GAS PRICE START ==========', Date.now());
 	}
 	
-	const pool = await createDbPool();
-	
+	const con = await pool.getConnection();
+
 	try {
 		const promises = Object.keys(chains)
 			.map((key) => chains[key])
 			.filter((chain) => chain.rpc)
 			.map(async (chain) => {
-				const con = await pool.getConnection();
-
 				getGasPrice(chain.rpc).then((gasPrice) => {
 					updateDbGasPrice(con, chain.id, gasPrice);
 					con.destroy();
@@ -192,22 +147,21 @@ app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
 
 async function startFetchData() {
 	try {
-		const pool = await createDbPool();
-		const res = await pool.getConnection();
+		const con = await pool.getConnection();
 
-		res.destroy();
+		con.destroy();
 
 		updateNodeCount();
 		updateGasPrice();
 		
-		fetchEVMBlocksFor(chains.ethereum);
-		fetchEVMBlocksFor(chains.polygon);
-		fetchEVMBlocksFor(chains.bsc);
-		fetchEVMBlocksFor(chains.avalanche);
+		fetchEVMBlocksFor(chains.ethereum, pool);
+		fetchEVMBlocksFor(chains.polygon, pool);
+		fetchEVMBlocksFor(chains.bsc, pool);
+		fetchEVMBlocksFor(chains.avalanche, pool);
 
-		fetchBitcoinData();
+		fetchBitcoinData(pool);
 
-		updateTokensCountForNetworks();
+		updateTokensCountForNetworks(pool);
 
 		setInterval(() => {
 			updateGasPrice();
@@ -225,6 +179,8 @@ async function startFetchData() {
 
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
+
+	pool = await createDbPool();
 
 	startFetchData();
 });

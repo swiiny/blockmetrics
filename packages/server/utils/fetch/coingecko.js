@@ -43,13 +43,12 @@ const getTokensByNetworks = (tokenList) => {
 	return n;
 };
 
-export const updateTokensCountForNetworks = async () => {
+export const updateTokensCountForNetworks = async (pool) => {
 	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('> start updating updateTokensCountForNetworks');		
 	}
 
 	try {
-		const pool = await createDbPool();
 		const con = await pool.getConnection();
 
 		const tokenList = await getCGTokenList();
@@ -75,7 +74,7 @@ export const updateTokensCountForNetworks = async () => {
 
 		await Promise.all(promises);
 
-		con.destroy();
+		con.release();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('> updateTokensCountForNetworks success, next update in 1 hour');		
