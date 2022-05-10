@@ -5,7 +5,7 @@ import cors from "cors";
 import { getBlockchains } from "./utils/fetch.js";
 import { createDbPool } from "./utils/pool.js";
 
-const BASE_URL_V1 = "/v1/api";
+const BASE_URL_V1 = "/v1/api/rest";
 
 // connection pool
 let pool;

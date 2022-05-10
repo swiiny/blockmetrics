@@ -1,4 +1,4 @@
-FROM node:16.9.1
+FROM node:16.9.1-alpine
 
 WORKDIR /app
 
@@ -8,4 +8,4 @@ RUN npm install
 
 EXPOSE $PORT
 
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "dev"]

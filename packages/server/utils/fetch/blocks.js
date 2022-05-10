@@ -198,7 +198,7 @@ export async function fetchBitcoinData(pool) {
 		updatableCon?.release();
 
 		setTimeout(() => {
-			fetchBitcoinData();
+			fetchBitcoinData(pool);
 		}, timeBetweenNextUpdate * 60 * 1000);
 	} catch (err) {
 		console.error('fetchBitcoinBlocks', err);
@@ -206,7 +206,7 @@ export async function fetchBitcoinData(pool) {
 		updatableCon?.destroy();
 
 		setTimeout(() => {
-			fetchBitcoinData();
+			fetchBitcoinData(pool);
 		}, 1 * 60 * 1000);
 	}
 }

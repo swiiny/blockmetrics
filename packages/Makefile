@@ -8,7 +8,8 @@ down:
 install:
 	cd frontend && npm install && cd ..
 	cd server && npm install && cd ..
-	cd api && npm install && cd ..
+	cd api/rest && npm install && cd ../..
+	cd api/ws && npm install && cd ../..
 
 reset: 
 	docker system prune -a -f

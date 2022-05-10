@@ -19,7 +19,7 @@ ARG API_PORT
 
 WORKDIR /app
 
-COPY ./packages/api .
+COPY ./packages/api/rest .
 
 RUN npm install
 
