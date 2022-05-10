@@ -16,7 +16,7 @@ export const chains = {
 		id: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
 		name: 'Ethereum',
 		coingeckoId: 'ethereum',
-		rpc: process.env.RPC_ETHEREUM_ALCHEMY
+		rpc: process.env.RPC_ETHEREUM_MORALIS,
 	},
 	bsc: {
 		id: '0bb6df38-231e-47d3-b427-88d16a65580e',
