@@ -66,12 +66,12 @@ export async function fetchEVMBlocksFor(chain, pool) {
 					.filter((res) => res !== null);
                     */
 
-				const txPromises = transactions.map(({ from }) => ({
+				const txPromises = transactions?.map(({ from }) => ({
 					public_address: from,
 					timestamp: block.timestamp
-				}));
+				})) || [];
 
-				const resolvedTxPromises = await Promise.all(txPromises);
+				const resolvedTxPromises = await Promise.all(txPromises) || [];
 
 				if (process.env.DEBUG_LOGS === 'activated') {
 					console.log(name + ' tx added to db: ' + resolvedTxPromises.length);
@@ -84,7 +84,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				// TODO : improve blockchain update with a call to update all values
 				const promises = [
 					updatableCon.query(udpdateBlockCountInBlockParsed, [index, id]),
-					updatableCon.query(increaseTxCountInBlockchain, [transactions.length, id]),
+					updatableCon.query(increaseTxCountInBlockchain, [transactions?.length || 0, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
 							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
