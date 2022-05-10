@@ -81,11 +81,11 @@ export const updateTokensCountForNetworks = async (pool) => {
 		}
 
 		// update tokens count each hour
-		setTimeout(updateTokensCountForNetworks, 60 * 60 * 1000);
+		setTimeout(updateTokensCountForNetworks(pool), 60 * 60 * 1000);
 	} catch (err) {
 		console.log('Failed to update tokens count for networks, try again in 1 minute:', err);
 
 		// try again in a minute
-		setTimeout(updateTokensCountForNetworks, 60 * 1000);
+		setTimeout(updateTokensCountForNetworks(pool), 60 * 1000);
 	}
 };
