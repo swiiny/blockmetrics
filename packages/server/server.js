@@ -28,7 +28,7 @@ export const chains = {
 		id: '4df0b4ad-2165-4543-a74b-7cdf46f9c5e3',
 		name: 'Polygon',
 		coingeckoId: 'polygon-pos',
-		rpc: process.env.RPC_POLYGON_ALCHEMY
+		rpc: process.env.RPC_POLYGON_MATICVIGIL
 	},
 	bitcoin: {
 		id: '1daa2a79-98cc-49a5-970a-0ad620a8b0d9',
