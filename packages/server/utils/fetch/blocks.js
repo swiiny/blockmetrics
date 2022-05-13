@@ -49,28 +49,10 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				block = await provider.getBlockWithTransactions(index);
 				const transactions = block.transactions;
 
-				/* function to know if an address is a contract or not to expensive but will do in the future
-                const txPromises = transactions
-					.map(({ from }) =>
-						provider.getCode(from).then((res) => {
-							if (res === '0x') {
-								return {
-									public_address: from,
-									timestamp: block.timestamp
-								};
-							} else {
-								return null;
-							}
-						})
-					)
-					.filter((res) => res !== null);
-                    */
-
 				const txPromises = transactions?.map(({ from }) => ({
 					public_address: from,
 					timestamp: block.timestamp
 				})) || [];
-
 				const resolvedTxPromises = await Promise.all(txPromises) || [];
 
 				if (process.env.DEBUG_LOGS === 'activated') {
