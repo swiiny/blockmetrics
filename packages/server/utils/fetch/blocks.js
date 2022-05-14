@@ -2,7 +2,6 @@ import axios from 'axios';
 import crypto from 'crypto';
 import { ethers } from 'ethers';
 import { chains } from '../../server.js';
-import { createDbPool } from '../pool/pool.js';
 import {
 	getLastBlockParsedFromBlockParsed,
 	increaseTxCountInBlockchain,
@@ -49,11 +48,12 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				block = await provider.getBlockWithTransactions(index);
 				const transactions = block.transactions;
 
-				const txPromises = transactions?.map(({ from }) => ({
-					public_address: from,
-					timestamp: block.timestamp
-				})) || [];
-				const resolvedTxPromises = await Promise.all(txPromises) || [];
+				const txPromises =
+					transactions?.map(({ from }) => ({
+						public_address: from,
+						timestamp: block.timestamp
+					})) || [];
+				const resolvedTxPromises = (await Promise.all(txPromises)) || [];
 
 				if (process.env.DEBUG_LOGS === 'activated') {
 					console.log(name + ' tx added to db: ' + resolvedTxPromises.length);
@@ -85,7 +85,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 			}
 
 			if (process.env.DEBUG_LOGS === 'activated') {
-				console.log("All new " + name + ' blocks fetched and saved in db');
+				console.log('All new ' + name + ' blocks fetched and saved in db');
 			}
 
 			updatableCon?.release();
@@ -100,7 +100,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 			throw new Error("can't fetch block_parsed number for " + name);
 		}
 	} catch (err) {
-		console.error('fetch blocks n°' + lastBlockCheck + " on " + name, err);
+		console.error('fetch blocks n°' + lastBlockCheck + ' on ' + name, err);
 
 		updatableCon?.destroy();
 
@@ -167,7 +167,7 @@ export async function fetchBitcoinData(pool) {
 		await Promise.all(promises);
 
 		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log(name + ' data fetched and saved in db in ' + (Date.now() - startTime) + 'ms');	
+			console.log(name + ' data fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 		}
 
 		const timeBetweenNextUpdate = minutes_between_blocks + 0.5;

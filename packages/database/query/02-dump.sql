@@ -89,7 +89,6 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`account` (
   `first_action_at` DATETIME NULL,
   `last_action_at` DATETIME NULL,
   `action_count` INT UNSIGNED NOT NULL DEFAULT 1,
-  `is_contract` TINYINT(1) NOT NULL DEFAULT 0,
   PRIMARY KEY (`public_address`))
 ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
@@ -120,6 +119,7 @@ COLLATE = utf8mb4_0900_ai_ci;
 CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain_has_account` (
   `blockchain_id` VARCHAR(255) NOT NULL,
   `account_public_address` VARCHAR(255) NOT NULL,
+  `is_contract` TINYINT(1) NULL DEFAULT NULL,
   PRIMARY KEY (`blockchain_id`, `account_public_address`),
   INDEX `fk_blockchain_has_account_account1_idx` (`account_public_address` ASC) VISIBLE,
   INDEX `fk_blockchain_has_account_blockchain1_idx` (`blockchain_id` ASC) VISIBLE,

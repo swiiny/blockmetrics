@@ -1,4 +1,5 @@
 import cors from 'cors';
+import { ethers } from 'ethers';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -6,9 +7,9 @@ import { fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
 import { updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
-import { calculatePowerConsumption } from './utils/functions.js';
+import { calculatePowerConsumption, getRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
-import { getPowerConsumptionDataForPoS } from './utils/sql.js';
+import { getPowerConsumptionDataForPoS, getPublicAddressFromAccountWhereContractIsNull, updateIsContractInBlockchainHasAccount } from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updateDbNodeCount } from './utils/update/nodeCount.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
@@ -45,8 +46,6 @@ export const chains = {
 		rpc: process.env.RPC_AVALANCHE
 	}
 };
-
-const BASE_URL_V1 = 'v1/server';
 
 const limiter = rateLimit({
 	windowMs: 1000,
@@ -174,7 +173,9 @@ async function updatePowerConsumption() {
 			chain.powerConsumption = calculatePowerConsumption(chain.single_node_power_consumption, chain.node_count, chain.testnet_node_count);
 		});
 
-		updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
+		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
+
+		con.release();
 	} catch (err) {
 		console.error('updatePowerConsumption', err);
 	}
@@ -184,24 +185,52 @@ async function updatePowerConsumption() {
 	}
 }
 
+// fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
 async function checkIfAddressesAreContracts() {
-	/*
-	TODO : fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
-	const txPromises = transactions
-		.map(({ from }) =>
-			provider.getCode(from).then((res) => {
+	try {
+		const con = await pool.getConnection();
+
+		const [accountRows] = await con.query(getPublicAddressFromAccountWhereContractIsNull, [10]);
+
+		const txPromises = accountRows.map(async ({ blockchain_id, account_public_address }) => {
+			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
+			return provider.getCode(account_public_address).then((res) => {
 				if (res === '0x') {
 					return {
-						public_address: from,
-						timestamp: block.timestamp
+						blockchain_id: blockchain_id,
+						account_public_address: account_public_address,
+						is_contract: 0
 					};
 				} else {
-					return null;
+					return {
+						blockchain_id: blockchain_id,
+						account_public_address: account_public_address,
+						is_contract: 1
+					};
 				}
-			})
-		)
-		.filter((res) => res !== null);
-		*/
+			});
+		});
+
+		const txResults = await Promise.all(txPromises);
+
+		const updateDbPromises = txResults.map((txResult) =>
+			con.query(updateIsContractInBlockchainHasAccount, [txResult.is_contract, txResult.blockchain_id, txResult.account_public_address])
+		);
+
+		await Promise.all(updateDbPromises);
+
+		con.release();
+
+		setTimeout(() => {
+			checkIfAddressesAreContracts();
+		}, 100);
+	} catch (err) {
+		console.error('checkIfAddressesAreContracts', err);
+
+		setTimeout(() => {
+			checkIfAddressesAreContracts();
+		}, 60 * 1000);
+	}
 }
 
 async function startFetchData() {
@@ -222,6 +251,8 @@ async function startFetchData() {
 			fetchBitcoinData(pool);
 
 			updateTokensCountForNetworks(pool);
+
+			checkIfAddressesAreContracts();
 
 			setInterval(() => {
 				updateGasPrice();
