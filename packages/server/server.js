@@ -1,4 +1,5 @@
 import cors from 'cors';
+import { ethers } from 'ethers';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
@@ -6,9 +7,12 @@ import { fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
 import { updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
+import { calculatePowerConsumption, getRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
+import { getPowerConsumptionDataForPoS, getPublicAddressFromAccountWhereContractIsNull, updateIsContractInBlockchainHasAccount } from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updateDbNodeCount } from './utils/update/nodeCount.js';
+import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
 
 // chain uuid in the database
 export const chains = {
@@ -16,7 +20,7 @@ export const chains = {
 		id: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
 		name: 'Ethereum',
 		coingeckoId: 'ethereum',
-		rpc: process.env.RPC_ETHEREUM,
+		rpc: process.env.RPC_ETHEREUM
 	},
 	bsc: {
 		id: '0bb6df38-231e-47d3-b427-88d16a65580e',
@@ -42,8 +46,6 @@ export const chains = {
 		rpc: process.env.RPC_AVALANCHE
 	}
 };
-
-const BASE_URL_V1 = "v1/server"
 
 const limiter = rateLimit({
 	windowMs: 1000,
@@ -78,19 +80,31 @@ async function updateNodeCount() {
 		}
 
 		const promises = [
-			getEthNodeCount().then((res) => updateDbNodeCount(con, chains.ethereum.id, res)).catch (() => null),
-			getBscNodeCount().then((res) => updateDbNodeCount(con, chains.bsc.id, res)).catch (() => null),
-			getPolygonNodeCount().then((res) => updateDbNodeCount(con, chains.polygon.id, res)).catch (() => null),
-			getAvalancheNodeCount().then((res) => updateDbNodeCount(con, chains.avalanche.id, res)).catch (() => null),
-			getBitcoinNodeCount().then((res) => updateDbNodeCount(con, chains.bitcoin.id, res)).catch (() => null)
-		]
+			getEthNodeCount()
+				.then((res) => updateDbNodeCount(con, chains.ethereum.id, res))
+				.catch(() => null),
+			getBscNodeCount()
+				.then((res) => updateDbNodeCount(con, chains.bsc.id, res))
+				.catch(() => null),
+			getPolygonNodeCount()
+				.then((res) => updateDbNodeCount(con, chains.polygon.id, res))
+				.catch(() => null),
+			getAvalancheNodeCount()
+				.then((res) => updateDbNodeCount(con, chains.avalanche.id, res))
+				.catch(() => null),
+			getBitcoinNodeCount()
+				.then((res) => updateDbNodeCount(con, chains.bitcoin.id, res))
+				.catch(() => null)
+		];
 
 		await Promise.all(promises);
+
+		updatePowerConsumption();
 
 		con.destroy();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('========== UPDATE NODE COUNT END ==========', Date.now());		
+			console.log('========== UPDATE NODE COUNT END ==========', Date.now());
 		}
 
 		return 0;
@@ -108,18 +122,18 @@ async function updateGasPrice() {
 	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('========== UPDATE GAS PRICE START ==========', Date.now());
 	}
-	
+
 	const con = await pool.getConnection();
 
 	try {
 		const promises = Object.keys(chains)
 			.map((key) => chains[key])
 			.filter((chain) => chain.rpc)
-			.map(async (chain) => (
+			.map(async (chain) =>
 				getGasPrice(chain.rpc).then((gasPrice) => {
 					updateDbGasPrice(con, chain.id, gasPrice);
 				})
-			));
+			);
 
 		await Promise.all(promises);
 
@@ -141,10 +155,83 @@ async function updateGasPrice() {
 	}
 }
 
-// test endpoint, should respond the string "pong"
-app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
-	res.send("pong");
-});
+async function updatePowerConsumption() {
+	if (process.env.DEBUG_LOGS === 'activated') {
+		console.log('========== UPDATE POWER CONSUMPTION START ==========', Date.now().toLocaleString());
+	}
+
+	const con = await pool.getConnection();
+
+	try {
+		// fetch single_node_power_consumption, testnet_node_count and node_count for PoS chains
+		const [posRows] = await con.query(getPowerConsumptionDataForPoS);
+
+		// TODO : fetch single_node_power_consumption, testnet_node_count and node_count for PoW chains
+		const powRows = [];
+
+		posRows?.forEach((chain) => {
+			chain.powerConsumption = calculatePowerConsumption(chain.single_node_power_consumption, chain.node_count, chain.testnet_node_count);
+		});
+
+		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
+
+		con.release();
+	} catch (err) {
+		console.error('updatePowerConsumption', err);
+	}
+
+	if (process.env.DEBUG_LOGS === 'activated') {
+		console.log('========== UPDATE POWER CONSUMPTION END ==========', Date.now());
+	}
+}
+
+// fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
+async function checkIfAddressesAreContracts() {
+	try {
+		const con = await pool.getConnection();
+
+		const [accountRows] = await con.query(getPublicAddressFromAccountWhereContractIsNull, [10]);
+
+		const txPromises = accountRows.map(async ({ blockchain_id, account_public_address }) => {
+			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
+			return provider.getCode(account_public_address).then((res) => {
+				if (res === '0x') {
+					return {
+						blockchain_id: blockchain_id,
+						account_public_address: account_public_address,
+						is_contract: 0
+					};
+				} else {
+					return {
+						blockchain_id: blockchain_id,
+						account_public_address: account_public_address,
+						is_contract: 1
+					};
+				}
+			});
+		});
+
+		const txResults = await Promise.all(txPromises);
+
+		const updateDbPromises = txResults.map((txResult) =>
+			con.query(updateIsContractInBlockchainHasAccount, [txResult.is_contract, txResult.blockchain_id, txResult.account_public_address])
+		);
+
+		await Promise.all(updateDbPromises);
+
+		con.release();
+
+		setTimeout(() => {
+			checkIfAddressesAreContracts();
+		}, 100);
+	} catch (err) {
+		console.error('checkIfAddressesAreContracts', err);
+
+		setTimeout(() => {
+			checkIfAddressesAreContracts();
+		}, 60 * 1000);
+	}
+}
 
 async function startFetchData() {
 	try {
@@ -155,7 +242,7 @@ async function startFetchData() {
 		if (process.env.NODE_ENV === 'production') {
 			updateNodeCount();
 			updateGasPrice();
-			
+
 			fetchEVMBlocksFor(chains.ethereum, pool);
 			fetchEVMBlocksFor(chains.polygon, pool);
 			fetchEVMBlocksFor(chains.bsc, pool);
@@ -164,6 +251,8 @@ async function startFetchData() {
 			fetchBitcoinData(pool);
 
 			updateTokensCountForNetworks(pool);
+
+			checkIfAddressesAreContracts();
 
 			setInterval(() => {
 				updateGasPrice();
@@ -178,9 +267,9 @@ async function startFetchData() {
 	} catch {
 		setTimeout(() => {
 			startFetchData();
-		}, 1 * 60 * 1000)
+		}, 1 * 60 * 1000);
 	}
-}	
+}
 
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
