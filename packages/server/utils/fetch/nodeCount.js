@@ -34,7 +34,7 @@ export async function getFantomNodeCount() {
 
 		return res.data.recordsTotal;
 	} catch (err) {
-		console.error('getBscNodeCount', err);
+		console.error('getFantomNodeCount', err);
 		return null;
 	}
 }
