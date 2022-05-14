@@ -35,7 +35,9 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 -   [x] Init server.js file
 -   [ ] Fetch blockchains data and fill the db with :construction:
+-   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
 -   [ ] Setup data update cycle
+-   [ ] fetch new blocks with Websockets API (only when all the db is update with all blocks data)
 
 ### API - REST
 
@@ -57,6 +59,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
     -   [ ] Single blockchain page
 -   [ ] Compare
 -   [ ] About us
+    -   [ ] Powerd by ...
 
 ### DevOps
 
@@ -64,6 +67,21 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [x] Setup Jelastic server
 -   [x] Setup Database
 -   [ ] Create CI/CD scripts
+
+### Integrated Blockchains
+
+-   [x] Ethereum
+-   [x] Binance Smart Chain
+-   [x] Polygon
+-   [x] Avalanche
+-   [x] Bitcoin
+-   [x] Fantom
+-   [ ] Solana
+-   [ ] Celo
+-   [ ] Harmony
+-   [ ] Gnosis
+-   [ ] Arbitrum
+-   [ ] Moonbeam
 
 #### Webhook to deploy an updated image from dockerhub to jelastic cloud
 

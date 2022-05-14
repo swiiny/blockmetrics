@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import { fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
 import { updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
-import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
+import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getFantomNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption, getRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import { getPowerConsumptionDataForPoS, getPublicAddressFromAccountWhereContractIsNull, updateIsContractInBlockchainHasAccount } from './utils/sql.js';
@@ -44,6 +44,12 @@ export const chains = {
 		name: 'Avalanche',
 		coingeckoId: 'avalanche',
 		rpc: process.env.RPC_AVALANCHE
+	},
+	fantom: {
+		id: 'a3820e29-a5fc-41af-a5c1-07119795e07d',
+		name: 'Fantom',
+		coingeckoId: 'fantom',
+		rpc: process.env.RPC_FANTOM
 	}
 };
 
@@ -94,6 +100,9 @@ async function updateNodeCount() {
 				.catch(() => null),
 			getBitcoinNodeCount()
 				.then((res) => updateDbNodeCount(con, chains.bitcoin.id, res))
+				.catch(() => null),
+			getFantomNodeCount()
+				.then((res) => updateDbNodeCount(con, chains.fantom.id, res))
 				.catch(() => null)
 		];
 
@@ -247,6 +256,7 @@ async function startFetchData() {
 			fetchEVMBlocksFor(chains.polygon, pool);
 			fetchEVMBlocksFor(chains.bsc, pool);
 			fetchEVMBlocksFor(chains.avalanche, pool);
+			fetchEVMBlocksFor(chains.fantom, pool);
 
 			fetchBitcoinData(pool);
 
@@ -254,6 +264,7 @@ async function startFetchData() {
 
 			checkIfAddressesAreContracts();
 
+			// TODO : replace by a websocket
 			setInterval(() => {
 				updateGasPrice();
 			}, 60 * 1000);
