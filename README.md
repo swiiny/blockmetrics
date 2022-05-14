@@ -59,6 +59,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
     -   [ ] Single blockchain page
 -   [ ] Compare
 -   [ ] About us
+    -   [ ] Powerd by ...
 
 ### DevOps
 
@@ -74,7 +75,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [x] Polygon
 -   [x] Avalanche
 -   [x] Bitcoin
--   [ ] Fantom
+-   [x] Fantom
 -   [ ] Solana
 -   [ ] Celo
 -   [ ] Harmony
