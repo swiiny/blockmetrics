@@ -45,7 +45,7 @@ export async function getPolygonNodeCount() {
 
 		// const res = await axios.get(url);
 
-		return 25;
+		return 100;
 	} catch (err) {
 		console.error('getPolygonNodeCount', err);
 		return null;
