@@ -39,18 +39,20 @@ export async function getFantomNodeCount() {
 	}
 }
 
+/*
 export async function getPolygonNodeCount() {
 	try {
 		// const url = `${process.env.ETHERSCAN_API_URL}?module=stats&action=nodecount&apikey=${process.env.ETHERSCAN_API_KEY}`;
 
 		// const res = await axios.get(url);
 
-		return 25;
+		return 100;
 	} catch (err) {
 		console.error('getPolygonNodeCount', err);
 		return null;
 	}
 }
+*/
 
 export async function getAvalancheNodeCount() {
 	try {

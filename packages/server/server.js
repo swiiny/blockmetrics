@@ -92,9 +92,9 @@ async function updateNodeCount() {
 			getBscNodeCount()
 				.then((res) => updateDbNodeCount(con, chains.bsc.id, res))
 				.catch(() => null),
-			getPolygonNodeCount()
+			/*getPolygonNodeCount()
 				.then((res) => updateDbNodeCount(con, chains.polygon.id, res))
-				.catch(() => null),
+				.catch(() => null),*/
 			getAvalancheNodeCount()
 				.then((res) => updateDbNodeCount(con, chains.avalanche.id, res))
 				.catch(() => null),
