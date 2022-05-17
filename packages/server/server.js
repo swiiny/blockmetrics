@@ -6,7 +6,7 @@ import helmet from 'helmet';
 import { fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
 import { updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
-import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getFantomNodeCount, getPolygonNodeCount } from './utils/fetch/nodeCount.js';
+import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getFantomNodeCount } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption, getRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import { getPowerConsumptionDataForPoS, getPublicAddressFromAccountWhereContractIsNull, updateIsContractInBlockchainHasAccount } from './utils/sql.js';
@@ -175,7 +175,7 @@ async function updatePowerConsumption() {
 		// fetch single_node_power_consumption, testnet_node_count and node_count for PoS chains
 		const [posRows] = await con.query(getPowerConsumptionDataForPoS);
 
-		// TODO : fetch single_node_power_consumption, testnet_node_count and node_count for PoW chains
+		// TODO : fetch single_node_power_consumption, testnet_node_count and node_count for Proof of Work chains
 		const powRows = [];
 
 		posRows?.forEach((chain) => {
