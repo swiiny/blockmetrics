@@ -9,6 +9,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 ### Global :white_check_mark:
 
 -   [x] Buy block-metrics domain name
+-   [x] Buy blockmetrics.eth
 
 ### UI/UX
 
