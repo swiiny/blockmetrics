@@ -5,7 +5,6 @@ import { chains } from '../../server.js';
 import {
 	getLastBlockParsedFromBlockParsed,
 	increaseTxCountInBlockchain,
-	insertBlockchainHasAccount,
 	insertHashrateInHashrateHistory,
 	insertOrUpdateAccount,
 	udpdateBlockCountInBlockParsed,
@@ -69,8 +68,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 					updatableCon.query(increaseTxCountInBlockchain, [transactions?.length || 0, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
-							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
-							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
+							updatableCon.query(insertOrUpdateAccount, [public_address, id, timestamp, timestamp, timestamp]),
 						])
 						.flat(1),
 					updatableCon.query(updateTimeBetweenBlocksInBlockchain, [timeBetweenTwoBlocks, id]),

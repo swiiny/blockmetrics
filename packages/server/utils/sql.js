@@ -12,9 +12,7 @@ export const getPublicAddressFromAccountWhereContractIsNull = `SELECT * FROM blo
 // ======= INSERT ===============================================================================
 // ==============================================================================================
 // insert or update an account
-export const insertOrUpdateAccount = `INSERT INTO account (public_address, first_action_at, last_action_at) VALUES (?, FROM_UNIXTIME(?), FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE last_action_at = FROM_UNIXTIME(?), action_count = action_count + 1`;
-// insert if not exist an account in blockchain_has_account table
-export const insertBlockchainHasAccount = `INSERT IGNORE INTO blockchain_has_account (blockchain_id, account_public_address) VALUES (?, ?)`;
+export const insertOrUpdateAccount = `INSERT INTO account (public_address, blockchain_id, first_action_at, last_action_at) VALUES (?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE last_action_at = FROM_UNIXTIME(?), action_count = action_count + 1`;
 // insert new hashrate
 export const insertHashrateInHashrateHistory = `INSERT INTO hashrate_history (id, hashrate, blockchain_id) VALUES (?, ?, ?)`;
 
