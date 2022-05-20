@@ -249,8 +249,8 @@ async function startFetchData() {
 		con.destroy();
 
 		if (process.env.NODE_ENV === 'production') {
-			updateNodeCount();
-			updateGasPrice();
+			// updateNodeCount();
+			// updateGasPrice();
 
 			fetchEVMBlocksFor(chains.ethereum, pool);
 			fetchEVMBlocksFor(chains.polygon, pool);
@@ -258,13 +258,14 @@ async function startFetchData() {
 			fetchEVMBlocksFor(chains.avalanche, pool);
 			fetchEVMBlocksFor(chains.fantom, pool);
 
-			fetchBitcoinData(pool);
+			// fetchBitcoinData(pool);
 
-			updateTokensCountForNetworks(pool);
+			// updateTokensCountForNetworks(pool);
 
 			checkIfAddressesAreContracts();
 
 			// TODO : replace by a websocket
+			/*
 			setInterval(() => {
 				updateGasPrice();
 			}, 60 * 1000);
@@ -272,6 +273,7 @@ async function startFetchData() {
 			setInterval(() => {
 				updateNodeCount();
 			}, 10 * 60 * 1000);
+			*/
 		} else {
 			// dev stuff
 		}
