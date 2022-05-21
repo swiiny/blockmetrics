@@ -5,7 +5,6 @@ import { chains } from '../../server.js';
 import {
 	getLastBlockParsedFromBlockParsed,
 	increaseTxCountInBlockchain,
-	insertBlockchainHasAccount,
 	insertHashrateInHashrateHistory,
 	insertOrUpdateAccount,
 	udpdateBlockCountInBlockParsed,
@@ -63,14 +62,15 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000;
 				lastBlockTimestamp = block.timestamp;
 
+				//console.log("block", block.blockNumber:);
+
 				// TODO : improve blockchain update with a call to update all values
 				const promises = [
 					updatableCon.query(udpdateBlockCountInBlockParsed, [index, id]),
 					updatableCon.query(increaseTxCountInBlockchain, [transactions?.length || 0, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
-							updatableCon.query(insertOrUpdateAccount, [public_address, timestamp, timestamp, timestamp, id]),
-							updatableCon.query(insertBlockchainHasAccount, [id, public_address])
+							updatableCon.query(insertOrUpdateAccount, [public_address, id, timestamp, timestamp, timestamp]),
 						])
 						.flat(1),
 					updatableCon.query(updateTimeBetweenBlocksInBlockchain, [timeBetweenTwoBlocks, id]),

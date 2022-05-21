@@ -6,15 +6,13 @@ export const getLastBlockParsedFromBlockParsed = `SELECT number FROM block_parse
 // get datas to calculate PoS blockchains power consumption
 export const getPowerConsumptionDataForPoS = `SELECT id, single_node_power_consumption, node_count, testnet_node_count FROM blockchain WHERE consensus = 'pos'`;
 // fetch public_address from blockchain_has_account table with limit and is_contract is null
-export const getPublicAddressFromAccountWhereContractIsNull = `SELECT * FROM blockchain_has_account WHERE is_contract IS NULL LIMIT ?`;
+export const getPublicAddressFromAccountWhereContractIsNull = `SELECT public_address, blockchain_id FROM account WHERE is_contract IS NULL LIMIT ?`;
 
 // ==============================================================================================
 // ======= INSERT ===============================================================================
 // ==============================================================================================
 // insert or update an account
-export const insertOrUpdateAccount = `INSERT INTO account (public_address, first_action_at, last_action_at) VALUES (?, FROM_UNIXTIME(?), FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE last_action_at = FROM_UNIXTIME(?), action_count = action_count + 1`;
-// insert if not exist an account in blockchain_has_account table
-export const insertBlockchainHasAccount = `INSERT IGNORE INTO blockchain_has_account (blockchain_id, account_public_address) VALUES (?, ?)`;
+export const insertOrUpdateAccount = `INSERT INTO account (public_address, blockchain_id, first_action_at, last_action_at) VALUES (?, ?, FROM_UNIXTIME(?), FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE last_action_at = FROM_UNIXTIME(?), action_count = action_count + 1`;
 // insert new hashrate
 export const insertHashrateInHashrateHistory = `INSERT INTO hashrate_history (id, hashrate, blockchain_id) VALUES (?, ?, ?)`;
 
@@ -36,6 +34,6 @@ export const updateDifficultyInBlockchain = `UPDATE blockchain SET difficulty = 
 // update time between two blocks (from the new one to the last one)
 export const updateTimeBetweenBlocksInBlockchain = `UPDATE blockchain SET time_between_blocks = ? WHERE id = ?`;
 // udpate power consumption by blockchain id
-export const updatePowerConsumptionInBlockchain = `UPDATE blockchain SET power_consumption = ? WHERE id = ?`;
+export const updatePowerConsumptionInBlockchain = `UPDATE blockchain SET blockchain_power_consumption = ? WHERE id = ?`;
 // update is_contract by blockchain id and account public address in blochchain_has_account table
-export const updateIsContractInBlockchainHasAccount = `UPDATE blockchain_has_account SET is_contract = ? WHERE blockchain_id = ? AND account_public_address = ?`;
+export const updateIsContractInAccount = `UPDATE account SET is_contract = ? WHERE blockchain_id = ? AND public_address = ?`;

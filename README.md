@@ -31,7 +31,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [x] Create schema using MySQLWorkbench
 -   [x] Export SQL
 -   [x] Import SQL into the database
--   [ ] TODO : update database by removing account table, add action, first_action_at and last_action_at in blockchain_has_account table
+-   [x] TODO : update database by removing account table, add action, first_action_at and last_action_at in blockchain_has_account table
 -   [ ] add TVL in blockchain table
 
 ### Server
