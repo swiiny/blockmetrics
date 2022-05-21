@@ -1,6 +1,6 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { EFlex, EMediaQuery } from "../theme/utils/enums";
+import { EFlex, EMediaQuery } from "../theme/utils/enum";
 import { mq } from "../theme/utils/functions";
 
 interface IFlex {
