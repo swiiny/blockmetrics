@@ -65,3 +65,20 @@ export enum EFlex {
 	around = "space-around",
 	center = "center"
 }
+
+export enum ETextColor {
+	default = "default",
+	red = "red",
+	green = "green",
+}
+
+export enum ETextType {
+	h1 = "h1",
+	h2 = "h2",
+	h3 = "h3",
+	h4 = "h4",
+	p = "p",
+	link = "link",
+	span = "span",
+	externalLink = "externalLink"
+}

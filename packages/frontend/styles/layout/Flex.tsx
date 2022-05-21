@@ -1,7 +1,7 @@
 import React from "react";
 import styled, { css } from "styled-components";
-import { EFlex, EMediaQuery } from "../../utils/enums";
-import { mq } from "../../utils/functions";
+import { EFlex, EMediaQuery } from "../theme/utils/enums";
+import { mq } from "../theme/utils/functions";
 
 interface IFlex {
 	children: React.ReactNode;
