@@ -16,7 +16,7 @@ const Home: NextPage = () => {
       <FlexEx vertical={EFlex.center} horizontal={EFlex.center}>  
         <Heading type={ETextType.h1}>
           <TextWithGradient>
-            Heading One
+            Block metrics
           </TextWithGradient>
         </Heading>
       </FlexEx>
