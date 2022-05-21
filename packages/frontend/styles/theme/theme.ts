@@ -36,6 +36,7 @@ export const darkTheme: DefaultTheme = {
         },
         text: {
             default: "#B3FCFF",
+            accent: "#0D9BD7",
             positive: "#6BFFA6",
             negative: "#F22C3F",
             warning: "#FFCA3A", // check color in figma
@@ -58,6 +59,7 @@ export const lightTheme: DefaultTheme = {
         },
         text: {
             default: "#B3FCFF",
+            accent: "#0D9BD7",
             positive: "#6BFFA6",
             negative: "#F22C3F",
             warning: "#FFCA3A", // check color in figma

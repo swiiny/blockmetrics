@@ -1,12 +1,16 @@
 import Head from 'next/head';
 
 interface IMeta {
-  metas: [{ name: string, content: string }];
+  title: string;
+  metas?: [{ name: string, content: string }];
 }
 
-const Meta = ({ metas }: IMeta) => (
+const Meta = ({ title, metas }: IMeta) => (
     <Head>
-      {metas.map(({ name, content }) => (
+      <title>{title}</title>
+      <meta property="og:title" content={title} key="title" />
+
+      {metas?.map(({ name, content }) => (
         <meta key={name} name={name} content={content} />
       ))}
     </Head>

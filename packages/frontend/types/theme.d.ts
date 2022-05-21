@@ -33,6 +33,7 @@ declare module "styled-components" {
             };
 			text: {
 				default: string;
+				accent: string;
 				positive: string;
 				negative: string;
 				warning: string;
