@@ -9,7 +9,7 @@ import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getFantomNodeCount } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption, getRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
-import { getPowerConsumptionDataForPoS, getPublicAddressFromAccountWhereContractIsNull, updateIsContractInBlockchainHasAccount } from './utils/sql.js';
+import { getPowerConsumptionDataForPoS, getPublicAddressFromAccountWhereContractIsNull, updateIsContractInAccount } from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updateDbNodeCount } from './utils/update/nodeCount.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
@@ -201,19 +201,19 @@ async function checkIfAddressesAreContracts() {
 
 		const [accountRows] = await con.query(getPublicAddressFromAccountWhereContractIsNull, [10]);
 
-		const txPromises = accountRows.map(async ({ blockchain_id, account_public_address }) => {
+		const txPromises = accountRows.map(async ({ blockchain_id, public_address }) => {
 			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
-			return provider.getCode(account_public_address).then((res) => {
+			return provider.getCode(public_address).then((res) => {
 				if (res === '0x') {
 					return {
 						blockchain_id: blockchain_id,
-						account_public_address: account_public_address,
+						public_address: public_address,
 						is_contract: 0
 					};
 				} else {
 					return {
 						blockchain_id: blockchain_id,
-						account_public_address: account_public_address,
+						public_address: public_address,
 						is_contract: 1
 					};
 				}
@@ -223,7 +223,7 @@ async function checkIfAddressesAreContracts() {
 		const txResults = await Promise.all(txPromises);
 
 		const updateDbPromises = txResults.map((txResult) =>
-			con.query(updateIsContractInBlockchainHasAccount, [txResult.is_contract, txResult.blockchain_id, txResult.account_public_address])
+			con.query(updateIsContractInAccount, [txResult.is_contract, txResult.blockchain_id, txResult.public_address])
 		);
 
 		await Promise.all(updateDbPromises);
@@ -232,7 +232,7 @@ async function checkIfAddressesAreContracts() {
 
 		setTimeout(() => {
 			checkIfAddressesAreContracts();
-		}, 100);
+		}, 500);
 	} catch (err) {
 		console.error('checkIfAddressesAreContracts', err);
 

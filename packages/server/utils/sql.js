@@ -6,7 +6,7 @@ export const getLastBlockParsedFromBlockParsed = `SELECT number FROM block_parse
 // get datas to calculate PoS blockchains power consumption
 export const getPowerConsumptionDataForPoS = `SELECT id, single_node_power_consumption, node_count, testnet_node_count FROM blockchain WHERE consensus = 'pos'`;
 // fetch public_address from blockchain_has_account table with limit and is_contract is null
-export const getPublicAddressFromAccountWhereContractIsNull = `SELECT * FROM blockchain_has_account WHERE is_contract IS NULL LIMIT ?`;
+export const getPublicAddressFromAccountWhereContractIsNull = `SELECT public_address, blockchain_id FROM account WHERE is_contract IS NULL LIMIT ?`;
 
 // ==============================================================================================
 // ======= INSERT ===============================================================================
@@ -34,6 +34,6 @@ export const updateDifficultyInBlockchain = `UPDATE blockchain SET difficulty = 
 // update time between two blocks (from the new one to the last one)
 export const updateTimeBetweenBlocksInBlockchain = `UPDATE blockchain SET time_between_blocks = ? WHERE id = ?`;
 // udpate power consumption by blockchain id
-export const updatePowerConsumptionInBlockchain = `UPDATE blockchain SET power_consumption = ? WHERE id = ?`;
+export const updatePowerConsumptionInBlockchain = `UPDATE blockchain SET blockchain_power_consumption = ? WHERE id = ?`;
 // update is_contract by blockchain id and account public address in blochchain_has_account table
-export const updateIsContractInBlockchainHasAccount = `UPDATE blockchain_has_account SET is_contract = ? WHERE blockchain_id = ? AND account_public_address = ?`;
+export const updateIsContractInAccount = `UPDATE account SET is_contract = ? WHERE blockchain_id = ? AND public_address = ?`;

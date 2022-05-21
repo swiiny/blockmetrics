@@ -62,6 +62,8 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				const timeBetweenTwoBlocks = (block.timestamp - lastBlockTimestamp) / 1000;
 				lastBlockTimestamp = block.timestamp;
 
+				//console.log("block", block.blockNumber:);
+
 				// TODO : improve blockchain update with a call to update all values
 				const promises = [
 					updatableCon.query(udpdateBlockCountInBlockParsed, [index, id]),
