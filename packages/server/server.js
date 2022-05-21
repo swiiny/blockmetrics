@@ -276,6 +276,29 @@ async function startFetchData() {
 			*/
 		} else {
 			// dev stuff
+			updateNodeCount();
+			updateGasPrice();
+
+			fetchEVMBlocksFor(chains.ethereum, pool);
+			fetchEVMBlocksFor(chains.polygon, pool);
+			fetchEVMBlocksFor(chains.bsc, pool);
+			fetchEVMBlocksFor(chains.avalanche, pool);
+			fetchEVMBlocksFor(chains.fantom, pool);
+
+			fetchBitcoinData(pool);
+
+			updateTokensCountForNetworks(pool);
+
+			checkIfAddressesAreContracts();
+
+			// TODO : replace by a websocket
+			setInterval(() => {
+				updateGasPrice();
+			}, 60 * 1000);
+
+			setInterval(() => {
+				updateNodeCount();
+			}, 10 * 60 * 1000);
 		}
 	} catch {
 		setTimeout(() => {

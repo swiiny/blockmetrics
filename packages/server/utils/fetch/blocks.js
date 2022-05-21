@@ -82,6 +82,11 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				if (process.env.DEBUG_LOGS === 'activated') {
 					console.log(name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 				}
+
+				// wait for 60 seconds in development mode
+				if (process.env.NODE_ENV !== 'production') {
+					await new Promise((resolve) => setTimeout(resolve, 60000));
+				}
 			}
 
 			if (process.env.DEBUG_LOGS === 'activated') {
