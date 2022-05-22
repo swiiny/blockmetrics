@@ -21,8 +21,7 @@ export const StyledHeadingOne = styled.h1<{
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 2.25rem;
-		line-height: 2.93rem;`,
-		"max"
+		line-height: 2.93rem;`
 	)}
 	${p => p.weight ? `font-weight: ${p.weight} !important;` : ""}
 `;
@@ -44,8 +43,7 @@ export const StyledHeadingTwo = styled.h2<{
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 2.25rem;
-		line-height: 2.93rem;`,
-		"max"
+		line-height: 2.93rem;`
 	)}
 	${p => p.weight ? `font-weight: ${p.weight} !important;` : ""}
 `;
@@ -67,8 +65,7 @@ export const StyledHeadingThree = styled.h3<{
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 1.5rem;
-		line-height: 1.93rem;`,
-		"max"
+		line-height: 1.93rem;`
 	)}
 	${p => p.weight ? `font-weight: ${p.weight} !important;` : ""}
 `;
@@ -90,8 +87,7 @@ export const StyledHeadingFour = styled.h4<{
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 1.25rem;
-		line-height: 1.625rem;`,
-		"max"
+		line-height: 1.625rem;`
 	)}
 	${p => p.weight ? `font-weight: ${p.weight} !important;` : ""}
 `;

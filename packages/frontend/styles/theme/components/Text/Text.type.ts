@@ -14,6 +14,7 @@ interface IText {
 	singleLine?: boolean;
 	className?: string;
 	inheritStyle?: boolean;
+	decoration?: boolean;
 }
 
 export type { IText };

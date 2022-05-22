@@ -46,12 +46,17 @@ export const StyledTextLink = styled.a<{
 	weight?: ETextWeight;
 	style?: string;
 	singleLine?: boolean;
+	decoration?: boolean;
 }>`
 	${(p) => generateTextStyle(p)}
-	text-decoration: underline dotted;
-	text-decoration-thickness: 1px;
-	text-underline-offset: 1ex;
-	text-decoration-color: ${(p) => p.theme.colors.typo + "30"};
+
+	${p => p.decoration ? css`
+		text-decoration: underline dotted;
+		text-decoration-thickness: 1px;
+		text-underline-offset: 1ex;
+		text-decoration-color: ${p.theme.colors.typo + "30"};
+	` : css`text-decoration: none;`}
+
 	${(p) =>
 		p.disabled
 			? css`
