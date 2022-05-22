@@ -54,7 +54,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 ### Frontend
 
--   [ ] Create awesome theme based on UI/UX
+-   [ ] Create awesome theme based on UI/UX :construction:
 -   [ ] API Hook
 -   [ ] Homepage
 -   [ ] Blockchains

@@ -1,11 +1,11 @@
 import Head from 'next/head';
 import { ThemeProvider } from 'styled-components';
 import { darkTheme } from '../styles/theme/theme';
-import GlobalStyle from '../styles/theme/GlobalStyles';
 import { AppProps } from 'next/app';
 import { combineReducers, defaultState } from '../reducers';
 import mainReducer from '../reducers/mainReducer';
 import { AppWrapper } from '../context/state';
+import GlobalStyle from '../styles/theme/GlobalStyles';
 
 const appReducers = combineReducers({
   main: mainReducer,

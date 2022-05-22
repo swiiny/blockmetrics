@@ -1,4 +1,6 @@
-import { createGlobalStyle, DefaultTheme } from "styled-components";
+import { createGlobalStyle, DefaultTheme } from 'styled-components';
+import { EMediaQuery } from './utils/enum';
+import { mq } from './utils/functions';
 
 const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
 //========================================================================================================
@@ -15,7 +17,11 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
 }
 
 body {
-  margin: 0;
+  margin: 0 auto;
+	max-width: 1600px;
+	padding: 0 ${(p) => p.theme.spacing['2xl']};
+
+	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 }
 
 html {
