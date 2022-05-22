@@ -10,6 +10,11 @@ import { EFlex, ETextType } from '../styles/theme/utils/enum';
 import Main from '../styles/layout/Main';
 import Header from '../components/Header';
 
+const HeaderData = {
+	title: 'Lorem ipsum',
+	subtitle: 'Lorem ipsu dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+};
+
 const Home: NextPage = () => {
 	return (
 		<>
@@ -17,7 +22,7 @@ const Home: NextPage = () => {
 
 			<Navbar />
 
-			<Header title='Ethereum' subtitle='Ethereum is a decentralized, open-source blockchain with smart contract functionality.' image='/assets/ethereum.svg' />
+			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 
 			<Main></Main>
 		</>

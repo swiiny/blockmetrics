@@ -1,7 +1,7 @@
 interface IHeader {
 	title: string;
 	subtitle: string;
-	image: string;
+	image?: string;
 }
 
 export type { IHeader };
