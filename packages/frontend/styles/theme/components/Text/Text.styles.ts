@@ -1,6 +1,6 @@
-import { addTransition, setFontSize } from "../../utils/functions";
-import styled, { css } from "styled-components";
-import { ESize, ETextColor, ETextWeight } from "../../utils/enum";
+import { addTransition, setFontSize } from '../../utils/functions';
+import styled, { css } from 'styled-components';
+import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
 
 const generateTextStyle = (p: any) => {
 	return css`
@@ -11,7 +11,7 @@ const generateTextStyle = (p: any) => {
 		letter-spacing: -0.02em;
 		text-align: ${p.textAlign};
 
-		${p.singleLine ? "line-height: 1rem;" : ""}
+		${p.singleLine ? 'line-height: 1rem;' : ''}
 		${p.inheritStyle
 			? css`
 					font-size: inherit;
@@ -22,8 +22,20 @@ const generateTextStyle = (p: any) => {
 			  `
 			: `
 	`}
-	${p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.text.negative};` : ""}
-	${p.weight ? `font-weight: ${p.weight} !important;` : ""}
+	${p.textColor === ETextColor.green
+			? `color: ${p.theme.colors.text.positive};`
+			: p.textColor === ETextColor.red
+			? `color: ${p.theme.colors.text.negative};`
+			: p.textColor === ETextColor.gradient
+			? css`
+					background: ${p.theme.colors.gradient.toRight};
+					${() => '-webkit-background-clip: text;'}
+					-webkit-text-fill-color: transparent;
+			  `
+			: ''}
+
+	${p.weight ? `font-weight: ${p.weight} !important;` : ''}
+	${p.opacityReduced ? `opacity: 0.7` : ''}
 	`;
 };
 
@@ -34,6 +46,7 @@ export const StyledTextParagraph = styled.p<{
 	weight?: ETextWeight;
 	style?: string;
 	singleLine?: boolean;
+	opacityReduced?: boolean;
 }>`
 	${(p) => generateTextStyle(p)}
 `;
@@ -47,15 +60,21 @@ export const StyledTextLink = styled.a<{
 	style?: string;
 	singleLine?: boolean;
 	decoration?: boolean;
+	opacityReduced?: boolean;
 }>`
 	${(p) => generateTextStyle(p)}
 
-	${p => p.decoration ? css`
-		text-decoration: underline dotted;
-		text-decoration-thickness: 1px;
-		text-underline-offset: 1ex;
-		text-decoration-color: ${p.theme.colors.typo + "30"};
-	` : css`text-decoration: none;`}
+	${(p) =>
+		p.decoration
+			? css`
+					text-decoration: underline dotted;
+					text-decoration-thickness: 1px;
+					text-underline-offset: 1ex;
+					text-decoration-color: ${p.theme.colors.typo + '30'};
+			  `
+			: css`
+					text-decoration: none;
+			  `}
 
 	${(p) =>
 		p.disabled
@@ -66,7 +85,7 @@ export const StyledTextLink = styled.a<{
 			: css`
 					&:hover {
 						color: ${p.theme.colors.accent};
-						text-decoration-color: ${p.theme.colors.accent + "30"};
+						text-decoration-color: ${p.theme.colors.accent + '30'};
 					}
 			  `}
 `;
@@ -79,6 +98,7 @@ export const StyledTextSpan = styled.span<{
 	style?: string;
 	singleLine?: boolean;
 	inheritStyle?: boolean;
+	opacityReduced?: boolean;
 }>`
 	${(p) => generateTextStyle(p)}
 `;

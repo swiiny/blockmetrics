@@ -8,6 +8,7 @@ import Heading from '../styles/theme/components/Heading';
 import TextWithGradient from '../styles/theme/components/TextWithGradient';
 import { EFlex, ETextType } from '../styles/theme/utils/enum';
 import Main from '../styles/layout/Main';
+import Header from '../components/Header';
 
 const Home: NextPage = () => {
 	return (
@@ -16,23 +17,11 @@ const Home: NextPage = () => {
 
 			<Navbar />
 
-			<Main>
-				<FlexEx vertical={EFlex.center} horizontal={EFlex.between}>
-					<Heading type={ETextType.h1}>
-						<TextWithGradient>Block metrics</TextWithGradient>
-					</Heading>
+			<Header title='Ethereum' subtitle='Ethereum is a decentralized, open-source blockchain with smart contract functionality.' image='/assets/ethereum.svg' />
 
-					<Heading type={ETextType.h1}>
-						<TextWithGradient>Block metrics</TextWithGradient>
-					</Heading>
-				</FlexEx>
-			</Main>
+			<Main></Main>
 		</>
 	);
 };
-
-const FlexEx = styled(Flex)`
-	height: 100vh;
-`;
 
 export default Home;

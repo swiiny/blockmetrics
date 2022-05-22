@@ -1,8 +1,7 @@
-
-import React from "react";
-import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from "../../utils/enum";
-import { StyledTextLink, StyledTextParagraph, StyledTextSpan } from "./Text.styles";
-import { IText } from "./Text.type";
+import React from 'react';
+import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../utils/enum';
+import { StyledTextLink, StyledTextParagraph, StyledTextSpan } from './Text.styles';
+import { IText } from './Text.type';
 
 const Text: React.FC<IText> = ({
 	children,
@@ -15,7 +14,7 @@ const Text: React.FC<IText> = ({
 	weight,
 	style,
 	singleLine = false,
-	className = "",
+	className = '',
 	inheritStyle = true,
 	...otherProps
 }) => {
@@ -43,7 +42,7 @@ const Text: React.FC<IText> = ({
 					style={style}
 					weight={weight}
 					href={href}
-					rel="noopener noreferrer"
+					rel='noopener noreferrer'
 					textAlign={textAlign}
 					textColor={textColor}
 					size={size}
@@ -61,12 +60,12 @@ const Text: React.FC<IText> = ({
 					style={style}
 					weight={weight}
 					href={href}
-					rel="noopener noreferrer"
+					rel='noopener noreferrer'
 					textAlign={textAlign}
 					textColor={textColor}
 					size={size}
 					disabled={disabled}
-					target={"_blank"}
+					target={'_blank'}
 					{...otherProps}
 				>
 					{children}

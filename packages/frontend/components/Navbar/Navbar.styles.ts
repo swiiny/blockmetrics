@@ -17,6 +17,8 @@ export const StyledNavbar = styled.nav`
 	padding: 0 ${(p) => p.theme.spacing['2xl']};
 
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
+
+	height: 80px;
 `;
 
 export const StyledList = styled.ul`

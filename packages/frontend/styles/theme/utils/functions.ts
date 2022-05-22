@@ -1,21 +1,20 @@
-import { EMediaQuery, ESize } from "./enum";
+import { FlattenSimpleInterpolation } from 'styled-components';
+import { EMediaQuery, ESize } from './enum';
 
-
-export const mq = (mq: EMediaQuery, children: string, minOrMax = "max") => {
-	return `@media only screen and (${minOrMax}-width: ${mq}) {
+export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
+	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {
 		${children}
 	}`;
 };
 
 // add transition
-export const addTransition = (target: string = "all", duration: number = 0.4, timingFunction: string = "ease") => {
+export const addTransition = (target: string = 'all', duration: number = 0.4, timingFunction: string = 'ease') => {
 	return `
 		@media screen and (prefers-reduced-motion: no-preference) {
 			transition: ${target} ${duration}s ${timingFunction};
 		}
 	`;
 };
-
 
 // set font size for normal text
 export const setFontSize = (size: ESize) => {
@@ -56,5 +55,5 @@ export const setFontSize = (size: ESize) => {
             `
 		}
 	}
-	`
-}
+	`;
+};

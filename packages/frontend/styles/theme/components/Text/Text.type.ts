@@ -1,4 +1,4 @@
-import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from "../../utils/enum";
+import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../utils/enum';
 
 interface IText {
 	children: React.ReactNode | string;
@@ -15,6 +15,7 @@ interface IText {
 	className?: string;
 	inheritStyle?: boolean;
 	decoration?: boolean;
+	opacityReduced?: boolean;
 }
 
 export type { IText };
