@@ -3,7 +3,7 @@ import { ESize } from '../../theme/utils/enum';
 
 const Main = styled.main<{ paddingTop?: ESize.s | ESize.m | ESize.l | ESize.xl }>`
 	margin-top: 120px;
-	padding-bottom: 40px;
+	padding-bottom: 160px;
 
 	${(p) => {
 		switch (p.paddingTop) {
