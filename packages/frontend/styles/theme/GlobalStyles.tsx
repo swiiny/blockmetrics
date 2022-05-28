@@ -22,10 +22,11 @@ body {
 	padding: 0 ${(p) => p.theme.spacing['2xl']};
 
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
-}
 
-html {
-  background-color: ${(p) => p.theme.colors.bg};
+  background: ${(p) => p.theme.colors.bg};
+  min-height: 100vh;
+
+  overflow-x: hidden;
 }
 
 h1,

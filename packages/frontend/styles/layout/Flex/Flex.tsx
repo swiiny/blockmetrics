@@ -1,14 +1,20 @@
-import React from "react";
-import { EFlex } from "../../theme/utils/enum";
-import { StyledFlex } from "./Flex.styles";
-import { IFlex } from "./Flex.type";
-
+import React from 'react';
+import { EFlex } from '../../theme/utils/enum';
+import { StyledFlex } from './Flex.styles';
+import { IFlex } from './Flex.type';
 
 const Flex: React.FC<IFlex> = ({
 	children,
 	fullWidth = false,
 	fullHeight = false,
-	wrapItems = true,
+	wrapItems = false,
+	padding,
+	paddingBottom,
+	paddingTop,
+	paddingLeft,
+	paddingRight,
+	paddingX,
+	paddingY,
 	direction = EFlex.row,
 	horizontal = EFlex.start,
 	vertical = EFlex.start,
@@ -32,6 +38,13 @@ const Flex: React.FC<IFlex> = ({
 			fullWidth={fullWidth}
 			fullHeight={fullHeight}
 			wrapItems={wrapItems}
+			padding={padding}
+			paddingX={paddingX}
+			paddingY={paddingY}
+			paddingBottom={paddingBottom}
+			paddingTop={paddingTop}
+			paddingLeft={paddingLeft}
+			paddingRight={paddingRight}
 			horizontal={horizontal}
 			vertical={vertical}
 			smDirection={smDirection}

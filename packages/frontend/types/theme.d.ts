@@ -1,7 +1,7 @@
 // styled.d.ts
-import "styled-components";
+import 'styled-components';
 
-declare module "styled-components" {
+declare module 'styled-components' {
 	export interface DefaultTheme {
 		radius: {
 			s: string;
@@ -9,28 +9,32 @@ declare module "styled-components" {
 			l: string;
 		};
 		spacing: {
-			"4xs": string;
-			"3xs": string;
-			"2xs": string;
+			'4xs': string;
+			'3xs': string;
+			'2xs': string;
 			xs: string;
 			s: string;
 			m: string;
 			l: string;
 			xl: string;
-			"2xl": string;
-			"3xl": string;
-			"4xl": string;
+			'2xl': string;
+			'3xl': string;
+			'4xl': string;
+			'5xl': string;
+			'6xl': string;
+			'7xl': string;
+			'8xl': string;
 		};
 		colors: {
 			bg: string;
 			primary: string;
 			secondary: string;
-            gradient: {
-                toRight: string;
-                toLeft: string;
-                toTop: string;
-                toBottom: string;
-            };
+			gradient: {
+				toRight: string;
+				toLeft: string;
+				toTop: string;
+				toBottom: string;
+			};
 			text: {
 				default: string;
 				accent: string;

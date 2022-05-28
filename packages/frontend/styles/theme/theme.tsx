@@ -17,7 +17,11 @@ export const defaultTheme = {
 		xl: '48px',
 		'2xl': '64px',
 		'3xl': '80px',
-		'4xl': '100px'
+		'4xl': '100px',
+		'5xl': '120px',
+		'6xl': '140px',
+		'7xl': '160px',
+		'8xl': '180px'
 	}
 };
 

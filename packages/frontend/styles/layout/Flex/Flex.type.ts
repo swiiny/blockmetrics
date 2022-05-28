@@ -1,11 +1,18 @@
-import React from "react";
-import { EFlex } from "../../theme/utils/enum";
+import React from 'react';
+import { EFlex, ESize } from '../../theme/utils/enums';
 
 interface IFlex {
 	children: React.ReactNode;
 	fullWidth?: boolean;
 	fullHeight?: boolean;
 	wrapItems?: boolean;
+	padding?: ESize;
+	paddingBottom?: ESize;
+	paddingTop?: ESize;
+	paddingLeft?: ESize;
+	paddingRight?: ESize;
+	paddingX?: ESize;
+	paddingY?: ESize;
 
 	direction?: EFlex.row | EFlex.rowReverse | EFlex.column | EFlex.columnReverse;
 	horizontal?: EFlex.start | EFlex.end | EFlex.between | EFlex.around | EFlex.center;
@@ -27,4 +34,4 @@ interface IFlex {
 	xlVertical?: EFlex.start | EFlex.end | EFlex.between | EFlex.around | EFlex.center;
 }
 
-export type { IFlex }
+export type { IFlex };
