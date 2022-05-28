@@ -16,6 +16,7 @@ const Text: React.FC<IText> = ({
 	singleLine = false,
 	className = '',
 	inheritStyle = true,
+	opacityReduced = false,
 	...otherProps
 }) => {
 	switch (type) {
@@ -28,6 +29,7 @@ const Text: React.FC<IText> = ({
 					weight={weight}
 					textAlign={textAlign}
 					textColor={textColor}
+					opacityReduced={opacityReduced}
 					size={size}
 					{...otherProps}
 				>
@@ -47,6 +49,7 @@ const Text: React.FC<IText> = ({
 					textColor={textColor}
 					size={size}
 					disabled={disabled}
+					opacityReduced={opacityReduced}
 					{...otherProps}
 				>
 					{children}
@@ -66,6 +69,7 @@ const Text: React.FC<IText> = ({
 					size={size}
 					disabled={disabled}
 					target={'_blank'}
+					opacityReduced={opacityReduced}
 					{...otherProps}
 				>
 					{children}
@@ -82,6 +86,7 @@ const Text: React.FC<IText> = ({
 					textColor={textColor}
 					size={size}
 					inheritStyle={inheritStyle}
+					opacityReduced={opacityReduced}
 					{...otherProps}
 				>
 					{children}

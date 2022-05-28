@@ -8,6 +8,7 @@ export const StyledHeadingOne = styled.h1<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
+	opacityReduce?: boolean;
 }>`
 	font-size: 4rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `4.68rem`)};
@@ -22,6 +23,8 @@ export const StyledHeadingOne = styled.h1<{
 		line-height: 2.93rem;`
 	)}
 	${(p) => (p.weight ? `font-weight: ${p.weight} !important;` : '')}
+
+	opacity: ${(p) => (p.opacityReduced ? `0.7` : `1.0`)};
 `;
 
 export const StyledHeadingTwo = styled.h2<{
@@ -30,6 +33,7 @@ export const StyledHeadingTwo = styled.h2<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
+	opacityReduce?: boolean;
 }>`
 	font-size: 3rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `3.875rem`)};
@@ -43,6 +47,8 @@ export const StyledHeadingTwo = styled.h2<{
 		line-height: 2.93rem;`
 	)}
 	${(p) => (p.weight ? `font-weight: ${p.weight} !important;` : '')}
+
+	opacity: ${(p) => (p.opacityReduced ? `0.7` : `1.0`)};
 `;
 
 export const StyledHeadingThree = styled.h3<{
@@ -51,6 +57,7 @@ export const StyledHeadingThree = styled.h3<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
+	opacityReduce?: boolean;
 }>`
 	font-size: 2.25rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `2.625rem`)};
@@ -64,6 +71,8 @@ export const StyledHeadingThree = styled.h3<{
 		line-height: 1.93rem;`
 	)}
 	${(p) => (p.weight ? `font-weight: ${p.weight} !important;` : '')}
+
+	opacity: ${(p) => (p.opacityReduced ? `0.7` : `1.0`)};
 `;
 
 export const StyledHeadingFour = styled.h4<{
@@ -72,6 +81,7 @@ export const StyledHeadingFour = styled.h4<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
+	opacityReduce?: boolean;
 }>`
 	font-size: 1.5rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `1.93rem`)};
@@ -85,4 +95,6 @@ export const StyledHeadingFour = styled.h4<{
 		line-height: 1.625rem;`
 	)}
 	${(p) => (p.weight ? `font-weight: ${p.weight} !important;` : '')}
+
+	opacity: ${(p) => (p.opacityReduced ? `0.7` : `1.0`)};
 `;

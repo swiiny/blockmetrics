@@ -1,10 +1,10 @@
-import React from "react";
-import { ETextType, ETextAlign, ETextColor } from "../../utils/enum";
-import { IText } from "../Text/Text.type";
-import { StyledHeadingFour, StyledHeadingOne, StyledHeadingThree, StyledHeadingTwo } from "./Heading.styles";
+import React from 'react';
+import { ETextType, ETextAlign, ETextColor } from '../../utils/enum';
+import { IText } from '../Text/Text.type';
+import { StyledHeadingFour, StyledHeadingOne, StyledHeadingThree, StyledHeadingTwo } from './Heading.styles';
 
 const Heading: React.FC<IText> = ({
-	className = "",
+	className = '',
 	singleLine = true,
 	style,
 	children,
@@ -12,6 +12,7 @@ const Heading: React.FC<IText> = ({
 	type,
 	textColor = ETextColor.default,
 	textAlign = ETextAlign.left,
+	opacityReduced = false,
 	...otherProps
 }) => {
 	switch (type) {
@@ -24,6 +25,7 @@ const Heading: React.FC<IText> = ({
 					textAlign={textAlign}
 					textColor={textColor}
 					weight={weight}
+					opacityReduced={opacityReduced}
 					{...otherProps}
 				>
 					{children}
@@ -38,6 +40,7 @@ const Heading: React.FC<IText> = ({
 					textAlign={textAlign}
 					textColor={textColor}
 					weight={weight}
+					opacityReduced={opacityReduced}
 					{...otherProps}
 				>
 					{children}
@@ -52,6 +55,7 @@ const Heading: React.FC<IText> = ({
 					textAlign={textAlign}
 					textColor={textColor}
 					weight={weight}
+					opacityReduced={opacityReduced}
 					{...otherProps}
 				>
 					{children}
@@ -65,6 +69,7 @@ const Heading: React.FC<IText> = ({
 					style={style}
 					textAlign={textAlign}
 					textColor={textColor}
+					opacityReduced={opacityReduced}
 					{...otherProps}
 				>
 					{children}
