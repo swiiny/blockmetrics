@@ -14,7 +14,7 @@ export const StyledHeadingOne = styled.h1<{
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
 
 	${mq(
 		EMediaQuery.sm,
@@ -36,7 +36,7 @@ export const StyledHeadingTwo = styled.h2<{
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 2.25rem;
@@ -57,7 +57,7 @@ export const StyledHeadingThree = styled.h3<{
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 1.5rem;
@@ -78,7 +78,7 @@ export const StyledHeadingFour = styled.h4<{
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 1.25rem;

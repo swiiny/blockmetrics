@@ -15,8 +15,6 @@ const Compare: NextPage = () => {
 		<>
 			<Meta title='Compare' />
 
-			<Navbar />
-
 			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 
 			<Main></Main>

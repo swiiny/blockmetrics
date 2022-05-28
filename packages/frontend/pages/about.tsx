@@ -15,8 +15,6 @@ const About: NextPage = () => {
 		<>
 			<Meta title='About' />
 
-			<Navbar />
-
 			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 
 			<Main></Main>

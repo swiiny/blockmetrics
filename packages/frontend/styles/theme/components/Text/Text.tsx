@@ -1,5 +1,5 @@
 import React from 'react';
-import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../utils/enum';
+import { ESize, ETextAlign, ETextColor, ETextType } from '../../utils/enum';
 import { StyledTextLink, StyledTextParagraph, StyledTextSpan } from './Text.styles';
 import { IText } from './Text.type';
 

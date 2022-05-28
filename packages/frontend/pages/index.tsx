@@ -15,8 +15,6 @@ const Home: NextPage = () => {
 		<>
 			<Meta title='Block metrics' />
 
-			<Navbar />
-
 			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 
 			<Main></Main>

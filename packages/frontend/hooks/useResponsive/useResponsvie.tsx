@@ -2,16 +2,16 @@ import { useEffect, useState } from 'react';
 import { IUseResponsive } from './useResponsive.type';
 
 function getResponsive(): number {
+	if (typeof window === 'undefined') {
+		return 1200;
+	}
+
 	const { innerWidth: width } = window;
 
 	return width;
 }
 
 function useResponsive(): IUseResponsive {
-	if (typeof window === 'undefined') {
-		return {};
-	}
-
 	const mqSm: number = 660;
 	const mqMd: number = 900;
 	const mqLg: number = 1200;

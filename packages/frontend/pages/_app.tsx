@@ -6,6 +6,7 @@ import { combineReducers, defaultState } from '../reducers';
 import mainReducer from '../reducers/mainReducer';
 import { AppWrapper } from '../context/state';
 import GlobalStyle from '../styles/theme/GlobalStyles';
+import Navbar from '../components/Navbar';
 
 const appReducers = combineReducers({
 	main: mainReducer
@@ -21,6 +22,7 @@ const BlockMetricsApp = ({ Component, pageProps }: AppProps) => (
 			<ThemeProvider theme={darkTheme}>
 				<GlobalStyle />
 
+				<Navbar />
 				<Component {...pageProps} />
 			</ThemeProvider>
 		</AppWrapper>

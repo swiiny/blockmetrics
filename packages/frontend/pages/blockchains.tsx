@@ -15,8 +15,6 @@ const Blockchains: NextPage = () => {
 		<>
 			<Meta title='Blockchains' />
 
-			<Navbar />
-
 			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 
 			<Main></Main>
