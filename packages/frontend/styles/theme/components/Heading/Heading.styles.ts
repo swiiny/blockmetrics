@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { EMediaQuery, ETextWeight, ETextColor } from '../../utils/enum';
+import { EMediaQuery, ETextWeight, ETextColor, ETextType } from '../../utils/enum';
 import { mq } from '../../utils/functions';
 
 export const StyledHeadingOne = styled.h1<{
@@ -8,14 +8,20 @@ export const StyledHeadingOne = styled.h1<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
-	opacityReduce?: boolean;
+	opacityReduced?: boolean;
+	as?: ETextType;
 }>`
 	font-size: 4rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `4.68rem`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) =>
+		p.textColor === ETextColor.green
+			? `color: ${p.theme.colors.text.positive};`
+			: p.textColor === ETextColor.red
+			? `color: ${p.theme.colors.text.negative};`
+			: ''}
 
 	${mq(
 		EMediaQuery.sm,
@@ -33,14 +39,20 @@ export const StyledHeadingTwo = styled.h2<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
-	opacityReduce?: boolean;
+	opacityReduced?: boolean;
+	as?: ETextType;
 }>`
 	font-size: 3rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `3.875rem`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) =>
+		p.textColor === ETextColor.green
+			? `color: ${p.theme.colors.text.positive};`
+			: p.textColor === ETextColor.red
+			? `color: ${p.theme.colors.text.negative};`
+			: ''}
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 2.25rem;
@@ -57,14 +69,20 @@ export const StyledHeadingThree = styled.h3<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
-	opacityReduce?: boolean;
+	opacityReduced?: boolean;
+	as?: ETextType;
 }>`
 	font-size: 2.25rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `2.625rem`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) =>
+		p.textColor === ETextColor.green
+			? `color: ${p.theme.colors.text.positive};`
+			: p.textColor === ETextColor.red
+			? `color: ${p.theme.colors.text.negative};`
+			: ''}
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 1.5rem;
@@ -81,14 +99,20 @@ export const StyledHeadingFour = styled.h4<{
 	textAlign?: string;
 	weight?: ETextWeight;
 	style?: string;
-	opacityReduce?: boolean;
+	opacityReduced?: boolean;
+	as?: ETextType;
 }>`
 	font-size: 1.5rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `1.93rem`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
-	${(p) => (p.textColor === ETextColor.green ? `color: ${p.theme.colors.text.positive};` : p.textColor === ETextColor.red ? `color: ${p.theme.colors.negative};` : '')}
+	${(p) =>
+		p.textColor === ETextColor.green
+			? `color: ${p.theme.colors.text.positive};`
+			: p.textColor === ETextColor.red
+			? `color: ${p.theme.colors.text.negative};`
+			: ''}
 	${mq(
 		EMediaQuery.sm,
 		`font-size: 1.25rem;

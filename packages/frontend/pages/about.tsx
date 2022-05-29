@@ -15,7 +15,8 @@ import { motion, Variants } from 'framer-motion';
 
 const HeaderData = {
 	title: 'About',
-	subtitle: 'Blockchains data may be difficult to find and even more difficult to understand. That is exactly why Blockmetrics is being built.'
+	subtitle:
+		'Blockchains data may be difficult to find and even more difficult to understand. That is exactly why Blockmetrics is being built.'
 };
 
 const sectionVariants: Variants = {
@@ -43,22 +44,36 @@ const About: NextPage = () => {
 
 			<Main>
 				<Flex direction={EFlex.column} vertical={EFlex.center}>
-					<motion.section initial='offscreen' whileInView='onscreen' variants={sectionVariants} viewport={{ once: true, amount: 0.8 }}>
+					<motion.section
+						initial='offscreen'
+						whileInView='onscreen'
+						variants={sectionVariants}
+						viewport={{ once: true, amount: 0.8 }}
+					>
 						<Presentation />
 					</motion.section>
 
 					<Spacing size={ESize['8xl']} />
 					<Spacing size={ESize['8xl']} />
 
-					<motion.section initial='offscreen' whileInView='onscreen' variants={sectionVariants} viewport={{ once: true, amount: 0.8 }}>
-						<Text opacityReduced size={ESize.m} textAlign={ETextAlign.center}>
+					<motion.section
+						initial='offscreen'
+						whileInView='onscreen'
+						variants={sectionVariants}
+						viewport={{ once: true, amount: 0.8 }}
+					>
+						<Text opacityReduced size={ESize.xl} textAlign={ETextAlign.center}>
 							Your favorite blockchain isn’t listed?
 						</Text>
 
 						<Spacing size={ESize.xs} />
 
-						<a href='https://github.com/JeremyTheintz/block-metrics/issues' target='_blank' rel='noopener noreferrer'>
-							<Text size={ESize.l} textAlign={ETextAlign.center}>
+						<a
+							href='https://github.com/JeremyTheintz/block-metrics/issues'
+							target='_blank'
+							rel='noopener noreferrer'
+						>
+							<Text size={ESize['2xl']} textAlign={ETextAlign.center}>
 								Create a <TextWithGradient>Github issue</TextWithGradient> with some details
 							</Text>
 						</a>
@@ -67,14 +82,19 @@ const About: NextPage = () => {
 					<Spacing size={ESize['8xl']} />
 					<Spacing size={ESize['8xl']} />
 
-					<motion.section initial='offscreen' whileInView='onscreen' variants={sectionVariants} viewport={{ once: true, amount: 0.8 }}>
-						<Text size={ESize.m} opacityReduced textAlign={ETextAlign.center}>
+					<motion.section
+						initial='offscreen'
+						whileInView='onscreen'
+						variants={sectionVariants}
+						viewport={{ once: true, amount: 0.8 }}
+					>
+						<Text size={ESize['xl']} textAlign={ETextAlign.center}>
 							Want to help me improve Blockmetrics?
 						</Text>
 
 						<Spacing size={ESize.xs} />
 
-						<TextEx size={ESize.l} textAlign={ETextAlign.center}>
+						<TextEx size={ESize['2xl']} textAlign={ETextAlign.center}>
 							<TextWithGradient>0x123456ca3a7b8B5717dd99871167Fc3332805389</TextWithGradient>
 						</TextEx>
 					</motion.section>

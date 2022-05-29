@@ -16,6 +16,7 @@ interface IText {
 	inheritStyle?: boolean;
 	decoration?: boolean;
 	opacityReduced?: boolean;
+	as?: any;
 }
 
 export type { IText };

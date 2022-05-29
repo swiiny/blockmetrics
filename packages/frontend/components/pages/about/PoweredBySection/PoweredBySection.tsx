@@ -29,26 +29,31 @@ const SERVICES = [
 	}
 ];
 
-const PoweredBySection: React.FC = ({ variants, ...otherProps }: { variants: Variants }) => {
+const PoweredBySection: React.FC<{ variants: Variants }> = ({ variants, ...otherProps }: { variants: Variants }) => {
 	return (
 		<StyledPoweredBySection {...otherProps}>
-			<Heading
-				as={motion.h3}
-				type={ETextType.h3}
-				textAlign={ETextAlign.center}
+			<motion.div
 				initial='offscreen'
 				whileInView='onscreen'
 				variants={variants}
 				viewport={{ once: true, amount: 0.8 }}
 			>
-				Powered By
-			</Heading>
+				<Heading type={ETextType.h3} textAlign={ETextAlign.center}>
+					Powered By
+				</Heading>
+			</motion.div>
 
 			<Spacing size={ESize['3xl']} />
 
 			<StyledList>
 				{SERVICES.map(({ logoSrc, href }: { logoSrc: string; href: string }) => (
-					<motion.li key={href} initial='offscreen' whileInView='onscreen' variants={variants} viewport={{ once: true, amount: 0.8 }}>
+					<motion.li
+						key={href}
+						initial='offscreen'
+						whileInView='onscreen'
+						variants={variants}
+						viewport={{ once: true, amount: 0.8 }}
+					>
 						<a href={href} target='_blank' rel='noopener noreferrer'>
 							<StyledImageContainer>
 								<Image src={logoSrc} alt={href} layout='fill' objectFit='contain' />

@@ -13,6 +13,7 @@ const Heading: React.FC<IText> = ({
 	textColor = ETextColor.default,
 	textAlign = ETextAlign.left,
 	opacityReduced = false,
+	as,
 	...otherProps
 }) => {
 	switch (type) {
@@ -26,6 +27,7 @@ const Heading: React.FC<IText> = ({
 					textColor={textColor}
 					weight={weight}
 					opacityReduced={opacityReduced}
+					as={as}
 					{...otherProps}
 				>
 					{children}
@@ -41,6 +43,7 @@ const Heading: React.FC<IText> = ({
 					textColor={textColor}
 					weight={weight}
 					opacityReduced={opacityReduced}
+					as={as}
 					{...otherProps}
 				>
 					{children}
@@ -56,6 +59,7 @@ const Heading: React.FC<IText> = ({
 					textColor={textColor}
 					weight={weight}
 					opacityReduced={opacityReduced}
+					as={as}
 					{...otherProps}
 				>
 					{children}
@@ -70,6 +74,7 @@ const Heading: React.FC<IText> = ({
 					textAlign={textAlign}
 					textColor={textColor}
 					opacityReduced={opacityReduced}
+					as={as}
 					{...otherProps}
 				>
 					{children}
