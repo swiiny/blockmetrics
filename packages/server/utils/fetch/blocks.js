@@ -14,6 +14,10 @@ import {
 	updateTxCountInBlockchain
 } from '../sql.js';
 
+import { fetchingDataActivated } from '../../server.js';
+
+let bitcoinTimeout;
+
 export async function fetchEVMBlocksFor(chain, pool) {
 	let updatableCon = null;
 
@@ -41,7 +45,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 			let index = lastBlockCheck;
 			let lastBlockTimestamp = 0;
 
-			while (block) {
+			while (block && fetchingDataActivated) {
 				let startTime = Date.now();
 				index++;
 				block = await provider.getBlockWithTransactions(index);
@@ -70,7 +74,13 @@ export async function fetchEVMBlocksFor(chain, pool) {
 					updatableCon.query(increaseTxCountInBlockchain, [transactions?.length || 0, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
-							updatableCon.query(insertOrUpdateAccount, [public_address, id, timestamp, timestamp, timestamp]),
+							updatableCon.query(insertOrUpdateAccount, [
+								public_address,
+								id,
+								timestamp,
+								timestamp,
+								timestamp
+							])
 						])
 						.flat(1),
 					updatableCon.query(updateTimeBetweenBlocksInBlockchain, [timeBetweenTwoBlocks, id]),
@@ -80,12 +90,14 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				await Promise.all(promises);
 
 				if (process.env.DEBUG_LOGS === 'activated') {
-					console.log(name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
+					console.log(
+						name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms'
+					);
 				}
 
 				// wait for 60 seconds in development mode
 				if (process.env.NODE_ENV !== 'production') {
-					await new Promise((resolve) => setTimeout(resolve, 60000));
+					// await new Promise((resolve) => setTimeout(resolve, 60000));
 				}
 			}
 
@@ -95,12 +107,14 @@ export async function fetchEVMBlocksFor(chain, pool) {
 
 			updatableCon?.release();
 
-			setTimeout(() => {
-				if (process.env.DEBUG_LOGS === 'activated') {
-					console.log('> start fetching new blocks for ' + name);
-				}
-				fetchEVMBlocksFor({ id, rpc, name });
-			}, 1 * 60 * 1000);
+			if (fetchingDataActivated) {
+				setTimeout(() => {
+					if (process.env.DEBUG_LOGS === 'activated') {
+						console.log('> start fetching new blocks for ' + name);
+					}
+					fetchEVMBlocksFor({ id, rpc, name });
+				}, 1 * 60 * 1000);
+			}
 		} else {
 			throw new Error("can't fetch block_parsed number for " + name);
 		}
@@ -109,9 +123,11 @@ export async function fetchEVMBlocksFor(chain, pool) {
 
 		updatableCon?.destroy();
 
-		setTimeout(() => {
-			fetchEVMBlocksFor({ id, rpc, name }, pool);
-		}, 1 * 60 * 1000);
+		if (fetchingDataActivated) {
+			setTimeout(() => {
+				fetchEVMBlocksFor({ id, rpc, name }, pool);
+			}, 1 * 60 * 1000);
+		}
 	}
 }
 
@@ -184,16 +200,22 @@ export async function fetchBitcoinData(pool) {
 
 		updatableCon?.release();
 
-		setTimeout(() => {
-			fetchBitcoinData(pool);
-		}, timeBetweenNextUpdate * 60 * 1000);
+		if (fetchingDataActivated) {
+			bitcoinTimeout = setTimeout(() => {
+				fetchBitcoinData(pool);
+			}, timeBetweenNextUpdate * 60 * 1000);
+		}
 	} catch (err) {
 		console.error('fetchBitcoinBlocks', err);
 
 		updatableCon?.destroy();
 
-		setTimeout(() => {
-			fetchBitcoinData(pool);
-		}, 1 * 60 * 1000);
+		if (fetchingDataActivated) {
+			bitcoinTimeout = setTimeout(() => {
+				fetchBitcoinData(pool);
+			}, 1 * 60 * 1000);
+		}
 	}
 }
+
+export { bitcoinTimeout };

@@ -1,17 +1,18 @@
 import React from 'react';
 import type { NextPage } from 'next';
-import Meta from '../components/utils/Meta';
-import Main from '../styles/layout/Main';
-import Header from '../components/Header';
-import Flex from '../styles/layout/Flex';
-import Presentation from '../components/pages/about/Presentation';
-import { EFlex, ESize, ETextAlign } from '../styles/theme/utils/enum';
-import Spacing from '../styles/layout/Spacing';
-import TextWithGradient from '../styles/theme/components/TextWithGradient';
-import { TextEx } from '../components/pages/about/About.styles';
-import PoweredBySection from '../components/pages/about/PoweredBySection';
-import Text from '../styles/theme/components/Text';
+
 import { motion, Variants } from 'framer-motion';
+import Meta from '../../../utils/Meta';
+import Header from '../../../Header';
+import Flex from '../../../../styles/layout/Flex';
+import { EFlex, ESize, ETextAlign } from '../../../../styles/theme/utils/enum';
+import Presentation from '../Presentation';
+import Spacing from '../../../../styles/layout/Spacing';
+import TextWithGradient from '../../../../styles/theme/components/TextWithGradient';
+import Text from '../../../../styles/theme/components/Text';
+import PoweredBySection from '../PoweredBySection';
+import { TextEx } from './About.styles';
+import Main from '../../../../styles/layout/Main';
 
 const HeaderData = {
 	title: 'About',
@@ -109,4 +110,4 @@ const About: NextPage = () => {
 	);
 };
 
-export default About;
+export { About };

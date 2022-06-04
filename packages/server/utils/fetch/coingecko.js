@@ -1,11 +1,11 @@
 import axios from 'axios';
-import { chains } from '../../server.js';
-import { createDbPool } from '../pool/pool.js';
+import { chains, fetchingDataActivated } from '../../server.js';
 import { updateTokenCountInBlockchain } from '../sql.js';
+
+let updateTokenCountTimeout;
 
 const getCGTokenList = async () => {
 	try {
-		//const url = `https://pro-api.coingecko.com/api/v3/coins/list?include_platform=true&x_cg_pro_api_key=${process.env.CG_API}`;
 		const url = `https://api.coingecko.com/api/v3/coins/list?include_platform=true`;
 		const res = await axios.get(url);
 
@@ -45,7 +45,7 @@ const getTokensByNetworks = (tokenList) => {
 
 export const updateTokensCountForNetworks = async (pool) => {
 	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('> start updating updateTokensCountForNetworks');		
+		console.log('> start updating updateTokensCountForNetworks');
 	}
 
 	try {
@@ -68,26 +68,34 @@ export const updateTokensCountForNetworks = async (pool) => {
 			}
 		});
 
-		const promises = Object.keys(tokensCount).map((key) => con.query(updateTokenCountInBlockchain, [tokensCount[key], key]));
+		const promises = Object.keys(tokensCount).map((key) =>
+			con.query(updateTokenCountInBlockchain, [tokensCount[key], key])
+		);
 
 		await Promise.all(promises);
 
 		con.release();
 
 		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('> updateTokensCountForNetworks success, next update in 1 hour');		
+			console.log('> updateTokensCountForNetworks success, next update in 1 hour');
 		}
 
 		// update tokens count each hour
-		setTimeout(() => {
-			updateTokensCountForNetworks(pool);
-		}, 60 * 60 * 1000);
+		if (fetchingDataActivated) {
+			updateTokenCountTimeout = setTimeout(() => {
+				updateTokensCountForNetworks(pool);
+			}, 60 * 60 * 1000);
+		}
 	} catch (err) {
 		console.log('Failed to update tokens count for networks, try again in 1 minute:', err);
 
-		// try again in a minute
-		setTimeout(() => {
-			updateTokensCountForNetworks(pool);
-		}, 60 * 1000);
+		if (fetchingDataActivated) {
+			// try again in a minute
+			updateTokenCountTimeout = setTimeout(() => {
+				updateTokensCountForNetworks(pool);
+			}, 60 * 1000);
+		}
 	}
 };
+
+export { updateTokenCountTimeout };

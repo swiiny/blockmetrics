@@ -3,16 +3,34 @@ import { ethers } from 'ethers';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
-import { updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
+import { bitcoinTimeout, fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
+import { updateTokenCountTimeout, updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
-import { getAvalancheNodeCount, getBitcoinNodeCount, getBscNodeCount, getEthNodeCount, getFantomNodeCount } from './utils/fetch/nodeCount.js';
+import {
+	getAvalancheNodeCount,
+	getBitcoinNodeCount,
+	getBscNodeCount,
+	getEthNodeCount,
+	getFantomNodeCount
+} from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption, getRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
-import { getPowerConsumptionDataForPoS, getPublicAddressFromAccountWhereContractIsNull, updateIsContractInAccount } from './utils/sql.js';
+import {
+	getPowerConsumptionDataForPoS,
+	getPublicAddressFromAccountWhereContractIsNull,
+	updateIsContractInAccount
+} from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updateDbNodeCount } from './utils/update/nodeCount.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
+
+let intervalGasPrice;
+let intervalNodeCount;
+let timeoutFetchData;
+let timeoutCheckIfaddresses;
+
+let fetchingDataActivated = true;
+let canStartFetchData = true;
 
 // chain uuid in the database
 export const chains = {
@@ -179,7 +197,11 @@ async function updatePowerConsumption() {
 		const powRows = [];
 
 		posRows?.forEach((chain) => {
-			chain.powerConsumption = calculatePowerConsumption(chain.single_node_power_consumption, chain.node_count, chain.testnet_node_count);
+			chain.powerConsumption = calculatePowerConsumption(
+				chain.single_node_power_consumption,
+				chain.node_count,
+				chain.testnet_node_count
+			);
 		});
 
 		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
@@ -223,30 +245,42 @@ async function checkIfAddressesAreContracts() {
 		const txResults = await Promise.all(txPromises);
 
 		const updateDbPromises = txResults.map((txResult) =>
-			con.query(updateIsContractInAccount, [txResult.is_contract, txResult.blockchain_id, txResult.public_address])
+			con.query(updateIsContractInAccount, [
+				txResult.is_contract,
+				txResult.blockchain_id,
+				txResult.public_address
+			])
 		);
 
 		await Promise.all(updateDbPromises);
 
 		con.release();
 
-		setTimeout(() => {
-			checkIfAddressesAreContracts();
-		}, 500);
+		if (fetchingDataActivated) {
+			timeoutCheckIfaddresses = setTimeout(() => {
+				checkIfAddressesAreContracts();
+			}, 1000);
+		}
 	} catch (err) {
 		console.error('checkIfAddressesAreContracts', err);
-
-		setTimeout(() => {
-			checkIfAddressesAreContracts();
-		}, 60 * 1000);
+		if (fetchingDataActivated) {
+			timeoutCheckIfaddresses = setTimeout(() => {
+				checkIfAddressesAreContracts();
+			}, 60 * 1000);
+		}
 	}
 }
 
 async function startFetchData() {
+	canStartFetchData = false;
 	try {
 		const con = await pool.getConnection();
 
 		con.destroy();
+
+		if (!fetchingDataActivated) {
+			return 0;
+		}
 
 		if (process.env.NODE_ENV === 'production') {
 			// updateNodeCount();
@@ -266,19 +300,16 @@ async function startFetchData() {
 
 			// TODO : replace by a websocket
 			/*
-			setInterval(() => {
+			intervalGasPrice = setInterval(() => {
 				updateGasPrice();
 			}, 60 * 1000);
 
-			setInterval(() => {
+			intervalNodeCount = setInterval(() => {
 				updateNodeCount();
 			}, 10 * 60 * 1000);
 			*/
 		} else {
 			// dev stuff
-			updateNodeCount();
-			updateGasPrice();
-
 			fetchEVMBlocksFor(chains.ethereum, pool);
 			fetchEVMBlocksFor(chains.polygon, pool);
 			fetchEVMBlocksFor(chains.bsc, pool);
@@ -292,25 +323,71 @@ async function startFetchData() {
 			checkIfAddressesAreContracts();
 
 			// TODO : replace by a websocket
-			setInterval(() => {
+			intervalGasPrice = setInterval(() => {
 				updateGasPrice();
-			}, 60 * 1000);
+			}, 1000);
 
-			setInterval(() => {
+			intervalNodeCount = setInterval(() => {
+				console.log('start update node count from interval');
 				updateNodeCount();
-			}, 10 * 60 * 1000);
+			}, 5 * 1000);
 		}
 	} catch {
-		setTimeout(() => {
-			startFetchData();
-		}, 1 * 60 * 1000);
+		console.error('catch error in startFetchData');
+		if (canStartFetchData) {
+			timeoutFetchData = setTimeout(() => {
+				console.log('start fetch data');
+				startFetchData();
+			}, 1 * 60 * 1000);
+		}
 	}
 }
+
+app.get(`/v1/server/fetch/stop`, async (req, res) => {
+	try {
+		console.log('FETCHING DATA STOPPED');
+		fetchingDataActivated = false;
+
+		clearInterval(intervalGasPrice);
+		clearInterval(intervalNodeCount);
+		clearInterval(timeoutFetchData);
+		clearInterval(timeoutCheckIfaddresses);
+
+		// imported
+		clearInterval(updateTokenCountTimeout);
+		clearInterval(bitcoinTimeout);
+
+		canStartFetchData = true;
+		res.status(200).send('stop success');
+	} catch (err) {
+		res.status(500).send('trying to stop fetch data');
+		return;
+	}
+});
+
+app.get(`/v1/server/fetch/start`, async (req, res) => {
+	try {
+		if (canStartFetchData) {
+			fetchingDataActivated = true;
+
+			startFetchData();
+			res.status(200).send('start success');
+		} else {
+			res.status(200).send("can't start");
+		}
+	} catch (err) {
+		res.status(500).send('trying to start fetch data');
+		return;
+	}
+});
 
 app.listen(process.env.SERVER_PORT, async () => {
 	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
 
 	pool = await createDbPool();
 
+	console.log('start fetch data');
 	startFetchData();
 });
+
+export { fetchingDataActivated };
