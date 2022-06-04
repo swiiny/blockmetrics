@@ -1,3 +1,4 @@
+import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useEffect, useMemo } from 'react';
@@ -31,6 +32,24 @@ export const INTERNAL_LINKS = {
 	}
 };
 
+const axiosServer = axios.create({
+	baseURL: process.env.SERVER_URL
+});
+
+const deactivateFetchingData = async (): Promise<void> => {
+	console.log('deactivateFetchingData');
+	const res = await axiosServer.get('/v1/server/fetch/stop');
+
+	console.log('res', res);
+};
+
+const activateFetchingData = async (): Promise<void> => {
+	console.log('activateFetchingData');
+	const res = await axiosServer.get('/v1/server/fetch/start');
+
+	console.log('res', res);
+};
+
 const Navbar = () => {
 	const router = useRouter();
 	const { pathname } = router;
@@ -48,6 +67,9 @@ const Navbar = () => {
 			<div className='logo' />
 
 			<StyledList>
+				<button onClick={() => deactivateFetchingData()}>stop server</button>
+				<button onClick={() => activateFetchingData()}>start server</button>
+
 				{Object.values(NAVBAR_LINKS).map(({ label, href }) => (
 					<StyledNavbarItem key={href}>
 						<Link href={href}>

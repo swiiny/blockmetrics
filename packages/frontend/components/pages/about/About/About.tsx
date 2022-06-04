@@ -1,6 +1,5 @@
 import React from 'react';
 import type { NextPage } from 'next';
-
 import { motion, Variants } from 'framer-motion';
 import Meta from '../../../utils/Meta';
 import Header from '../../../Header';

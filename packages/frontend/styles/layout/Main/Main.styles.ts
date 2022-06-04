@@ -1,7 +1,8 @@
 import styled from 'styled-components';
 import { ESize } from '../../theme/utils/enum';
 
-const Main = styled.main<{ paddingTop?: ESize.s | ESize.m | ESize.l | ESize.xl; noNavbar?: boolean }>`
+const Main = styled.main<{ paddingTop?: ESize.s | ESize.m | ESize.l | ESize.xl }>`
+	min-height: calc(100vh - 120px - 250px);
 	margin-top: 120px;
 	padding-bottom: 160px;
 
@@ -19,8 +20,6 @@ const Main = styled.main<{ paddingTop?: ESize.s | ESize.m | ESize.l | ESize.xl; 
 				return `padding-top: 40px;`;
 		}
 	}}
-
-	${(p) => (p.noNavbar ? 'margin-top: 0; padding-top: 0; padding-bottom: 0;' : '')}
 `;
 
 export { Main };
