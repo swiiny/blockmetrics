@@ -3,10 +3,10 @@
 export const getBlockchains = async (pool, params) => {
 	try {
 		let { orderBy, pagination } = params;
-		orderBy = orderBy || "";
-		pagination = pagination || "";
+		orderBy = orderBy || '';
+		pagination = pagination || '';
 
-		let queryPrefix = `SELECT * FROM blockchain`;
+		let queryPrefix = `SELECT id, name, logoUrl, note, node_count, testnet_node_count, single_node_power_consumption, hashrate, difficulty, time_between_blocks, token_count, transaction_count, gas_price, consensus FROM blockchain`;
 
 		if (params.sortByField) {
 			queryPrefix += ` AND ${params.sortByField} IS NOT NULL`;
@@ -16,7 +16,7 @@ export const getBlockchains = async (pool, params) => {
 
 		return res;
 	} catch (err) {
-		console.error("getBlockchains", err);
+		console.error('getBlockchains', err);
 		return [];
 	}
 };
