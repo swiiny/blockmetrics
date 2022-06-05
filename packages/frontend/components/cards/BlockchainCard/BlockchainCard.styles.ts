@@ -26,6 +26,19 @@ export const StyledBlockchainCard = styled.li<{ gradientStart?: string; gradient
 	${mq(EMediaQuery.lg, `width: 30%;`)}
 	${mq(EMediaQuery.md, `width: 45%;`)}
 	${mq(EMediaQuery.sm, `width: 100%;`)}
+
+	@keyframes fadeIn {
+		0% {
+			opacity: 0;
+			transform: translateY(20px);
+		}
+		100% {
+			opacity: 1;
+			transform: translateY(0px);
+		}
+	}
+
+	animation: fadeIn 0.5s ease-in-out;
 `;
 
 export const StylesCardHeader = styled.div`
@@ -60,7 +73,7 @@ export const StyledLogoContainer = styled.div`
 	}
 `;
 
-export const StyledLink = styled.a`
+export const StyledExtendedLink = styled.span`
 	position: absolute;
 	z-index: 10;
 	top: 0;

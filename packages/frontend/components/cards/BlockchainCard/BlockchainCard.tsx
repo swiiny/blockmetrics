@@ -1,15 +1,22 @@
 import Image from 'next/image';
+import Link from 'next/link';
 import React, { FC, useMemo } from 'react';
 import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
 import Heading from '../../../styles/theme/components/Heading';
 import Text from '../../../styles/theme/components/Text';
-import { EFlex, ESize, ETextColor, ETextType } from '../../../styles/theme/utils/enum';
+import { EFlex, ESize, ETextType } from '../../../styles/theme/utils/enum';
 import { BLOCKCHAINS_ARRAY } from '../../../utils/variables';
-import { StyledBlockchainCard, StyledLink, StyledLogoContainer, StylesCardHeader } from './BlockchainCard.styles';
+import { NAVBAR_LINKS } from '../../Navbar/Navbar';
+import {
+	StyledBlockchainCard,
+	StyledExtendedLink,
+	StyledLogoContainer,
+	StylesCardHeader
+} from './BlockchainCard.styles';
 import { IBlockchainCard } from './BlockchainCard.type';
 
-const BlockchainCard: FC<IBlockchainCard> = ({ data, href = '', emptyItem = false }) => {
+const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	const {
 		id,
 		name,
@@ -42,6 +49,16 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, href = '', emptyItem = fals
 
 		return newGradient || defaultGradient;
 	}, [id]);
+
+	const linkTo = useMemo(() => {
+		try {
+			let formattedName = name?.toLowerCase().replace(/\s/g, '-');
+
+			return NAVBAR_LINKS.blockchains.href + '/' + formattedName;
+		} catch {
+			return '#';
+		}
+	}, [name]);
 
 	if (emptyItem) {
 		return <StyledBlockchainCard emptyItem />;
@@ -80,7 +97,18 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, href = '', emptyItem = fals
 				</Flex>
 			</Flex>
 
-			<StyledLink href={href} />
+			<Spacing size={ESize.s} />
+
+			<Link href={linkTo}>
+				<a href={linkTo}>
+					<Flex as='span' vertical={EFlex.center} horizontal={EFlex.end}>
+						<Text size={ESize.s} type={ETextType.span} inheritStyle={false}>
+							Show more
+						</Text>
+					</Flex>
+					<StyledExtendedLink />
+				</a>
+			</Link>
 		</StyledBlockchainCard>
 	);
 };
