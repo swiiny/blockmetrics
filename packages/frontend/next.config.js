@@ -3,6 +3,7 @@ const nextConfig = {
 	reactStrictMode: true,
 	env: {
 		SERVER_URL: process.env.SERVER_URL,
+		API_URL: process.env.API_URL,
 		WS_URL: process.env.WS_URL
 	},
 	compiler: {

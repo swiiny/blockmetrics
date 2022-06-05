@@ -15,3 +15,8 @@ type TBlockchain = {
 	gas_price: number;
 	consensus: string;
 };
+
+type TBlockchainMetadata = {
+	subtitle: string;
+	description: string;
+};

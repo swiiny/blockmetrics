@@ -4,6 +4,7 @@ import { useRouter } from 'next/router';
 import React, { useEffect, useMemo } from 'react';
 import Text from '../../styles/theme/components/Text';
 import { ESize, ETextColor, ETextType } from '../../styles/theme/utils/enum';
+import { axiosServer } from '../../utils/variables';
 import { StyledNavbar, StyledNavbarItem, StyledList } from './Navbar.styles';
 
 export const NAVBAR_LINKS = {
@@ -32,20 +33,16 @@ export const INTERNAL_LINKS = {
 	}
 };
 
-const axiosServer = axios.create({
-	baseURL: process.env.SERVER_URL
-});
-
 const deactivateFetchingData = async (): Promise<void> => {
 	console.log('deactivateFetchingData');
-	const res = await axiosServer.get('/v1/server/fetch/stop');
+	const res = await axiosServer.get('/fetch/stop');
 
 	console.log('res', res);
 };
 
 const activateFetchingData = async (): Promise<void> => {
 	console.log('activateFetchingData');
-	const res = await axiosServer.get('/v1/server/fetch/start');
+	const res = await axiosServer.get('/fetch/start');
 
 	console.log('res', res);
 };

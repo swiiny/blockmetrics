@@ -1,3 +1,5 @@
+import axios from 'axios';
+
 export const BLOCKCHAINS = {
 	ethereum: {
 		id: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
@@ -62,3 +64,15 @@ export const BLOCKCHAINS = {
 };
 
 export const BLOCKCHAINS_ARRAY = Object.values(BLOCKCHAINS);
+
+export const axiosServer = axios.create({
+	baseURL: process.env.SERVER_URL + '/v1/server'
+});
+
+export const axiosRest = axios.create({
+	baseURL: process.env.API_URL + '/v1/api/rest'
+});
+
+export const axiosWs = axios.create({
+	baseURL: process.env.WS_URL
+});

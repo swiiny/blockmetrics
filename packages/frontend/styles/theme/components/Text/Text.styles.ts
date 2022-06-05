@@ -70,7 +70,7 @@ export const StyledTextLink = styled.a<{
 					text-decoration: underline dotted;
 					text-decoration-thickness: 1px;
 					text-underline-offset: 1ex;
-					text-decoration-color: ${p.theme.colors.typo + '30'};
+					text-decoration-color: ${p.theme.colors.text.default + '30'};
 			  `
 			: css`
 					text-decoration: none;
@@ -84,8 +84,8 @@ export const StyledTextLink = styled.a<{
 			  `
 			: css`
 					&:hover {
-						color: ${p.theme.colors.accent};
-						text-decoration-color: ${p.theme.colors.accent + '30'};
+						color: ${p.theme.colors.text.accent};
+						text-decoration-color: ${p.theme.colors.text.accent + '30'};
 					}
 			  `}
 `;
