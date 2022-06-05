@@ -61,6 +61,12 @@ const Blockchains: NextPage = () => {
 		};
 	};
 
+	const refresh = (isActivated: boolean) => {
+		if (!isActivated) {
+			fetchData();
+		}
+	};
+
 	useEffect(() => {
 		fetchData();
 
@@ -75,7 +81,11 @@ const Blockchains: NextPage = () => {
 		<>
 			<Meta title='Blockchains' />
 
-			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
+			<Header
+				title={HeaderData.title}
+				subtitle={HeaderData.subtitle}
+				refreshAction={!wsConnected ? () => refresh(wsConnected) : undefined}
+			/>
 
 			<Main>
 				<StyledBlockchainList>

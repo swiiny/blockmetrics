@@ -5,7 +5,9 @@ import { mq } from '../../styles/theme/utils/functions';
 export const StyledHeader = styled.header`
 	margin-top: 160px;
 
-	max-width: 650px;
+	& > p {
+		max-width: 650px;
+	}
 `;
 
 export const StyledImageContainer = styled.div`

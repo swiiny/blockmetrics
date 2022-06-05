@@ -1,14 +1,15 @@
 import Image from 'next/image';
 import React, { FC, useMemo } from 'react';
+import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
 import Heading from '../../../styles/theme/components/Heading';
 import Text from '../../../styles/theme/components/Text';
-import { ESize, ETextType } from '../../../styles/theme/utils/enum';
+import { EFlex, ESize, ETextColor, ETextType } from '../../../styles/theme/utils/enum';
 import { BLOCKCHAINS_ARRAY } from '../../../utils/variables';
-import { StyledBlockchainCard, StyledLogoContainer, StylesCardHeader } from './BlockchainCard.styles';
+import { StyledBlockchainCard, StyledLink, StyledLogoContainer, StylesCardHeader } from './BlockchainCard.styles';
 import { IBlockchainCard } from './BlockchainCard.type';
 
-const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
+const BlockchainCard: FC<IBlockchainCard> = ({ data, href = '', emptyItem = false }) => {
 	const {
 		id,
 		name,
@@ -60,7 +61,26 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 			<Spacing size={ESize.s} />
 
-			<Text>{transaction_count}</Text>
+			<Flex as='ul' fullWidth direction={EFlex.column}>
+				<Flex as='li' fullWidth horizontal={EFlex.between}>
+					<Text type={ETextType.p}>Rank</Text>
+					<Text type={ETextType.p}>{note}</Text>
+				</Flex>
+				<Flex as='li' fullWidth horizontal={EFlex.between}>
+					<Text type={ETextType.p}>Tokens</Text>
+					<Text type={ETextType.p}>{token_count}</Text>
+				</Flex>
+				<Flex as='li' fullWidth horizontal={EFlex.between}>
+					<Text type={ETextType.p}>Gas price</Text>
+					<Text type={ETextType.p}>{gas_price}</Text>
+				</Flex>
+				<Flex as='li' fullWidth horizontal={EFlex.between}>
+					<Text type={ETextType.p}>Nodes</Text>
+					<Text type={ETextType.p}>{node_count}</Text>
+				</Flex>
+			</Flex>
+
+			<StyledLink href={href} />
 		</StyledBlockchainCard>
 	);
 };

@@ -44,9 +44,8 @@ async function startWebsocketServer() {
 
 	while (true) {
 		const res = await getBlockchains(pool, {
-			sortBy: 'note',
-			desc: true,
-			offset: 0,
+			sortBy: 'blockchain_power_consumption',
+			orderBy: false,
 			limit: 30
 		});
 
@@ -62,7 +61,7 @@ async function startWebsocketServer() {
 		}
 
 		// wait 2 seconds
-		await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
+		await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
 	}
 }
 

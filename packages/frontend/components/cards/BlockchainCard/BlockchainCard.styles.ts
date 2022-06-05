@@ -59,3 +59,12 @@ export const StyledLogoContainer = styled.div`
 		height: 70%;
 	}
 `;
+
+export const StyledLink = styled.a`
+	position: absolute;
+	z-index: 10;
+	top: 0;
+	left: 0;
+	right: 0;
+	bottom: 0;
+`;
