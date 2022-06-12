@@ -146,10 +146,10 @@ async function fetchDailyData() {
 
 	await Promise.all(nodesCountPromises);
 
-	updatePowerConsumption();
+	// updatePowerConsumption();
 
 	// wait 15 minutes to be sure that the scrapped data is udpated
-	await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
+	await new Promise((resolve) => setTimeout(resolve, 15 * 60 * 1000));
 
 	CHAINS_ARRAY.forEach(async (chain) => {
 		/* ========================================
@@ -308,8 +308,8 @@ async function startFetchData() {
 
 		if (process.env.NODE_ENV !== 'production') {
 			const rule = new schedule.RecurrenceRule();
-			rule.hour = 0;
-			rule.minute = 45;
+			rule.hour = 2;
+			rule.minute = 0;
 			rule.tz = 'Europe/Amsterdam';
 
 			console.log('init schedule');
