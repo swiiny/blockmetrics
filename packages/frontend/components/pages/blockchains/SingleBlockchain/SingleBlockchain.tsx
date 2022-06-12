@@ -9,8 +9,8 @@ import { ISingleBlockchain } from './SingleBlockchain.type';
 
 const SingleBlockchain: NextPage<ISingleBlockchain> = ({ blockchain, metadata }) => {
 	const {
+		id,
 		name,
-		logoUrl,
 		note,
 		node_count,
 		testnet_node_count,
@@ -18,20 +18,21 @@ const SingleBlockchain: NextPage<ISingleBlockchain> = ({ blockchain, metadata })
 		blockchain_power_consumption,
 		hashrate,
 		difficulty,
-		time_between_blocks,
+		last_block_timestamp,
 		token_count,
 		transaction_count,
 		gas_price,
-		consensus
+		consensus,
+		address_count,
+		today_address_count,
+		today_transaction_count
 	} = blockchain || {};
-
-	const { subtitle, description } = metadata || {};
 
 	return (
 		<>
 			<Meta title={name} />
 
-			<Header title={name} subtitle={subtitle} image={logoUrl} />
+			<Header title={name} subtitle={'fetch data'} image={`assets/images/blockchains/${id}.svg`} />
 
 			<Main></Main>
 		</>
