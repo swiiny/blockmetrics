@@ -115,7 +115,7 @@ export async function fetchDailyTransactionFor(chain) {
 }
 
 // { timestamp: number; second: number}[]
-export async function fetchDailyAverageBlockTime(chain) {
+export async function fetchDailyAverageBlockTimeFor(chain) {
 	const { id, chartPrefix } = chain;
 	try {
 		if (id === CHAINS.bitcoin.id) {
@@ -151,7 +151,7 @@ export async function fetchDailyAverageBlockTime(chain) {
 			return formattedJson;
 		}
 	} catch (err) {
-		console.error('fetchDailyAverageBlockTime', err);
+		console.error('fetchDailyAverageBlockTimeFor', err);
 		return null;
 	}
 	return null;
@@ -204,7 +204,7 @@ export async function fetchDailyActiveUsersFor(chain) {
 }
 
 // { timestamp: number; wei: number}[]
-export async function fetchDailyAverageGasPrice(chain) {
+export async function fetchDailyAverageGasPriceFor(chain) {
 	const { id, chartPrefix } = chain;
 
 	let formattedJson;
@@ -235,7 +235,7 @@ export async function fetchDailyAverageGasPrice(chain) {
 
 		return formattedJson;
 	} catch (err) {
-		console.error('fetchDailyAverageGasPrice', err);
+		console.error('fetchDailyAverageGasPriceFor', err);
 		return null;
 	}
 }
@@ -368,7 +368,7 @@ export async function fetchDailyVerifiedContractsFor(chain) {
 }
 
 // { timestamp: number; count: number}[]
-export async function fetchDailyTokenCount(chain, con) {
+export async function fetchDailyTokenCountFor(chain, con) {
 	const { id, chartPrefix } = chain;
 
 	if (id === CHAINS.bitcoin.id) {
@@ -381,7 +381,7 @@ export async function fetchDailyTokenCount(chain, con) {
 
 		return tokenRows;
 	} catch (err) {
-		console.error('fetchDailyTokenCount', err);
+		console.error('fetchDailyTokenCountFor', err);
 		return null;
 	}
 }

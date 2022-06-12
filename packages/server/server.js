@@ -1,20 +1,9 @@
-import cors from 'cors';
-import express from 'express';
-import rateLimit from 'express-rate-limit';
-import helmet from 'helmet';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
-import {
-	getAvalancheNodeCount,
-	getBitcoinNodeCount,
-	getBscNodeCount,
-	getEthNodeCount,
-	getFantomNodeCount
-} from './utils/fetch/nodeCount.js';
+import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import { getPowerConsumptionDataForPoS } from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
-import { updateDbNodeCount } from './utils/update/nodeCount.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
 import { CHAINS, CHAINS_ARRAY } from './variables.js';
 import schedule from 'node-schedule';
@@ -27,92 +16,30 @@ import {
 	updateDbDailyNewAddresses,
 	updateDbDailyNewContracts,
 	updateDbDailyNewTokens,
+	updateDbDailyNodeCount,
 	updateDbDailyTokenCount
 } from './utils/update/dailyData.js';
 
 import { getTokensCountForNetworks } from './utils/fetch/coingecko.js';
-import { fetchDailyTokenCount } from './utils/fetch/fetch.js';
-
-let intervalGasPrice;
-let intervalNodeCount;
-let timeoutFetchData;
-let timeoutCheckIfaddresses;
+import {
+	fetchDailyActiveUsersFor,
+	fetchDailyAverageBlockTimeFor,
+	fetchDailyAverageGasPriceFor,
+	fetchDailyTokenCountFor,
+	fetchDailyUniqueAddressesFor,
+	fetchDailyVerifiedContractsFor,
+	fetchDifficultyFor,
+	fetchHashrateFor
+} from './utils/fetch/fetch.js';
+import ethers from 'ethers';
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
 
-const limiter = rateLimit({
-	windowMs: 1000,
-	max: 50,
-	standardHeaders: true, // Return rate limit info in the `RateLimit-*` headers
-	legacyHeaders: false // Disable the `X-RateLimit-*` headers
-});
+// schudeled job that fetch data every day at 00:00
+let dailyRoutine;
 
-const corsOptions = {
-	origin: process.env.FRONTEND_URL,
-	optionsSuccessStatus: 200
-};
-
-const app = express();
 let pool;
-
-app.use(cors(corsOptions));
-app.use(helmet());
-app.use(limiter);
-
-// fetch blockchains node count and update the database
-async function updateNodeCount() {
-	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('========== UPDATE NODE COUNT START ==========', Date.now());
-	}
-
-	try {
-		const con = await pool.getConnection();
-
-		if (!con) {
-			return 1;
-		}
-
-		const promises = [
-			getEthNodeCount()
-				.then((res) => updateDbNodeCount(con, CHAINS.ethereum.id, res))
-				.catch(() => null),
-			getBscNodeCount()
-				.then((res) => updateDbNodeCount(con, CHAINS.bsc.id, res))
-				.catch(() => null),
-			/*getPolygonNodeCount()
-				.then((res) => updateDbNodeCount(con, CHAINS.polygon.id, res))
-				.catch(() => null),*/
-			getAvalancheNodeCount()
-				.then((res) => updateDbNodeCount(con, CHAINS.avalanche.id, res))
-				.catch(() => null),
-			getBitcoinNodeCount()
-				.then((res) => updateDbNodeCount(con, CHAINS.bitcoin.id, res))
-				.catch(() => null),
-			getFantomNodeCount()
-				.then((res) => updateDbNodeCount(con, CHAINS.fantom.id, res))
-				.catch(() => null)
-		];
-
-		await Promise.all(promises);
-
-		updatePowerConsumption();
-
-		con.destroy();
-
-		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('========== UPDATE NODE COUNT END ==========', Date.now());
-		}
-
-		return 0;
-	} catch {
-		console.error('updateNodeCount', err);
-		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('========== UPDATE NODE COUNT END WITH ERROR ==========', Date.now());
-		}
-		return 2;
-	}
-}
 
 // fetch blockchains gas price and update the database
 async function updateGasPrice() {
@@ -153,7 +80,7 @@ async function updateGasPrice() {
 
 async function updatePowerConsumption() {
 	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('========== UPDATE POWER CONSUMPTION START ==========', Date.now().toLocaleString());
+		console.log('========== UPDATE POWER CONSUMPTION START ==========', Date.now());
 	}
 
 	const con = await pool.getConnection();
@@ -186,13 +113,13 @@ async function updatePowerConsumption() {
 }
 
 async function fetchDailyData() {
-	const delay = 5 * 1000;
+	const delay = 5000;
 
 	const con = await pool.getConnection();
-	/*
-	// prevent run at midnight
-	await new Promise((resolve) => setTimeout(resolve, delay));
 
+	/* ========================================
+	 FETCH AND UPDATE TOKEN COUNT PER BLOCKCHAINS
+	 ======================================== */
 
 	const tokensCount = await getTokensCountForNetworks();
 
@@ -204,11 +131,32 @@ async function fetchDailyData() {
 		console.error('getTokensCountForNetworks failed');
 	}
 
-	// await 15 minutes to be sure that the scrapped data is udpated
+	/* ========================================
+	 FETCH AND UPDATE NODE COUNT PER BLOCKCHAINS
+	 ======================================== */
+
+	const nodesCount = await getNodeCountForAllBlockchains();
+
+	const nodesCountPromises = nodesCount?.map(({ id, count }) => {
+		updateDbDailyNodeCount(con, id, count);
+	});
+
+	if (!nodesCount) {
+		console.error('getNodeCountForAllBlockchains failed');
+	}
+
+	await Promise.all(nodesCountPromises);
+
+	updatePowerConsumption();
+
+	// wait 15 minutes to be sure that the scrapped data is udpated
 	await new Promise((resolve) => setTimeout(resolve, 15 * 60 * 1000));
-*/
+
 	CHAINS_ARRAY.forEach(async (chain) => {
-		/*
+		/* ========================================
+	 FETCH AND UPDATE ACTIVE USERS
+	 ======================================== */
+
 		fetchDailyActiveUsersFor(chain)
 			.then((data) => {
 				if (data) {
@@ -217,18 +165,27 @@ async function fetchDailyData() {
 			})
 			.catch((err) => console.error(err));
 
-			await new Promise((resolve) => setTimeout(resolve, delay));
+		await new Promise((resolve) => setTimeout(resolve, delay));
 
-				fetchDailyAverageBlockTime(chain)
-				.then((data) => {
-					if (data) {
-						updateDbDailyAverageBlocktime(con, chain.id, data);
-					}
-				})
-				.catch((err) => console.error(err));
+		/* ========================================
+	 FETCH AND UPDATE AVERAGE BLOCKTIME 
+	 ======================================== */
+		fetchDailyAverageBlockTimeFor(chain)
+			.then((data) => {
+				if (data) {
+					updateDbDailyAverageBlocktime(con, chain.id, data);
+				}
+			})
+			.catch((err) => console.error(err));
 
-await new Promise((resolve) => setTimeout(resolve, delay));			
-		fetchDailyAverageGasPrice(chain)
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		/* ========================================
+	 FETCH AND UPDATE AVERAGE GAS PRICE
+	 ======================================== */
+
+		if (chain.id !== CHAINS.bitcoin.id) {
+			fetchDailyAverageGasPriceFor(chain)
 				.then((data) => {
 					if (data) {
 						updateDbDailyAverageGasPrice(con, chain.id, data);
@@ -236,9 +193,15 @@ await new Promise((resolve) => setTimeout(resolve, delay));
 				})
 				.catch((err) => console.error(err));
 
-		await new Promise((resolve) => setTimeout(resolve, delay));
+			await new Promise((resolve) => setTimeout(resolve, delay));
+		}
 
-		fetchDifficultyFor(chain)
+		/* ========================================
+	 FETCH AND UPDATE DIFFICULTY FOR POW CHAINS
+	 ======================================== */
+
+		if (chain.consensus === 'POW') {
+			fetchDifficultyFor(chain)
 				.then((data) => {
 					if (data) {
 						updateDbDailyDifficulty(con, chain.id, data);
@@ -246,10 +209,12 @@ await new Promise((resolve) => setTimeout(resolve, delay));
 				})
 				.catch((err) => console.error(err));
 
-				
+			await new Promise((resolve) => setTimeout(resolve, delay));
+		}
 
-		await new Promise((resolve) => setTimeout(resolve, delay));
-		
+		/* ========================================
+	 FETCH AND UPDATE HASHRATE FOR POW CHAINS
+	 ======================================== */
 		fetchHashrateFor(chain)
 			.then((data) => {
 				if (data) {
@@ -260,7 +225,9 @@ await new Promise((resolve) => setTimeout(resolve, delay));
 
 		await new Promise((resolve) => setTimeout(resolve, delay));
 
-		
+		/* ========================================
+	 FETCH AND UPDATE UNIQUE ADDRESSES
+	 ======================================== */
 		fetchDailyUniqueAddressesFor(chain)
 			.then((data) => {
 				const formattedData = [];
@@ -280,23 +247,28 @@ await new Promise((resolve) => setTimeout(resolve, delay));
 			})
 			.catch((err) => console.error(err));
 
-		
 		await new Promise((resolve) => setTimeout(resolve, delay));
 
-		fetchDailyVerifiedContractsFor(chain)
-			.then((data) => {
-				if (data) {
-					updateDbDailyNewContracts(con, chain.id, data);
-				}
-			})
-			.catch((err) => console.error(err));
-
-		await new Promise((resolve) => setTimeout(resolve, delay));
-
-		*/
-
+		/* ========================================
+	 FETCH AND UPDATE NEW SMART CONTRACTS
+	 ======================================== */
 		if (chain.id !== CHAINS.bitcoin.id) {
-			fetchDailyTokenCount(chain, con)
+			fetchDailyVerifiedContractsFor(chain)
+				.then((data) => {
+					if (data) {
+						updateDbDailyNewContracts(con, chain.id, data);
+					}
+				})
+				.catch((err) => console.error(err));
+
+			await new Promise((resolve) => setTimeout(resolve, delay));
+		}
+
+		/* ========================================
+	 FETCH AND UPDATE NEW TOKENS COUNT
+	 ======================================== */
+		if (chain.id !== CHAINS.bitcoin.id) {
+			fetchDailyTokenCountFor(chain, con)
 				.then((data) => {
 					let formattedData = null;
 					if (data?.length > 1) {
@@ -318,6 +290,8 @@ await new Promise((resolve) => setTimeout(resolve, delay));
 				.catch((err) => console.error(err));
 
 			await new Promise((resolve) => setTimeout(resolve, delay));
+
+			console.log('end fetching daily data for', chain.name);
 		}
 	});
 }
@@ -334,91 +308,49 @@ async function startFetchData() {
 		}
 
 		if (process.env.NODE_ENV === 'production') {
-			// updateNodeCount();
-			// updateGasPrice();
-			// TODO : replace by a websocket
-			/*
-			intervalGasPrice = setInterval(() => {
-				updateGasPrice()
-			}, 60 * 1000);
+			const rule = new schedule.RecurrenceRule();
+			rule.hour = 0;
+			rule.minute = 5;
 
-			intervalNodeCount = setInterval(() => {
-				updateNodeCount();
-			}, 10 * 60 * 1000);
-			*/
+			dailyRoutine = schedule.scheduleJob(rule, async () => {
+				fetchDailyData();
+			});
 		} else {
 			// dev stuff
-			// fetchDailyUniqueAddressesFor(CHAINS.bitcoin);
-			// fetchDailyTransactionFor(CHAINS.bitcoin);
-			// fetchDailyAverageBlockTime(CHAINS.ethereum);
-			// fetchDailyActiveUsersFor(CHAINS.avalanche);
-			// fetchDailyAverageGasPrice(CHAINS.avalanche);
-			// fetchDifficultyFor(CHAINS.bitcoin);
-			// fetchHashrateFor(CHAINS.bitcoin);
-			const rule = new schedule.RecurrenceRule();
-			rule.second = 30;
+			/*
+			const wsProvider = new ethers.providers.WebSocketProvider(process.env.RPC_FANTOM_WS);
+			const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_FANTOM);
 
-			fetchDailyData();
+			wsProvider.on('block', async (blockNumber) => {
+				console.log('==========> new block mined', blockNumber);
+				const block = await provider.getBlockWithTransactions(blockNumber);
+				const transactions = block?.transactions;
 
-			const job = schedule.scheduleJob(rule, async () => {
-				//fetchDailyData();
+				console.log('block', block?.number);
+				console.log('transactions', transactions?.length);
 			});
+			*/
 		}
-	} catch {
-		console.error('catch error in startFetchData');
+	} catch (err) {
+		console.error('catch error in startFetchData', err);
 		if (canStartFetchData) {
 			timeoutFetchData = setTimeout(() => {
-				console.log('start fetch data');
-				startFetchData();
+				console.log('restart fetching data');
+				dailyRoutine = null;
+				// startFetchData();
 			}, 1 * 60 * 1000);
 		}
 	}
 }
 
-app.get(`/v1/server/fetch/stop`, async (req, res) => {
-	try {
-		console.log('FETCHING DATA STOPPED');
-		fetchingDataActivated = false;
-
-		clearInterval(intervalGasPrice);
-		clearInterval(intervalNodeCount);
-		clearInterval(timeoutFetchData);
-		clearInterval(timeoutCheckIfaddresses);
-
-		// imported
-		clearInterval(updateTokenCountTimeout);
-		// clearInterval(bitcoinTimeout);
-
-		canStartFetchData = true;
-		res.status(200).send('stop success');
-	} catch (err) {
-		res.status(500).send('trying to stop fetch data');
-		return;
-	}
-});
-
-app.get(`/v1/server/fetch/start`, async (req, res) => {
-	try {
-		if (canStartFetchData) {
-			fetchingDataActivated = true;
-
-			startFetchData();
-			res.status(200).send('start success');
-		} else {
-			res.status(200).send("can't start");
-		}
-	} catch (err) {
-		res.status(500).send('trying to start fetch data');
-		return;
-	}
-});
-
-app.listen(process.env.SERVER_PORT, async () => {
-	console.log(`Server listening on port ${process.env.SERVER_PORT}`);
+async function init() {
+	console.log(`Server running on port ${process.env.SERVER_PORT}`);
 
 	pool = await createDbPool();
 
 	startFetchData();
-});
+}
+
+init();
 
 export { fetchingDataActivated };

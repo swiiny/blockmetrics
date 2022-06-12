@@ -234,3 +234,25 @@ export const updateDbDailyTokenCount = async (con, id, count) => {
 		return 1;
 	}
 };
+
+export const updateDbDailyNodeCount = async (con, id, count) => {
+	try {
+		if (!count) {
+			throw new Error('count is not defined for ' + id);
+		}
+
+		// get first timestamp OF today
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		const timestamp = today.getTime() / 1000;
+
+		const uuid = `${id}-${timestamp}-${count}`;
+
+		await con.query(insertDailyNodeCount, [uuid, id, count, timestamp]);
+
+		return 0;
+	} catch (err) {
+		console.error('updateDbDailyTokenCount', id, err);
+		return 1;
+	}
+};
