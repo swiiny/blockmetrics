@@ -96,10 +96,10 @@ async function updatePowerConsumption() {
 			);
 		});
 
-		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
-
 		// TODO : fetch single_node_power_consumption, testnet_node_count and node_count for Proof of Work chains
 		const powRows = [];
+
+		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
 
 		con.release();
 	} catch (err) {
@@ -149,7 +149,7 @@ async function fetchDailyData() {
 	updatePowerConsumption();
 
 	// wait 15 minutes to be sure that the scrapped data is udpated
-	await new Promise((resolve) => setTimeout(resolve, 15 * 60 * 1000));
+	await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
 
 	CHAINS_ARRAY.forEach(async (chain) => {
 		/* ========================================
@@ -309,7 +309,7 @@ async function startFetchData() {
 		if (process.env.NODE_ENV !== 'production') {
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 0;
-			rule.minute = 30;
+			rule.minute = 45;
 			rule.tz = 'Europe/Amsterdam';
 
 			console.log('init schedule');
