@@ -2,8 +2,6 @@ import cors from 'cors';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
-import { updateTokenCountTimeout } from './utils/fetch/coingecko.js';
-import { fetchDailyActiveUsersFor, fetchDailyAverageGasPrice } from './utils/fetch/fetch.js';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
 import {
 	getAvalancheNodeCount,
@@ -20,7 +18,20 @@ import { updateDbNodeCount } from './utils/update/nodeCount.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
 import { CHAINS, CHAINS_ARRAY } from './variables.js';
 import schedule from 'node-schedule';
-import { updateDbDailyActiveUsers } from './utils/update/dailyData.js';
+import {
+	updateDbDailyActiveUsers,
+	updateDbDailyAverageBlocktime,
+	updateDbDailyAverageGasPrice,
+	updateDbDailyDifficulty,
+	updateDbDailyHashrate,
+	updateDbDailyNewAddresses,
+	updateDbDailyNewContracts,
+	updateDbDailyNewTokens,
+	updateDbDailyTokenCount
+} from './utils/update/dailyData.js';
+
+import { getTokensCountForNetworks } from './utils/fetch/coingecko.js';
+import { fetchDailyTokenCount } from './utils/fetch/fetch.js';
 
 let intervalGasPrice;
 let intervalNodeCount;
@@ -151,9 +162,6 @@ async function updatePowerConsumption() {
 		// fetch single_node_power_consumption, testnet_node_count and node_count for PoS chains
 		const [posRows] = await con.query(getPowerConsumptionDataForPoS);
 
-		// TODO : fetch single_node_power_consumption, testnet_node_count and node_count for Proof of Work chains
-		const powRows = [];
-
 		posRows?.forEach((chain) => {
 			chain.powerConsumption = calculatePowerConsumption(
 				chain.single_node_power_consumption,
@@ -163,6 +171,9 @@ async function updatePowerConsumption() {
 		});
 
 		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
+
+		// TODO : fetch single_node_power_consumption, testnet_node_count and node_count for Proof of Work chains
+		const powRows = [];
 
 		con.release();
 	} catch (err) {
@@ -175,14 +186,139 @@ async function updatePowerConsumption() {
 }
 
 async function fetchDailyData() {
-	const con = await pool.getConnection();
+	const delay = 5 * 1000;
 
-	CHAINS_ARRAY.forEach((chain) => {
+	const con = await pool.getConnection();
+	/*
+	// prevent run at midnight
+	await new Promise((resolve) => setTimeout(resolve, delay));
+
+
+	const tokensCount = await getTokensCountForNetworks();
+
+	tokensCount?.forEach(({ id, count }) => {
+		updateDbDailyTokenCount(con, id, count);
+	});
+
+	if (!tokensCount) {
+		console.error('getTokensCountForNetworks failed');
+	}
+
+	// await 15 minutes to be sure that the scrapped data is udpated
+	await new Promise((resolve) => setTimeout(resolve, 15 * 60 * 1000));
+*/
+	CHAINS_ARRAY.forEach(async (chain) => {
+		/*
 		fetchDailyActiveUsersFor(chain)
 			.then((data) => {
-				updateDbDailyActiveUsers(con, chain.id, data);
+				if (data) {
+					updateDbDailyActiveUsers(con, chain.id, data);
+				}
 			})
 			.catch((err) => console.error(err));
+
+			await new Promise((resolve) => setTimeout(resolve, delay));
+
+				fetchDailyAverageBlockTime(chain)
+				.then((data) => {
+					if (data) {
+						updateDbDailyAverageBlocktime(con, chain.id, data);
+					}
+				})
+				.catch((err) => console.error(err));
+
+await new Promise((resolve) => setTimeout(resolve, delay));			
+		fetchDailyAverageGasPrice(chain)
+				.then((data) => {
+					if (data) {
+						updateDbDailyAverageGasPrice(con, chain.id, data);
+					}
+				})
+				.catch((err) => console.error(err));
+
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		fetchDifficultyFor(chain)
+				.then((data) => {
+					if (data) {
+						updateDbDailyDifficulty(con, chain.id, data);
+					}
+				})
+				.catch((err) => console.error(err));
+
+				
+
+		await new Promise((resolve) => setTimeout(resolve, delay));
+		
+		fetchHashrateFor(chain)
+			.then((data) => {
+				if (data) {
+					updateDbDailyHashrate(con, chain.id, data);
+				}
+			})
+			.catch((err) => console.error(err));
+
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		
+		fetchDailyUniqueAddressesFor(chain)
+			.then((data) => {
+				const formattedData = [];
+				if (data) {
+					for (let i = 1; i < data.length; i++) {
+						formattedData.push({
+							timestamp: data[i].timestamp,
+							count: data[i].count - data[i - 1].count
+						});
+					}
+				}
+
+				return formattedData;
+			})
+			.then((formattedData) => {
+				updateDbDailyNewAddresses(con, chain.id, formattedData);
+			})
+			.catch((err) => console.error(err));
+
+		
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		fetchDailyVerifiedContractsFor(chain)
+			.then((data) => {
+				if (data) {
+					updateDbDailyNewContracts(con, chain.id, data);
+				}
+			})
+			.catch((err) => console.error(err));
+
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		*/
+
+		if (chain.id !== CHAINS.bitcoin.id) {
+			fetchDailyTokenCount(chain, con)
+				.then((data) => {
+					let formattedData = null;
+					if (data?.length > 1) {
+						formattedData = [];
+
+						for (let i = 1; i < data.length; i++) {
+							formattedData.push({
+								date: data[i].date,
+								count: data[i].token_count - data[i - 1].token_count
+							});
+						}
+					}
+
+					return formattedData;
+				})
+				.then((formattedData) => {
+					updateDbDailyNewTokens(con, chain.id, formattedData);
+				})
+				.catch((err) => console.error(err));
+
+			await new Promise((resolve) => setTimeout(resolve, delay));
+		}
 	});
 }
 

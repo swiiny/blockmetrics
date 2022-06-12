@@ -2,6 +2,7 @@ export const CHAINS = {
 	ethereum: {
 		id: 'ethereum',
 		name: 'Ethereum',
+		consensus: 'POW',
 		chartPrefix: 'https://etherscan.io/chart',
 		coingeckoId: 'ethereum',
 		rpc: process.env.RPC_ETHEREUM
@@ -23,6 +24,7 @@ export const CHAINS = {
 	bitcoin: {
 		id: 'bitcoin',
 		name: 'Bitcoin',
+		consensus: 'POW',
 		chartPrefix: 'https://api.blockchain.info/charts',
 		coingeckoId: 'bitcoin'
 	},

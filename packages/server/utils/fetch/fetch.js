@@ -1,7 +1,7 @@
 import axios from 'axios';
 import CSVToJSON from 'csvtojson';
 import { CHAINS } from '../../variables.js';
-import { getChainById } from '../functions.js';
+import { getDailyTokenCount } from '../sql.js';
 
 export async function getAvalancheStats() {
 	try {
@@ -26,6 +26,7 @@ export async function getAvalancheStats() {
 		console.error('getAvalancheStats', err);
 		return null;
 	}
+	return null;
 }
 
 // { timestamp: number; count: number}[]
@@ -50,7 +51,7 @@ export async function fetchDailyUniqueAddressesFor(chain) {
 			// convert data to json
 			const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
 			// get only the last 30 days
 			const last30Days = json.filter(({ UnixTimeStamp }) => {
@@ -68,6 +69,7 @@ export async function fetchDailyUniqueAddressesFor(chain) {
 		console.error('fetchDailyUniqueAddressesFor', err);
 		return null;
 	}
+	return null;
 }
 
 // { timestamp: number; count: number}[]
@@ -92,7 +94,7 @@ export async function fetchDailyTransactionFor(chain) {
 			// convert data to json
 			const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
 			// get only the last 30 days
 			const last30Days = json.filter(({ UnixTimeStamp }) => {
@@ -134,7 +136,7 @@ export async function fetchDailyAverageBlockTime(chain) {
 			// convert data to json
 			const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
 			// get only the last 30 days
 			const last30Days = json.filter(({ UnixTimeStamp }) => {
@@ -143,7 +145,7 @@ export async function fetchDailyAverageBlockTime(chain) {
 
 			const formattedJson = last30Days.map(({ UnixTimeStamp, Value }) => ({
 				timestamp: parseInt(UnixTimeStamp, 10),
-				second: parseInt(Value, 10)
+				second: parseFloat(Value)
 			}));
 
 			return formattedJson;
@@ -152,6 +154,7 @@ export async function fetchDailyAverageBlockTime(chain) {
 		console.error('fetchDailyAverageBlockTime', err);
 		return null;
 	}
+	return null;
 }
 
 // { timestamp: number; count: number}[]
@@ -170,8 +173,10 @@ export async function fetchDailyActiveUsersFor(chain) {
 			formattedJson = data.values.map(({ x, y }) => ({ timestamp: x, count: y }));
 		} else if (id === CHAINS.avalanche.id) {
 			console.log('TODO - get this from the Avalanche chain');
+			formattedJson = null;
 		} else if (id === CHAINS.fantom.id) {
 			console.log('TODO - get this from the Fantom chain');
+			formattedJson = null;
 		} else {
 			const url = `${chartPrefix}/active-address?output=csv`;
 
@@ -180,7 +185,7 @@ export async function fetchDailyActiveUsersFor(chain) {
 			// convert data to json
 			const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
 			// get only the last 30 days
 			const last30Days = json.filter((item) => Date.parse(item['Date(UTC)']) / 1000 > theertyOneDaysAgo);
@@ -215,7 +220,7 @@ export async function fetchDailyAverageGasPrice(chain) {
 			// convert data to json
 			const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
 			// get only the last 30 days
 			const last30Days = json.filter(({ UnixTimeStamp }) => {
@@ -224,7 +229,7 @@ export async function fetchDailyAverageGasPrice(chain) {
 
 			formattedJson = last30Days.map((item) => ({
 				timestamp: parseInt(item.UnixTimeStamp, 10),
-				wei: parseInt(item['Value (Wei)'], 10)
+				wei: parseFloat(item['Value (Wei)'])
 			}));
 		}
 
@@ -256,7 +261,7 @@ export async function fetchDifficultyFor(chain) {
 			// convert data to json
 			const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
 			// get only the last 30 days
 			const last30Days = json.filter(({ UnixTimeStamp }) => {
@@ -265,7 +270,7 @@ export async function fetchDifficultyFor(chain) {
 
 			formattedJson = last30Days.map(({ UnixTimeStamp, Value }) => ({
 				timestamp: parseInt(UnixTimeStamp, 10),
-				difficulty: parseInt(Value, 10)
+				difficulty: parseFloat(Value)
 			}));
 		} else {
 			throw new Error('difficulty is not available for POS chains');
@@ -280,9 +285,13 @@ export async function fetchDifficultyFor(chain) {
 
 // { timestamp: number; hashrateTHs: number}[]
 export async function fetchHashrateFor(chain) {
-	const { id, chartPrefix } = chain;
+	const { id, chartPrefix, consensus } = chain;
 
 	let formattedJson;
+
+	if (consensus !== 'POW') {
+		return null;
+	}
 
 	try {
 		if (id === CHAINS.bitcoin.id) {
@@ -299,7 +308,7 @@ export async function fetchHashrateFor(chain) {
 			// convert data to json
 			const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
 			// get only the last 30 days
 			const last30Days = json.filter(({ UnixTimeStamp }) => {
@@ -308,7 +317,7 @@ export async function fetchHashrateFor(chain) {
 
 			formattedJson = last30Days.map(({ UnixTimeStamp, Value }) => ({
 				timestamp: parseInt(UnixTimeStamp, 10),
-				hashrateTHs: parseInt(Value, 10) * 10 ** -3
+				hashrateTHs: parseFloat(Value) * 10 ** -3
 			}));
 		} else {
 			throw new Error('Hashrate is not available for POS chains');
@@ -327,33 +336,52 @@ export async function fetchDailyVerifiedContractsFor(chain) {
 
 	let formattedJson;
 
+	if (id === CHAINS.bitcoin.id) {
+		return null;
+	}
+
 	try {
-		if (id === CHAINS.bitcoin.id) {
-			throw new Error("bitcoin doesn't have smart contracts");
-		} else {
-			const url = `${chartPrefix}/verified-contracts?output=csv`;
+		const url = `${chartPrefix}/verified-contracts?output=csv`;
 
-			const { data } = await axios.get(url);
+		const { data } = await axios.get(url);
 
-			// convert data to json
-			const json = await CSVToJSON().fromString(data);
+		// convert data to json
+		const json = await CSVToJSON().fromString(data);
 
-			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 31;
+		const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
 
-			// get only the last 30 days
-			const last30Days = json.filter(({ UnixTimeStamp }) => {
-				return parseInt(UnixTimeStamp, 10) > theertyOneDaysAgo;
-			});
+		// get only the last 30 days
+		const last30Days = json.filter(({ UnixTimeStamp }) => {
+			return parseInt(UnixTimeStamp, 10) > theertyOneDaysAgo;
+		});
 
-			formattedJson = last30Days.map(({ UnixTimeStamp, No }) => ({
-				timestamp: parseInt(UnixTimeStamp, 10),
-				count: parseInt(No[' of Verified Contracts'], 10)
-			}));
-		}
+		formattedJson = last30Days.map(({ UnixTimeStamp, No }) => ({
+			timestamp: parseInt(UnixTimeStamp, 10),
+			count: parseInt(No[' of Verified Contracts'], 10)
+		}));
 
 		return formattedJson;
 	} catch (err) {
 		console.error('fetchDailyVerifiedContractsFor', err);
+		return null;
+	}
+}
+
+// { timestamp: number; count: number}[]
+export async function fetchDailyTokenCount(chain, con) {
+	const { id, chartPrefix } = chain;
+
+	if (id === CHAINS.bitcoin.id) {
+		return null;
+	}
+
+	try {
+		// get rows for last 40 days
+		const [tokenRows] = await con.query(getDailyTokenCount, [id, 40]);
+
+		return tokenRows;
+	} catch (err) {
+		console.error('fetchDailyTokenCount', err);
 		return null;
 	}
 }

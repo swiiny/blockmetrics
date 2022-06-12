@@ -21,10 +21,11 @@
 		"requests": "^0.3.0"
 	},
 	"devDependencies": {
-		"eslint": "^8.13.0",
-		"eslint-config-airbnb-base": "^15.0.0",
-		"eslint-plugin-import": "^2.26.0",
-		"nodemon": "^2.0.16"
+		"eslint": "^8.17.0",
+		"eslint-config-prettier": "^8.5.0",
+		"nodemon": "^2.0.16",
+		"prettier": "2.6.2",
+		"prettier-eslint": "^15.0.1"
 	},
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",

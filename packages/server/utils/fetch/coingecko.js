@@ -1,12 +1,8 @@
 import axios from 'axios';
-import { fetchingDataActivated } from '../../server.js';
-import { updateTokenCountInBlockchain } from '../sql.js';
 
 import { CHAINS } from '../../variables.js';
 
-let updateTokenCountTimeout;
-
-const getCGTokenList = async () => {
+async function getCGTokenList() {
 	try {
 		const url = `https://api.coingecko.com/api/v3/coins/list?include_platform=true`;
 		const res = await axios.get(url);
@@ -19,9 +15,9 @@ const getCGTokenList = async () => {
 		console.log('Failed to get Coingecko token list:', err);
 		return null;
 	}
-};
+}
 
-const getTokensByNetworks = (tokenList) => {
+function getTokensByNetworks(tokenList) {
 	const n = {};
 
 	if (!(tokenList instanceof Array)) {
@@ -43,61 +39,31 @@ const getTokensByNetworks = (tokenList) => {
 	});
 
 	return n;
-};
+}
 
-export const updateTokensCountForNetworks = async (pool) => {
-	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('> start updating updateTokensCountForNetworks');
-	}
-
+export async function getTokensCountForNetworks() {
 	try {
-		const con = await pool.getConnection();
-
 		const tokenList = await getCGTokenList();
 		const tokensByNetworks = getTokensByNetworks(tokenList);
 
 		const networks = Object.keys(tokensByNetworks);
-		const tokensCount = {};
+		const tokensCount = [];
 
 		const chainsValues = Object.values(CHAINS);
 
 		const availableValues = chainsValues.map((chain) => chain.coingeckoId);
 
 		networks.forEach((n) => {
+			// test if network is listed on blockmetrics
 			if (availableValues.includes(n)) {
-				const id = chainsValues.find((chain) => chain.coingeckoId === n);
-				tokensCount[id] = tokensByNetworks[n].length;
+				const chain = chainsValues.find((chain) => chain.coingeckoId === n);
+				tokensCount.push({ id: chain.id, count: tokensByNetworks[n].length });
 			}
 		});
 
-		const promises = Object.keys(tokensCount).map((key) =>
-			con.query(updateTokenCountInBlockchain, [tokensCount[key], key])
-		);
-
-		await Promise.all(promises);
-
-		con.release();
-
-		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('> updateTokensCountForNetworks success, next update in 1 hour');
-		}
-
-		// update tokens count each hour
-		if (fetchingDataActivated) {
-			updateTokenCountTimeout = setTimeout(() => {
-				updateTokensCountForNetworks(pool);
-			}, 60 * 60 * 1000);
-		}
+		return tokensCount;
 	} catch (err) {
 		console.log('Failed to update tokens count for networks, try again in 1 minute:', err);
-
-		if (fetchingDataActivated) {
-			// try again in a minute
-			updateTokenCountTimeout = setTimeout(() => {
-				updateTokensCountForNetworks(pool);
-			}, 60 * 1000);
-		}
+		return null;
 	}
-};
-
-export { updateTokenCountTimeout };
+}
