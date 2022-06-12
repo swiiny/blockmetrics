@@ -31,7 +31,6 @@ import {
 	fetchDifficultyFor,
 	fetchHashrateFor
 } from './utils/fetch/fetch.js';
-import ethers from 'ethers';
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
@@ -307,12 +306,16 @@ async function startFetchData() {
 			return 0;
 		}
 
-		if (process.env.NODE_ENV === 'production') {
+		if (process.env.NODE_ENV !== 'production') {
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 0;
-			rule.minute = 5;
+			rule.minute = 30;
+			rule.tz = 'Europe/Amsterdam';
+
+			console.log('init schedule');
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
+				console.log('run schedule');
 				fetchDailyData();
 			});
 		} else {
@@ -337,7 +340,7 @@ async function startFetchData() {
 			timeoutFetchData = setTimeout(() => {
 				console.log('restart fetching data');
 				dailyRoutine = null;
-				// startFetchData();
+				startFetchData();
 			}, 1 * 60 * 1000);
 		}
 	}
