@@ -1,3 +1,4 @@
+/*
 import axios from 'axios';
 import crypto from 'crypto';
 import { ethers } from 'ethers';
@@ -211,3 +212,4 @@ export async function fetchBitcoinData(pool) {
 }
 
 export { bitcoinTimeout };
+*/

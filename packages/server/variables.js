@@ -41,3 +41,5 @@ export const CHAINS = {
 		rpc: process.env.RPC_FANTOM
 	}
 };
+
+export const CHAINS_ARRAY = Object.values(CHAINS);
