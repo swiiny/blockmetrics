@@ -2,7 +2,7 @@ import styled, { css } from 'styled-components';
 import { EMediaQuery } from '../../styles/theme/utils/enum';
 import { mq } from '../../styles/theme/utils/functions';
 
-export const StyledNavbar = styled.nav`
+export const StyledNavbar = styled.nav<{ isHidden?: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -19,6 +19,8 @@ export const StyledNavbar = styled.nav`
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
 	height: 80px;
+
+	${(p) => (p.isHidden ? `display: none;` : '')}
 `;
 
 export const StyledList = styled.ul`

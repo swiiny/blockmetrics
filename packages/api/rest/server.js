@@ -1,11 +1,11 @@
-import express from "express";
-import helmet from "helmet";
-import rateLimit from "express-rate-limit";
-import cors from "cors";
-import { getBlockchains } from "./utils/fetch.js";
-import { createDbPool } from "./utils/pool.js";
+import express from 'express';
+import helmet from 'helmet';
+import rateLimit from 'express-rate-limit';
+import cors from 'cors';
+import { getBlockchainById, getBlockchains } from './utils/fetch.js';
+import { createDbPool } from './utils/pool.js';
 
-const BASE_URL_V1 = "/v1/api/rest";
+const BASE_URL_V1 = '/v1/api/rest';
 
 // connection pool
 let pool;
@@ -51,19 +51,44 @@ app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
 			res.send(result);
 			return;
 		} else {
-			throw new Error("getBlockchains failed");
+			throw new Error('getBlockchains failed');
 		}
 	} catch (err) {
-		console.error("/get/blockchains", err);
+		console.error('/get/blockchains', err);
 
-		res.status(500).send("Error fetching blockchains data");
+		res.status(500).send('Error fetching blockchains data');
+		return;
+	}
+});
+
+app.get(`${BASE_URL_V1}/get/blockchain`, async (req, res) => {
+	const { id } = req.query;
+
+	try {
+		if (!id) {
+			res.status(500).send('Missing id');
+			return;
+		}
+
+		const result = await getBlockchainById(pool, id);
+
+		if (result[0][0]) {
+			res.send(result[0][0]);
+			return;
+		} else {
+			throw new Error('getBlockchain failed');
+		}
+	} catch (err) {
+		console.error('/get/blockchain', err);
+
+		res.status(500).send('Error fetching blockchain data where id is ' + id);
 		return;
 	}
 });
 
 // test endpoint, should respond the string "pong"
 app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
-	res.send("pong");
+	res.send('pong');
 });
 
 app.listen(process.env.API_PORT, async () => {

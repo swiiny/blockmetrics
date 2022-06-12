@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { CHAINS } from '../../variables.js';
 import { getAvalancheStats } from './fetch.js';
 
 export async function getEthNodeCount() {
@@ -77,3 +78,31 @@ export async function getBitcoinNodeCount() {
 		return null;
 	}
 }
+
+export const getNodeCountForAllBlockchains = async () => {
+	try {
+		const promises = [
+			getEthNodeCount()
+				.then((res) => ({ id: CHAINS.ethereum.id, count: res }))
+				.catch(() => null),
+			getBscNodeCount()
+				.then((res) => ({ id: CHAINS.bsc.id, count: res }))
+				.catch(() => null),
+			getAvalancheNodeCount()
+				.then((res) => ({ id: CHAINS.avalanche.id, count: res }))
+				.catch(() => null),
+			getBitcoinNodeCount()
+				.then((res) => ({ id: CHAINS.bitcoin.id, count: res }))
+				.catch(() => null),
+			getFantomNodeCount()
+				.then((res) => ({ id: CHAINS.fantom.id, count: res }))
+				.catch(() => null)
+		];
+
+		const resolvedPromises = await Promise.all(promises);
+
+		return resolvedPromises;
+	} catch {
+		return null;
+	}
+};

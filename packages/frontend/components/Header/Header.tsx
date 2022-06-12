@@ -9,25 +9,29 @@ import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../styles/t
 import { StyledHeader, StyledImageContainer } from './Header.styles';
 import { IHeader } from './Header.type';
 
-const Header: React.FC<IHeader> = ({ title, subtitle, image }) => {
+const Header: React.FC<IHeader> = ({ title, subtitle, image, refreshAction = null }) => {
 	const { isSmallerThanSm } = useResponsive();
 
 	return (
 		<StyledHeader>
-			<Flex vertical={EFlex.center} wrapItems={false}>
-				<Heading type={ETextType.h1}>{title}</Heading>
+			<Flex vertical={EFlex.center} horizontal={EFlex.between}>
+				<Flex vertical={EFlex.center} wrapItems={false}>
+					<Heading type={ETextType.h1}>{title}</Heading>
 
-				{image ? (
-					<>
-						<Spacing size={!isSmallerThanSm ? ESize.m : ESize.s} />
+					{image ? (
+						<>
+							<Spacing size={!isSmallerThanSm ? ESize.m : ESize.s} />
 
-						<StyledImageContainer>
-							<img src={image} alt={title} />
-						</StyledImageContainer>
-					</>
-				) : (
-					<></>
-				)}
+							<StyledImageContainer>
+								<img src={image} alt={title} />
+							</StyledImageContainer>
+						</>
+					) : (
+						<></>
+					)}
+				</Flex>
+
+				{refreshAction && <button onClick={refreshAction}>refresh</button>}
 			</Flex>
 
 			<Spacing size={ESize.l} />

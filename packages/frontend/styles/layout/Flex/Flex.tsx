@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { EFlex } from '../../theme/utils/enum';
 import { StyledFlex } from './Flex.styles';
 import { IFlex } from './Flex.type';
 
-const Flex: React.FC<IFlex> = ({
+const Flex: FC<IFlex> = ({
 	children,
 	fullWidth = false,
 	fullHeight = false,

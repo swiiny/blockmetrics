@@ -1,11 +1,12 @@
 import React from 'react';
-import { EFlex, ESize } from '../../theme/utils/enums';
+import { EFlex, ESize } from '../../theme/utils/enum';
 
 interface IFlex {
-	children: React.ReactNode;
+	children: React.ReactNode | React.ReactNode[];
 	fullWidth?: boolean;
 	fullHeight?: boolean;
 	wrapItems?: boolean;
+	as?: any;
 	padding?: ESize;
 	paddingBottom?: ESize;
 	paddingTop?: ESize;

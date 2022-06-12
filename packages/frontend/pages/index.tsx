@@ -1,13 +1,14 @@
 import React from 'react';
 import type { NextPage } from 'next';
-import Navbar from '../components/Navbar';
 import Meta from '../components/utils/Meta';
 import Main from '../styles/layout/Main';
 import Header from '../components/Header';
+import axios from 'axios';
 
 const HeaderData = {
 	title: 'Lorem ipsum',
-	subtitle: 'Lorem ipsu dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
+	subtitle:
+		'Lorem ipsu dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
 };
 
 const Home: NextPage = () => {
