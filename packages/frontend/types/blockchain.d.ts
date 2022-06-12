@@ -1,7 +1,6 @@
 type TBlockchain = {
 	id: string;
 	name: string;
-	logoUrl: string;
 	note: string;
 	node_count: number;
 	testnet_node_count: number;
@@ -9,14 +8,17 @@ type TBlockchain = {
 	blockchain_power_consumption: number;
 	hashrate: number;
 	difficulty: number;
-	time_between_blocks: number;
+	last_block_timestamp: number;
 	token_count: number;
 	transaction_count: number;
 	gas_price: number;
 	consensus: string;
+	today_transaction_count: number;
+	address_count: number;
+	today_address_count: number;
 };
 
 type TBlockchainMetadata = {
-	subtitle: string;
+	tagline: string;
 	description: string;
 };
