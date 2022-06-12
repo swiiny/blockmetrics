@@ -1,6 +1,8 @@
 import axios from 'axios';
-import { chains, fetchingDataActivated } from '../../server.js';
+import { fetchingDataActivated } from '../../server.js';
 import { updateTokenCountInBlockchain } from '../sql.js';
+
+import { CHAINS } from '../../variables.js';
 
 let updateTokenCountTimeout;
 
@@ -57,14 +59,14 @@ export const updateTokensCountForNetworks = async (pool) => {
 		const networks = Object.keys(tokensByNetworks);
 		const tokensCount = {};
 
-		const chainsKeys = Object.keys(chains);
+		const chainsValues = Object.values(CHAINS);
 
-		const availableValues = chainsKeys.map((key) => chains[key].coingeckoId);
+		const availableValues = chainsValues.map((chain) => chain.coingeckoId);
 
 		networks.forEach((n) => {
 			if (availableValues.includes(n)) {
-				const key = chainsKeys.find((key) => chains[key].coingeckoId === n);
-				tokensCount[chains[key].id] = tokensByNetworks[n].length;
+				const id = chainsValues.find((chain) => chain.coingeckoId === n);
+				tokensCount[id] = tokensByNetworks[n].length;
 			}
 		});
 

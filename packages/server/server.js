@@ -5,6 +5,16 @@ import rateLimit from 'express-rate-limit';
 import helmet from 'helmet';
 import { bitcoinTimeout, fetchBitcoinData, fetchEVMBlocksFor } from './utils/fetch/blocks.js';
 import { updateTokenCountTimeout, updateTokensCountForNetworks } from './utils/fetch/coingecko.js';
+import {
+	fetchDailyActiveUsersFor,
+	fetchDailyAverageBlockTime,
+	fetchDailyAverageGasPrice,
+	fetchDailyTransactionFor,
+	fetchDailyUniqueAddressesFor,
+	fetchDailyVerifiedContractsFor,
+	fetchDifficultyFor,
+	fetchHashrateFor
+} from './utils/fetch/fetch.js';
 import { getGasPrice } from './utils/fetch/gasPrice.js';
 import {
 	getAvalancheNodeCount,
@@ -23,6 +33,8 @@ import {
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updateDbNodeCount } from './utils/update/nodeCount.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
+import { CHAINS } from './variables.js';
+import schedule from 'node-schedule';
 
 let intervalGasPrice;
 let intervalNodeCount;
@@ -31,45 +43,6 @@ let timeoutCheckIfaddresses;
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
-
-// chain uuid in the database
-export const chains = {
-	ethereum: {
-		id: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
-		name: 'Ethereum',
-		coingeckoId: 'ethereum',
-		rpc: process.env.RPC_ETHEREUM
-	},
-	bsc: {
-		id: '0bb6df38-231e-47d3-b427-88d16a65580e',
-		name: 'Binance SC',
-		coingeckoId: 'binance-smart-chain',
-		rpc: process.env.RPC_BSC
-	},
-	polygon: {
-		id: '4df0b4ad-2165-4543-a74b-7cdf46f9c5e3',
-		name: 'Polygon',
-		coingeckoId: 'polygon-pos',
-		rpc: process.env.RPC_POLYGON
-	},
-	bitcoin: {
-		id: '1daa2a79-98cc-49a5-970a-0ad620a8b0d9',
-		name: 'Bitcoin',
-		coingeckoId: 'bitcoin'
-	},
-	avalanche: {
-		id: '7fc003e2-680f-4e69-9741-b00c18d2e6dc',
-		name: 'Avalanche',
-		coingeckoId: 'avalanche',
-		rpc: process.env.RPC_AVALANCHE
-	},
-	fantom: {
-		id: 'a3820e29-a5fc-41af-a5c1-07119795e07d',
-		name: 'Fantom',
-		coingeckoId: 'fantom',
-		rpc: process.env.RPC_FANTOM
-	}
-};
 
 const limiter = rateLimit({
 	windowMs: 1000,
@@ -105,22 +78,22 @@ async function updateNodeCount() {
 
 		const promises = [
 			getEthNodeCount()
-				.then((res) => updateDbNodeCount(con, chains.ethereum.id, res))
+				.then((res) => updateDbNodeCount(con, CHAINS.ethereum.id, res))
 				.catch(() => null),
 			getBscNodeCount()
-				.then((res) => updateDbNodeCount(con, chains.bsc.id, res))
+				.then((res) => updateDbNodeCount(con, CHAINS.bsc.id, res))
 				.catch(() => null),
 			/*getPolygonNodeCount()
-				.then((res) => updateDbNodeCount(con, chains.polygon.id, res))
+				.then((res) => updateDbNodeCount(con, CHAINS.polygon.id, res))
 				.catch(() => null),*/
 			getAvalancheNodeCount()
-				.then((res) => updateDbNodeCount(con, chains.avalanche.id, res))
+				.then((res) => updateDbNodeCount(con, CHAINS.avalanche.id, res))
 				.catch(() => null),
 			getBitcoinNodeCount()
-				.then((res) => updateDbNodeCount(con, chains.bitcoin.id, res))
+				.then((res) => updateDbNodeCount(con, CHAINS.bitcoin.id, res))
 				.catch(() => null),
 			getFantomNodeCount()
-				.then((res) => updateDbNodeCount(con, chains.fantom.id, res))
+				.then((res) => updateDbNodeCount(con, CHAINS.fantom.id, res))
 				.catch(() => null)
 		];
 
@@ -153,8 +126,7 @@ async function updateGasPrice() {
 	const con = await pool.getConnection();
 
 	try {
-		const promises = Object.keys(chains)
-			.map((key) => chains[key])
+		const promises = Object.values(CHAINS)
 			.filter((chain) => chain.rpc)
 			.map(async (chain) =>
 				getGasPrice(chain.rpc).then((gasPrice) => {
@@ -215,7 +187,7 @@ async function updatePowerConsumption() {
 		console.log('========== UPDATE POWER CONSUMPTION END ==========', Date.now());
 	}
 }
-
+/*
 // fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
 async function checkIfAddressesAreContracts() {
 	try {
@@ -245,11 +217,7 @@ async function checkIfAddressesAreContracts() {
 		const txResults = await Promise.all(txPromises);
 
 		const updateDbPromises = txResults.map((txResult) =>
-			con.query(updateIsContractInAccount, [
-				txResult.is_contract,
-				txResult.blockchain_id,
-				txResult.public_address
-			])
+			con.query(updateIsContractInAccount, [txResult.is_contract, txResult.blockchain_id, txResult.public_address])
 		);
 
 		await Promise.all(updateDbPromises);
@@ -270,6 +238,13 @@ async function checkIfAddressesAreContracts() {
 		}
 	}
 }
+*/
+
+async function fetchDailyData() {
+	const res = await fetchDailyActiveUsersFor(CHAINS.ethereum);
+
+	console.log('fetchDailyActiveUsersFor', res);
+}
 
 async function startFetchData() {
 	canStartFetchData = false;
@@ -286,11 +261,11 @@ async function startFetchData() {
 			// updateNodeCount();
 			// updateGasPrice();
 
-			fetchEVMBlocksFor(chains.ethereum, pool);
-			fetchEVMBlocksFor(chains.polygon, pool);
-			fetchEVMBlocksFor(chains.bsc, pool);
-			fetchEVMBlocksFor(chains.avalanche, pool);
-			fetchEVMBlocksFor(chains.fantom, pool);
+			fetchEVMBlocksFor(CHAINS.ethereum, pool);
+			fetchEVMBlocksFor(CHAINS.polygon, pool);
+			fetchEVMBlocksFor(CHAINS.bsc, pool);
+			fetchEVMBlocksFor(CHAINS.avalanche, pool);
+			fetchEVMBlocksFor(CHAINS.fantom, pool);
 
 			// fetchBitcoinData(pool);
 
@@ -310,27 +285,23 @@ async function startFetchData() {
 			*/
 		} else {
 			// dev stuff
-			fetchEVMBlocksFor(chains.ethereum, pool);
-			fetchEVMBlocksFor(chains.polygon, pool);
-			fetchEVMBlocksFor(chains.bsc, pool);
-			fetchEVMBlocksFor(chains.avalanche, pool);
-			fetchEVMBlocksFor(chains.fantom, pool);
+			// fetchDailyUniqueAddressesFor(CHAINS.bitcoin);
+			// fetchDailyTransactionFor(CHAINS.bitcoin);
+			// fetchDailyAverageBlockTime(CHAINS.ethereum);
+			// fetchDailyActiveUsersFor(CHAINS.avalanche);
+			// fetchDailyAverageGasPrice(CHAINS.avalanche);
+			// fetchDifficultyFor(CHAINS.bitcoin);
+			// fetchHashrateFor(CHAINS.bitcoin);
+			const res = await fetchDailyAverageGasPrice(CHAINS.ethereum);
 
-			fetchBitcoinData(pool);
+			console.log('fetchDailyVerifiedContractsFor', res);
 
-			updateTokensCountForNetworks(pool);
+			const rule = new schedule.RecurrenceRule();
+			rule.second = 30;
 
-			checkIfAddressesAreContracts();
-
-			// TODO : replace by a websocket
-			intervalGasPrice = setInterval(() => {
-				updateGasPrice();
-			}, 1000);
-
-			intervalNodeCount = setInterval(() => {
-				console.log('start update node count from interval');
-				updateNodeCount();
-			}, 5 * 1000);
+			const job = schedule.scheduleJob(rule, async () => {
+				// fetchDailyData();
+			});
 		}
 	} catch {
 		console.error('catch error in startFetchData');

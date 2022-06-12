@@ -1,4 +1,4 @@
-import { chains } from '../server.js';
+import { CHAINS } from '../variables.js';
 
 /**
  * calculate power comsumption for PoS chains
@@ -6,7 +6,11 @@ import { chains } from '../server.js';
  * @param {*} nodeCount
  * @returns
  */
-export function calculatePowerConsumptionPerDayForPosChain(singleNodePowerConsumption, nodeCount, testnetNodeCount = 0) {
+export function calculatePowerConsumptionPerDayForPosChain(
+	singleNodePowerConsumption,
+	nodeCount,
+	testnetNodeCount = 0
+) {
 	return Math.round(singleNodePowerConsumption * (nodeCount + testnetNodeCount) * 24);
 }
 
@@ -15,6 +19,19 @@ export function calculatePowerConsumption(singleNodePowerConsumption, nodeCount,
 }
 
 export const getRpcByChainId = (chainId) => {
-	const key = Object.keys(chains).find((key) => chains[key].id === chainId);
-	return chains[key]?.rpc;
+	try {
+		const chain = Object.values(CHAINS).find((chain) => chain.id === chainId);
+		return chain.rpc;
+	} catch {
+		return null;
+	}
+};
+
+export const getChainById = (chainId) => {
+	try {
+		const chain = Object.values(CHAINS).find((chain) => chain.id === chainId);
+		return chain;
+	} catch {
+		return null;
+	}
 };

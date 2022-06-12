@@ -1,7 +1,6 @@
 import axios from 'axios';
 import crypto from 'crypto';
 import { ethers } from 'ethers';
-import { chains } from '../../server.js';
 import {
 	getLastBlockParsedFromBlockParsed,
 	increaseTxCountInBlockchain,
@@ -15,6 +14,7 @@ import {
 } from '../sql.js';
 
 import { fetchingDataActivated } from '../../server.js';
+import { CHAINS } from '../../variables.js';
 
 let bitcoinTimeout;
 
@@ -74,13 +74,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 					updatableCon.query(increaseTxCountInBlockchain, [transactions?.length || 0, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
-							updatableCon.query(insertOrUpdateAccount, [
-								public_address,
-								id,
-								timestamp,
-								timestamp,
-								timestamp
-							])
+							updatableCon.query(insertOrUpdateAccount, [public_address, id, timestamp, timestamp, timestamp])
 						])
 						.flat(1),
 					updatableCon.query(updateTimeBetweenBlocksInBlockchain, [timeBetweenTwoBlocks, id]),
@@ -90,9 +84,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				await Promise.all(promises);
 
 				if (process.env.DEBUG_LOGS === 'activated') {
-					console.log(
-						name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms'
-					);
+					console.log(name + ' block n°' + index + ' fetched and saved in db in ' + (Date.now() - startTime) + 'ms');
 				}
 
 				// wait for 60 seconds in development mode
@@ -132,7 +124,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 }
 
 export async function fetchBitcoinData(pool) {
-	const { id, name } = chains.bitcoin;
+	const { id, name } = CHAINS.bitcoin;
 
 	let updatableCon = null;
 

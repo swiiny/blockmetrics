@@ -2,7 +2,7 @@ import axios from 'axios';
 
 export const BLOCKCHAINS = {
 	ethereum: {
-		id: '387123e4-6a73-44aa-b57e-79b5ed1246d4',
+		id: 'ethereum',
 		name: 'Ethereum',
 		colors: {
 			gradient: {
@@ -12,7 +12,7 @@ export const BLOCKCHAINS = {
 		}
 	},
 	bsc: {
-		id: '0bb6df38-231e-47d3-b427-88d16a65580e',
+		id: 'binance-smart-chain',
 		name: 'Binance SC',
 		colors: {
 			gradient: {
@@ -22,7 +22,7 @@ export const BLOCKCHAINS = {
 		}
 	},
 	polygon: {
-		id: '4df0b4ad-2165-4543-a74b-7cdf46f9c5e3',
+		id: 'polygon',
 		name: 'Polygon',
 		colors: {
 			gradient: {
@@ -32,7 +32,7 @@ export const BLOCKCHAINS = {
 		}
 	},
 	bitcoin: {
-		id: '1daa2a79-98cc-49a5-970a-0ad620a8b0d9',
+		id: 'bitcoin',
 		name: 'Bitcoin',
 		colors: {
 			gradient: {
@@ -42,7 +42,7 @@ export const BLOCKCHAINS = {
 		}
 	},
 	avalanche: {
-		id: '7fc003e2-680f-4e69-9741-b00c18d2e6dc',
+		id: 'avalanche',
 		name: 'Avalanche',
 		colors: {
 			gradient: {
@@ -52,7 +52,7 @@ export const BLOCKCHAINS = {
 		}
 	},
 	fantom: {
-		id: 'a3820e29-a5fc-41af-a5c1-07119795e07d',
+		id: 'fantom',
 		name: 'Fantom',
 		colors: {
 			gradient: {
