@@ -322,6 +322,7 @@ async function startFetchData() {
 			const con = await pool.getConnection();
 
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
+				console.log('start ws provider for', chain.name);
 				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 				wsProvider.on('block', async (blockNumber) => {
