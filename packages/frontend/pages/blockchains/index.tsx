@@ -1,1 +1,1 @@
-export { Blockchains as default } from '../../components/pages/blockchains/Blockchains/Blockchains';
+export { BlockchainsPage as default } from '../../components/pages/blockchains/BlockchainsPage/BlockchainsPage';

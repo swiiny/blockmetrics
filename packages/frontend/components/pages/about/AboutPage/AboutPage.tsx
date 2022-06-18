@@ -1,7 +1,6 @@
 import React from 'react';
 import type { NextPage } from 'next';
 import { motion, Variants } from 'framer-motion';
-import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Flex from '../../../../styles/layout/Flex';
 import { EFlex, ESize, ETextAlign } from '../../../../styles/theme/utils/enum';
@@ -10,8 +9,9 @@ import Spacing from '../../../../styles/layout/Spacing';
 import TextWithGradient from '../../../../styles/theme/components/TextWithGradient';
 import Text from '../../../../styles/theme/components/Text';
 import PoweredBySection from '../PoweredBySection';
-import { TextEx } from './About.styles';
+import { TextEx } from './AboutPage.styles';
 import Main from '../../../../styles/layout/Main';
+import Meta from '../../../utils/Meta';
 
 const HeaderData = {
 	title: 'About',
@@ -35,7 +35,7 @@ const sectionVariants: Variants = {
 	}
 };
 
-const About: NextPage = () => {
+const AboutPage: NextPage = () => {
 	return (
 		<>
 			<Meta title='About' />
@@ -68,11 +68,7 @@ const About: NextPage = () => {
 
 						<Spacing size={ESize.xs} />
 
-						<a
-							href='https://github.com/JeremyTheintz/block-metrics/issues'
-							target='_blank'
-							rel='noopener noreferrer'
-						>
+						<a href='https://github.com/JeremyTheintz/block-metrics/issues' target='_blank' rel='noopener noreferrer'>
 							<Text size={ESize['2xl']} textAlign={ETextAlign.center}>
 								Create a <TextWithGradient>Github issue</TextWithGradient> with some details
 							</Text>
@@ -109,4 +105,4 @@ const About: NextPage = () => {
 	);
 };
 
-export { About };
+export { AboutPage };

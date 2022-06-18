@@ -1,14 +1,17 @@
-import React from 'react';
 import styled, { css } from 'styled-components';
 import { EDirection, EMediaQuery, ESize } from '../../theme/utils/enum';
-import { mq } from '../../theme/utils/functions';
+import { getSpacingFromESize, mq } from '../../theme/utils/functions';
 import { ISpacing } from './Spacing.type';
 
-const setRect = (spacing: string, direction: EDirection, index: EMediaQuery) => {
+const setRect = (direction: EDirection, index: EMediaQuery) => {
 	return mq(
 		index,
 		css`
-			${direction === EDirection.vertical ? `margin: ${spacing} 0;` : direction === EDirection.horizontal ? `margin: 0 ${spacing};` : ''}
+			${direction === EDirection.vertical
+				? `margin-left: 0 !important; margin-right: 0 !important;`
+				: direction === EDirection.horizontal
+				? `margin-top: 0 !important; margin-bottom: 0 !important;`
+				: ''}
 		`
 	);
 };
@@ -16,23 +19,43 @@ const setRect = (spacing: string, direction: EDirection, index: EMediaQuery) => 
 export const StyledSpacing = styled.span<ISpacing>`
 	display: inline-block;
 
-	${({ size, xs, sm, md, lg, xl, theme }) => {
-		const spacing = theme.spacing[size];
-		return css`
-			height: 0;
-			width: 0;
+	${({
+		size,
+		smSize,
+		mdSize,
+		lgSize,
+		xlSize,
+		xsDirection,
+		smDirection,
+		mdDirection,
+		lgDirection,
+		xlDirection,
+		theme
+	}) => css`
+		height: 0;
+		width: 0;
 
-			margin: ${spacing};
+		margin: ${getSpacingFromESize(size, theme)};
 
-			${xs === EDirection.vertical ? `margin: ${spacing} 0;` : xs === EDirection.horizontal ? `margin: 0 ${spacing};` : ''}
+		${({ theme }) => css`
+			${xlSize ? mq(EMediaQuery.xl, `margin: ${getSpacingFromESize(xlSize, theme)}`) : ''}
+			${lgSize ? mq(EMediaQuery.lg, `margin: ${getSpacingFromESize(lgSize, theme)}`) : ''}
+			${mdSize ? mq(EMediaQuery.md, `margin: ${getSpacingFromESize(mdSize, theme)}`) : ''}
+			${smSize ? mq(EMediaQuery.sm, `margin: ${getSpacingFromESize(smSize, theme)}`) : ''}
+		`}
 
-			${sm ? setRect(spacing, sm, EMediaQuery.sm) : ''}
-      ${md ? setRect(spacing, md, EMediaQuery.md) : ''}
-      ${lg ? setRect(spacing, lg, EMediaQuery.lg) : ''}
-      ${xl ? setRect(spacing, xl, EMediaQuery.xl) : ''}
+		${xlDirection ? setRect(xlDirection, EMediaQuery.xl) : ''}
+		${lgDirection ? setRect(lgDirection, EMediaQuery.lg) : ''}
+		${mdDirection ? setRect(mdDirection, EMediaQuery.md) : ''}
+		${smDirection ? setRect(smDirection, EMediaQuery.sm) : ''}
 
-      margin-left: 0;
-			margin-bottom: 0;
-		`;
-	}}
+		${xsDirection === EDirection.vertical
+			? `margin-left: 0 !important; margin-right: 0 !important;`
+			: xsDirection === EDirection.horizontal
+			? `margin-top: 0 !important; margin-bottom: 0 !important;`
+			: ''}
+
+		margin-left: 0 !important;
+		margin-bottom: 0 !important;
+	`}
 `;

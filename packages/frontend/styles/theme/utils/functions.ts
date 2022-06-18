@@ -1,4 +1,4 @@
-import { css, FlattenSimpleInterpolation } from 'styled-components';
+import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
 import { EMediaQuery, ESize } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
@@ -75,3 +75,93 @@ export const setFontSize = (size: ESize) => {
 		}
 	`;
 };
+
+export const addPaddingStyles = (p: any) => {
+	return css`
+		${p.xlPadding ? mq(EMediaQuery.xl, `padding: ${p.theme.spacing[p.xlPadding]};`) : ''}
+		${p.xlPaddingX
+			? mq(
+					EMediaQuery.xl,
+					`padding-left: ${p.theme.spacing[p.xlPaddingX]}; padding-right: ${p.theme.spacing[p.xlPaddingX]};`
+			  )
+			: ''}
+		${p.xlPaddingY
+			? mq(
+					EMediaQuery.xl,
+					`padding-top: ${p.theme.spacing[p.xlPaddingY]}; padding-bottom: ${p.theme.spacing[p.xlPaddingY]};`
+			  )
+			: ''}
+		${p.xlPaddingTop ? mq(EMediaQuery.xl, `padding-top: ${p.theme.spacing[p.xlPaddingTop]};`) : ''}
+		${p.xlPaddingBottom ? mq(EMediaQuery.xl, `padding-bottom: ${p.theme.spacing[p.xlPaddingBottom]};`) : ''}
+		${p.xlPaddingLeft ? mq(EMediaQuery.xl, `padding-left: ${p.theme.spacing[p.xlPaddingLeft]};`) : ''}
+		${p.xlPaddingRight ? mq(EMediaQuery.xl, `padding-right: ${p.theme.spacing[p.xlPaddingRight]};`) : ''}
+	
+
+			${p.lgPadding ? mq(EMediaQuery.lg, `padding: ${p.theme.spacing[p.lgPadding]};`) : ''}
+			${p.lgPaddingX
+			? mq(
+					EMediaQuery.lg,
+					`padding-left: ${p.theme.spacing[p.lgPaddingX]}; padding-right: ${p.theme.spacing[p.lgPaddingX]};`
+			  )
+			: ''}
+		${p.lgPaddingY
+			? mq(
+					EMediaQuery.lg,
+					`padding-top: ${p.theme.spacing[p.lgPaddingY]}; padding-bottom: ${p.theme.spacing[p.lgPaddingY]};`
+			  )
+			: ''}
+		${p.lgPaddingTop ? mq(EMediaQuery.lg, `padding-top: ${p.theme.spacing[p.lgPaddingTop]};`) : ''}
+		${p.lgPaddingBottom ? mq(EMediaQuery.lg, `padding-bottom: ${p.theme.spacing[p.lgPaddingBottom]};`) : ''}
+		${p.lgPaddingLeft ? mq(EMediaQuery.lg, `padding-left: ${p.theme.spacing[p.lgPaddingLeft]};`) : ''}
+		${p.lgPaddingRight ? mq(EMediaQuery.lg, `padding-right: ${p.theme.spacing[p.lgPaddingRight]};`) : ''}
+
+		
+	${p.mdPadding ? mq(EMediaQuery.md, `padding: ${p.theme.spacing[p.mdPadding]};`) : ''}
+			${p.mdPaddingX
+			? mq(
+					EMediaQuery.md,
+					`padding-left: ${p.theme.spacing[p.mdPaddingX]}; padding-right: ${p.theme.spacing[p.mdPaddingX]};`
+			  )
+			: ''}
+		${p.mdPaddingY
+			? mq(
+					EMediaQuery.md,
+					`padding-top: ${p.theme.spacing[p.mdPaddingY]}; padding-bottom: ${p.theme.spacing[p.mdPaddingY]};`
+			  )
+			: ''}
+		${p.mdPaddingTop ? mq(EMediaQuery.md, `padding-top: ${p.theme.spacing[p.mdPaddingTop]};`) : ''}
+		${p.mdPaddingBottom ? mq(EMediaQuery.md, `padding-bottom: ${p.theme.spacing[p.mdPaddingBottom]};`) : ''}
+		${p.mdPaddingLeft ? mq(EMediaQuery.md, `padding-left: ${p.theme.spacing[p.mdPaddingLeft]};`) : ''}
+		${p.mdPaddingRight ? mq(EMediaQuery.md, `padding-right: ${p.theme.spacing[p.mdPaddingRight]};`) : ''}
+
+		${p.smPadding ? mq(EMediaQuery.sm, `padding: ${p.theme.spacing[p.smPadding]};`) : ''}
+			${p.smPaddingX
+			? mq(
+					EMediaQuery.sm,
+					`padding-left: ${p.theme.spacing[p.smPaddingX]}; padding-right: ${p.theme.spacing[p.smPaddingX]};`
+			  )
+			: ''}
+		${p.smPaddingY
+			? mq(
+					EMediaQuery.sm,
+					`padding-top: ${p.theme.spacing[p.smPaddingY]}; padding-bottom: ${p.theme.spacing[p.smPaddingY]};`
+			  )
+			: ''}
+		${p.smPaddingTop ? mq(EMediaQuery.sm, `padding-top: ${p.theme.spacing[p.smPaddingTop]};`) : ''}
+		${p.smPaddingBottom ? mq(EMediaQuery.sm, `padding-bottom: ${p.theme.spacing[p.smPaddingBottom]};`) : ''}
+		${p.smPaddingLeft ? mq(EMediaQuery.sm, `padding-left: ${p.theme.spacing[p.smPaddingLeft]};`) : ''}
+		${p.smPaddingRight ? mq(EMediaQuery.sm, `padding-right: ${p.theme.spacing[p.smPaddingRight]};`) : ''}
+
+			${p.padding ? `padding: ${p.theme.spacing[p.padding]};` : ''}
+		${p.paddingX ? `padding-left: ${p.theme.spacing[p.paddingX]}; padding-right: ${p.theme.spacing[p.paddingX]};` : ''}
+		${p.paddingY ? `padding-top: ${p.theme.spacing[p.paddingY]}; padding-bottom: ${p.theme.spacing[p.paddingY]};` : ''}
+		${p.paddingTop ? `padding-top: ${p.theme.spacing[p.paddingTop]};` : ''}
+		${p.paddingBottom ? `padding-bottom: ${p.theme.spacing[p.paddingBottom]};` : ''}
+		${p.paddingLeft ? `padding-left: ${p.theme.spacing[p.paddingLeft]};` : ''}
+		${p.paddingRight ? `padding-right: ${p.theme.spacing[p.paddingRight]};` : ''}
+	`;
+};
+
+export function getSpacingFromESize(size: ESize, theme: DefaultTheme): string {
+	return theme.spacing[size];
+}

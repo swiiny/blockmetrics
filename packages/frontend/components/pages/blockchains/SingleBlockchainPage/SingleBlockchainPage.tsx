@@ -1,13 +1,11 @@
-import React, { useEffect, useState } from 'react';
-import type { GetStaticProps, NextPage } from 'next';
-import { getBlockchainById } from '../../../../utils/fetch';
-import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
+import React from 'react';
+import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
-import { ISingleBlockchain } from './SingleBlockchain.type';
+import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
 
-const SingleBlockchain: NextPage<ISingleBlockchain> = ({ blockchain, metadata }) => {
+const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ blockchain, metadata }) => {
 	const {
 		id,
 		name,
@@ -39,4 +37,4 @@ const SingleBlockchain: NextPage<ISingleBlockchain> = ({ blockchain, metadata })
 	);
 };
 
-export { SingleBlockchain };
+export { SingleBlockchainPage };
