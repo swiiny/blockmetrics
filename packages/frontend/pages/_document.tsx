@@ -6,17 +6,6 @@ export default function BMDocument() {
 		<Html lang='en'>
 			<Head>
 				<link href='https://use.typekit.net/mgc0tse.css' rel='stylesheet' />
-
-				<meta
-					name='viewport'
-					content='width=device-width, minimum-scale=1.0, maximum-scale = 1.0, user-scalable=no'
-				/>
-
-				{/*
-				<link rel='preload' href='/fonts/icomoon.ttf' as='font' crossOrigin='' />
-				<link rel='preload' href='/fonts/icomoon.eot' as='font' crossOrigin='' />
-				<link rel='preload' href='/fonts/icomoon.woff' as='font' crossOrigin='' />
-         */}
 			</Head>
 			<body>
 				<Main />

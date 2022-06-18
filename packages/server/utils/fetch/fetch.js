@@ -63,7 +63,10 @@ export async function fetchDailyUniqueAddressesFor(chain) {
 				count: parseInt(Value, 10)
 			}));
 
-			return formattedJson;
+			return {
+				chartsData: formattedJson,
+				total: formattedJson?.reduce((acc, { count }) => acc + count, 0)
+			};
 		}
 	} catch (err) {
 		console.error('fetchDailyUniqueAddressesFor', err);

@@ -2,7 +2,7 @@ import { GetStaticPaths } from 'next';
 import { getBlockchainById } from '../../utils/fetch';
 import { BLOCKCHAINS_ARRAY } from '../../utils/variables';
 
-export { SingleBlockchain as default } from '../../components/pages/blockchains/SingleBlockchain/SingleBlockchain';
+export { SingleBlockchainPage as default } from '../../components/pages/blockchains/SingleBlockchainPage/SingleBlockchainPage';
 
 export const getStaticProps = async ({ params }: { params: { name: string } }) => {
 	const blockchainId = BLOCKCHAINS_ARRAY.find((bc) => bc.name.toLowerCase().replace(/\s/g, '-') === params.name)?.id;

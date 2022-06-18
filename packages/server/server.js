@@ -2,7 +2,7 @@ import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
-import { getPowerConsumptionDataForPoS } from './utils/sql.js';
+import { getPowerConsumptionDataForPoS, resetTodayTransactionCount, updateTxCountInBlockchain } from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
 import { CHAINS, CHAINS_ARRAY } from './variables.js';
@@ -31,6 +31,8 @@ import {
 	fetchDifficultyFor,
 	fetchHashrateFor
 } from './utils/fetch/fetch.js';
+import { ethers } from 'ethers';
+import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
@@ -111,8 +113,8 @@ async function updatePowerConsumption() {
 	}
 }
 
-async function fetchDailyData() {
-	const delay = 5000;
+async function fetchDailyData(noDelay = false) {
+	const delay = noDelay ? 0 : 5000;
 
 	const con = await pool.getConnection();
 
@@ -149,7 +151,7 @@ async function fetchDailyData() {
 	// updatePowerConsumption();
 
 	// wait 15 minutes to be sure that the scrapped data is udpated
-	await new Promise((resolve) => setTimeout(resolve, 15 * 60 * 1000));
+	await new Promise((resolve) => setTimeout(resolve, noDelay ? 0 : 15 * 60 * 1000));
 
 	CHAINS_ARRAY.forEach(async (chain) => {
 		/* ========================================
@@ -183,7 +185,7 @@ async function fetchDailyData() {
 	 FETCH AND UPDATE AVERAGE GAS PRICE
 	 ======================================== */
 
-		if (chain.id !== CHAINS.bitcoin.id) {
+		if (chain.type === 'EVM') {
 			fetchDailyAverageGasPriceFor(chain)
 				.then((data) => {
 					if (data) {
@@ -229,20 +231,29 @@ async function fetchDailyData() {
 	 ======================================== */
 		fetchDailyUniqueAddressesFor(chain)
 			.then((data) => {
-				const formattedData = [];
-				if (data) {
+				const formattedData = {
+					chartsData: [],
+					total: null
+				};
+				if (data?.chartsData) {
 					for (let i = 1; i < data.length; i++) {
-						formattedData.push({
+						formattedData['chartsData'].push({
 							timestamp: data[i].timestamp,
 							count: data[i].count - data[i - 1].count
 						});
 					}
 				}
 
+				if (data?.total > 0) {
+					formattedData.total = data.total;
+				}
+
 				return formattedData;
 			})
 			.then((formattedData) => {
-				updateDbDailyNewAddresses(con, chain.id, formattedData);
+				updateDbDailyNewAddresses(con, chain.id, formattedData.chartsData);
+				con.query(updateTxCountInBlockchain, [formattedData.total, chain.id]);
+				con.query(resetTodayTransactionCount, [chain.id]);
 			})
 			.catch((err) => console.error(err));
 
@@ -306,13 +317,23 @@ async function startFetchData() {
 			return 0;
 		}
 
-		if (process.env.NODE_ENV !== 'production') {
+		if (process.env.NODE_ENV === 'production') {
+			// INIT WEBSOCKET PROVIDERS CONNECTIONS
+			const con = await pool.getConnection();
+
+			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
+				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
+
+				wsProvider.on('block', async (blockNumber) => {
+					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+				});
+			});
+
+			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 2;
 			rule.minute = 0;
 			rule.tz = 'Europe/Amsterdam';
-
-			console.log('init schedule');
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
 				console.log('run schedule');
@@ -321,18 +342,17 @@ async function startFetchData() {
 		} else {
 			// dev stuff
 			/*
-			const wsProvider = new ethers.providers.WebSocketProvider(process.env.RPC_FANTOM_WS);
-			const provider = new ethers.providers.JsonRpcProvider(process.env.RPC_FANTOM);
+			const con = await pool.getConnection();
 
-			wsProvider.on('block', async (blockNumber) => {
-				console.log('==========> new block mined', blockNumber);
-				const block = await provider.getBlockWithTransactions(blockNumber);
-				const transactions = block?.transactions;
+			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
+				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
-				console.log('block', block?.number);
-				console.log('transactions', transactions?.length);
+				wsProvider.on('block', async (blockNumber) => {
+					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+				});
 			});
-			*/
+*/
+			// fetchDailyData();
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
@@ -340,7 +360,7 @@ async function startFetchData() {
 			timeoutFetchData = setTimeout(() => {
 				console.log('restart fetching data');
 				dailyRoutine = null;
-				startFetchData();
+				// startFetchData();
 			}, 1 * 60 * 1000);
 		}
 	}

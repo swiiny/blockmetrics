@@ -1,20 +1,16 @@
 import React from 'react';
 import type { NextPage } from 'next';
-import Meta from '../components/utils/Meta';
-import Main from '../styles/layout/Main';
-import Flex from '../styles/layout/Flex';
-import { EFlex, ESize, ETextAlign, ETextType } from '../styles/theme/utils/enum';
+import Meta from '../../../utils/Meta';
+import Main from '../../../../styles/layout/Main';
+import Flex from '../../../../styles/layout/Flex';
+import { EFlex, ESize, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
 import { motion, Variants } from 'framer-motion';
-import Heading from '../styles/theme/components/Heading';
-import {
-	StyledFullHeightContainer,
-	StyledHalfHeightContainer,
-	StyledScreenHeightContainer
-} from '../components/pages/story/story.styles';
-import Spacing from '../styles/layout/Spacing';
-import { TitleAndValue } from '../components/pages/story/TitleAndValue';
-import Text from '../styles/theme/components/Text';
-import TextWithGradient from '../styles/theme/components/TextWithGradient';
+import Heading from '../../../../styles/theme/components/Heading';
+import { StyledFullHeightContainer, StyledHalfHeightContainer, StyledScreenHeightContainer } from '../story.styles';
+import Spacing from '../../../../styles/layout/Spacing';
+import { TitleAndValue } from '../TitleAndValue';
+import Text from '../../../../styles/theme/components/Text';
+import TextWithGradient from '../../../../styles/theme/components/TextWithGradient';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -43,7 +39,7 @@ const Animated = ({ children }: { children: React.ReactNode }) => (
 	</motion.div>
 );
 
-const Story: NextPage = () => {
+const StoryPage: NextPage = () => {
 	return (
 		<>
 			<Meta title='Blockmetrics' />
@@ -149,4 +145,4 @@ const Story: NextPage = () => {
 	);
 };
 
-export default Story;
+export { StoryPage };

@@ -15,6 +15,7 @@ import {
 	StylesCardHeader
 } from './BlockchainCard.styles';
 import { IBlockchainCard } from './BlockchainCard.type';
+import CountUp from 'react-countup';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	const {
@@ -62,6 +63,14 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		}
 	}, [name]);
 
+	const gweiGasPrice = useMemo(() => {
+		if (gas_price) {
+			return Math.floor(gas_price / 1000000000);
+		}
+
+		return null;
+	}, [gas_price]);
+
 	if (emptyItem) {
 		return <StyledBlockchainCard emptyItem />;
 	}
@@ -91,11 +100,23 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 				</Flex>
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
 					<Text type={ETextType.p}>Gas price</Text>
-					<Text type={ETextType.p}>{gas_price}</Text>
+					<Text type={ETextType.p}>{gweiGasPrice}</Text>
 				</Flex>
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
 					<Text type={ETextType.p}>Nodes</Text>
 					<Text type={ETextType.p}>{node_count}</Text>
+				</Flex>
+				<Flex as='li' fullWidth horizontal={EFlex.between}>
+					<Text type={ETextType.p}>Today transactions</Text>
+					<Text type={ETextType.p}>
+						<CountUp
+							preserveValue
+							end={today_transaction_count || 0}
+							duration={3}
+							separator=','
+							style={{ color: 'inherit' }}
+						/>
+					</Text>
 				</Flex>
 			</Flex>
 

@@ -3,8 +3,34 @@ import { ESize } from '../../theme/utils/enum';
 import { StyledSpacing } from './Spacing.styles';
 import { ISpacing } from './Spacing.type';
 
-const Spacing: React.FC<ISpacing> = ({ className = '', size = ESize.l, xs, sm, md, lg, xl, ...otherProps }) => {
-	return <StyledSpacing className={className} size={size} xs={xs} sm={sm} md={md} lg={lg} xl={xl} {...otherProps} />;
+const Spacing: FC<ISpacing> = ({
+	size = ESize.l,
+	smSize,
+	mdSize,
+	lgSize,
+	xlSize,
+	xsDirection,
+	smDirection,
+	mdDirection,
+	lgDirection,
+	xlDirection,
+	...otherProps
+}) => {
+	return (
+		<StyledSpacing
+			size={size}
+			smSize={smSize}
+			mdSize={mdSize}
+			lgSize={lgSize}
+			xlSize={xlSize}
+			xsDirection={xsDirection}
+			smDirection={smDirection}
+			mdDirection={mdDirection}
+			lgDirection={lgDirection}
+			xlDirection={xlDirection}
+			{...otherProps}
+		/>
+	);
 };
 
 export { Spacing };

@@ -1,26 +1,15 @@
 import styled, { css } from 'styled-components';
 import { EMediaQuery } from '../../theme/utils/enum';
-import { mq } from '../../theme/utils/functions';
+import { addPaddingStyles, mq } from '../../theme/utils/functions';
 import { IFlex } from './Flex.type';
 
 export const StyledFlex = styled.div<IFlex>`
+	position: relative;
 	display: flex;
 
 	${(p) => (p.wrapItems ? 'flex-wrap: wrap;' : 'flex-wrap: nowrap;')}
-	${(p) => (p.padding ? `padding: ${p.theme.spacing[p.padding]};` : '')}
-	${(p) =>
-		p.paddingX
-			? `padding-left: ${p.theme.spacing[p.paddingX]}; padding-right: ${p.theme.spacing[p.paddingX]};`
-			: ''}
-	${(p) =>
-		p.paddingY
-			? `padding-top: ${p.theme.spacing[p.paddingY]}; padding-bottom: ${p.theme.spacing[p.paddingY]};`
-			: ''}
-	${(p) => (p.paddingTop ? `padding-top: ${p.theme.spacing[p.paddingTop]};` : '')}
-	${(p) => (p.paddingBottom ? `padding-bottom: ${p.theme.spacing[p.paddingBottom]};` : '')}
-	${(p) => (p.paddingLeft ? `padding-left: ${p.theme.spacing[p.paddingLeft]};` : '')}
-	${(p) => (p.paddingRight ? `padding-right: ${p.theme.spacing[p.paddingRight]};` : '')}
 
+	${(p) => addPaddingStyles(p)}
 
 	${(p) => {
 		return css`
