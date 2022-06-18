@@ -21,13 +21,15 @@ export const insertDailyNewTokens = `INSERT INTO daily_new_tokens_history (id, b
 export const insertDailyTokenCount = `INSERT INTO daily_token_count_history (id, blockchain_id, token_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?))`;
 export const insertDailyNodeCount = `INSERT INTO daily_node_count_history (id, blockchain_id, node_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?))`;
 
+export const insertNewTodayActiveAddress = `INSERT INTO today_active_address (address, blockchain_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE address = address`;
+
 // ==============================================================================================
 // ======= UPDATE ===============================================================================
 // ==============================================================================================
 // update token count in blockchain table by blockchain id
 export const updateTokenCountInBlockchain = `UPDATE blockchain SET token_count = ? WHERE id = ?`;
 // increment transactions count by blockchain id
-export const increaseTxCountInBlockchain = `UPDATE blockchain SET transaction_count = transaction_count + ? WHERE id = ?`;
+export const increaseTodayTxCountInBlockchain = `UPDATE blockchain SET today_transaction_count = today_transaction_count + ? WHERE id = ?`;
 // update transaction count by blockchain id
 export const updateTxCountInBlockchain = `UPDATE blockchain SET transaction_count = ? WHERE id = ?`;
 // update hashrate by blockchain id
@@ -38,3 +40,8 @@ export const updateDifficultyInBlockchain = `UPDATE blockchain SET difficulty = 
 export const updateLastBlockTimestamp = `UPDATE blockchain SET last_block_timestamp = ? WHERE id = ?`;
 // udpate power consumption by blockchain id
 export const updatePowerConsumptionInBlockchain = `UPDATE blockchain SET blockchain_power_consumption = ? WHERE id = ?`;
+// update blockchain data for each block
+export const updateBlockchainWithNewBlockData = `UPDATE blockchain SET last_block_timestamp = ?, today_transaction_count = today_transaction_count + ?, gas_price = ? WHERE id = ?`;
+
+// update transaction count with value equal to 0
+export const resetTodayTransactionCount = `UPDATE blockchain SET today_transaction_count = 0 WHERE id = ?`;

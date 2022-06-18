@@ -1,22 +1,59 @@
-/*
-import axios from 'axios';
-import crypto from 'crypto';
 import { ethers } from 'ethers';
 import {
-	getLastBlockParsedFromBlockParsed,
-	increaseTxCountInBlockchain,
-	insertHashrateInHashrateHistory,
-	insertOrUpdateAccount,
-	udpdateBlockCountInBlockParsed,
-	updateDifficultyInBlockchain,
-	updateHashrateInBlockchain,
-	updateTimeBetweenBlocksInBlockchain,
-	updateTxCountInBlockchain
+	increaseTodayTxCountInBlockchain,
+	insertNewTodayActiveAddress,
+	updateBlockchainWithNewBlockData,
+	updateLastBlockTimestamp
 } from '../sql.js';
 
-import { fetchingDataActivated } from '../../server.js';
-import { CHAINS } from '../../variables.js';
+const savedAverageGasPrice = {};
 
+export async function fetchEVMBlockFor(chain, provider, blockNumber, con) {
+	const { id, name } = chain;
+
+	try {
+		const block = await provider.getBlockWithTransactions(blockNumber);
+		const transactions = block?.transactions || [];
+
+		const txPromises =
+			transactions?.map(({ from, gasPrice }) => ({
+				public_address: from,
+				timestamp: block.timestamp,
+				gasPrice: gasPrice
+			})) || [];
+
+		const resolvedTxPromises = (await Promise.all(txPromises)) || [];
+
+		if (process.env.DEBUG_LOGS === 'activated') {
+			console.log('fetching EVM block for', name, blockNumber, ' with ', resolvedTxPromises.length, ' transactions');
+		}
+
+		const averageGasPrice = resolvedTxPromises.reduce(
+			(acc, { gasPrice }) => acc.add(gasPrice),
+			ethers.BigNumber.from(0)
+		);
+		const averageGasPriceInWei = averageGasPrice.div(ethers.BigNumber.from(transactions.length || 1));
+
+		if (averageGasPriceInWei?.toString() !== '0') {
+			savedAverageGasPrice[id] = averageGasPriceInWei?.toString();
+		}
+
+		const promises = [
+			resolvedTxPromises.map((tx) => con.query(insertNewTodayActiveAddress, [tx.public_address, id])),
+			con.query(updateBlockchainWithNewBlockData, [
+				block?.timestamp || Math.floor(Date.now() / 1000),
+				transactions?.length || 0,
+				savedAverageGasPrice[id],
+				id
+			])
+		];
+		await Promise.all(promises);
+	} catch (err) {
+		console.error('fetch blocks n°' + blockNumber + ' on ' + name, err);
+	}
+}
+
+/*
 let bitcoinTimeout;
 
 export async function fetchEVMBlocksFor(chain, pool) {
@@ -72,7 +109,7 @@ export async function fetchEVMBlocksFor(chain, pool) {
 				// TODO : improve blockchain update with a call to update all values
 				const promises = [
 					updatableCon.query(udpdateBlockCountInBlockParsed, [index, id]),
-					updatableCon.query(increaseTxCountInBlockchain, [transactions?.length || 0, id]),
+					updatableCon.query(increaseTodayTxCountInBlockchain, [transactions?.length || 0, id]),
 					...resolvedTxPromises
 						.map(({ public_address, timestamp }) => [
 							updatableCon.query(insertOrUpdateAccount, [public_address, id, timestamp, timestamp, timestamp])

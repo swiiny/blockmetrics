@@ -277,12 +277,12 @@ ENGINE = InnoDB;
 
 
 INSERT INTO `blockchain` (`id`, `name`, `note`, `node_count`, `testnet_node_count`, `single_node_power_consumption`, `blockchain_power_consumption`, `hashrate`, `difficulty`, `last_block_timestamp`, `token_count`, `transaction_count`, `gas_price`, `created_at`, `updated_at`, `consensus`, `today_transaction_count`, `address_count`, `today_address_count`) VALUES
-('avalanche', 'Avalanche', NULL, NULL, 0, 51.33, 0, 0, NULL, NULL, 0, 0, NULL, '2022-04-19 11:50:53', '2022-06-11 23:56:24', 'pos', 0, 0, 0),
-('binance-smart-chain', 'Binance SC', NULL, NULL, 0, 50, 0, 0, NULL, NULL, 0, 0, NULL, '2022-04-19 11:47:09', '2022-06-11 23:56:24', 'pos', 0, 0, 0),
+('avalanche', 'Avalanche', NULL, NULL, 0, 51.33, 0, NULL, NULL, NULL, 0, 0, NULL, '2022-04-19 11:50:53', '2022-06-11 23:56:24', 'pos', 0, 0, 0),
+('binance-smart-chain', 'Binance SC', NULL, NULL, 0, 50, 0, NULL, NULL, NULL, 0, 0, NULL, '2022-04-19 11:47:09', '2022-06-11 23:56:24', 'pos', 0, 0, 0),
 ('bitcoin', 'Bitcoin', NULL, NULL, 0, 0, 0, 0, NULL, NULL, 1, 0, NULL, '2022-04-19 11:48:19', '2022-06-11 23:56:24', 'pow', 0, 0, 0),
 ('ethereum', 'Ethereum', NULL, NULL, 0, 0, 0, 0, NULL, NULL, 0, 0, NULL, '2022-04-19 11:46:20', '2022-06-11 23:56:24', 'pow', 0, 0, 0),
-('fantom', 'Fantom', NULL, 89, 0, 0.25, 0, 0, NULL, NULL, 0, 0, NULL, '2022-05-14 09:47:40', '2022-06-11 23:56:24', 'pos', 0, 0, 0),
-('polygon', 'Polygon', NULL, 100, 0, 1000, 0, 0, NULL, NULL, 0, 0, NULL, '2022-04-19 11:47:32', '2022-06-11 23:56:24', 'pos', 0, 0, 0);
+('fantom', 'Fantom', NULL, 89, 0, 0.25, 0, NULL, NULL, NULL, 0, 0, NULL, '2022-05-14 09:47:40', '2022-06-11 23:56:24', 'pos', 0, 0, 0),
+('polygon', 'Polygon', NULL, 100, 0, 1000, 0, NULL, NULL, NULL, 0, 0, NULL, '2022-04-19 11:47:32', '2022-06-11 23:56:24', 'pos', 0, 0, 0);
 
 
 
