@@ -1,19 +1,13 @@
 import React from 'react';
 import { EFlex, ESize } from '../../theme/utils/enum';
+import { IPadding } from '../../../types/padding';
 
-interface IFlex {
+interface IFlex extends IPadding {
 	children: React.ReactNode | React.ReactNode[];
 	fullWidth?: boolean;
 	fullHeight?: boolean;
 	wrapItems?: boolean;
 	as?: any;
-	padding?: ESize;
-	paddingBottom?: ESize;
-	paddingTop?: ESize;
-	paddingLeft?: ESize;
-	paddingRight?: ESize;
-	paddingX?: ESize;
-	paddingY?: ESize;
 
 	direction?: EFlex.row | EFlex.rowReverse | EFlex.column | EFlex.columnReverse;
 	horizontal?: EFlex.start | EFlex.end | EFlex.between | EFlex.around | EFlex.center;

@@ -9,7 +9,9 @@ import {
 	insertDailyHashrate,
 	insertDailyNewTokens,
 	insertDailyNodeCount,
-	insertDailyTokenCount
+	insertDailyTokenCount,
+	updateDifficultyInBlockchain,
+	updateHashrateInBlockchain
 } from '../sql.js';
 
 /**
@@ -96,6 +98,12 @@ export async function updateDbDailyDifficulty(con, id, data) {
 			return con.query(insertDailyDifficulty, [uuid, id, difficulty, timestamp]);
 		});
 
+		const lastDifficulty = data?.[data.length - 1].difficulty;
+
+		if (lastDifficulty) {
+			promises.push(con.query(updateDifficultyInBlockchain, [lastDifficulty, id]));
+		}
+
 		await Promise.all(promises);
 
 		return 0;
@@ -116,6 +124,12 @@ export async function updateDbDailyHashrate(con, id, data) {
 
 			return con.query(insertDailyHashrate, [uuid, id, hashrateTHs, timestamp]);
 		});
+
+		const lastHashrate = data?.[data.length - 1].hashrateTHs;
+
+		if (lastHashrate) {
+			promises.push(con.query(updateHashrateInBlockchain, [lastHashrate, id]));
+		}
 
 		await Promise.all(promises);
 

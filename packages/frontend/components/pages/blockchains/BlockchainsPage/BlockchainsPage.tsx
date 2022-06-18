@@ -5,14 +5,14 @@ import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import BlockchainCard from '../../../cards/BlockchainCard';
-import { StyledBlockchainList } from './Blockchain.styles';
+import { StyledBlockchainList } from './BlockchainPage.styles';
 
 const HeaderData = {
 	title: 'Blockchains',
 	subtitle: 'Here you can find the 10 most importants blockchains and a preview of their data'
 };
 
-const Blockchains: NextPage = () => {
+const BlockchainsPage: NextPage = () => {
 	const [loading, setLoading] = useState(true);
 	const [wsConnected, setWsConnected] = useState(false);
 	const [blockchains, setBlockchains] = useState([]);
@@ -102,4 +102,4 @@ const Blockchains: NextPage = () => {
 	);
 };
 
-export { Blockchains };
+export { BlockchainsPage };
