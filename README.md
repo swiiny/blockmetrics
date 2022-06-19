@@ -33,15 +33,16 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [x] Import SQL into the database
 -   [x] TODO : update database by removing account table, add action, first_action_at and last_action_at in blockchain_has_account table
 -   [ ] add TVL in blockchain table
--   [ ] add metadata table and remove description from blockchain table
+-   [x] add metadata table and remove description from blockchain table
 
 ### Server
 
 -   [x] Init server.js file
--   [ ] Fetch blockchains data and fill the db with :construction:
+-   [x] Fetch blockchains data and fill the db with :white_checl_mark:
 -   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
--   [ ] Setup data update cycle
--   [ ] fetch new blocks with Websockets API (only when all the db is update with all blocks data)
+-   [x] ~~Setup data update cycle~~
+-   [x] fetch new blocks with Websockets API ~~(only when all the db is update with all blocks data)~~
+-   [ ] get blockchain power consumption for proof of work networks
 
 ### API - REST
 
@@ -65,12 +66,12 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] About us
     -   [ ] Powerd by ...
 
-### DevOps
+### DevOps :white_check_mark:
 
 -   [x] Setup DockerHub account
 -   [x] Setup Jelastic server
 -   [x] Setup Database
--   [ ] Create CI/CD scripts
+-   [x] Create CI/CD scripts
 
 ### Integrated Blockchains
 

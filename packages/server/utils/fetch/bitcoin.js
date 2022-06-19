@@ -42,24 +42,17 @@ const fetchLastBitcoinBlockData = async (con) => {
 			trade_volume_usd
 		} = res.data;
 
-		console.log('height block fetched', n_blocks_total);
-
-		console.log('hashrate', hash_rate);
-		console.log('difficulty', difficulty);
-
 		// timestamp not saved here beacause it is 2 blocks behind
 		const promises = [
 			con.query(updateHashrateInBlockchain, [hash_rate * 10 ** -9, id]),
 			con.query(updateDifficultyInBlockchain, [difficulty, id])
 		];
 
-		const resolvedPromises = await Promise.all(promises);
-
-		console.log('resolvedPromises', resolvedPromises[0]);
+		await Promise.all(promises);
 
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('Bitcoin data updated');
-			console.log('next update in ' + minutes_between_blocks + ' minutes');
+			console.log('next update approximatively in ' + minutes_between_blocks + ' minutes');
 		}
 	} catch (err) {
 		console.error('fetchLastBitcoinBlockData', err);
@@ -113,16 +106,13 @@ export async function fetchBitcoinData(pool) {
 
 					const newBlock = res.x;
 					const newTransactionsCount = newBlock.nTx;
-
-					console.log('newTransactionsCount', newTransactionsCount);
+					const blockTimestamp = newBlock.time;
 
 					if (newTransactionsCount) {
 						updatableCon.query(increaseTodayTxCountInBlockchain, [newTransactionsCount, id]);
 					}
 
-					updatableCon.query(updateLastBlockTimestamp, [Math.floor(Date.now() / 1000), id]);
-
-					console.log('===== height: ', newBlock.height);
+					updatableCon.query(updateLastBlockTimestamp, [blockTimestamp, id]);
 
 					fetchLastBitcoinBlockData(updatableCon);
 				} else if (res.op === 'utx') {
