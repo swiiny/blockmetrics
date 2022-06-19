@@ -4,6 +4,7 @@ export const BLOCKCHAINS = {
 	ethereum: {
 		id: 'ethereum',
 		name: 'Ethereum',
+		estimatedTimeBetweenBlocks: 20,
 		colors: {
 			gradient: {
 				start: '#454A7580',
@@ -14,6 +15,7 @@ export const BLOCKCHAINS = {
 	bsc: {
 		id: 'binance-smart-chain',
 		name: 'Binance SC',
+		estimatedTimeBetweenBlocks: 4,
 		colors: {
 			gradient: {
 				start: '#F3BA2F80',
@@ -24,6 +26,7 @@ export const BLOCKCHAINS = {
 	polygon: {
 		id: 'polygon',
 		name: 'Polygon',
+		estimatedTimeBetweenBlocks: 3,
 		colors: {
 			gradient: {
 				start: '#8247E580',
@@ -34,6 +37,7 @@ export const BLOCKCHAINS = {
 	bitcoin: {
 		id: 'bitcoin',
 		name: 'Bitcoin',
+		estimatedTimeBetweenBlocks: 600,
 		colors: {
 			gradient: {
 				start: '#F7931A80',
@@ -44,6 +48,7 @@ export const BLOCKCHAINS = {
 	avalanche: {
 		id: 'avalanche',
 		name: 'Avalanche',
+		estimatedTimeBetweenBlocks: 3,
 		colors: {
 			gradient: {
 				start: '#E8414280',
@@ -54,6 +59,7 @@ export const BLOCKCHAINS = {
 	fantom: {
 		id: 'fantom',
 		name: 'Fantom',
+		estimatedTimeBetweenBlocks: 3,
 		colors: {
 			gradient: {
 				start: '#13B5EC80',

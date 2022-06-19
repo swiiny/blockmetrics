@@ -1,6 +1,6 @@
 import Image from 'next/image';
 import Link from 'next/link';
-import React, { FC, useMemo } from 'react';
+import React, { FC, useMemo, useState } from 'react';
 import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
 import Heading from '../../../styles/theme/components/Heading';
@@ -18,6 +18,10 @@ import { IBlockchainCard } from './BlockchainCard.type';
 import CountUp from 'react-countup';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
+	if (emptyItem) {
+		return <StyledBlockchainCard emptyItem />;
+	}
+
 	const {
 		id,
 		name,
@@ -38,19 +42,27 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		today_transaction_count
 	} = data || {};
 
-	const blockchainGradient = useMemo((): { start: string; end: string } => {
-		let newGradient;
+	const blockchain = useMemo((): {
+		estimatedTimeBetweenBlocks: number;
+		colors: { gradient: { start: string; end: string } };
+	} => {
+		let newBlockchain;
 
-		let defaultGradient = {
-			start: '',
-			end: ''
+		let defaultBlockchain = {
+			estimatedTimeBetweenBlocks: 0,
+			colors: {
+				gradient: {
+					start: '',
+					end: ''
+				}
+			}
 		};
 
 		if (id) {
-			newGradient = BLOCKCHAINS_ARRAY.find((bc) => bc.id === id)?.colors?.gradient;
+			newBlockchain = BLOCKCHAINS_ARRAY.find((bc) => bc.id === id);
 		}
 
-		return newGradient || defaultGradient;
+		return newBlockchain || defaultBlockchain;
 	}, [id]);
 
 	const linkTo = useMemo(() => {
@@ -71,12 +83,11 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		return null;
 	}, [gas_price]);
 
-	if (emptyItem) {
-		return <StyledBlockchainCard emptyItem />;
-	}
+	const [initTodayTransactionCount, setInitTodayTransactionCount] = useState(today_transaction_count);
+	const [initTodayAddressCount, setInitTodayAddressCount] = useState(today_address_count);
 
 	return (
-		<StyledBlockchainCard gradientStart={blockchainGradient.start} gradientEnd={blockchainGradient.end}>
+		<StyledBlockchainCard gradientStart={blockchain.colors.gradient.start} gradientEnd={blockchain.colors.gradient.end}>
 			<StylesCardHeader>
 				<Heading type={ETextType.h4}>{name}</Heading>
 
@@ -98,10 +109,14 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 					<Text type={ETextType.p}>Tokens</Text>
 					<Text type={ETextType.p}>{token_count}</Text>
 				</Flex>
-				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<Text type={ETextType.p}>Gas price</Text>
-					<Text type={ETextType.p}>{gweiGasPrice}</Text>
-				</Flex>
+				{gweiGasPrice && (
+					<Flex as='li' fullWidth horizontal={EFlex.between}>
+						<Text type={ETextType.p}>Gas price</Text>
+						<Text type={ETextType.p}>
+							<CountUp preserveValue end={gweiGasPrice} duration={0.5} separator=',' style={{ color: 'inherit' }} />
+						</Text>
+					</Flex>
+				)}
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
 					<Text type={ETextType.p}>Nodes</Text>
 					<Text type={ETextType.p}>{node_count}</Text>
@@ -111,8 +126,23 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 					<Text type={ETextType.p}>
 						<CountUp
 							preserveValue
+							start={initTodayTransactionCount}
 							end={today_transaction_count || 0}
-							duration={3}
+							duration={blockchain.estimatedTimeBetweenBlocks}
+							separator=','
+							style={{ color: 'inherit' }}
+						/>
+					</Text>
+				</Flex>
+
+				<Flex as='li' fullWidth horizontal={EFlex.between}>
+					<Text type={ETextType.p}>Today Addresses</Text>
+					<Text type={ETextType.p}>
+						<CountUp
+							preserveValue
+							start={initTodayAddressCount}
+							end={today_address_count || 0}
+							duration={300}
 							separator=','
 							style={{ color: 'inherit' }}
 						/>
@@ -123,7 +153,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 			<Spacing size={ESize.s} />
 
 			<Link href={linkTo}>
-				<a href={linkTo}>
+				<a>
 					<Flex as='span' vertical={EFlex.center} horizontal={EFlex.end}>
 						<Text size={ESize.s} type={ETextType.span} inheritStyle={false}>
 							Show more

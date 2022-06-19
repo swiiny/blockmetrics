@@ -4,16 +4,25 @@ import { mq } from '../../../styles/theme/utils/functions';
 
 export const StyledBlockchainCard = styled.li<{ gradientStart?: string; gradientEnd?: string; emptyItem?: boolean }>`
 	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
 
 	overflow: hidden;
 
 	width: 22%;
 	min-height: 200px;
 
+	align-self: stretch;
+
 	border-radius: ${(p) => p.theme.radius.l};
 
 	margin-top: ${(p) => p.theme.spacing.xl};
 	padding: ${(p) => p.theme.spacing['3xs']};
+
+	& > a {
+		margin-top: auto;
+	}
 
 	${(p) =>
 		!p.emptyItem

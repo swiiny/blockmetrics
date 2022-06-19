@@ -2,7 +2,16 @@ import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
-import { getPowerConsumptionDataForPoS, resetTodayTransactionCount, updateTxCountInBlockchain } from './utils/sql.js';
+import {
+	getPowerConsumptionDataForPoS,
+	getTodayActiveAddressCount,
+	removeYesterdayAddressFromTodayActiveAddress,
+	resetTodayAddressCount,
+	resetTodayTransactionCount,
+	updateAddressCountInBlockchain,
+	updateTodayAddressCountInBlockchain,
+	updateTxCountInBlockchain
+} from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
 import { CHAINS, CHAINS_ARRAY } from './variables.js';
@@ -17,7 +26,8 @@ import {
 	updateDbDailyNewContracts,
 	updateDbDailyNewTokens,
 	updateDbDailyNodeCount,
-	updateDbDailyTokenCount
+	updateDbDailyTokenCount,
+	updateDbDailyTransaction
 } from './utils/update/dailyData.js';
 
 import { getTokensCountForNetworks } from './utils/fetch/coingecko.js';
@@ -26,6 +36,7 @@ import {
 	fetchDailyAverageBlockTimeFor,
 	fetchDailyAverageGasPriceFor,
 	fetchDailyTokenCountFor,
+	fetchDailyTransactionFor,
 	fetchDailyUniqueAddressesFor,
 	fetchDailyVerifiedContractsFor,
 	fetchDifficultyFor,
@@ -33,12 +44,16 @@ import {
 } from './utils/fetch/fetch.js';
 import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
+import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
+let fiveMinutesRoutine;
+
+let wsProviders = [];
 
 let pool;
 
@@ -148,7 +163,13 @@ async function fetchDailyData(noDelay = false) {
 
 	await Promise.all(nodesCountPromises);
 
-	// updatePowerConsumption();
+	// fetch and update blockchains power consumption
+	updatePowerConsumption();
+
+	/* ========================================
+	 REMOVE yesterday active addresses
+	 ======================================== */
+	await con.query(removeYesterdayAddressFromTodayActiveAddress);
 
 	// wait 15 minutes to be sure that the scrapped data is udpated
 	await new Promise((resolve) => setTimeout(resolve, noDelay ? 0 : 15 * 60 * 1000));
@@ -162,6 +183,28 @@ async function fetchDailyData(noDelay = false) {
 			.then((data) => {
 				if (data) {
 					updateDbDailyActiveUsers(con, chain.id, data);
+				}
+			})
+			.catch((err) => console.error(err));
+
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		/* ========================================
+	 FETCH AND UPDATE AVERAGE BLOCKTIME 
+	 ======================================== */
+
+		fetchDailyTransactionFor(chain)
+			.then((data) => {
+				return data;
+			})
+			.then((formattedData) => {
+				if (formattedData.chartsData.length > 0) {
+					updateDbDailyTransaction(con, chain.id, formattedData.chartsData);
+				}
+
+				if (formattedData.total > 0) {
+					con.query(updateTxCountInBlockchain, [formattedData.total, chain.id]);
+					con.query(resetTodayTransactionCount, [chain.id]);
 				}
 			})
 			.catch((err) => console.error(err));
@@ -235,25 +278,32 @@ async function fetchDailyData(noDelay = false) {
 					chartsData: [],
 					total: null
 				};
-				if (data?.chartsData) {
-					for (let i = 1; i < data.length; i++) {
+				const { chartsData, total } = data || {};
+
+				if (chartsData) {
+					for (let i = 1; i < chartsData.length; i++) {
 						formattedData['chartsData'].push({
-							timestamp: data[i].timestamp,
-							count: data[i].count - data[i - 1].count
+							timestamp: chartsData[i].timestamp,
+							count: chartsData[i].count - chartsData[i - 1].count
 						});
 					}
 				}
 
-				if (data?.total > 0) {
-					formattedData.total = data.total;
+				if (total > 0) {
+					formattedData.total = total;
 				}
 
 				return formattedData;
 			})
 			.then((formattedData) => {
-				updateDbDailyNewAddresses(con, chain.id, formattedData.chartsData);
-				con.query(updateTxCountInBlockchain, [formattedData.total, chain.id]);
-				con.query(resetTodayTransactionCount, [chain.id]);
+				if (formattedData.chartsData.length > 0) {
+					updateDbDailyNewAddresses(con, chain.id, formattedData.chartsData);
+				}
+
+				if (formattedData.total) {
+					con.query(updateAddressCountInBlockchain, [formattedData.total, chain.id]);
+					con.query(resetTodayAddressCount, [chain.id]);
+				}
 			})
 			.catch((err) => console.error(err));
 
@@ -318,17 +368,23 @@ async function startFetchData() {
 		}
 
 		if (process.env.NODE_ENV === 'production') {
+			console.log('start production');
+
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
 			const con = await pool.getConnection();
 
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
 				console.log('start ws provider for', chain.name);
+
 				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 				wsProvider.on('block', async (blockNumber) => {
 					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
 				});
 			});
+
+			// INIT BITCOIN WEBSOCKET PROVIDER
+			fetchBitcoinData(pool);
 
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
@@ -340,28 +396,59 @@ async function startFetchData() {
 				console.log('run schedule');
 				fetchDailyData();
 			});
-		} else {
-			// dev stuff
-			/*
-			const con = await pool.getConnection();
 
-			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
-				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
+			const ruleFiveMinutes = new schedule.RecurrenceRule();
+			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 56, 57];
 
-				wsProvider.on('block', async (blockNumber) => {
-					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
+				CHAINS_ARRAY.forEach(async (chain) => {
+					const [todayActiveAddressCount] = await con.query(getTodayActiveAddressCount, [chain.id]);
+					if (todayActiveAddressCount[0].count > 0) {
+						con.query(updateTodayAddressCountInBlockchain, [todayActiveAddressCount[0].count, chain.id]);
+					}
 				});
 			});
-*/
-			// fetchDailyData();
+		} else {
+			// dev stuff
+			console.log('start dev');
+
+			const con = await pool.getConnection();
+
+			// const chain = CHAINS.avalanche;
+
+			const nodesCount = await getNodeCountForAllBlockchains();
+
+			const nodesCountPromises = nodesCount?.map(({ id, count }) => {
+				updateDbDailyNodeCount(con, id, count);
+			});
+
+			if (!nodesCount) {
+				console.error('getNodeCountForAllBlockchains failed');
+			}
+
+			await Promise.all(nodesCountPromises);
+
+			// fetch and update blockchains power consumption
+			updatePowerConsumption();
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
 		if (canStartFetchData) {
-			timeoutFetchData = setTimeout(() => {
+			timeoutFetchData = setTimeout(async () => {
 				console.log('restart fetching data');
-				dailyRoutine = null;
-				// startFetchData();
+
+				// remove all items from wsProviders
+				wsProviders.forEach((wsProvider) => {
+					wsProvider.removeAllListeners();
+				});
+
+				wsProviders = [];
+
+				const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
+
+				await Promise.all(promises);
+
+				startFetchData();
 			}, 1 * 60 * 1000);
 		}
 	}
@@ -376,5 +463,12 @@ async function init() {
 }
 
 init();
+
+process.on('SIGINT', async () => {
+	const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
+	await Promise.all(promises);
+
+	process.exit(0);
+});
 
 export { fetchingDataActivated };
