@@ -102,7 +102,24 @@ export async function fetchDailyTransactionFor(chain) {
 
 			const { data } = await axios.get(url);
 
-			formattedJson = data.values.map(({ x, y }) => ({ timestamp: x, count: y }));
+			const formattedJson = data.values.map(({ x, y }) => ({ timestamp: x, count: y }));
+
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
+
+			// get only the last 30 days
+			const last30Days = formattedJson.filter(({ timestamp }) => {
+				return parseInt(timestamp, 10) > theertyOneDaysAgo;
+			});
+
+			const formattedJsonForAMonth = last30Days.map(({ timestamp, count }) => ({
+				timestamp: parseInt(timestamp, 10),
+				count: parseInt(count, 10)
+			}));
+
+			return {
+				chartsData: formattedJsonForAMonth,
+				total: formattedJson?.reduce((acc, { count }) => acc + count, 0)
+			};
 		} else {
 			const url = `${chartPrefix}/tx?output=csv`;
 
@@ -122,9 +139,12 @@ export async function fetchDailyTransactionFor(chain) {
 				timestamp: parseInt(UnixTimeStamp, 10),
 				count: parseInt(Value, 10)
 			}));
-		}
 
-		return formattedJson;
+			return {
+				chartsData: formattedJson,
+				total: json?.reduce((acc, { Value }) => acc + parseInt(Value, 10), 0)
+			};
+		}
 	} catch (err) {
 		console.error('fetchDailyTransactionFor', err);
 		return null;

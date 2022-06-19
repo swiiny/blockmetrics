@@ -26,7 +26,8 @@ import {
 	updateDbDailyNewContracts,
 	updateDbDailyNewTokens,
 	updateDbDailyNodeCount,
-	updateDbDailyTokenCount
+	updateDbDailyTokenCount,
+	updateDbDailyTransaction
 } from './utils/update/dailyData.js';
 
 import { getTokensCountForNetworks } from './utils/fetch/coingecko.js';
@@ -35,6 +36,7 @@ import {
 	fetchDailyAverageBlockTimeFor,
 	fetchDailyAverageGasPriceFor,
 	fetchDailyTokenCountFor,
+	fetchDailyTransactionFor,
 	fetchDailyUniqueAddressesFor,
 	fetchDailyVerifiedContractsFor,
 	fetchDifficultyFor,
@@ -190,6 +192,28 @@ async function fetchDailyData(noDelay = false) {
 		/* ========================================
 	 FETCH AND UPDATE AVERAGE BLOCKTIME 
 	 ======================================== */
+
+		fetchDailyTransactionFor(chain)
+			.then((data) => {
+				return data;
+			})
+			.then((formattedData) => {
+				if (formattedData.chartsData.length > 0) {
+					updateDbDailyTransaction(con, chain.id, formattedData.chartsData);
+				}
+
+				if (formattedData.total > 0) {
+					con.query(updateTxCountInBlockchain, [formattedData.total, chain.id]);
+					con.query(resetTodayTransactionCount, [chain.id]);
+				}
+			})
+			.catch((err) => console.error(err));
+
+		await new Promise((resolve) => setTimeout(resolve, delay));
+
+		/* ========================================
+	 FETCH AND UPDATE AVERAGE BLOCKTIME 
+	 ======================================== */
 		fetchDailyAverageBlockTimeFor(chain)
 			.then((data) => {
 				if (data) {
@@ -254,29 +278,31 @@ async function fetchDailyData(noDelay = false) {
 					chartsData: [],
 					total: null
 				};
-				if (data?.chartsData) {
-					for (let i = 1; i < data.length; i++) {
+				const { chartsData, total } = data || {};
+
+				if (chartsData) {
+					for (let i = 1; i < chartsData.length; i++) {
 						formattedData['chartsData'].push({
-							timestamp: data[i].timestamp,
-							count: data[i].count - data[i - 1].count
+							timestamp: chartsData[i].timestamp,
+							count: chartsData[i].count - chartsData[i - 1].count
 						});
 					}
 				}
 
-				if (data?.total > 0) {
-					formattedData.total = data.total;
+				if (total > 0) {
+					formattedData.total = total;
 				}
 
 				return formattedData;
 			})
 			.then((formattedData) => {
 				if (formattedData.chartsData.length > 0) {
-					updateDbDailyNewAddresses(con, testChain.id, formattedData.chartsData);
+					updateDbDailyNewAddresses(con, chain.id, formattedData.chartsData);
 				}
 
 				if (formattedData.total) {
-					con.query(updateAddressCountInBlockchain, [formattedData.total, testChain.id]);
-					con.query(resetTodayAddressCount, [testChain.id]);
+					con.query(updateAddressCountInBlockchain, [formattedData.total, chain.id]);
+					con.query(resetTodayAddressCount, [chain.id]);
 				}
 			})
 			.catch((err) => console.error(err));
@@ -388,9 +414,23 @@ async function startFetchData() {
 
 			const con = await pool.getConnection();
 
-			const testChain = CHAINS.bitcoin;
+			const chain = CHAINS.avalanche;
 
-			// fetchDailyData();
+			fetchDailyTransactionFor(chain)
+				.then((data) => {
+					return data;
+				})
+				.then((formattedData) => {
+					if (formattedData.chartsData.length > 0) {
+						updateDbDailyTransaction(con, chain.id, formattedData.chartsData);
+					}
+
+					if (formattedData.total) {
+						con.query(updateTxCountInBlockchain, [formattedData.total, chain.id]);
+						con.query(resetTodayTransactionCount, [chain.id]);
+					}
+				})
+				.catch((err) => console.error(err));
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);

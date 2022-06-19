@@ -17,6 +17,7 @@ export const insertDailyAverageGasPrice = `INSERT INTO daily_average_gas_price_h
 export const insertDailyDifficulty = `INSERT INTO daily_difficulty_history (id, blockchain_id, difficulty, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyHashrate = `INSERT INTO daily_hashrate_history (id, blockchain_id, hashrate, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyAddressesCount = `INSERT INTO daily_new_addresses_history (id, blockchain_id, address_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
+export const insertDailyTransactionCount = `INSERT INTO daily_transaction_count_history (id, blockchain_id, transaction_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyContracts = `INSERT INTO daily_new_contracts_history (id, blockchain_id, contract_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyNewTokens = `INSERT INTO daily_new_tokens_history (id, blockchain_id, token_count, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE id = id`;
 

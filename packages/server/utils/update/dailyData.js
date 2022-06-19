@@ -10,6 +10,7 @@ import {
 	insertDailyNewTokens,
 	insertDailyNodeCount,
 	insertDailyTokenCount,
+	insertDailyTransactionCount,
 	updateDifficultyInBlockchain,
 	updateHashrateInBlockchain,
 	updateTokenCountInBlockchain
@@ -158,6 +159,27 @@ export async function updateDbDailyNewAddresses(con, id, data) {
 		return 0;
 	} catch (err) {
 		console.error('updateDbDailyNewAddresses', id, err);
+		return 1;
+	}
+}
+
+export async function updateDbDailyTransaction(con, id, data) {
+	try {
+		if (!data) {
+			throw new Error('data is not defined for ' + id);
+		}
+
+		const promises = data.map(({ timestamp, count }) => {
+			const uuid = `${id}-${timestamp}-${count}`;
+
+			return con.query(insertDailyTransactionCount, [uuid, id, count, timestamp]);
+		});
+
+		await Promise.all(promises);
+
+		return 0;
+	} catch (err) {
+		console.error('updateDbDailyTransaction', id, err);
 		return 1;
 	}
 }

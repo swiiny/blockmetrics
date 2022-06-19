@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain` (
   `today_transaction_count` INT UNSIGNED NOT NULL DEFAULT '0',
   `address_count` BIGINT NOT NULL DEFAULT 0,
   `today_address_count` INT NOT NULL DEFAULT 0,
-  `gas_price` INT NULL DEFAULT NULL,
+  `gas_price` BIGINT NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`))
@@ -176,6 +176,24 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`daily_new_addresses_history` (
   PRIMARY KEY (`id`),
   INDEX `fk_daily_new_addresses_blockchain_idx` (`blockchain_id` ASC) VISIBLE,
   CONSTRAINT `fk_daily_new_addresses_blockchain`
+    FOREIGN KEY (`blockchain_id`)
+    REFERENCES `blockmetrics-db`.`blockchain` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Table `blockmetrics-db`.`daily_transaction_count_history`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`daily_transaction_count_history` (
+  `id` VARCHAR(255) NOT NULL,
+  `blockchain_id` VARCHAR(255) NOT NULL,
+  `transaction_count` INT NOT NULL DEFAULT '0',
+  `date` DATETIME NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_daily_transaction_count_history_blockchain_idx` (`blockchain_id` ASC) VISIBLE,
+  CONSTRAINT `fk_daily_transaction_count_history_blockchain`
     FOREIGN KEY (`blockchain_id`)
     REFERENCES `blockmetrics-db`.`blockchain` (`id`))
 ENGINE = InnoDB
