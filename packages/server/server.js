@@ -318,11 +318,14 @@ async function startFetchData() {
 		}
 
 		if (process.env.NODE_ENV === 'production') {
+			console.log('start production');
+
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
 			const con = await pool.getConnection();
 
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
 				console.log('start ws provider for', chain.name);
+
 				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 				wsProvider.on('block', async (blockNumber) => {
@@ -342,6 +345,7 @@ async function startFetchData() {
 			});
 		} else {
 			// dev stuff
+			console.log('start dev');
 			/*
 			const con = await pool.getConnection();
 
@@ -361,7 +365,7 @@ async function startFetchData() {
 			timeoutFetchData = setTimeout(() => {
 				console.log('restart fetching data');
 				dailyRoutine = null;
-				// startFetchData();
+				startFetchData();
 			}, 1 * 60 * 1000);
 		}
 	}
