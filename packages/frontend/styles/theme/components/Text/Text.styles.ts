@@ -1,4 +1,4 @@
-import { addTransition, setFontSize } from '../../utils/functions';
+import { addTransition, getTextColor, setFontSize } from '../../utils/functions';
 import styled, { css } from 'styled-components';
 import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
 
@@ -22,20 +22,17 @@ const generateTextStyle = (p: any) => {
 			  `
 			: `
 	`}
-	${p.textColor === ETextColor.green
-			? `color: ${p.theme.colors.text.positive};`
-			: p.textColor === ETextColor.red
-			? `color: ${p.theme.colors.text.negative};`
-			: p.textColor === ETextColor.gradient
+
+			${p.textColor === ETextColor.gradient
 			? css`
 					background: ${p.theme.colors.gradient.toRight};
 					${() => '-webkit-background-clip: text;'}
 					-webkit-text-fill-color: transparent;
 			  `
-			: ''}
+			: `color: ${getTextColor(p)}`}
 
-	${p.weight ? `font-weight: ${p.weight} !important;` : ''}
-	${p.opacityReduced ? `opacity: 0.7` : ''}
+		${p.weight ? `font-weight: ${p.weight} !important;` : ''}
+		${p.opacityReduced ? `opacity: 0.7` : ''}
 	`;
 };
 

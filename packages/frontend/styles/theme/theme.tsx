@@ -40,6 +40,7 @@ export const darkTheme: DefaultTheme = {
 		},
 		text: {
 			default: '#B3FCFF',
+			light: '#B3FCFF80',
 			accent: '#0D9BD7',
 			positive: '#6BFFA6',
 			negative: '#F22C3F',
@@ -64,6 +65,7 @@ export const lightTheme: DefaultTheme = {
 		},
 		text: {
 			default: '#B3FCFF',
+			light: '#B3FCFF80',
 			accent: '#0D9BD7',
 			positive: '#6BFFA6',
 			negative: '#F22C3F',

@@ -414,7 +414,7 @@ async function startFetchData() {
 
 			const con = await pool.getConnection();
 
-			fetchBitcoinData(pool);
+			// fetchBitcoinData(pool);
 
 			// const chain = CHAINS.avalanche;
 

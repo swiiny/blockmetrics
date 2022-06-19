@@ -2,7 +2,7 @@ import express from 'express';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
-import { getBlockchainById, getBlockchains } from './utils/fetch.js';
+import { getBlockchainById, getBlockchains, getMetadataById } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
 
 const BASE_URL_V1 = '/v1/api/rest';
@@ -38,17 +38,17 @@ app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
 	const { sortBy, desc = true, offset = 0, limit = 30 } = req.query;
 
 	try {
-		const params = parseParams(sortBy, desc, offset, limit);
-
-		if (params.error) {
-			res.status(500).send(params.error);
-			return;
-		}
+		const params = {
+			sortBy,
+			desc,
+			offset,
+			limit
+		};
 
 		const result = await getBlockchains(pool, params);
 
-		if (result) {
-			res.send(result);
+		if (result[0][0]) {
+			res.send(result[0][0]);
 			return;
 		} else {
 			throw new Error('getBlockchains failed');
@@ -82,6 +82,62 @@ app.get(`${BASE_URL_V1}/get/blockchain`, async (req, res) => {
 		console.error('/get/blockchain', err);
 
 		res.status(500).send('Error fetching blockchain data where id is ' + id);
+		return;
+	}
+});
+
+app.get(`${BASE_URL_V1}/get/blockchain/metadata`, async (req, res) => {
+	const { id, language } = req.query;
+
+	try {
+		if (!id) {
+			res.status(500).send('Missing id');
+			return;
+		}
+
+		const result = await getMetadataById(pool, id, language || 'en');
+
+		if (result[0][0]) {
+			res.send(result[0][0]);
+			return;
+		} else {
+			throw new Error('get metadata failed');
+		}
+	} catch (err) {
+		console.error('/get/blockchain', err);
+
+		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
+		return;
+	}
+});
+
+app.get(`${BASE_URL_V1}/get/blockchain/all`, async (req, res) => {
+	const { id, language } = req.query;
+
+	try {
+		if (!id) {
+			res.status(500).send('Missing id');
+			return;
+		}
+
+		const blockchainData = await getBlockchainById(pool, id);
+		const metadata = await getMetadataById(pool, id, language || 'en');
+
+		if (blockchainData[0][0] && metadata[0][0]) {
+			const formattedResult = {
+				blockchain: blockchainData[0][0],
+				metadata: metadata[0][0]
+			};
+
+			res.send(formattedResult);
+			return;
+		} else {
+			throw new Error('get metadata failed');
+		}
+	} catch (err) {
+		console.error('/get/blockchain', err);
+
+		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
 		return;
 	}
 });

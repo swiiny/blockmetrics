@@ -1,5 +1,5 @@
 import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
-import { EMediaQuery, ESize } from './enum';
+import { EMediaQuery, ESize, ETextColor } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
 	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {
@@ -165,3 +165,25 @@ export const addPaddingStyles = (p: any) => {
 export function getSpacingFromESize(size: ESize, theme: DefaultTheme): string {
 	return theme.spacing[size];
 }
+
+// convert ETextColor to to theme color
+export const getTextColor = (p: any) => {
+	switch (p.textColor) {
+		case ETextColor.default:
+			return `${p.theme.colors.text.default};`;
+		case ETextColor.light:
+			return `${p.theme.colors.text.light};`;
+		case ETextColor.accent:
+			return `${p.theme.colors.text.accent};`;
+		case ETextColor.positive:
+			return `${p.theme.colors.text.positive};`;
+		case ETextColor.negative:
+			return `${p.theme.colors.text.negative};`;
+		case ETextColor.warning:
+			return `${p.theme.colors.text.warning};`;
+		case ETextColor.disabled:
+			return `${p.theme.colors.text.disabled};`;
+		default:
+			return `${p.theme.colors.text.default};`;
+	}
+};
