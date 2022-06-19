@@ -163,6 +163,7 @@ export const addPaddingStyles = (p: any) => {
 };
 
 export function getSpacingFromESize(size: ESize, theme: DefaultTheme): string {
+	// @ts-ignore
 	return theme.spacing[size];
 }
 
