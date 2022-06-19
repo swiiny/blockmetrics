@@ -4,6 +4,8 @@
 // get datas to calculate PoS blockchains power consumption
 export const getPowerConsumptionDataForPoS = `SELECT id, single_node_power_consumption, node_count, testnet_node_count FROM blockchain WHERE consensus = 'pos'`;
 export const getDailyTokenCount = `SELECT token_count, date FROM daily_token_count_history WHERE blockchain_id = ? AND date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW() ORDER BY date ASC`;
+// return the count of active address for the current day for the given blockchain
+export const getTodayActiveAddressCount = `SELECT COUNT(*) AS count FROM today_active_address WHERE blockchain_id = ? AND day = CURDATE()`;
 
 // ==============================================================================================
 // ======= INSERT ===============================================================================
@@ -18,10 +20,10 @@ export const insertDailyAddressesCount = `INSERT INTO daily_new_addresses_histor
 export const insertDailyContracts = `INSERT INTO daily_new_contracts_history (id, blockchain_id, contract_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyNewTokens = `INSERT INTO daily_new_tokens_history (id, blockchain_id, token_count, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE id = id`;
 
-export const insertDailyTokenCount = `INSERT INTO daily_token_count_history (id, blockchain_id, token_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?))`;
-export const insertDailyNodeCount = `INSERT INTO daily_node_count_history (id, blockchain_id, node_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?))`;
+export const insertDailyTokenCount = `INSERT INTO daily_token_count_history (id, blockchain_id, token_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
+export const insertDailyNodeCount = `INSERT INTO daily_node_count_history (id, blockchain_id, node_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 
-export const insertNewTodayActiveAddress = `INSERT INTO today_active_address (address, blockchain_id) VALUES (?, ?) ON DUPLICATE KEY UPDATE address = address`;
+export const insertNewTodayActiveAddress = `INSERT INTO today_active_address (address, blockchain_id, day) VALUES (?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE address = address`;
 
 // ==============================================================================================
 // ======= UPDATE ===============================================================================
@@ -32,6 +34,10 @@ export const updateTokenCountInBlockchain = `UPDATE blockchain SET token_count =
 export const increaseTodayTxCountInBlockchain = `UPDATE blockchain SET today_transaction_count = today_transaction_count + ? WHERE id = ?`;
 // update transaction count by blockchain id
 export const updateTxCountInBlockchain = `UPDATE blockchain SET transaction_count = ? WHERE id = ?`;
+// update address count by blockchain id
+export const updateAddressCountInBlockchain = `UPDATE blockchain SET address_count = ? WHERE id = ?`;
+// update address count by blockchain id
+export const updateTodayAddressCountInBlockchain = `UPDATE blockchain SET today_address_count = ? WHERE id = ?`;
 // update hashrate by blockchain id
 export const updateHashrateInBlockchain = `UPDATE blockchain SET hashrate = ? WHERE id = ?`;
 // update difficulty by blockchain id
@@ -45,3 +51,11 @@ export const updateBlockchainWithNewBlockData = `UPDATE blockchain SET last_bloc
 
 // update transaction count with value equal to 0
 export const resetTodayTransactionCount = `UPDATE blockchain SET today_transaction_count = 0 WHERE id = ?`;
+// update address count with value equal to 0
+export const resetTodayAddressCount = `UPDATE blockchain SET today_address_count = 0 WHERE id = ?`;
+
+// ==============================================================================================
+// ======= DELETE ===============================================================================
+// ==============================================================================================
+export const removeYesterdayAddressFromTodayActiveAddress =
+	'DELETE FROM today_active_address WHERE day = DATE_SUB(CURDATE(), INTERVAL 1 DAY)';

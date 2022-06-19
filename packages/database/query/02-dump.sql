@@ -265,8 +265,9 @@ ENGINE = InnoDB;
 CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`today_active_address` (
   `address` VARCHAR(255) NOT NULL,
   `blockchain_id` VARCHAR(255) NOT NULL,
+  `day` DATETIME NOT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`address`, `blockchain_id`),
+  PRIMARY KEY (`address`, `blockchain_id`, `day`),
   INDEX `fk_today_active_address_blockchain1_idx` (`blockchain_id` ASC) VISIBLE,
   CONSTRAINT `fk_today_active_address_blockchain1`
     FOREIGN KEY (`blockchain_id`)

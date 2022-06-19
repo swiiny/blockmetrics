@@ -34,15 +34,29 @@ export async function fetchDailyUniqueAddressesFor(chain) {
 	const { id, chartPrefix } = chain;
 	try {
 		if (id === CHAINS.bitcoin.id) {
-			/*
 			// per day => daily active users of bitcoin
-			const url = `${chartPrefix}/n-unique-addresses?timespan=30days&sampled=true&metadata=false&cors=true&format=json`;
+			const url = `${chartPrefix}/n-unique-addresses?timespan=all&sampled=true&metadata=false&cors=true&format=json`;
 
 			const { data } = await axios.get(url);
 
 			const formattedJson = data.values.map(({ x, y }) => ({ timestamp: x, count: y }));
-			console.log('formattedJson', formattedJson);
-			*/
+
+			const theertyOneDaysAgo = Date.now() / 1000 - 60 * 60 * 24 * 40;
+
+			// get only the last 30 days
+			const last30Days = formattedJson.filter(({ timestamp }) => {
+				return parseInt(timestamp, 10) > theertyOneDaysAgo;
+			});
+
+			const formattedJsonForAMonth = last30Days.map(({ timestamp, count }) => ({
+				timestamp: parseInt(timestamp, 10),
+				count: parseInt(count, 10)
+			}));
+
+			return {
+				chartsData: formattedJsonForAMonth,
+				total: formattedJson?.reduce((acc, { count }) => acc + count, 0)
+			};
 		} else {
 			const url = `${chartPrefix}/address?output=csv`;
 

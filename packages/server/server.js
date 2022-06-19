@@ -2,7 +2,16 @@ import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
-import { getPowerConsumptionDataForPoS, resetTodayTransactionCount, updateTxCountInBlockchain } from './utils/sql.js';
+import {
+	getPowerConsumptionDataForPoS,
+	getTodayActiveAddressCount,
+	removeYesterdayAddressFromTodayActiveAddress,
+	resetTodayAddressCount,
+	resetTodayTransactionCount,
+	updateAddressCountInBlockchain,
+	updateTodayAddressCountInBlockchain,
+	updateTxCountInBlockchain
+} from './utils/sql.js';
 import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
 import { CHAINS, CHAINS_ARRAY } from './variables.js';
@@ -33,12 +42,16 @@ import {
 } from './utils/fetch/fetch.js';
 import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
+import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
+let fiveMinutesRoutine;
+
+let wsProviders = [];
 
 let pool;
 
@@ -148,7 +161,13 @@ async function fetchDailyData(noDelay = false) {
 
 	await Promise.all(nodesCountPromises);
 
+	// TODO : fix fetch power consumption
 	// updatePowerConsumption();
+
+	/* ========================================
+	 REMOVE yesterday active addresses
+	 ======================================== */
+	await con.query(removeYesterdayAddressFromTodayActiveAddress);
 
 	// wait 15 minutes to be sure that the scrapped data is udpated
 	await new Promise((resolve) => setTimeout(resolve, noDelay ? 0 : 15 * 60 * 1000));
@@ -251,9 +270,14 @@ async function fetchDailyData(noDelay = false) {
 				return formattedData;
 			})
 			.then((formattedData) => {
-				updateDbDailyNewAddresses(con, chain.id, formattedData.chartsData);
-				con.query(updateTxCountInBlockchain, [formattedData.total, chain.id]);
-				con.query(resetTodayTransactionCount, [chain.id]);
+				if (formattedData.chartsData.length > 0) {
+					updateDbDailyNewAddresses(con, testChain.id, formattedData.chartsData);
+				}
+
+				if (formattedData.total) {
+					con.query(updateAddressCountInBlockchain, [formattedData.total, testChain.id]);
+					con.query(resetTodayAddressCount, [testChain.id]);
+				}
 			})
 			.catch((err) => console.error(err));
 
@@ -333,6 +357,9 @@ async function startFetchData() {
 				});
 			});
 
+			// INIT BITCOIN WEBSOCKET PROVIDER
+			fetchBitcoinData(pool);
+
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 2;
@@ -343,28 +370,85 @@ async function startFetchData() {
 				console.log('run schedule');
 				fetchDailyData();
 			});
+
+			const ruleFiveMinutes = new schedule.RecurrenceRule();
+			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 56, 57];
+
+			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
+				CHAINS_ARRAY.forEach(async (chain) => {
+					const [todayActiveAddressCount] = await con.query(getTodayActiveAddressCount, [chain.id]);
+					if (todayActiveAddressCount[0].count > 0) {
+						con.query(updateTodayAddressCountInBlockchain, [todayActiveAddressCount[0].count, chain.id]);
+					}
+				});
+			});
 		} else {
 			// dev stuff
 			console.log('start dev');
-			/*
+
 			const con = await pool.getConnection();
 
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
+				console.log('start ws provider for', chain.name);
+
 				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 				wsProvider.on('block', async (blockNumber) => {
 					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
 				});
 			});
-*/
-			// fetchDailyData();
+
+			const testChain = CHAINS.bitcoin;
+			fetchDailyUniqueAddressesFor(testChain)
+				.then((data) => {
+					const formattedData = {
+						chartsData: [],
+						total: null
+					};
+					if (data?.chartsData) {
+						for (let i = 1; i < data.length; i++) {
+							formattedData['chartsData'].push({
+								timestamp: data[i].timestamp,
+								count: data[i].count - data[i - 1].count
+							});
+						}
+					}
+
+					if (data?.total > 0) {
+						formattedData.total = data.total;
+					}
+
+					return formattedData;
+				})
+				.then((formattedData) => {
+					if (formattedData.chartsData.length > 0) {
+						updateDbDailyNewAddresses(con, testChain.id, formattedData.chartsData);
+					}
+
+					if (formattedData.total) {
+						con.query(updateAddressCountInBlockchain, [formattedData.total, testChain.id]);
+						con.query(resetTodayAddressCount, [testChain.id]);
+					}
+				})
+				.catch((err) => console.error(err));
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
 		if (canStartFetchData) {
-			timeoutFetchData = setTimeout(() => {
+			timeoutFetchData = setTimeout(async () => {
 				console.log('restart fetching data');
-				dailyRoutine = null;
+
+				// remove all items from wsProviders
+				wsProviders.forEach((wsProvider) => {
+					wsProvider.removeAllListeners();
+				});
+
+				wsProviders = [];
+
+				const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
+
+				await Promise.all(promises);
+
 				startFetchData();
 			}, 1 * 60 * 1000);
 		}
@@ -380,5 +464,12 @@ async function init() {
 }
 
 init();
+
+process.on('SIGINT', function () { 
+	const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
+	await Promise.all(promises);
+	
+  process.exit(0)
+})
 
 export { fetchingDataActivated };
