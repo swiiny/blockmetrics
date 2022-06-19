@@ -11,7 +11,8 @@ import {
 	insertDailyNodeCount,
 	insertDailyTokenCount,
 	updateDifficultyInBlockchain,
-	updateHashrateInBlockchain
+	updateHashrateInBlockchain,
+	updateTokenCountInBlockchain
 } from '../sql.js';
 
 /**
@@ -233,14 +234,19 @@ export const updateDbDailyTokenCount = async (con, id, count) => {
 			throw new Error('count is not defined for ' + id);
 		}
 
-		// get first timestamp OF today
+		// get first timestamp of today
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 		const timestamp = today.getTime() / 1000;
 
 		const uuid = `${id}-${timestamp}-${count}`;
 
-		await con.query(insertDailyTokenCount, [uuid, id, count, timestamp]);
+		const promises = [
+			con.query(insertDailyTokenCount, [uuid, id, count, timestamp]),
+			con.query(updateTokenCountInBlockchain, [count, id])
+		];
+
+		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {

@@ -388,49 +388,9 @@ async function startFetchData() {
 
 			const con = await pool.getConnection();
 
-			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
-				console.log('start ws provider for', chain.name);
-
-				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
-
-				wsProvider.on('block', async (blockNumber) => {
-					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
-				});
-			});
-
 			const testChain = CHAINS.bitcoin;
-			fetchDailyUniqueAddressesFor(testChain)
-				.then((data) => {
-					const formattedData = {
-						chartsData: [],
-						total: null
-					};
-					if (data?.chartsData) {
-						for (let i = 1; i < data.length; i++) {
-							formattedData['chartsData'].push({
-								timestamp: data[i].timestamp,
-								count: data[i].count - data[i - 1].count
-							});
-						}
-					}
 
-					if (data?.total > 0) {
-						formattedData.total = data.total;
-					}
-
-					return formattedData;
-				})
-				.then((formattedData) => {
-					if (formattedData.chartsData.length > 0) {
-						updateDbDailyNewAddresses(con, testChain.id, formattedData.chartsData);
-					}
-
-					if (formattedData.total) {
-						con.query(updateAddressCountInBlockchain, [formattedData.total, testChain.id]);
-						con.query(resetTodayAddressCount, [testChain.id]);
-					}
-				})
-				.catch((err) => console.error(err));
+			// fetchDailyData();
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
@@ -465,11 +425,11 @@ async function init() {
 
 init();
 
-process.on('SIGINT', function () { 
+process.on('SIGINT', async () => {
 	const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
 	await Promise.all(promises);
-	
-  process.exit(0)
-})
+
+	process.exit(0);
+});
 
 export { fetchingDataActivated };
