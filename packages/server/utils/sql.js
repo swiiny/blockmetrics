@@ -43,6 +43,8 @@ export const updateTodayAddressCountInBlockchain = `UPDATE blockchain SET today_
 export const updateHashrateInBlockchain = `UPDATE blockchain SET hashrate = ? WHERE id = ?`;
 // update difficulty by blockchain id
 export const updateDifficultyInBlockchain = `UPDATE blockchain SET difficulty = ? WHERE id = ?`;
+// update node count in blockchain table by blockchain id
+export const updateNodeCountInBlockchain = `UPDATE blockchain SET node_count = ? WHERE id = ?`;
 // update last block timestamp
 export const updateLastBlockTimestamp = `UPDATE blockchain SET last_block_timestamp = ? WHERE id = ?`;
 // udpate power consumption by blockchain id

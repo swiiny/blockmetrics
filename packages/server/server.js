@@ -163,8 +163,8 @@ async function fetchDailyData(noDelay = false) {
 
 	await Promise.all(nodesCountPromises);
 
-	// TODO : fix fetch power consumption
-	// updatePowerConsumption();
+	// fetch and update blockchains power consumption
+	updatePowerConsumption();
 
 	/* ========================================
 	 REMOVE yesterday active addresses
@@ -414,23 +414,22 @@ async function startFetchData() {
 
 			const con = await pool.getConnection();
 
-			const chain = CHAINS.avalanche;
+			// const chain = CHAINS.avalanche;
 
-			fetchDailyTransactionFor(chain)
-				.then((data) => {
-					return data;
-				})
-				.then((formattedData) => {
-					if (formattedData.chartsData.length > 0) {
-						updateDbDailyTransaction(con, chain.id, formattedData.chartsData);
-					}
+			const nodesCount = await getNodeCountForAllBlockchains();
 
-					if (formattedData.total) {
-						con.query(updateTxCountInBlockchain, [formattedData.total, chain.id]);
-						con.query(resetTodayTransactionCount, [chain.id]);
-					}
-				})
-				.catch((err) => console.error(err));
+			const nodesCountPromises = nodesCount?.map(({ id, count }) => {
+				updateDbDailyNodeCount(con, id, count);
+			});
+
+			if (!nodesCount) {
+				console.error('getNodeCountForAllBlockchains failed');
+			}
+
+			await Promise.all(nodesCountPromises);
+
+			// fetch and update blockchains power consumption
+			updatePowerConsumption();
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);

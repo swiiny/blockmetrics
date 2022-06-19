@@ -80,6 +80,7 @@ export async function getBitcoinNodeCount() {
 }
 
 export const getNodeCountForAllBlockchains = async () => {
+	// polygon is set to 100 in database as it's fixed
 	try {
 		const promises = [
 			getEthNodeCount()

@@ -13,6 +13,7 @@ import {
 	insertDailyTransactionCount,
 	updateDifficultyInBlockchain,
 	updateHashrateInBlockchain,
+	updateNodeCountInBlockchain,
 	updateTokenCountInBlockchain
 } from '../sql.js';
 
@@ -290,7 +291,12 @@ export const updateDbDailyNodeCount = async (con, id, count) => {
 
 		const uuid = `${id}-${timestamp}-${count}`;
 
-		await con.query(insertDailyNodeCount, [uuid, id, count, timestamp]);
+		const promises = [
+			con.query(insertDailyNodeCount, [uuid, id, count, timestamp]),
+			con.query(updateNodeCountInBlockchain, [count, id])
+		];
+
+		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {
