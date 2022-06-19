@@ -37,6 +37,7 @@ declare module 'styled-components' {
 			};
 			text: {
 				default: string;
+				light: string;
 				accent: string;
 				positive: string;
 				negative: string;

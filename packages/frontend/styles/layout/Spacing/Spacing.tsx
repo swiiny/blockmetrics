@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { FC } from 'react';
 import { ESize } from '../../theme/utils/enum';
 import { StyledSpacing } from './Spacing.styles';
 import { ISpacing } from './Spacing.type';

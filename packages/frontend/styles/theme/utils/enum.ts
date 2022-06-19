@@ -1,4 +1,5 @@
 export enum ESize {
+	unset = 'unset',
 	'4xs' = '4xs',
 	'3xs' = '3xs',
 	'2xs' = '2xs',
@@ -72,10 +73,15 @@ export enum EFlex {
 
 export enum ETextColor {
 	default = 'default',
+	light = 'light',
 	red = 'red',
 	green = 'green',
 	gradient = 'gradient',
-	accent = 'accent'
+	accent = 'accent',
+	positive = 'positive',
+	negative = 'negative',
+	warning = 'warning',
+	disabled = 'disabled'
 }
 
 export enum ETextType {
@@ -87,4 +93,8 @@ export enum ETextType {
 	link = 'link',
 	span = 'span',
 	externalLink = 'externalLink'
+}
+
+export enum ELanguage {
+	en = 'en'
 }

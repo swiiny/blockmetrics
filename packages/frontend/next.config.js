@@ -9,7 +9,7 @@ const nextConfig = {
 	compiler: {
 		// remove .babelrc to test these changes
 		// styledComponents: true, // ssr and displayName are configured by default
-		removeConsole: true, // remove all console.*
+		// removeConsole: true, // remove all console.*
 		swcMinify: true // minify swc (fastest)
 	},
 	eslint: {

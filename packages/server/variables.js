@@ -32,7 +32,8 @@ export const CHAINS = {
 		name: 'Bitcoin',
 		consensus: 'POW',
 		chartPrefix: 'https://api.blockchain.info/charts',
-		coingeckoId: 'bitcoin'
+		coingeckoId: 'bitcoin',
+		rpcWs: 'wss://ws.blockchain.info/inv' // process.env.RPC_BITCOIN_WS
 	},
 	avalanche: {
 		id: 'avalanche',

@@ -8,13 +8,6 @@ const Flex: FC<IFlex> = ({
 	fullWidth = false,
 	fullHeight = false,
 	wrapItems = false,
-	padding,
-	paddingBottom,
-	paddingTop,
-	paddingLeft,
-	paddingRight,
-	paddingX,
-	paddingY,
 	direction = EFlex.row,
 	horizontal = EFlex.start,
 	vertical = EFlex.start,
@@ -38,13 +31,6 @@ const Flex: FC<IFlex> = ({
 			fullWidth={fullWidth}
 			fullHeight={fullHeight}
 			wrapItems={wrapItems}
-			padding={padding}
-			paddingX={paddingX}
-			paddingY={paddingY}
-			paddingBottom={paddingBottom}
-			paddingTop={paddingTop}
-			paddingLeft={paddingLeft}
-			paddingRight={paddingRight}
 			horizontal={horizontal}
 			vertical={vertical}
 			smDirection={smDirection}

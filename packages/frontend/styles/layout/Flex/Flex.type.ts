@@ -1,6 +1,6 @@
 import React from 'react';
-import { EFlex, ESize } from '../../theme/utils/enum';
 import { IPadding } from '../../../types/padding';
+import { EFlex } from '../../theme/utils/enum';
 
 interface IFlex extends IPadding {
 	children: React.ReactNode | React.ReactNode[];

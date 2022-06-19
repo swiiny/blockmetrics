@@ -10,8 +10,11 @@ import {
 	insertDailyNewTokens,
 	insertDailyNodeCount,
 	insertDailyTokenCount,
+	insertDailyTransactionCount,
 	updateDifficultyInBlockchain,
-	updateHashrateInBlockchain
+	updateHashrateInBlockchain,
+	updateNodeCountInBlockchain,
+	updateTokenCountInBlockchain
 } from '../sql.js';
 
 /**
@@ -161,6 +164,27 @@ export async function updateDbDailyNewAddresses(con, id, data) {
 	}
 }
 
+export async function updateDbDailyTransaction(con, id, data) {
+	try {
+		if (!data) {
+			throw new Error('data is not defined for ' + id);
+		}
+
+		const promises = data.map(({ timestamp, count }) => {
+			const uuid = `${id}-${timestamp}-${count}`;
+
+			return con.query(insertDailyTransactionCount, [uuid, id, count, timestamp]);
+		});
+
+		await Promise.all(promises);
+
+		return 0;
+	} catch (err) {
+		console.error('updateDbDailyTransaction', id, err);
+		return 1;
+	}
+}
+
 export async function updateDbDailyNewContracts(con, id, data) {
 	try {
 		if (!data) {
@@ -233,14 +257,19 @@ export const updateDbDailyTokenCount = async (con, id, count) => {
 			throw new Error('count is not defined for ' + id);
 		}
 
-		// get first timestamp OF today
+		// get first timestamp of today
 		const today = new Date();
 		today.setHours(0, 0, 0, 0);
 		const timestamp = today.getTime() / 1000;
 
 		const uuid = `${id}-${timestamp}-${count}`;
 
-		await con.query(insertDailyTokenCount, [uuid, id, count, timestamp]);
+		const promises = [
+			con.query(insertDailyTokenCount, [uuid, id, count, timestamp]),
+			con.query(updateTokenCountInBlockchain, [count, id])
+		];
+
+		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {
@@ -262,7 +291,12 @@ export const updateDbDailyNodeCount = async (con, id, count) => {
 
 		const uuid = `${id}-${timestamp}-${count}`;
 
-		await con.query(insertDailyNodeCount, [uuid, id, count, timestamp]);
+		const promises = [
+			con.query(insertDailyNodeCount, [uuid, id, count, timestamp]),
+			con.query(updateNodeCountInBlockchain, [count, id])
+		];
+
+		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {

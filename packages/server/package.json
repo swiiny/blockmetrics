@@ -13,7 +13,8 @@
 		"mysql2": "^2.3.3",
 		"node-schedule": "^2.1.0",
 		"request": "^2.88.2",
-		"requests": "^0.3.0"
+		"requests": "^0.3.0",
+		"ws": "^8.6.0"
 	},
 	"devDependencies": {
 		"eslint": "^8.17.0",
