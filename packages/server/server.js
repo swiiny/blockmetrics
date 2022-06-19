@@ -414,8 +414,11 @@ async function startFetchData() {
 
 			const con = await pool.getConnection();
 
+			// fetchBitcoinData(pool);
+
 			// const chain = CHAINS.avalanche;
 
+			/*
 			const nodesCount = await getNodeCountForAllBlockchains();
 
 			const nodesCountPromises = nodesCount?.map(({ id, count }) => {
@@ -430,6 +433,7 @@ async function startFetchData() {
 
 			// fetch and update blockchains power consumption
 			updatePowerConsumption();
+			*/
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
