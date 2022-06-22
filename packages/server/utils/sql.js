@@ -60,5 +60,5 @@ export const resetTodayAddressCount = `UPDATE blockchain SET today_address_count
 // ==============================================================================================
 // ======= DELETE ===============================================================================
 // ==============================================================================================
-export const removeYesterdayAddressFromTodayActiveAddress =
-	'DELETE FROM today_active_address WHERE day = DATE_SUB(CURDATE(), INTERVAL 1 DAY)';
+// remove row with day older than today
+export const removeYesterdayAddressFromTodayActiveAddress = `DELETE FROM today_active_address WHERE created_at < CURDATE()`;

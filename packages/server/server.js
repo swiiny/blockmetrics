@@ -172,7 +172,7 @@ async function fetchDailyData(noDelay = false) {
 	await con.query(removeYesterdayAddressFromTodayActiveAddress);
 
 	// wait 15 minutes to be sure that the scrapped data is udpated
-	await new Promise((resolve) => setTimeout(resolve, noDelay ? 0 : 15 * 60 * 1000));
+	await new Promise((resolve) => setTimeout(resolve, 10 * 60 * 1000));
 
 	CHAINS_ARRAY.forEach(async (chain) => {
 		/* ========================================
@@ -367,7 +367,7 @@ async function startFetchData() {
 			return 0;
 		}
 
-		if (process.env.NODE_ENV === 'production') {
+		if (process.env.NODE_ENV !== 'production') {
 			console.log('start production');
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
@@ -389,7 +389,6 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 2;
-			rule.minute = 0;
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
@@ -467,12 +466,12 @@ async function init() {
 }
 
 init();
-
+/*
 process.on('SIGINT', async () => {
 	const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
 	await Promise.all(promises);
 
 	process.exit(0);
 });
-
+*/
 export { fetchingDataActivated };
