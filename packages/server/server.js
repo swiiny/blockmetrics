@@ -389,6 +389,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 2;
+			rule.minute = 0;
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
