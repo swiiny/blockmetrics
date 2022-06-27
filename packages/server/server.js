@@ -399,6 +399,7 @@ async function startFetchData() {
 				fetchDailyData();
 			});
 
+			/*
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
 			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
@@ -410,6 +411,7 @@ async function startFetchData() {
 					}
 				});
 			});
+			*/
 		} else {
 			// dev stuff
 			console.log('start dev');
