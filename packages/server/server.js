@@ -128,8 +128,8 @@ async function updatePowerConsumption() {
 	}
 }
 
-async function fetchDailyData(noDelay = false) {
-	const delay = noDelay ? 0 : 5000;
+async function fetchDailyData(factor = 1) {
+	const delay = 5000 * factor;
 
 	const con = await pool.getConnection();
 
@@ -171,8 +171,8 @@ async function fetchDailyData(noDelay = false) {
 	 ======================================== */
 	await con.query(removeYesterdayAddressFromTodayActiveAddress);
 
-	// wait 15 minutes to be sure that the scrapped data is udpated
-	await new Promise((resolve) => setTimeout(resolve, 10 * 60 * 1000));
+	// wait 20 minutes to be sure that the scrapped data is udpated
+	await new Promise((resolve) => setTimeout(resolve, 10 * 60 * 1000 * factor));
 
 	CHAINS_ARRAY.forEach(async (chain) => {
 		/* ========================================
@@ -381,6 +381,8 @@ async function startFetchData() {
 				wsProvider.on('block', async (blockNumber) => {
 					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
 				});
+
+				wsProviders.push(wsProvider);
 			});
 
 			// INIT BITCOIN WEBSOCKET PROVIDER
@@ -398,7 +400,7 @@ async function startFetchData() {
 			});
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
-			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 56, 57];
+			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
@@ -412,28 +414,54 @@ async function startFetchData() {
 			// dev stuff
 			console.log('start dev');
 
+			// INIT WEBSOCKET PROVIDERS CONNECTIONS
 			const con = await pool.getConnection();
 
-			// fetchBitcoinData(pool);
+			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
+				console.log('start ws provider for', chain.name);
 
-			// const chain = CHAINS.avalanche;
+				try {
+					const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
-			/*
-			const nodesCount = await getNodeCountForAllBlockchains();
+					wsProvider.on('block', async (blockNumber) => {
+						fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+					});
 
-			const nodesCountPromises = nodesCount?.map(({ id, count }) => {
-				updateDbDailyNodeCount(con, id, count);
+					wsProviders.push(wsProvider);
+				} catch {
+					console.error('error connecting to ws provider for', chain.name, err);
+				}
 			});
 
-			if (!nodesCount) {
-				console.error('getNodeCountForAllBlockchains failed');
-			}
+			// INIT BITCOIN WEBSOCKET PROVIDER
+			fetchBitcoinData(pool);
 
-			await Promise.all(nodesCountPromises);
+			// SET DAILY ROUTINE
+			const rule = new schedule.RecurrenceRule();
+			//rule.hour = 2;
+			rule.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+			rule.tz = 'Europe/Amsterdam';
 
-			// fetch and update blockchains power consumption
-			updatePowerConsumption();
-			*/
+			dailyRoutine = schedule.scheduleJob(rule, async () => {
+				console.log('run schedule');
+				fetchDailyData(1 / 10);
+			});
+
+			const ruleFiveMinutes = new schedule.RecurrenceRule();
+			// ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 56, 57];
+			ruleFiveMinutes.minute = [
+				0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56,
+				58
+			];
+
+			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
+				CHAINS_ARRAY.forEach(async (chain) => {
+					const [todayActiveAddressCount] = await con.query(getTodayActiveAddressCount, [chain.id]);
+					if (todayActiveAddressCount[0].count > 0) {
+						con.query(updateTodayAddressCountInBlockchain, [todayActiveAddressCount[0].count, chain.id]);
+					}
+				});
+			});
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
@@ -467,12 +495,9 @@ async function init() {
 }
 
 init();
-/*
-process.on('SIGINT', async () => {
-	const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
-	await Promise.all(promises);
 
-	process.exit(0);
+process.on('uncaughtException', function (err) {
+	console.log('UNCAUGHT EXCEPTION - keeping process alive:', err.message);
 });
-*/
+
 export { fetchingDataActivated };
