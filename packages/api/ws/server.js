@@ -45,8 +45,7 @@ async function fetchAndSendBlockchains() {
 			const outbound = JSON.stringify(res[0]);
 
 			// log lengths of clients
-			console.log(`${clients.size} clients connected`);
-
+			// console.log(`${clients.size} clients connected`);
 			[...clients.keys()].forEach((client) => {
 				client.send(outbound);
 			});
