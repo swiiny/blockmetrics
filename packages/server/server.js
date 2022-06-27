@@ -423,6 +423,12 @@ async function startFetchData() {
 				try {
 					const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
+					wsProvider.on('error', async (err) => {
+						console.log('===========================================================');
+						console.log('error with ', chain.name, err);
+						console.log('===========================================================');
+					});
+
 					wsProvider.on('block', async (blockNumber) => {
 						fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
 					});
