@@ -12,10 +12,16 @@ import Column from '../../../../styles/layout/Column';
 import Text from '../../../../styles/theme/components/Text';
 import Flex from '../../../../styles/layout/Flex';
 import { DataText } from '../../../texts/DataText/DataText';
+import { w3cwebsocket as W3CWebSocket } from 'websocket';
+
+let ws: W3CWebSocket | null;
+let wsTimeout: NodeJS.Timeout | null;
 
 const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
 	const [metadata, setMetadata] = useState<TBlockchainMetadata>();
+	const [wsConnected, setWsConnected] = useState<boolean>(false);
+	const [wsAlreaddyConnected, setWsAlreadyConnected] = useState<boolean>(false);
 
 	const { query } = useRouter();
 	const { name } = query;
@@ -31,19 +37,54 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		setMetadata(fetchMetadata);
 	}, [name]);
 
-	const formattedGasPrice = useMemo(() => {
-		if (blockchain?.gas_price) {
-			const value = (blockchain?.gas_price || 0) * 10 ** -9;
-			return Math.floor(value);
+	const initWebsocket = useCallback(() => {
+		if (ws) {
+			ws.close();
+			ws = null;
 		}
 
-		return null;
-	}, [blockchain?.gas_price]);
+		let type;
+		let strToRemove;
+
+		if (process.env.NODE_ENV === 'production') {
+			type = 'wss';
+			strToRemove = 'https://';
+		} else {
+			type = 'ws';
+			strToRemove = 'http://';
+		}
+
+		const removed = process.env.WS_URL?.replace(strToRemove, '');
+		ws = new W3CWebSocket(`${type}://${removed}/`);
+
+		ws.onopen = () => {
+			setWsAlreadyConnected(true);
+			setWsConnected(true);
+		};
+
+		ws.onmessage = (e: any) => {
+			const res = JSON.parse(e.data);
+
+			if (res?.length) {
+				const newBlockchain = res.find((bc: TBlockchain) => bc.id === blockchain?.id);
+
+				if (newBlockchain) {
+					setBlockchain(newBlockchain);
+				}
+			}
+		};
+
+		ws.onerror = (e: any) => {
+			console.error('socket error', e);
+		};
+
+		ws.onclose = () => {
+			setWsConnected(false);
+		};
+	}, [blockchain]);
 
 	const selectedData = useMemo(() => {
 		const result = [];
-
-		console.log('blockchain', blockchain);
 
 		const { gas_price, token_count, hashrate, last_block_timestamp } = blockchain || {};
 
@@ -88,6 +129,25 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	useEffect(() => {
 		initData();
 	}, [name]);
+
+	useEffect(() => {
+		if (blockchain?.id && !wsAlreaddyConnected) {
+		}
+	}, [blockchain, wsAlreaddyConnected]);
+
+	useEffect(() => {
+		if (!wsConnected) {
+			wsTimeout = setTimeout(() => {
+				initWebsocket();
+			}, 5000);
+		} else if (wsTimeout) {
+			clearTimeout(wsTimeout);
+		}
+	}, [wsConnected]);
+
+	useEffect(() => {
+		return () => ws?.close();
+	}, []);
 
 	return (
 		<>

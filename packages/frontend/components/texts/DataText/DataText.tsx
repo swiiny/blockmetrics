@@ -7,16 +7,21 @@ import { IDataText } from './DataText.type';
 import CountUp from 'react-countup';
 import { StyledDataText } from './DataText.styles';
 
+// hte ping with the api
+const ping = 1.5;
+
 const DataText: FC<IDataText> = ({ as, value, label, unit, isAnimated, isTimer, ...otherProps }) => {
 	const [timerValue, updateValue] = useReducer(() => {
-		return (Date.now() - value * 1000) / 1000;
+		const newVal = (Date.now() - value * 1000) / 1000;
+
+		return newVal - ping > 0 ? newVal - ping : 0;
 	}, 0);
 
 	useEffect(() => {
 		if (isTimer) {
 			setInterval(() => {
 				updateValue();
-			}, 1000);
+			}, 100);
 		}
 	}, [isTimer]);
 
@@ -24,9 +29,16 @@ const DataText: FC<IDataText> = ({ as, value, label, unit, isAnimated, isTimer, 
 		<StyledDataText {...otherProps}>
 			<Heading as='p' type={ETextType.h1}>
 				{isAnimated ? (
-					<CountUp preserveValue end={value} duration={0.5} separator=',' style={{ color: 'inherit' }} />
+					<CountUp preserveValue end={value} duration={1} separator=',' style={{ color: 'inherit' }} />
 				) : isTimer ? (
-					<CountUp preserveValue end={timerValue} duration={1} decimal='.' decimals={1} style={{ color: 'inherit' }} />
+					<CountUp
+						preserveValue
+						end={timerValue}
+						duration={0.1}
+						decimal='.'
+						decimals={1}
+						style={{ color: 'inherit' }}
+					/>
 				) : (
 					value
 				)}

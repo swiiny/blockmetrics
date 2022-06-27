@@ -34,7 +34,7 @@ let isFetchDeactivate = true;
 
 async function fetchAndSendBlockchains() {
 	while (!isFetchDeactivate) {
-		console.log('start new loop process');
+		// console.log('start new loop process');
 		const res = await getBlockchains(pool, {
 			sortBy: 'blockchain_power_consumption',
 			desc: false,
@@ -45,14 +45,14 @@ async function fetchAndSendBlockchains() {
 			const outbound = JSON.stringify(res[0]);
 
 			// log lengths of clients
-			// console.log(`${clients.size} clients connected`);
+			console.log(`${clients.size} clients connected`);
 			[...clients.keys()].forEach((client) => {
 				client.send(outbound);
 			});
 		}
 
 		// wait 3 seconds
-		await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
+		await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
 	}
 }
 
@@ -65,16 +65,11 @@ async function startWebsocketServer() {
 			isFetchDeactivate = false;
 			fetchAndSendBlockchains();
 		}
-	});
 
-	wss.on('close', (ws) => {
-		console.log('client disconnected');
-		clients.delete(ws);
-
-		if (clients.size === 0) {
-			console.log('no clients connected');
-			isFetchDeactivate = true;
-		}
+		ws.on('close', () => {
+			console.log('client disconnected');
+			clients.delete(ws);
+		});
 	});
 }
 
