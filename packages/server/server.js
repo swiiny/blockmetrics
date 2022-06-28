@@ -1,6 +1,6 @@
 import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
-import { calculatePowerConsumption } from './utils/functions.js';
+import { calculatePowerConsumption, keepAlive } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
@@ -356,6 +356,49 @@ async function fetchDailyData(factor = 1) {
 	});
 }
 
+async function initWebsocketProvider(chain, con) {
+	let pingTimeout = null;
+	let keepAliveInterval = null;
+
+	const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
+
+	wsProvider.on('block', async (blockNumber) => {
+		fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+	});
+
+	// check each 7.5 seconds if websocket is still connected
+	wsProvider._websocket.on('open', () => {
+		keepAliveInterval = setInterval(() => {
+			wsProvider._websocket.ping();
+
+			pingTimeout = setTimeout(() => {
+				wsProvider._websocket.terminate();
+			}, 15000);
+		}, 7500);
+	});
+
+	wsProvider._websocket.on('close', (err) => {
+		if (keepAliveInterval) {
+			clearInterval(keepAliveInterval);
+		}
+
+		if (pingTimeout) {
+			clearTimeout(pingTimeout);
+		}
+
+		console.log('on close called');
+		initWebsocketProvider(chain, con);
+	});
+
+	wsProvider._websocket.on('pong', () => {
+		if (pingTimeout) {
+			clearInterval(pingTimeout);
+		}
+	});
+
+	wsProviders.push(wsProvider);
+}
+
 async function startFetchData() {
 	canStartFetchData = false;
 	try {
@@ -376,13 +419,7 @@ async function startFetchData() {
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
 				console.log('start ws provider for', chain.name);
 
-				const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
-
-				wsProvider.on('block', async (blockNumber) => {
-					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
-				});
-
-				wsProviders.push(wsProvider);
+				initWebsocketProvider(chain, con);
 			});
 
 			// INIT BITCOIN WEBSOCKET PROVIDER
@@ -399,7 +436,6 @@ async function startFetchData() {
 				fetchDailyData();
 			});
 
-			/*
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
 			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
@@ -411,7 +447,6 @@ async function startFetchData() {
 					}
 				});
 			});
-			*/
 		} else {
 			// dev stuff
 			console.log('start dev');
@@ -419,23 +454,11 @@ async function startFetchData() {
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
 			const con = await pool.getConnection();
 
-			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
+			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
 
 				try {
-					const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
-
-					wsProvider.on('error', async (err) => {
-						console.log('===========================================================');
-						console.log('error with ', chain.name, err);
-						console.log('===========================================================');
-					});
-
-					wsProvider.on('block', async (blockNumber) => {
-						fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
-					});
-
-					wsProviders.push(wsProvider);
+					initWebsocketProvider(chain, con);
 				} catch {
 					console.error('error connecting to ws provider for', chain.name, err);
 				}
@@ -480,6 +503,7 @@ async function startFetchData() {
 				// remove all items from wsProviders
 				wsProviders.forEach((wsProvider) => {
 					wsProvider.removeAllListeners();
+					wsProvider._websocket?.removeAllListeners();
 				});
 
 				wsProviders = [];
