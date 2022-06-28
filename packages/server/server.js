@@ -1,6 +1,6 @@
 import { getGasPrice } from './utils/fetch/gasPrice.js';
 import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
-import { calculatePowerConsumption, keepAlive } from './utils/functions.js';
+import { calculatePowerConsumption } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
