@@ -13,6 +13,7 @@ export const StyledHeadingOne = styled.h1<{
 }>`
 	font-size: 4rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `4.68rem`)};
+	white-space: ${(p) => (p.singleLine ? `nowrap` : `unset`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
@@ -44,6 +45,7 @@ export const StyledHeadingTwo = styled.h2<{
 }>`
 	font-size: 3rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `3.875rem`)};
+	white-space: ${(p) => (p.singleLine ? `nowrap` : `unset`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
@@ -74,6 +76,7 @@ export const StyledHeadingThree = styled.h3<{
 }>`
 	font-size: 2.25rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `2.625rem`)};
+	white-space: ${(p) => (p.singleLine ? `nowrap` : `unset`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};
@@ -104,6 +107,7 @@ export const StyledHeadingFour = styled.h4<{
 }>`
 	font-size: 1.5rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `1.93rem`)};
+	white-space: ${(p) => (p.singleLine ? `nowrap` : `unset`)};
 	font-weight: normal;
 	letter-spacing: -0.02em;
 	text-align: ${(p) => p.textAlign};

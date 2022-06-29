@@ -98,3 +98,24 @@ export enum ETextType {
 export enum ELanguage {
 	en = 'en'
 }
+
+export enum EDailyData {
+	activeUsers = 'activeUsers',
+	averageBlocktime = 'averageBlocktime',
+	averageGasPrice = 'averageGasPrice',
+	difficulty = 'difficulty',
+	hashrate = 'hashrate',
+	newAddress = 'newAddress',
+	newContract = 'newContract',
+	newTokens = 'newTokens',
+	tokenCount = 'tokenCount',
+	nodeCount = 'nodeCount',
+	transactionCount = 'transactionCount'
+}
+
+export enum EChartType {
+	line,
+	bar,
+	pie,
+	doughnut
+}

@@ -2,8 +2,9 @@ import express from 'express';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
-import { getBlockchainById, getBlockchains, getMetadataById } from './utils/fetch.js';
+import { getBlockchainById, getBlockchains, getChartByIdAndType, getMetadataById } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
+import { EDailyData } from './utils/variables.js';
 
 const BASE_URL_V1 = '/v1/api/rest';
 
@@ -35,7 +36,7 @@ app.use(limiter);
 // - offset: unsigned number less than limit
 // - limit: unsigned number greater than offset
 app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
-	const { sortBy, desc = true, offset = 0, limit = 30 } = req.query;
+	const { sortBy = 'blockchain_power_consumption', desc = false, offset = 0, limit = 30 } = req.query;
 
 	try {
 		const params = {
@@ -47,8 +48,8 @@ app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
 
 		const result = await getBlockchains(pool, params);
 
-		if (result[0][0]) {
-			res.send(result[0][0]);
+		if (result[0].length) {
+			res.send(result[0]);
 			return;
 		} else {
 			throw new Error('getBlockchains failed');
@@ -138,6 +139,43 @@ app.get(`${BASE_URL_V1}/get/blockchain/all`, async (req, res) => {
 		console.error('/get/blockchain', err);
 
 		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
+		return;
+	}
+});
+
+app.get(`${BASE_URL_V1}/get/blockchain/chart`, async (req, res) => {
+	const { id, type } = req.query;
+
+	try {
+		if (!id) {
+			res.status(500).send('Missing id');
+			return;
+		}
+
+		if (!type) {
+			res.status(500).send('Missing type');
+			return;
+		} else {
+			const isValidType = Object.values(EDailyData).includes(type);
+
+			if (!isValidType) {
+				res.status(500).send('Invalid type');
+				return;
+			}
+		}
+
+		const result = await getChartByIdAndType(pool, id, type);
+
+		if (result[0].length) {
+			res.send(result[0]);
+			return;
+		} else {
+			throw new Error('get blockchain chart failed');
+		}
+	} catch (err) {
+		console.error('/get/blockchain/chart?type=X&id=Y', err);
+
+		res.status(500).send('Error fetching blockchain chart data where id is ' + id + ' and type is ' + type);
 		return;
 	}
 });

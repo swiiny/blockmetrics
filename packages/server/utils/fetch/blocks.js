@@ -20,7 +20,7 @@ export async function fetchEVMBlockFor(chain, provider, blockNumber, con) {
 		const resolvedTxPromises = (await Promise.all(txPromises)) || [];
 
 		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('fetching EVM block for', name, blockNumber, ' with ', resolvedTxPromises.length, ' transactions');
+			// console.log('fetching EVM block for', name, blockNumber, ' with ', resolvedTxPromises.length, ' transactions');
 		}
 
 		const averageGasPrice = resolvedTxPromises.reduce(
