@@ -1,5 +1,5 @@
 import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
-import { EMediaQuery, ESize, ETextColor } from './enum';
+import { EDailyData, EMediaQuery, ESize, ETextColor } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
 	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {
@@ -186,5 +186,45 @@ export const getTextColor = (p: any) => {
 			return `${p.theme.colors.text.disabled};`;
 		default:
 			return `${p.theme.colors.text.default};`;
+	}
+};
+
+export const getDailyValueFromType = (type: EDailyData) => {
+	switch (type) {
+		case EDailyData.activeUsers:
+			return 'active_user_count';
+			break;
+		case EDailyData.averageBlocktime:
+			return 'second';
+			break;
+		case EDailyData.averageGasPrice:
+			return 'gas_price';
+			break;
+		case EDailyData.difficulty:
+			return 'difficulty';
+			break;
+		case EDailyData.hashrate:
+			return 'hashrate';
+			break;
+		case EDailyData.newAddress:
+			return 'address_count';
+			break;
+		case EDailyData.newContract:
+			return 'contract_count';
+			break;
+		case EDailyData.newTokens:
+			return 'token_count';
+			break;
+		case EDailyData.tokenCount:
+			return 'token_count';
+			break;
+		case EDailyData.nodeCount:
+			return 'node_count';
+			break;
+		case EDailyData.transactionCount:
+			return 'transaction_count';
+			break;
+		default:
+			return '';
 	}
 };

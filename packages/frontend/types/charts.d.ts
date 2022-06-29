@@ -1,12 +1,14 @@
 import { EChartType, EDailyData } from '../styles/theme/utils/enum';
 
 interface IBarLineChart {
-	chartType: EChartType;
+	chartType?: EChartType;
 	dailyType: EDailyData;
 	chainId: TBlockchain['id'];
 }
 
 interface IBarLineChartData {
-	horizontalData: number;
-	verticalData: number;
+	x: string;
+	y: number;
 }
+
+export type { IBarLineChart, IBarLineChartData };

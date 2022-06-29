@@ -100,17 +100,17 @@ export enum ELanguage {
 }
 
 export enum EDailyData {
-	activeUsers,
-	averageBlocktime,
-	averageGasPrice,
-	difficulty,
-	hashrate,
-	newAddress,
-	newContract,
-	newTokens,
-	tokenCount,
-	nodeCount,
-	transactionCount
+	activeUsers = 'activeUsers',
+	averageBlocktime = 'averageBlocktime',
+	averageGasPrice = 'averageGasPrice',
+	difficulty = 'difficulty',
+	hashrate = 'hashrate',
+	newAddress = 'newAddress',
+	newContract = 'newContract',
+	newTokens = 'newTokens',
+	tokenCount = 'tokenCount',
+	nodeCount = 'nodeCount',
+	transactionCount = 'transactionCount'
 }
 
 export enum EChartType {

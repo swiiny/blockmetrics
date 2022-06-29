@@ -7,7 +7,7 @@ import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
 import { getBlockchainAndMetadataById } from '../../../../utils/fetch';
 import { useRouter } from 'next/router';
 import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
-import { EChartType, EFlex, ELanguage, ESize, ETextColor } from '../../../../styles/theme/utils/enum';
+import { EChartType, EDailyData, EFlex, ELanguage, ESize, ETextColor } from '../../../../styles/theme/utils/enum';
 import Column from '../../../../styles/layout/Column';
 import Text from '../../../../styles/theme/components/Text';
 import Flex from '../../../../styles/layout/Flex';
@@ -15,6 +15,7 @@ import { DataText } from '../../../texts/DataText/DataText';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import Spacing from '../../../../styles/layout/Spacing';
 import BarChart from '../../../charts/BarChart';
+import { IBarLineChart } from '../../../../types/charts';
 
 let ws: W3CWebSocket | null;
 let wsTimeout: NodeJS.Timeout | null;
@@ -83,6 +84,11 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		const result: IBarLineChart[] = [];
 
 		// TODO : select charts to display
+		result.push({
+			chartType: EChartType.bar,
+			dailyType: EDailyData.averageBlocktime,
+			chainId: blockchain?.id || ''
+		});
 
 		return result;
 	}, [blockchain]);
@@ -203,10 +209,12 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 
 				<Spacing size={ESize.xl} />
 
-				<Flex as='ul' horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
-					{chartsToDisplay.map(({ chartType, dailyType, chainId }) =>
-						chartType === EChartType.bar ? <BarChart key={dailyType} type={dailyType} chainId={chainId} /> : <></>
-					)}
+				<Flex as='ul' fullWidth horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
+					{chartsToDisplay.map(({ chartType, dailyType, chainId }) => (
+						<Column as='li' key={dailyType} columns={4}>
+							{chartType === EChartType.bar ? <BarChart dailyType={dailyType} chainId={chainId} /> : <></>}
+						</Column>
+					))}
 				</Flex>
 			</Main>
 		</>

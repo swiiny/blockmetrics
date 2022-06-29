@@ -1,3 +1,10 @@
+import { EDailyData } from '../../../styles/theme/utils/enum';
+
+interface IBarChart {
+	dailyType: EDailyData;
+	chainId: TBlockchain['id'];
+}
+
 interface IChartContainer {
 	containerHeight: string;
 	containerMarginTop: string;
@@ -6,4 +13,4 @@ interface IChartContainer {
 	chartVerticalDelta: string;
 }
 
-export type { IChartContainer };
+export type { IChartContainer, IBarChart };

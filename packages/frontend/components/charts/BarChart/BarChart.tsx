@@ -1,16 +1,19 @@
 import React, { FC, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { Chart, Filler } from 'chart.js';
+import { Chart, Filler, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { StyledChartContainer } from './BarChart.styles';
 import { IChartContainer } from './BarChart.type';
 import useResponsive from '../../../hooks/useResponsive';
+import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
+import { axiosRest } from '../../../utils/variables';
+import { getDailyValueFromType } from '../../../styles/theme/utils/functions';
 
 // required to get the gradient in the charts
-Chart.register(Filler);
+Chart.register(Filler, CategoryScale, LinearScale, BarElement);
 
-const BarChart: FC<IBarLineChart> = ({ type, chainId }) => {
+const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
 	const [chartData, setChartData] = useState<IBarLineChartData[]>([]);
-	const [loading, updateLoading] = useReducer((state: boolean, value: boolean) => value || !state, true);
+	const [loading, updateLoading] = useReducer((_: boolean, value: boolean) => value, false);
 
 	const { screenWidth, isSmallerThanSm, isSmallerThanMd, isSmallerThanLg } = useResponsive();
 
@@ -52,7 +55,7 @@ const BarChart: FC<IBarLineChart> = ({ type, chainId }) => {
 
 	const xData = useMemo(() => {
 		try {
-			return chartData.map((t) => t.horizontalData);
+			return chartData.map((t) => t.x);
 		} catch {
 			return [];
 		}
@@ -60,7 +63,7 @@ const BarChart: FC<IBarLineChart> = ({ type, chainId }) => {
 
 	const yData = useMemo(() => {
 		try {
-			return chartData.map((t) => t.verticalData);
+			return chartData.map((t) => t.y);
 		} catch {
 			return [];
 		}
@@ -68,7 +71,7 @@ const BarChart: FC<IBarLineChart> = ({ type, chainId }) => {
 
 	const minValue = useMemo(() => {
 		try {
-			return Math.min(...yData) * 1.0;
+			return Math.min(...yData) * 0.99;
 		} catch {
 			return 0;
 		}
@@ -101,23 +104,24 @@ const BarChart: FC<IBarLineChart> = ({ type, chainId }) => {
 		}
 
 		return {
-			type: 'line',
-			labels: xData.map((t) => new Date(t).toLocaleString('de-DE')),
+			// type: 'bar',
+			labels: xData,
 			datasets: [
 				{
 					data: yData,
+					backgroundColor: 'rgba(255, 99, 132, 0.5)',
 					radius: 2,
-					borderWidth: 1,
-					grid: { display: false },
-					fill: true,
-					pointRadius: 0,
-					tension: 0.1,
-					backgroundColor: gradientFill,
-					borderColor: borderFill,
-					pointBorderColor: borderFill,
-					pointBackgroundColor: borderFill,
-					pointHoverBackgroundColor: borderFill,
-					pointHoverBorderColor: borderFill
+					// borderWidth: 1,
+					grid: { display: false }
+					// fill: true,
+					// pointRadius: 0,
+					// tension: 0.1,
+					//backgroundColor: gradientFill,
+					//borderColor: borderFill,
+					//pointBorderColor: borderFill,
+					//pointBackgroundColor: borderFill,
+					//pointHoverBackgroundColor: borderFill,
+					//pointHoverBorderColor: borderFill
 				}
 			]
 		};
@@ -131,39 +135,28 @@ const BarChart: FC<IBarLineChart> = ({ type, chainId }) => {
 			title: {
 				display: false
 			},
-			maintainAspectRatio: false,
 			scales: {
+				// @ts-ignore
 				x: {
-					grid: {
-						display: false
-					},
 					display: false
 				},
 				y: {
-					type: 'linear',
-					display: false,
+					// display: false, // check if we need to display the y axis
 					grid: {
-						display: false,
-						color: '#8fd4c520'
-					}
-				}
-			},
-			plugins: {
-				legend: {
-					display: false
-				}, // ChartLegendOptions
-				tooltip: {
-					enabled: false,
-					displayColors: false
-					//external: null
+						display: false
+					},
+					ticks: {
+						stepSize: (maxValue - minValue) / 2,
+						//stepSize: 1,
+						callback(value: number) {
+							return `${Math.floor(value)}`;
+						}
+					},
+					min: minValue,
+					max: maxValue
 				}
 			}
 		};
-
-		if (minValue >= 0 && maxValue >= 0) {
-			data.scales.y.min = minValue;
-			data.scales.y.max = maxValue;
-		}
 
 		return data;
 	}, [minValue, maxValue]);
@@ -177,19 +170,41 @@ const BarChart: FC<IBarLineChart> = ({ type, chainId }) => {
 	}, [yData, minValue, maxValue, chartOptions]);
 
 	const fetchChartData = useCallback(async () => {
-		if (type && chainId) {
+		if (dailyType && chainId) {
+			updateLoading(true);
+			try {
+				const result = await axiosRest(`/get/blockchain/chart?type=${dailyType}&id=${chainId}`);
+
+				// format result in IBarLineChartData
+				const formattedData: IBarLineChartData[] = result.data.map((t: any) => {
+					return {
+						x: new Date(t.date).toLocaleString(),
+						y: t[getDailyValueFromType(dailyType)]
+					};
+				});
+
+				setChartData(formattedData);
+
+				updateLoading(false);
+			} catch (err) {
+				updateLoading(false);
+				console.error('Error fetchChartData', err);
+			}
 		}
-	}, [type, chainId]);
+	}, [dailyType, chainId]);
 
 	useEffect(() => {
 		fetchChartData();
-	}, [type, chainId]);
+	}, [dailyType, chainId]);
 
 	return loading ? (
-		<></>
+		<StyledChartContainer {...chartFrames}>
+			<div id='chart-container' className='relative overflow-hidden' />
+		</StyledChartContainer>
 	) : (
 		<StyledChartContainer {...chartFrames}>
-			<div id='chart-container' className='relative overflow-hidden'>
+			<div id='chart-container'>
+				{/* @ts-ignore */}
 				<Bar options={chartOptions} data={chartReady ? datas : null} />
 			</div>
 		</StyledChartContainer>
