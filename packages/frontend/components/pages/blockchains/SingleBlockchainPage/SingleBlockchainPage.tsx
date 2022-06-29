@@ -7,12 +7,14 @@ import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
 import { getBlockchainAndMetadataById } from '../../../../utils/fetch';
 import { useRouter } from 'next/router';
 import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
-import { EFlex, ELanguage, ESize, ETextColor } from '../../../../styles/theme/utils/enum';
+import { EChartType, EFlex, ELanguage, ESize, ETextColor } from '../../../../styles/theme/utils/enum';
 import Column from '../../../../styles/layout/Column';
 import Text from '../../../../styles/theme/components/Text';
 import Flex from '../../../../styles/layout/Flex';
 import { DataText } from '../../../texts/DataText/DataText';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import Spacing from '../../../../styles/layout/Spacing';
+import BarChart from '../../../charts/BarChart';
 
 let ws: W3CWebSocket | null;
 let wsTimeout: NodeJS.Timeout | null;
@@ -25,6 +27,65 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 
 	const { query } = useRouter();
 	const { name } = query;
+
+	const selectedData = useMemo(() => {
+		const result = [];
+
+		const { gas_price, token_count, hashrate, last_block_timestamp } = blockchain || {};
+
+		if (gas_price) {
+			result.push({
+				value: Math.floor(gas_price * 10 ** -9),
+				unit: 'Gwei',
+				isAnimated: true,
+				label: 'Gas Price'
+			});
+		}
+
+		if (token_count) {
+			result.push({
+				value: token_count,
+				isAnimated: true,
+				label: 'Tokens'
+			});
+		}
+
+		if (hashrate) {
+			let tempHashrate = hashrate;
+			let tempUnit = 'TH/s';
+
+			if (Math.floor(tempHashrate) > 1000000) {
+				tempHashrate = Math.floor(tempHashrate * 10 ** -3);
+				tempUnit = 'PH/s';
+			}
+
+			result.push({
+				value: tempHashrate,
+				unit: tempUnit,
+				isAnimated: true,
+				label: 'Hashrate'
+			});
+		}
+
+		if (last_block_timestamp) {
+			result.push({
+				value: last_block_timestamp,
+				unit: 's',
+				isTimer: true,
+				label: 'Time from last block'
+			});
+		}
+
+		return result;
+	}, [blockchain]);
+
+	const chartsToDisplay: IBarLineChart[] = useMemo(() => {
+		const result: IBarLineChart[] = [];
+
+		// TODO : select charts to display
+
+		return result;
+	}, [blockchain]);
 
 	const initData = useCallback(async () => {
 		const blockchainId = BLOCKCHAINS_ARRAY.find((bc) => bc.name.toLowerCase().replace(/\s/g, '-') === name)?.id;
@@ -84,57 +145,6 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		};
 	}, [blockchain]);
 
-	const selectedData = useMemo(() => {
-		const result = [];
-
-		const { gas_price, token_count, hashrate, last_block_timestamp } = blockchain || {};
-
-		if (gas_price) {
-			result.push({
-				value: Math.floor(gas_price * 10 ** -9),
-				unit: 'Gwei',
-				isAnimated: true,
-				label: 'Gas Price'
-			});
-		}
-
-		if (token_count) {
-			result.push({
-				value: token_count,
-				isAnimated: true,
-				label: 'Tokens'
-			});
-		}
-
-		if (hashrate) {
-			let tempHashrate = hashrate;
-			let tempUnit = 'TH/s';
-
-			if (Math.floor(tempHashrate) > 1000000) {
-				tempHashrate = Math.floor(tempHashrate * 10 ** -3);
-				tempUnit = 'PH/s';
-			}
-
-			result.push({
-				value: tempHashrate,
-				unit: tempUnit,
-				isAnimated: true,
-				label: 'Hashrate'
-			});
-		}
-
-		if (last_block_timestamp) {
-			result.push({
-				value: last_block_timestamp,
-				unit: 's',
-				isTimer: true,
-				label: 'Time from last block'
-			});
-		}
-
-		return result;
-	}, [blockchain]);
-
 	useEffect(() => {
 		name && !blockchain && initData();
 	}, [name, blockchain]);
@@ -186,9 +196,18 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 						))}
 					</Flex>
 				</Column>
+
 				<Column columns={6} md={12} lg={8}>
 					<Text textColor={ETextColor.light}>{metadata?.description || ''}</Text>
 				</Column>
+
+				<Spacing size={ESize.xl} />
+
+				<Flex as='ul' horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
+					{chartsToDisplay.map(({ chartType, dailyType, chainId }) =>
+						chartType === EChartType.bar ? <BarChart key={dailyType} type={dailyType} chainId={chainId} /> : <></>
+					)}
+				</Flex>
 			</Main>
 		</>
 	);
