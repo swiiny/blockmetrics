@@ -4,7 +4,7 @@ export const getBlockchains = async (pool, params) => {
 	try {
 		const { desc, sortBy, limit, offset } = params;
 
-		let queryPrefix = `SELECT name, note, node_count, testnet_node_count, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count FROM blockchain`;
+		let queryPrefix = `SELECT id, name, note, node_count, testnet_node_count, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count FROM blockchain`;
 
 		// don't take care of none value
 		// queryPrefix += ` AND ${params.sortByField} IS NOT NULL`;

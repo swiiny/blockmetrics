@@ -35,7 +35,7 @@ app.use(limiter);
 // - offset: unsigned number less than limit
 // - limit: unsigned number greater than offset
 app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
-	const { sortBy, desc = true, offset = 0, limit = 30 } = req.query;
+	const { sortBy = 'blockchain_power_consumption', desc = false, offset = 0, limit = 30 } = req.query;
 
 	try {
 		const params = {
@@ -47,8 +47,8 @@ app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
 
 		const result = await getBlockchains(pool, params);
 
-		if (result[0][0]) {
-			res.send(result[0][0]);
+		if (result[0].length) {
+			res.send(result[0]);
 			return;
 		} else {
 			throw new Error('getBlockchains failed');

@@ -29,18 +29,18 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const initData = useCallback(async () => {
 		const blockchainId = BLOCKCHAINS_ARRAY.find((bc) => bc.name.toLowerCase().replace(/\s/g, '-') === name)?.id;
 
-		const result = await getBlockchainAndMetadataById(blockchainId || '', ELanguage.en);
+		if (blockchainId) {
+			const result = await getBlockchainAndMetadataById(blockchainId || '', ELanguage.en);
+			const { blockchain: fetchedBlockchain, metadata: fetchMetadata } = result || {};
 
-		const { blockchain: fetchedBlockchain, metadata: fetchMetadata } = result || {};
-
-		setBlockchain(fetchedBlockchain);
-		setMetadata(fetchMetadata);
+			setBlockchain(fetchedBlockchain);
+			setMetadata(fetchMetadata);
+		}
 	}, [name]);
 
 	const initWebsocket = useCallback(() => {
 		if (ws) {
 			ws.close();
-			ws = null;
 		}
 
 		let type;
@@ -76,6 +76,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 
 		ws.onerror = (e: any) => {
 			console.error('socket error', e);
+			setWsConnected(false);
 		};
 
 		ws.onclose = () => {
@@ -106,9 +107,17 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		}
 
 		if (hashrate) {
+			let tempHashrate = hashrate;
+			let tempUnit = 'TH/s';
+
+			if (Math.floor(tempHashrate) > 1000000) {
+				tempHashrate = Math.floor(tempHashrate * 10 ** -3);
+				tempUnit = 'PH/s';
+			}
+
 			result.push({
-				value: hashrate,
-				unit: 'TH/s',
+				value: tempHashrate,
+				unit: tempUnit,
 				isAnimated: true,
 				label: 'Hashrate'
 			});
@@ -127,23 +136,25 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	}, [blockchain]);
 
 	useEffect(() => {
-		initData();
-	}, [name]);
+		name && !blockchain && initData();
+	}, [name, blockchain]);
 
 	useEffect(() => {
 		if (blockchain?.id && !wsAlreaddyConnected) {
+			initWebsocket();
 		}
 	}, [blockchain, wsAlreaddyConnected]);
 
 	useEffect(() => {
-		if (!wsConnected) {
+		if (!wsConnected && wsAlreaddyConnected) {
+			wsTimeout && clearTimeout(wsTimeout);
 			wsTimeout = setTimeout(() => {
 				initWebsocket();
 			}, 5000);
 		} else if (wsTimeout) {
 			clearTimeout(wsTimeout);
 		}
-	}, [wsConnected]);
+	}, [wsConnected, wsAlreaddyConnected]);
 
 	useEffect(() => {
 		return () => ws?.close();
@@ -160,7 +171,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 			/>
 
 			<Main paddingTop={ESize.unset} noMarginTop>
-				<Column columns={8} md={12} lg={8}>
+				<Column columns={9} md={12} lg={8}>
 					<Flex as='ul' horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
 						{selectedData.map(({ value, label, unit, isAnimated, isTimer }) => (
 							<DataText

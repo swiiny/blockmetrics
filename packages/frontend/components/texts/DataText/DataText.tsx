@@ -27,9 +27,9 @@ const DataText: FC<IDataText> = ({ as, value, label, unit, isAnimated, isTimer, 
 
 	return (
 		<StyledDataText {...otherProps}>
-			<Heading as='p' type={ETextType.h1}>
+			<Heading as='p' type={ETextType.h1} singleLine>
 				{isAnimated ? (
-					<CountUp preserveValue end={value} duration={1} separator=',' style={{ color: 'inherit' }} />
+					<CountUp preserveValue end={value} duration={0.1} separator=',' style={{ color: 'inherit' }} />
 				) : isTimer ? (
 					<CountUp
 						preserveValue

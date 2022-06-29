@@ -5,7 +5,8 @@ import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import BlockchainCard from '../../../cards/BlockchainCard';
-import { StyledBlockchainList } from './BlockchainPage.styles';
+import { StyledBlockchainList } from './BlockchainsPage.styles';
+import { axiosRest } from '../../../../utils/variables';
 
 const HeaderData = {
 	title: 'Blockchains',
@@ -19,7 +20,7 @@ const BlockchainsPage: NextPage = () => {
 
 	let ws: W3CWebSocket;
 
-	const fetchData = async () => {
+	const initWebsocket = async () => {
 		if (ws) {
 			ws.close();
 		}
@@ -63,7 +64,17 @@ const BlockchainsPage: NextPage = () => {
 
 	const refresh = (isActivated: boolean) => {
 		if (!isActivated) {
-			fetchData();
+			initWebsocket();
+		}
+	};
+
+	const fetchData = async () => {
+		try {
+			const res = await axiosRest('/get/blockchains');
+			setBlockchains(res.data);
+			initWebsocket();
+		} catch (err) {
+			console.error('fetchData', err);
 		}
 	};
 
