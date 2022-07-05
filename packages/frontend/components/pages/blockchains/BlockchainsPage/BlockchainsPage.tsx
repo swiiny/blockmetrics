@@ -5,7 +5,8 @@ import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import BlockchainCard from '../../../cards/BlockchainCard';
-import { StyledBlockchainList } from './BlockchainPage.styles';
+import { StyledBlockchainList } from './BlockchainsPage.styles';
+import { axiosRest } from '../../../../utils/variables';
 
 const HeaderData = {
 	title: 'Blockchains',
@@ -19,7 +20,7 @@ const BlockchainsPage: NextPage = () => {
 
 	let ws: W3CWebSocket;
 
-	const fetchData = async () => {
+	const initWebsocket = async () => {
 		if (ws) {
 			ws.close();
 		}
@@ -28,15 +29,20 @@ const BlockchainsPage: NextPage = () => {
 		let type;
 		let strToRemove;
 
-		if (process.env.NODE_ENV === 'production') {
-			type = 'wss';
-			strToRemove = 'https://';
-		} else {
+		// if process.env.WS_URL start with http then replace it by ws
+		if ((process.env.WS_URL as string).startsWith('http')) {
 			type = 'ws';
-			strToRemove = 'http://';
+			strToRemove = 'http';
+		} else {
+			type = 'wss';
+			strToRemove = 'ws';
 		}
 
 		const removed = process.env.WS_URL?.replace(strToRemove, '');
+
+		console.log('ws_url', process.env.WS_URL);
+		console.log('res', `${type}://${removed}/`);
+
 		ws = new W3CWebSocket(`${type}://${removed}/`);
 
 		ws.onopen = () => {
@@ -63,7 +69,17 @@ const BlockchainsPage: NextPage = () => {
 
 	const refresh = (isActivated: boolean) => {
 		if (!isActivated) {
-			fetchData();
+			initWebsocket();
+		}
+	};
+
+	const fetchData = async () => {
+		try {
+			const res = await axiosRest('/get/blockchains');
+			setBlockchains(res.data);
+			initWebsocket();
+		} catch (err) {
+			console.error('fetchData', err);
 		}
 	};
 

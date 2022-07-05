@@ -43,16 +43,18 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [x] ~~Setup data update cycle~~
 -   [x] fetch new blocks with Websockets API ~~(only when all the db is update with all blocks data)~~
 -   [ ] get blockchain power consumption for proof of work networks
+-   [ ] prevent bitcoin webscoket from disconnecting
 
-### API - REST
+### API - REST :white_check_mark:
 
 -   [x] Add CORS policies
 -   [x] Add Rate limiter
--   [ ] Create Endpoints
+-   [x] Create Single blockchain endpoint
 
 ### API - Websocket
 
 -   [x] Set up WS Server
+-   [ ] set up single blockchain websocket connection
 
 ### Frontend
 
