@@ -71,6 +71,8 @@ const BlockchainsPage: NextPage = () => {
 
 	const fetchData = async (isActivated: boolean = false) => {
 		try {
+			console.log('NODE_ENV ===========>');
+			console.log('node_env', process.env.NODE_ENV);
 			console.log('API_URL ===========>');
 			console.log('api_url', process.env.API_URL);
 			console.log('api_url_complete', process.env.API_URL + '/v1/api/rest');
