@@ -5,7 +5,7 @@ import cors from 'cors';
 import { getBlockchainById, getBlockchains, getChartByIdAndType, getMetadataById } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
 import { EDailyData } from './utils/variables.js';
-import httpsRedirect from 'express-https-redirect';
+// import httpsRedirect from 'express-https-redirect';
 
 const BASE_URL_V1 = '/v1/api/rest';
 
@@ -30,8 +30,8 @@ app.enable('trust proxy');
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(limiter);
-app.use('/', httpsRedirect());
-app.use(`${BASE_URL_V1}/ping`, httpsRedirect());
+//app.use('/', httpsRedirect());
+//app.use(`${BASE_URL_V1}/ping`, httpsRedirect());
 
 // returns blockchains sorted by default by rank
 // query parameters could be
