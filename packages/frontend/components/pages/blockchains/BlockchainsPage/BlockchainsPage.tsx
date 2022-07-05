@@ -30,12 +30,12 @@ const BlockchainsPage: NextPage = () => {
 		let strToRemove;
 
 		// if process.env.WS_URL start with http then replace it by ws
-		if ((process.env.WS_URL as string).startsWith('http')) {
+		if ((process.env.WS_URL as string).startsWith('http://')) {
 			type = 'ws';
-			strToRemove = 'http';
+			strToRemove = 'http://';
 		} else {
 			type = 'wss';
-			strToRemove = 'ws';
+			strToRemove = 'https://';
 		}
 
 		const removed = process.env.WS_URL?.replace(strToRemove, '');
