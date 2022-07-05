@@ -3,8 +3,8 @@ const nextConfig = {
 	reactStrictMode: true,
 	env: {
 		SERVER_URL: process.env.SERVER_URL,
-		API_URL: process.env.API_URL,
-		WS_URL: process.env.WS_URL
+		API_URL: 'http://10.101.11.157',
+		WS_URL: 'http://10.101.11.147'
 	},
 	compiler: {
 		// remove .babelrc to test these changes
