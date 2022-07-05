@@ -5,6 +5,7 @@ import cors from 'cors';
 import { getBlockchainById, getBlockchains, getChartByIdAndType, getMetadataById } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
 import { EDailyData } from './utils/variables.js';
+import httpsRedirect from 'express-https-redirect';
 
 const BASE_URL_V1 = '/v1/api/rest';
 
@@ -29,6 +30,8 @@ app.enable('trust proxy');
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(limiter);
+app.use('/', httpsRedirect());
+app.use(`${BASE_URL_V1}/ping`, httpsRedirect());
 
 // returns blockchains sorted by default by rank
 // query parameters could be
@@ -186,6 +189,10 @@ app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
 	res.send('pong');
 });
 
+app.get(`${BASE_URL_V1}/pong`, async (req, res) => {
+	res.send('ping');
+});
+/*
 app.use(function (request, response, next) {
 	if (process.env.NODE_ENV !== 'development' && !request.secure) {
 		return response.redirect('https://' + request.headers.host + request.url);
@@ -193,6 +200,7 @@ app.use(function (request, response, next) {
 
 	next();
 });
+*/
 
 app.listen(process.env.API_PORT, async () => {
 	console.log(`Server listening on port ${process.env.API_PORT}`);
