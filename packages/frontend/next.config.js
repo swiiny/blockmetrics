@@ -1,3 +1,9 @@
+console.log('next config', {
+	SERVER_URL: process.env.SERVER_URL,
+	API_URL: process.env.API_URL,
+	WS_URL: process.env.WS_URL
+});
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
