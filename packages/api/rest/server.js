@@ -24,6 +24,7 @@ const corsOptions = {
 };
 
 const app = express();
+app.enable('trust proxy');
 
 app.use(cors(corsOptions));
 app.use(helmet());
@@ -183,6 +184,14 @@ app.get(`${BASE_URL_V1}/get/blockchain/chart`, async (req, res) => {
 // test endpoint, should respond the string "pong"
 app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
 	res.send('pong');
+});
+
+app.use(function (request, response, next) {
+	if (process.env.NODE_ENV !== 'development' && !request.secure) {
+		return response.redirect('https://' + request.headers.host + request.url);
+	}
+
+	next();
 });
 
 app.listen(process.env.API_PORT, async () => {

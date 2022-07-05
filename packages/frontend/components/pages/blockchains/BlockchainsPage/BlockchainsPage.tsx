@@ -80,8 +80,8 @@ const BlockchainsPage: NextPage = () => {
 			console.log('WS_URL ===========>');
 			console.log('ws_url', process.env.WS_URL);
 
-			const res = await axiosRest('/get/blockchains');
-			setBlockchains(res.data);
+			// const res = await axiosRest('/get/blockchains');
+			// setBlockchains(res.data);
 
 			if (!isActivated) {
 				initWebsocket();

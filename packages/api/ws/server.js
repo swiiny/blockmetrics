@@ -5,6 +5,8 @@ import { createDbPool } from './utils/pool.js';
 // connection pool
 let pool;
 
+// TODO : SETUP SECURE CONNECTION
+
 const wss = new WebSocketServer({
 	port: process.env.WS_PORT,
 	perMessageDeflate: {
