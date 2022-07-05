@@ -1,11 +1,15 @@
+const env = {
+	SERVER_URL: process.env.SERVER_URL,
+	API_URL: process.env.API_URL,
+	WS_URL: process.env.WS_URL
+};
+
+console.log('env', env);
+
 /** @type {import('next').NextConfig} */
 const nextConfig = {
 	reactStrictMode: true,
-	env: {
-		SERVER_URL: process.env.SERVER_URL,
-		API_URL: process.env.API_URL,
-		WS_URL: process.env.WS_URL
-	},
+	env: { ...env },
 	compiler: {
 		// remove .babelrc to test these changes
 		styledComponents: true, // ssr and displayName are configured by default
@@ -18,5 +22,7 @@ const nextConfig = {
 		ignoreDuringBuilds: true
 	}
 };
+
+console.log('nextConfig', nextConfig);
 
 module.exports = nextConfig;
