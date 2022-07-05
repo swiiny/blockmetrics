@@ -29,15 +29,20 @@ const BlockchainsPage: NextPage = () => {
 		let type;
 		let strToRemove;
 
-		if (process.env.NODE_ENV === 'production') {
-			type = 'wss';
-			strToRemove = 'https://';
-		} else {
+		// if process.env.WS_URL start with http then replace it by ws
+		if ((process.env.WS_URL as string).startsWith('http')) {
 			type = 'ws';
-			strToRemove = 'http://';
+			strToRemove = 'http';
+		} else {
+			type = 'wss';
+			strToRemove = 'ws';
 		}
 
 		const removed = process.env.WS_URL?.replace(strToRemove, '');
+
+		console.log('ws_url', process.env.WS_URL);
+		console.log('res', `${type}://${removed}/`);
+
 		ws = new W3CWebSocket(`${type}://${removed}/`);
 
 		ws.onopen = () => {
