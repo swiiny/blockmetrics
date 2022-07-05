@@ -386,7 +386,13 @@ async function initWebsocketProvider(chain, con) {
 			clearTimeout(pingTimeout);
 		}
 
-		console.log('on close called');
+		// get current date with hour and minutes
+		const date = new Date();
+		const dateString = `${date.getFullYear()}-${
+			date.getMonth() + 1
+		}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+
+		console.log('WS closed', chain.name, dateString);
 		initWebsocketProvider(chain, con);
 	});
 

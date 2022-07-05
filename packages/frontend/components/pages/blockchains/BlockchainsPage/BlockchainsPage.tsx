@@ -69,13 +69,7 @@ const BlockchainsPage: NextPage = () => {
 		};
 	};
 
-	const refresh = (isActivated: boolean) => {
-		if (!isActivated) {
-			initWebsocket();
-		}
-	};
-
-	const fetchData = async () => {
+	const fetchData = async (isActivated: boolean = false) => {
 		try {
 			console.log('API_URL ===========>');
 			console.log('api_url', process.env.API_URL);
@@ -86,10 +80,12 @@ const BlockchainsPage: NextPage = () => {
 
 			const res = await axiosRest('/get/blockchains');
 			setBlockchains(res.data);
-			initWebsocket();
+
+			if (!isActivated) {
+				initWebsocket();
+			}
 		} catch (err) {
 			console.error('fetchData', err);
-			initWebsocket();
 		}
 	};
 
@@ -110,7 +106,7 @@ const BlockchainsPage: NextPage = () => {
 			<Header
 				title={HeaderData.title}
 				subtitle={HeaderData.subtitle}
-				refreshAction={!wsConnected ? () => refresh(wsConnected) : undefined}
+				refreshAction={!wsConnected ? () => fetchData() : undefined}
 			/>
 
 			<Main>
