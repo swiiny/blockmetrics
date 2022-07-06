@@ -20,12 +20,21 @@ const limiter = rateLimit({
 });
 
 const corsOptions = {
-	origin: process.env.FRONTEND_URL,
+	origin: [
+		process.env.FRONTEND_URL,
+		'http://blockmetrics.jcloud-ver-jpc.ik-server.com',
+		'https://blockmetrics.jcloud-ver-jpc.ik-server.com',
+		'https://block-metrics.io',
+		'http://block-metrics.io/',
+		'https://block-metrics.com',
+		'http://block-metrics.com/'
+	],
+	methods: ['GET'],
 	optionsSuccessStatus: 200
 };
 
 const app = express();
-app.enable('trust proxy');
+// app.enable('trust proxy');
 
 app.use(cors(corsOptions));
 app.use(helmet());
