@@ -76,7 +76,14 @@ export const axiosServer = axios.create({
 });
 
 export const axiosRest = axios.create({
-	baseURL: process.env.API_URL + '/v1/api/rest'
+	baseURL: process.env.API_URL + '/v1/api/rest',
+	headers: {
+		'Content-Type': 'application/json',
+		Accept: 'application/json',
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET',
+		'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+	}
 });
 
 export const axiosWs = axios.create({
