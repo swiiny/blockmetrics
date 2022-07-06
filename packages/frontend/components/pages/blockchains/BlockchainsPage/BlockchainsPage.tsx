@@ -30,7 +30,7 @@ const BlockchainsPage: NextPage = () => {
 		let strToRemove;
 
 		// if process.env.WS_URL start with http then replace it by ws
-		if ((process.env.NEXT_PUBLIC_WS_URL as string).startsWith('http://')) {
+		if ((process.env.WS_URL as string).startsWith('http://')) {
 			type = 'ws';
 			strToRemove = 'http://';
 		} else {
@@ -38,11 +38,11 @@ const BlockchainsPage: NextPage = () => {
 			strToRemove = 'https://';
 		}
 
-		const removed = process.env.NEXT_PUBLIC_WS_URL?.replace(strToRemove, '');
+		const removed = process.env.WS_URL?.replace(strToRemove, '');
 
 		console.log('in initWebsocket removed =====>');
 
-		console.log('ws_url', process.env.NEXT_PUBLIC_WS_URL);
+		console.log('ws_url', process.env.WS_URL);
 		console.log('res', `${type}://${removed}/`);
 
 		ws = new W3CWebSocket(`${type}://${removed}/`);
@@ -74,11 +74,11 @@ const BlockchainsPage: NextPage = () => {
 			console.log('NODE_ENV ===========>');
 			console.log('node_env', process.env.NODE_ENV);
 			console.log('API_URL ===========>');
-			console.log('api_url', process.env.NEXT_PUBLIC_);
-			console.log('api_url_complete', process.env.NEXT_PUBLIC_ + '/v1/api/rest');
+			console.log('api_url', process.env.API_URL);
+			console.log('api_url_complete', process.env.API_URL + '/v1/api/rest');
 
 			console.log('WS_URL ===========>');
-			console.log('ws_url', process.env.NEXT_PUBLIC_WS_URL);
+			console.log('ws_url', process.env.WS_URL);
 
 			const res = await axiosRest('/get/blockchains');
 			setBlockchains(res.data);
