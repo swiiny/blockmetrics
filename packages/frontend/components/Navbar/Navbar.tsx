@@ -33,20 +33,6 @@ export const INTERNAL_LINKS = {
 	}
 };
 
-const deactivateFetchingData = async (): Promise<void> => {
-	console.log('deactivateFetchingData');
-	const res = await axiosServer.get('/fetch/stop');
-
-	console.log('res', res);
-};
-
-const activateFetchingData = async (): Promise<void> => {
-	console.log('activateFetchingData');
-	const res = await axiosServer.get('/fetch/start');
-
-	console.log('res', res);
-};
-
 const Navbar = () => {
 	const router = useRouter();
 	const { pathname } = router;
@@ -64,9 +50,6 @@ const Navbar = () => {
 			<div className='logo' />
 
 			<StyledList>
-				<button onClick={() => deactivateFetchingData()}>stop server</button>
-				<button onClick={() => activateFetchingData()}>start server</button>
-
 				{Object.values(NAVBAR_LINKS).map(({ label, href }) => (
 					<StyledNavbarItem key={href}>
 						<Link href={href}>
