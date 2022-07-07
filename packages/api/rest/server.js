@@ -7,7 +7,7 @@ import { createDbPool } from './utils/pool.js';
 import { EDailyData } from './utils/variables.js';
 // import httpsRedirect from 'express-https-redirect';
 
-const BASE_URL_V1 = '/v1/api/rest';
+const BASE_URL_V1 = '/v1';
 
 // connection pool
 let pool;
