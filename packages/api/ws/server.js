@@ -54,7 +54,7 @@ async function fetchAndSendBlockchains() {
 		}
 
 		// wait 3 seconds
-		await new Promise((resolve) => setTimeout(resolve, 1 * 1000));
+		await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
 	}
 }
 

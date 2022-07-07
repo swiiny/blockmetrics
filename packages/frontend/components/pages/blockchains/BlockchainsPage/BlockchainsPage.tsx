@@ -70,24 +70,28 @@ const BlockchainsPage: NextPage = () => {
 	};
 
 	const fetchData = async (isActivated: boolean = false) => {
+		console.log('NODE_ENV ===========>');
+		console.log('node_env', process.env.NODE_ENV);
+		console.log('API_URL ===========>');
+		console.log('api_url', process.env.API_URL);
+		console.log('api_url_complete', process.env.API_URL);
+
+		console.log('WS_URL ===========>');
+		console.log('ws_url', process.env.WS_URL);
+
 		try {
-			console.log('NODE_ENV ===========>');
-			console.log('node_env', process.env.NODE_ENV);
-			console.log('API_URL ===========>');
-			console.log('api_url', process.env.API_URL);
-			console.log('api_url_complete', process.env.API_URL + '/v1/api/rest');
-
-			console.log('WS_URL ===========>');
-			console.log('ws_url', process.env.WS_URL);
-
 			const res = await axiosRest('/get/blockchains');
 			setBlockchains(res.data);
+		} catch (err) {
+			console.error('fetch rest data', err);
+		}
 
+		try {
 			if (!isActivated) {
 				initWebsocket();
 			}
 		} catch (err) {
-			console.error('fetchData', err);
+			console.error('fetch ws data', err);
 		}
 	};
 
