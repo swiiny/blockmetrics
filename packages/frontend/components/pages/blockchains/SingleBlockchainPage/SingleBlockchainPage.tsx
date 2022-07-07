@@ -113,12 +113,13 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		let type;
 		let strToRemove;
 
-		if (process.env.NODE_ENV === 'production') {
-			type = 'wss';
-			strToRemove = 'https://';
-		} else {
+		// if process.env.WS_URL start with http then replace it by ws
+		if ((process.env.WS_URL as string).startsWith('http://')) {
 			type = 'ws';
 			strToRemove = 'http://';
+		} else {
+			type = 'wss';
+			strToRemove = 'https://';
 		}
 
 		const removed = process.env.WS_URL?.replace(strToRemove, '');
