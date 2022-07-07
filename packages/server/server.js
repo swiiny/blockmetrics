@@ -363,7 +363,10 @@ async function initWebsocketProvider(chain, con) {
 	const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 	wsProvider.on('block', async (blockNumber) => {
-		fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+		// wait a second to be sure that the block is fully processed (mainly avalanche issue)
+		setTimeout(() => {
+			fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+		}, 1000);
 	});
 
 	// check each 7.5 seconds if websocket is still connected
