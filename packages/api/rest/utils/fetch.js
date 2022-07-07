@@ -111,8 +111,6 @@ export const getChartByIdAndType = async (pool, id, type) => {
 
 		let query = `SELECT date, ${valueLabel} FROM ${tableLabel} WHERE blockchain_id = ? AND date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`;
 
-		console.log('getChartByIdAndType', query);
-
 		const res = await pool.query(query, [id]);
 
 		return res;

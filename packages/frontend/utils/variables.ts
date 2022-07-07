@@ -76,7 +76,7 @@ export const axiosServer = axios.create({
 });
 
 export const axiosRest = axios.create({
-	baseURL: (process.env.API_URL || 'http://api-rest.block-metrics.io') + '/v1',
+	baseURL: process.env.API_URL || 'http://api-rest.block-metrics.io',
 	headers: {
 		'Content-Type': 'application/json',
 		Accept: 'application/json',
