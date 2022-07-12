@@ -4,6 +4,8 @@ import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
 
 const generateTextStyle = (p: any) => {
 	return css`
+		position: relative;
+
 		${setFontSize(p.size)}
 		${addTransition()}
 
@@ -20,10 +22,30 @@ const generateTextStyle = (p: any) => {
 					text-align: inherit;
 					line-height: inherit;
 			  `
-			: `
-	`}
+			: ``}
 
-			${p.textColor === ETextColor.gradient
+		&::before {
+			content: ' ';
+			position: absolute;
+
+			${addTransition()}
+
+			bottom: -7px;
+			left: 5px;
+
+			height: 3px;
+			width: 0%;
+
+			border-radius: 2px;
+
+			background-color: ${p.theme.colors.primary};
+		}
+
+		&.navbar-active::before {
+			width: 60%;
+		}
+
+		${p.textColor === ETextColor.gradient
 			? css`
 					background: ${p.theme.colors.gradient.toRight};
 					${() => '-webkit-background-clip: text;'}

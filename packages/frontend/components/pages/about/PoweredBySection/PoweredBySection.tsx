@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import React from 'react';
 import Spacing from '../../../../styles/layout/Spacing';
-import Heading from '../../../../styles/theme/components/Heading';
+import BMHeading from '../../../../styles/theme/components/BMHeading';
 import { ESize, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
 import { StyledImageContainer, StyledList, StyledPoweredBySection } from './PoweredBySection.styles';
 import { motion, Variants } from 'framer-motion';
@@ -32,15 +32,10 @@ const SERVICES = [
 const PoweredBySection: React.FC<{ variants: Variants }> = ({ variants, ...otherProps }: { variants: Variants }) => {
 	return (
 		<StyledPoweredBySection {...otherProps}>
-			<motion.div
-				initial='offscreen'
-				whileInView='onscreen'
-				variants={variants}
-				viewport={{ once: true, amount: 0.8 }}
-			>
-				<Heading type={ETextType.h3} textAlign={ETextAlign.center}>
+			<motion.div initial='offscreen' whileInView='onscreen' variants={variants} viewport={{ once: true, amount: 0.8 }}>
+				<BMHeading type={ETextType.h3} textAlign={ETextAlign.center}>
 					Powered By
-				</Heading>
+				</BMHeading>
 			</motion.div>
 
 			<Spacing size={ESize['3xl']} />

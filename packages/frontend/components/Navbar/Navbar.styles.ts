@@ -18,7 +18,7 @@ export const StyledNavbar = styled.nav<{ isHidden?: boolean }>`
 
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
-	height: 80px;
+	height: 120px;
 
 	${(p) => (p.isHidden ? `display: none;` : '')}
 `;
@@ -33,8 +33,8 @@ export const StyledList = styled.ul`
 export const StyledNavbarItem = styled.li`
 	& > a {
 		display: inline-block;
-		margin: 0 ${(p) => p.theme.spacing.xs};
-		padding: ${(p) => p.theme.spacing.xs} 0;
+		margin: 0 ${(p) => p.theme.spacing.s};
+		padding: ${(p) => p.theme.spacing.s} 0;
 	}
 
 	&:nth-child(1) a {

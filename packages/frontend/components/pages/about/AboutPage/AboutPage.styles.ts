@@ -1,6 +1,6 @@
 import styled from 'styled-components';
-import Text from '../../../../styles/theme/components/Text';
+import BMText from '../../../../styles/theme/components/BMText';
 
-export const TextEx = styled(Text)`
+export const TextEx = styled(BMText)`
 	overflow-wrap: break-word;
 `;

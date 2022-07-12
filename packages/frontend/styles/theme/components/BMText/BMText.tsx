@@ -1,9 +1,9 @@
 import React from 'react';
 import { ESize, ETextAlign, ETextColor, ETextType } from '../../utils/enum';
-import { StyledTextLink, StyledTextParagraph, StyledTextSpan } from './Text.styles';
-import { IText } from './Text.type';
+import { StyledTextLink, StyledTextParagraph, StyledTextSpan } from './BMText.styles';
+import { IBMText } from './BMText.type';
 
-const Text: React.FC<IText> = ({
+const BMText: React.FC<IBMText> = ({
 	children,
 	type = ETextType.p,
 	textColor = ETextColor.default,
@@ -97,4 +97,4 @@ const Text: React.FC<IText> = ({
 	}
 };
 
-export { Text };
+export { BMText };

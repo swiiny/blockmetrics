@@ -32,15 +32,16 @@ export const darkTheme: DefaultTheme = {
 		bg: '#121923',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
+		deepBlue: '#25A9DC',
 		gradient: {
-			toRight: 'linear-gradient(to right, #79DCEF, #0D9BD7)',
-			toLeft: 'linear-gradient(to left, #79DCEF, #0D9BD7)',
-			toTop: 'linear-gradient(to top, #79DCEF, #0D9BD7)',
-			toBottom: 'linear-gradient(to bottom, #79DCEF, #0D9BD7)'
+			toRight: 'linear-gradient(to right, #6AD4F3, #25A9DC)',
+			toLeft: 'linear-gradient(to left, #6AD4F3, #25A9DC)',
+			toTop: 'linear-gradient(to top, #6AD4F3, #25A9DC)',
+			toBottom: 'linear-gradient(to bottom, #6AD4F3, #25A9DC)'
 		},
 		text: {
-			default: '#B3FCFF',
-			light: '#B3FCFF80',
+			default: '#FFFFFF',
+			light: '#79DCEF',
 			accent: '#0D9BD7',
 			positive: '#6BFFA6',
 			negative: '#F22C3F',
@@ -57,15 +58,16 @@ export const lightTheme: DefaultTheme = {
 		bg: '#121923',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
+		deepBlue: '#25A9DC',
 		gradient: {
-			toRight: 'linear-gradient(to right, #79DCEF, #0D9BD7)',
-			toLeft: 'linear-gradient(to left, #79DCEF, #0D9BD7)',
-			toTop: 'linear-gradient(to top, #79DCEF, #0D9BD7)',
-			toBottom: 'linear-gradient(to bottom, #79DCEF, #0D9BD7)'
+			toRight: 'linear-gradient(to right, #6AD4F3, #25A9DC)',
+			toLeft: 'linear-gradient(to left, #6AD4F3, #25A9DC)',
+			toTop: 'linear-gradient(to top, #6AD4F3, #25A9DC)',
+			toBottom: 'linear-gradient(to bottom, #6AD4F3, #25A9DC)'
 		},
 		text: {
 			default: '#B3FCFF',
-			light: '#B3FCFF80',
+			light: '#79DCEF',
 			accent: '#0D9BD7',
 			positive: '#6BFFA6',
 			negative: '#F22C3F',

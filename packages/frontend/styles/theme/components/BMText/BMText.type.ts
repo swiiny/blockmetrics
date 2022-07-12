@@ -1,6 +1,6 @@
 import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../utils/enum';
 
-interface IText {
+interface IBMText {
 	children: React.ReactNode | string;
 	type?: ETextType;
 	textColor?: ETextColor;
@@ -19,4 +19,4 @@ interface IText {
 	as?: any;
 }
 
-export type { IText };
+export type { IBMText };

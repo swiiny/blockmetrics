@@ -5,12 +5,12 @@ import Main from '../../../../styles/layout/Main';
 import Flex from '../../../../styles/layout/Flex';
 import { EFlex, ESize, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
 import { motion, Variants } from 'framer-motion';
-import Heading from '../../../../styles/theme/components/Heading';
+import BMHeading from '../../../../styles/theme/components/BMHeading';
 import { StyledFullHeightContainer, StyledHalfHeightContainer, StyledScreenHeightContainer } from '../story.styles';
 import Spacing from '../../../../styles/layout/Spacing';
 import { TitleAndValue } from '../TitleAndValue';
-import Text from '../../../../styles/theme/components/Text';
-import TextWithGradient from '../../../../styles/theme/components/TextWithGradient';
+import BMText from '../../../../styles/theme/components/BMText';
+import TextWithGradient from '../../../../styles/theme/components/BMTextWithGradient';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -48,9 +48,9 @@ const StoryPage: NextPage = () => {
 				<Flex direction={EFlex.column} vertical={EFlex.center}>
 					<StyledScreenHeightContainer>
 						<StyledFullHeightContainer>
-							<Heading type={ETextType.h1} textAlign={ETextAlign.center}>
+							<BMHeading type={ETextType.h1} textAlign={ETextAlign.center}>
 								Blockchains are power consumming
-							</Heading>
+							</BMHeading>
 						</StyledFullHeightContainer>
 
 						<Animated>
@@ -61,9 +61,9 @@ const StoryPage: NextPage = () => {
 
 						<section>
 							<Animated>
-								<Heading type={ETextType.h1} textAlign={ETextAlign.center}>
+								<BMHeading type={ETextType.h1} textAlign={ETextAlign.center}>
 									Blockchains are powerful
-								</Heading>
+								</BMHeading>
 							</Animated>
 
 							<Spacing size={ESize['8xl']} />
@@ -95,9 +95,9 @@ const StoryPage: NextPage = () => {
 
 						<section>
 							<Animated>
-								<Heading type={ETextType.h1} textAlign={ETextAlign.center}>
+								<BMHeading type={ETextType.h1} textAlign={ETextAlign.center}>
 									Users are powerful
-								</Heading>
+								</BMHeading>
 							</Animated>
 
 							<Spacing size={ESize['8xl']} />
@@ -123,18 +123,18 @@ const StoryPage: NextPage = () => {
 
 						<section>
 							<Animated>
-								<Heading type={ETextType.h1} textAlign={ETextAlign.center}>
+								<BMHeading type={ETextType.h1} textAlign={ETextAlign.center}>
 									Blockchains are even more...
-								</Heading>
+								</BMHeading>
 							</Animated>
 
 							<Spacing size={ESize['8xl']} />
 
 							<StyledFullHeightContainer>
 								<Animated>
-									<Text textAlign={ETextAlign.center}>
+									<BMText textAlign={ETextAlign.center}>
 										<TextWithGradient>Discover</TextWithGradient>
-									</Text>
+									</BMText>
 								</Animated>
 							</StyledFullHeightContainer>
 						</section>

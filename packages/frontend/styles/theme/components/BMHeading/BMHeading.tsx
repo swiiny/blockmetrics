@@ -1,9 +1,9 @@
 import React from 'react';
 import { ETextType, ETextAlign, ETextColor } from '../../utils/enum';
-import { IText } from '../Text/Text.type';
-import { StyledHeadingFour, StyledHeadingOne, StyledHeadingThree, StyledHeadingTwo } from './Heading.styles';
+import { IBMText } from '../BMText/BMText.type';
+import { StyledHeadingFour, StyledHeadingOne, StyledHeadingThree, StyledHeadingTwo } from './BMHeading.styles';
 
-const Heading: React.FC<IText> = ({
+const BMHeading: React.FC<IBMText> = ({
 	className = '',
 	singleLine = true,
 	style,
@@ -85,4 +85,4 @@ const Heading: React.FC<IText> = ({
 	}
 };
 
-export { Heading };
+export { BMHeading };

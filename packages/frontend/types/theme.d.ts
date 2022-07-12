@@ -29,6 +29,7 @@ declare module 'styled-components' {
 			bg: string;
 			primary: string;
 			secondary: string;
+			deepBlue: string;
 			gradient: {
 				toRight: string;
 				toLeft: string;

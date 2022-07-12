@@ -1,7 +1,7 @@
 import React, { FC, useEffect, useReducer } from 'react';
 import Spacing from '../../../styles/layout/Spacing';
-import Heading from '../../../styles/theme/components/Heading';
-import Text from '../../../styles/theme/components/Text';
+import BMHeading from '../../../styles/theme/components/BMHeading';
+import BMText from '../../../styles/theme/components/BMText';
 import { ESize, ETextColor, ETextType } from '../../../styles/theme/utils/enum';
 import { IDataText } from './DataText.type';
 import CountUp from 'react-countup';
@@ -27,7 +27,7 @@ const DataText: FC<IDataText> = ({ as, value, label, unit, isAnimated, isTimer, 
 
 	return (
 		<StyledDataText {...otherProps}>
-			<Heading as='p' type={ETextType.h1} singleLine>
+			<BMHeading as='p' type={ETextType.h1} singleLine>
 				{isAnimated ? (
 					<CountUp preserveValue end={value} duration={0.1} separator=',' style={{ color: 'inherit' }} />
 				) : isTimer ? (
@@ -44,17 +44,17 @@ const DataText: FC<IDataText> = ({ as, value, label, unit, isAnimated, isTimer, 
 				)}
 
 				{unit ? (
-					<Text type={ETextType.span} inheritStyle={false} size={ESize.l} textColor={ETextColor.light}>
+					<BMText type={ETextType.span} inheritStyle={false} size={ESize.l} textColor={ETextColor.light}>
 						{` ${unit}`}
-					</Text>
+					</BMText>
 				) : (
 					<></>
 				)}
-			</Heading>
+			</BMHeading>
 
 			<Spacing size={ESize['4xs']} />
 
-			<Text size={ESize.m}>{label}</Text>
+			<BMText size={ESize.m}>{label}</BMText>
 		</StyledDataText>
 	);
 };

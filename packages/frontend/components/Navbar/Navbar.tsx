@@ -1,8 +1,11 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useMemo } from 'react';
-import Text from '../../styles/theme/components/Text';
-import { ESize, ETextColor, ETextType } from '../../styles/theme/utils/enum';
+import Flex from '../../styles/layout/Flex';
+import Spacing from '../../styles/layout/Spacing';
+import BMButton from '../../styles/theme/components/BMButton';
+import BMText from '../../styles/theme/components/BMText';
+import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../styles/theme/utils/enum';
 import { StyledNavbar, StyledNavbarItem, StyledList } from './Navbar.styles';
 
 export const NAVBAR_LINKS = {
@@ -19,7 +22,7 @@ export const NAVBAR_LINKS = {
 		href: '/compare'
 	},
 	about: {
-		label: 'About',
+		label: 'About Blockmetrics',
 		href: '/about'
 	}
 };
@@ -45,26 +48,36 @@ const Navbar = () => {
 
 	return (
 		<StyledNavbar isHidden={navbarHidden}>
-			<div className='logo' />
+			<Flex vertical={EFlex.center}>
+				<div className='logo' />
 
-			<StyledList>
-				{Object.values(NAVBAR_LINKS).map(({ label, href }) => (
-					<StyledNavbarItem key={href}>
-						<Link href={href}>
-							<a>
-								<Text
-									type={ETextType.span}
-									inheritStyle={false}
-									size={ESize.m}
-									textColor={pathname === href ? ETextColor.gradient : ETextColor.default}
-								>
-									{label}
-								</Text>
-							</a>
-						</Link>
-					</StyledNavbarItem>
-				))}
-			</StyledList>
+				<Spacing size={ESize.xl} />
+
+				<StyledList>
+					{Object.values(NAVBAR_LINKS).map(({ label, href }) => (
+						<StyledNavbarItem key={href}>
+							<Link href={href}>
+								<a>
+									<BMText
+										type={ETextType.span}
+										inheritStyle={false}
+										weight={ETextWeight.thin}
+										size={ESize.m}
+										className={pathname === href ? 'navbar-active' : ''}
+										textColor={pathname === href ? ETextColor.light : ETextColor.default}
+									>
+										{label}
+									</BMText>
+								</a>
+							</Link>
+						</StyledNavbarItem>
+					))}
+				</StyledList>
+			</Flex>
+
+			<BMButton size={ESize.m} secondary onClick={() => alert('Work in progress')}>
+				What is a blockchain ?
+			</BMButton>
 		</StyledNavbar>
 	);
 };

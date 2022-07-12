@@ -9,7 +9,7 @@ import { useRouter } from 'next/router';
 import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
 import { EChartType, EDailyData, EFlex, ELanguage, ESize, ETextColor } from '../../../../styles/theme/utils/enum';
 import Column from '../../../../styles/layout/Column';
-import Text from '../../../../styles/theme/components/Text';
+import BMText from '../../../../styles/theme/components/BMText';
 import Flex from '../../../../styles/layout/Flex';
 import { DataText } from '../../../texts/DataText/DataText';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
@@ -205,7 +205,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 				</Column>
 
 				<Column columns={6} md={12} lg={8}>
-					<Text textColor={ETextColor.light}>{metadata?.description || ''}</Text>
+					<BMText textColor={ETextColor.light}>{metadata?.description || ''}</BMText>
 				</Column>
 
 				<Spacing size={ESize.xl} />
