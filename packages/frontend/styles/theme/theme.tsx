@@ -29,7 +29,7 @@ export const darkTheme: DefaultTheme = {
 	...defaultTheme,
 	colors: {
 		// set theme colors
-		bg: '#121923',
+		bg: '#131923',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
 		deepBlue: '#25A9DC',
@@ -55,7 +55,7 @@ export const lightTheme: DefaultTheme = {
 	...defaultTheme,
 	colors: {
 		// set theme colors
-		bg: '#121923',
+		bg: '#131923',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
 		deepBlue: '#25A9DC',

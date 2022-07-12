@@ -3,6 +3,7 @@ import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
+import HomeHeader from '../HomeHeader';
 
 const HeaderData = {
 	title: 'Lorem ipsum',
@@ -15,9 +16,9 @@ const HomePage: NextPage = () => {
 		<>
 			<Meta title='Block metrics' />
 
-			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
-
-			<Main></Main>
+			<Main>
+				<HomeHeader />
+			</Main>
 		</>
 	);
 };

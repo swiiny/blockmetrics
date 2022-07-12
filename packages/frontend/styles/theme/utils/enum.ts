@@ -49,7 +49,7 @@ export enum ETextAlign {
 export enum ETextWeight {
 	thin = '300',
 	normal = 'normal',
-	bold = 'bold'
+	bold = '600'
 }
 
 export enum EMediaQuery {

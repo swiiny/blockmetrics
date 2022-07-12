@@ -14,7 +14,7 @@ export const StyledNavbar = styled.nav<{ isHidden?: boolean }>`
 
 	z-index: 100;
 
-	padding: 0 ${(p) => p.theme.spacing['2xl']};
+	padding: 0 ${(p) => p.theme.spacing['4xl']};
 
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 

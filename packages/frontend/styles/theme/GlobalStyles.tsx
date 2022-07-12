@@ -19,7 +19,7 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
 body {
   margin: 0 auto;
 	max-width: 1600px;
-	padding: 0 ${(p) => p.theme.spacing['2xl']};
+	padding: 0 ${(p) => p.theme.spacing['4xl']};
 
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
@@ -27,6 +27,9 @@ body {
   min-height: 100vh;
 
   overflow-x: hidden;
+
+  background-image: url('/assets/images/bubbles/bubbles-bg.svg');
+  background-repeat: repeat-y;
 }
 
 h1,
@@ -41,7 +44,8 @@ a,
 p,
 input,
 textarea { // TODO : Set font family
-	font-family: SetFontFamily, Helvetica, sans-serif;
+	//font-family: SetFontFamily, Helvetica, sans-serif;
+  font-family: 'Outfit', sans-serif;
 	color: ${(p) => p.theme.colors.text.default};
 
 	margin: 0;
