@@ -30,6 +30,8 @@ body {
 
   background-image: url('/assets/images/bubbles/bubbles-bg.svg');
   background-repeat: repeat-y;
+
+  ${mq(EMediaQuery.sm, `background-size: contain;`)}
 }
 
 h1,

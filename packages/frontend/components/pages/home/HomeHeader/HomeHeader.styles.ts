@@ -76,6 +76,8 @@ export const StyledBlockPattern = styled.div`
 
 		display: flex;
 		justify-content: flex-end;
+
+		${mq(EMediaQuery.md, `display: none;`)}
 	`}
 `;
 export const StyledBlockImage = styled.img`

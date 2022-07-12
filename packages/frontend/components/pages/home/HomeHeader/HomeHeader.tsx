@@ -30,7 +30,7 @@ const HomeHeader: FC = () => {
 
 			<Eclipse size={ESize.s} position={EPosition.topRight} zIndex={0} />
 
-			<Column columns={5}>
+			<Column columns={5} sm={12} md={8} xl={6}>
 				<Flex direction={EFlex.column} fullWidth>
 					<StyledGradientLine />
 
