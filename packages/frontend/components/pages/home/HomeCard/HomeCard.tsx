@@ -4,7 +4,8 @@ import Spacing from '../../../../styles/layout/Spacing';
 import BMGradientSeparator from '../../../../styles/theme/components/BMGradientSeparator';
 import BMHeading from '../../../../styles/theme/components/BMHeading';
 import BMText from '../../../../styles/theme/components/BMText';
-import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
+import { EChartType, EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
+import BarChart from '../../../charts/BarChart';
 import { IHomeCardData } from '../HomeData/HomeData.type';
 import { StyledHomeCard, StyledIcon, StyledIconContainer } from './HomeCard.styles';
 
@@ -18,7 +19,7 @@ const HomeCard: FC<IHomeCardData> = ({
 	iconSrc,
 	chartTitle,
 	chartType,
-	chartData,
+	chartDataType,
 	...otherProps
 }) => {
 	const formattedValue = useMemo(() => {
@@ -130,6 +131,20 @@ const HomeCard: FC<IHomeCardData> = ({
 			</Flex>
 
 			<BMGradientSeparator margin={ESize.xl} />
+
+			<BMText size={ESize.m} weight={ETextWeight.medium}>
+				{chartTitle}
+			</BMText>
+
+			<Spacing size={ESize.xs} />
+
+			{chartType === EChartType.line ? (
+				<></>
+			) : chartType === EChartType.bar ? (
+				<BarChart dailyType={chartDataType} deactivateLegend chartHeight={120} />
+			) : (
+				<></>
+			)}
 		</StyledHomeCard>
 	);
 };

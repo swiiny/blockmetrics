@@ -1,4 +1,4 @@
-import { EChartType } from '../../../../styles/theme/utils/enum';
+import { EChartType, EDailyData } from '../../../../styles/theme/utils/enum';
 import { IBarLineChartData } from '../../../../types/charts';
 
 interface IHomeCardData {
@@ -11,7 +11,7 @@ interface IHomeCardData {
 	iconSrc: string;
 	chartTitle: string;
 	chartType: EChartType;
-	chartData: IBarLineChartData[]; // @todo(or ILineChartData[])
+	chartDataType: EDailyData;
 }
 
 export type { IHomeCardData };

@@ -48,7 +48,8 @@ export enum ETextAlign {
 
 export enum ETextWeight {
 	light = '300',
-	normal = 'normal',
+	normal = '400',
+	medium = '500',
 	semiBold = '600'
 }
 
@@ -111,12 +112,15 @@ export enum EDailyData {
 	newTokens = 'newTokens',
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
-	transactionCount = 'transactionCount'
+	transactionCount = 'transactionCount',
+	globalActiveUsers = 'globalActiveUsers',
+	globalDailyTransactionCount = 'globalDailyTransactionCount',
+	globalDailyPowerConsumption = 'globalDailyPowerConsumption'
 }
 
 export enum EChartType {
-	line,
-	bar,
-	pie,
-	doughnut
+	line = 'line',
+	bar = 'bar',
+	pie = 'pie',
+	doughnut = 'doughnut'
 }

@@ -11,47 +11,9 @@ import { getDailyValueFromType } from '../../../styles/theme/utils/functions';
 // required to get the gradient in the charts
 Chart.register(Filler, CategoryScale, LinearScale, BarElement);
 
-const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
+const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = false, chartHeight = 150 }) => {
 	const [chartData, setChartData] = useState<IBarLineChartData[]>([]);
 	const [loading, updateLoading] = useReducer((_: boolean, value: boolean) => value, false);
-
-	const { screenWidth, isSmallerThanSm, isSmallerThanMd, isSmallerThanLg } = useResponsive();
-
-	const chartFrames: IChartContainer = useMemo(() => {
-		let containerHeight = '300px';
-		let chartHeight = '300px';
-		let chartVerticalDelta = '0px';
-		let containerMarginTop = '0px';
-		let chartHeightInt = 300;
-
-		if (isSmallerThanSm) {
-			containerHeight = '120px';
-			chartHeight = '120px';
-			chartHeightInt = 120;
-			chartVerticalDelta = '0px';
-			containerMarginTop = '0px';
-		} else if (isSmallerThanMd) {
-			containerHeight = '250px';
-			chartHeight = '250px';
-			chartHeightInt = 250;
-			chartVerticalDelta = '0px';
-			containerMarginTop = '0px';
-		} else if (isSmallerThanLg) {
-			containerHeight = '250px';
-			chartHeight = '250px';
-			chartHeightInt = 250;
-			chartVerticalDelta = '-0px';
-			containerMarginTop = '0px';
-		}
-
-		return {
-			containerHeight,
-			containerMarginTop,
-			chartHeight,
-			chartHeightInt,
-			chartVerticalDelta
-		};
-	}, [screenWidth, isSmallerThanSm, isSmallerThanMd, isSmallerThanMd, isSmallerThanLg]);
 
 	const xData = useMemo(() => {
 		try {
@@ -92,13 +54,13 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
 
 		try {
 			ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
-			borderFill = ctx?.createLinearGradient(chartFrames?.chartHeightInt || 500, 0, 100, 0);
+			borderFill = ctx?.createLinearGradient(chartHeight || 500, 0, 100, 0);
 			borderFill?.addColorStop(1, '#7AD1BF');
 			borderFill?.addColorStop(0, '#25B0C4');
 
-			gradientFill = ctx?.createLinearGradient(0, 0, 0, chartFrames?.chartHeightInt || 500); // replace 500 by chart Height
-			gradientFill?.addColorStop(0, `${'#25B0C4' /* props.theme.colors.gradientStart */}30`);
-			gradientFill?.addColorStop(1, `${'#7AD1BF' /* props.theme.colors.gradientEnd */}00`);
+			gradientFill = ctx?.createLinearGradient(0, 0, 0, chartHeight || 500); // replace 500 by chart Height
+			gradientFill?.addColorStop(0, `${'#25A9DC' /* props.theme.colors.gradientStart */}`);
+			gradientFill?.addColorStop(1, `${'#6AD4F3' /* props.theme.colors.gradientEnd */}`);
 		} catch {
 			//
 		}
@@ -109,14 +71,14 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
 			datasets: [
 				{
 					data: yData,
-					backgroundColor: 'rgba(255, 99, 132, 0.5)',
+					//backgroundColor: 'rgba(255, 99, 132, 0.5)',
 					radius: 2,
 					// borderWidth: 1,
-					grid: { display: false }
+					grid: { display: false },
 					// fill: true,
 					// pointRadius: 0,
 					// tension: 0.1,
-					//backgroundColor: gradientFill,
+					backgroundColor: gradientFill
 					//borderColor: borderFill,
 					//pointBorderColor: borderFill,
 					//pointBackgroundColor: borderFill,
@@ -125,11 +87,12 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
 				}
 			]
 		};
-	}, [chartFrames?.chartHeightInt, xData, yData]);
+	}, [chartHeight, xData, yData]);
 
 	const chartOptions = useMemo(() => {
 		const data: Chart.ChartOptions = {
 			responsive: true,
+			maintainAspectRatio: false,
 			animation: {}, //chartAnimation,
 			// interaction: false,
 			title: {
@@ -141,7 +104,7 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
 					display: false
 				},
 				y: {
-					// display: false, // check if we need to display the y axis
+					display: !deactivateLegend, // check if we need to display the y axis
 					grid: {
 						display: false
 					},
@@ -190,6 +153,16 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
 				updateLoading(false);
 				console.error('Error fetchChartData', err);
 			}
+		} else if (dailyType) {
+			// @todo(fetch global data)
+			/*
+			switch (dailyType) {
+				case '':
+					break;
+				default:
+					break;
+			}
+			*/
 		}
 	}, [dailyType, chainId]);
 
@@ -198,11 +171,11 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId }) => {
 	}, [dailyType, chainId]);
 
 	return loading ? (
-		<StyledChartContainer {...chartFrames}>
+		<StyledChartContainer chartHeight={chartHeight}>
 			<div id='chart-container' className='relative overflow-hidden' />
 		</StyledChartContainer>
 	) : (
-		<StyledChartContainer {...chartFrames}>
+		<StyledChartContainer chartHeight={chartHeight}>
 			<div id='chart-container'>
 				{/* @ts-ignore */}
 				<Bar options={chartOptions} data={chartReady ? datas : null} />

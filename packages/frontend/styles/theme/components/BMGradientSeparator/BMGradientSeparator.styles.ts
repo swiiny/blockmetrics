@@ -38,7 +38,7 @@ export const StyledBMGradientSeparator = styled.span<IBMGradientSeparator>`
 			: ''}
 
 	background: ${`
-		radial-gradient(${p.theme.colors.lightBlue + '30'}, ${p.theme.colors.lightBlue + '00'});
+		radial-gradient(${p.theme.colors.lightBlue + '40'}, ${p.theme.colors.lightBlue + '00'});
 		`};
 	`}
 `;

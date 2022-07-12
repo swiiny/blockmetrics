@@ -9,7 +9,7 @@ export const StyledHomeCard = styled.li`
 
 		border-radius: 30px;
 
-		padding: ${p.theme.spacing.s};
+		padding: ${p.theme.spacing.m};
 
 		&::before {
 			content: ' ';
