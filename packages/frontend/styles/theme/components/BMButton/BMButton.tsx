@@ -24,7 +24,7 @@ const BMButton: FC<IBMButton> = ({
 			aria-label={ariaLabel || (typeof children === 'string' ? children : '')}
 			{...otherProps}
 		>
-			<BMText type={ETextType.span} weight={ETextWeight.bold} size={size} inheritStyle={false}>
+			<BMText type={ETextType.span} weight={ETextWeight.semiBold} size={size} inheritStyle={false}>
 				{children}
 			</BMText>
 		</StyledButton>

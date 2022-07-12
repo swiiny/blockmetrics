@@ -36,16 +36,16 @@ const HomeHeader: FC = () => {
 
 					<Spacing size={ESize.m} />
 
-					<BMHeading type={ETextType.h1} weight={ETextWeight.thin}>
+					<BMHeading type={ETextType.h1} weight={ETextWeight.light}>
 						Blockchain
-						<BMText type={ETextType.span} weight={ETextWeight.bold}>
+						<BMText type={ETextType.span} weight={ETextWeight.semiBold}>
 							{` Data`}
 						</BMText>
 					</BMHeading>
 
 					<Spacing size={ESize.m} />
 
-					<BMText size={ESize.m} weight={ETextWeight.thin}>
+					<BMText size={ESize.m} weight={ETextWeight.light}>
 						Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
 						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
 						scrambled it to make a type specimen book.

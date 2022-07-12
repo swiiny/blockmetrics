@@ -61,7 +61,7 @@ const Navbar = () => {
 									<BMText
 										type={ETextType.span}
 										inheritStyle={false}
-										weight={ETextWeight.thin}
+										weight={ETextWeight.light}
 										size={ESize.m}
 										className={pathname === href ? 'navbar-active' : ''}
 										textColor={pathname === href ? ETextColor.light : ETextColor.default}
