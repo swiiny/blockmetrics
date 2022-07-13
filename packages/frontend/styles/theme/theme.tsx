@@ -32,6 +32,7 @@ export const darkTheme: DefaultTheme = {
 		bg: '#131923',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
+		lightBlue: '#52BBE8',
 		deepBlue: '#25A9DC',
 		gradient: {
 			toRight: 'linear-gradient(to right, #6AD4F3, #25A9DC)',
@@ -58,6 +59,7 @@ export const lightTheme: DefaultTheme = {
 		bg: '#131923',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
+		lightBlue: '#52BBE8',
 		deepBlue: '#25A9DC',
 		gradient: {
 			toRight: 'linear-gradient(to right, #6AD4F3, #25A9DC)',

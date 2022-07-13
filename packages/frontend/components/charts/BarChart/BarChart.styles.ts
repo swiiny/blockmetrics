@@ -1,17 +1,18 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import { IChartContainer } from './BarChart.type';
 
-export const StyledChartContainer = styled.div<IChartContainer>`
-	position: relative;
-	width: 100%;
-	height: ${(p) => p.containerHeight};
-	margin-top: ${(p) => p.containerMarginTop};
-	z-index: -1;
-	#chart-container {
-		position: absolute;
-		height: ${(p) => p.chartHeight};
-		bottom: ${(p) => p.chartVerticalDelta};
-		left: 0;
-		right: 0;
-	}
+export const StyledChartContainer = styled.div<{ chartHeight?: number }>`
+	${(p) => css`
+		position: relative;
+		width: 100%;
+		height: ${`${p.chartHeight}px`};
+		z-index: 0;
+		#chart-container {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+	`}
 `;

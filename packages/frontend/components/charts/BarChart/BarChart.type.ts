@@ -11,6 +11,7 @@ interface IChartContainer {
 	chartHeight: string;
 	chartHeightInt: number;
 	chartVerticalDelta: string;
+	heightFactor: number;
 }
 
 export type { IChartContainer, IBarChart };

@@ -74,7 +74,7 @@ export const StyledHeadingThree = styled.h3<{
 	opacityReduced?: boolean;
 	as?: ETextType;
 }>`
-	font-size: 2.25rem;
+	font-size: 2.5rem;
 	line-height: ${(p) => (p.singleLine ? `1` : `2.625rem`)};
 	white-space: ${(p) => (p.singleLine ? `nowrap` : `unset`)};
 	font-weight: normal;

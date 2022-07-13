@@ -36,7 +36,7 @@ const Header: React.FC<IHeader> = ({ title, subtitle, image, refreshAction = nul
 
 			<Spacing size={ESize.l} />
 
-			<BMText weight={ETextWeight.bold} size={ESize.l} textColor={ETextColor.default} opacityReduced>
+			<BMText weight={ETextWeight.semiBold} size={ESize.l} textColor={ETextColor.default} opacityReduced>
 				{subtitle}
 			</BMText>
 		</StyledHeader>

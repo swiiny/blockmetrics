@@ -1,15 +1,11 @@
 import React from 'react';
 import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
-import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
 import HomeHeader from '../HomeHeader';
-
-const HeaderData = {
-	title: 'Lorem ipsum',
-	subtitle:
-		'Lorem ipsu dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.'
-};
+import HomeData from '../HomeData';
+import Spacing from '../../../../styles/layout/Spacing';
+import { ESize } from '../../../../styles/theme/utils/enum';
 
 const HomePage: NextPage = () => {
 	return (
@@ -18,6 +14,10 @@ const HomePage: NextPage = () => {
 
 			<Main>
 				<HomeHeader />
+
+				<Spacing size={ESize['2xl']} />
+
+				<HomeData />
 			</Main>
 		</>
 	);
