@@ -58,9 +58,28 @@ async function fetchAndSendBlockchains() {
 	}
 }
 
+// set client to be alive
+function heartbeat() {
+	this.isAlive = true;
+}
+
 async function startWebsocketServer() {
+	// heartbeat detect and delete dead connection
+	const interval = setInterval(function ping() {
+		wss.clients.forEach(function each(ws) {
+			if (ws.isAlive === false) return ws.terminate();
+
+			ws.isAlive = false;
+			ws.ping();
+		});
+	}, 3000);
+
 	wss.on('connection', (ws) => {
 		console.log('new client connected');
+
+		ws.isAlive = true;
+		ws.on('pong', heartbeat);
+
 		clients.set(ws);
 
 		if (isFetchDeactivate) {
@@ -71,6 +90,11 @@ async function startWebsocketServer() {
 		ws.on('close', () => {
 			console.log('client disconnected');
 			clients.delete(ws);
+
+			if (clients.size === 0) {
+				isFetchDeactivate = true;
+				clearInterval(interval);
+			}
 		});
 	});
 }
