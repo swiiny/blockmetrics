@@ -58,19 +58,46 @@ async function fetchAndSendBlockchains() {
 	}
 }
 
+// set client to be alive
+function heartbeat() {
+	this.isAlive = true;
+}
+
 async function startWebsocketServer() {
+	// heartbeat detect and delete dead connection
+	const interval = setInterval(function ping() {
+		wss.clients.forEach(function each(ws) {
+			if (ws.isAlive === false) return ws.terminate();
+
+			ws.isAlive = false;
+			ws.ping();
+		});
+	}, 3000);
+
 	wss.on('connection', (ws) => {
-		console.log('new client connected');
+		ws.isAlive = true;
+		ws.on('pong', heartbeat);
+
 		clients.set(ws);
 
+		console.log('current clients: ', clients.size);
+
 		if (isFetchDeactivate) {
+			console.log('=> start streaming blockchains');
 			isFetchDeactivate = false;
 			fetchAndSendBlockchains();
 		}
 
 		ws.on('close', () => {
-			console.log('client disconnected');
 			clients.delete(ws);
+
+			console.log('current clients: ', clients.size);
+
+			if (clients.size === 0) {
+				console.log('=> streaming stopped');
+				isFetchDeactivate = true;
+				clearInterval(interval);
+			}
 		});
 	});
 }
