@@ -75,12 +75,12 @@ async function startWebsocketServer() {
 	}, 3000);
 
 	wss.on('connection', (ws) => {
-		console.log('new client connected');
-
 		ws.isAlive = true;
 		ws.on('pong', heartbeat);
 
 		clients.set(ws);
+
+		console.log('current clients: ', clients.size);
 
 		if (isFetchDeactivate) {
 			isFetchDeactivate = false;
@@ -88,8 +88,9 @@ async function startWebsocketServer() {
 		}
 
 		ws.on('close', () => {
-			console.log('client disconnected');
 			clients.delete(ws);
+
+			console.log('current clients: ', clients.size);
 
 			if (clients.size === 0) {
 				isFetchDeactivate = true;
