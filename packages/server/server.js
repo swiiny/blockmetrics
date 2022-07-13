@@ -364,7 +364,7 @@ async function initWebsocketProvider(chain, con) {
 		console.log('WS opened', chain.name, dateString);
 	}
 
-	const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
+	let wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 	wsProvider.on('block', async (blockNumber) => {
 		if (chain.id === CHAINS.avalanche.id) {
@@ -406,6 +406,10 @@ async function initWebsocketProvider(chain, con) {
 		if (process.env.DEBUG_LOGS === 'activated') {
 			console.log('WS closed', chain.name, dateString);
 		}
+
+		wsProvider = null;
+		keepAliveInterval = null;
+		pingTimeout = null;
 
 		initWebsocketProvider(chain, con);
 	});
