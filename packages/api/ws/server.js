@@ -83,6 +83,7 @@ async function startWebsocketServer() {
 		console.log('current clients: ', clients.size);
 
 		if (isFetchDeactivate) {
+			console.log('=> start streaming blockchains');
 			isFetchDeactivate = false;
 			fetchAndSendBlockchains();
 		}
@@ -93,6 +94,7 @@ async function startWebsocketServer() {
 			console.log('current clients: ', clients.size);
 
 			if (clients.size === 0) {
+				console.log('=> streaming stopped');
 				isFetchDeactivate = true;
 				clearInterval(interval);
 			}
