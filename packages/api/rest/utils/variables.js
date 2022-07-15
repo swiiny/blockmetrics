@@ -1,3 +1,4 @@
+// fetch chart data for a blockchain
 export const EDailyData = {
 	activeUsers: 'activeUsers',
 	averageBlocktime: 'averageBlocktime',
@@ -12,8 +13,20 @@ export const EDailyData = {
 	transactionCount: 'transactionCount'
 };
 
+// fetch chart data for all blockchains
 export const EDailyGlobalData = {
 	activeUsers: 'activeUsers',
 	transactionsCount: 'transactionsCount',
 	powerConsumption: 'powerConsumption'
+};
+
+// sum of data fetched for all blockchains
+export const EGlobalData = {
+	blockchainPowerConsumption: 'blockchainPowerConsumption',
+	tokenCount: 'tokenCount',
+	nodeCount: 'nodeCount',
+	transactionCount: 'transactionCount',
+	todayTransactionsCount: 'todayTransactionCount',
+	addressCount: 'addressCount',
+	todayAddressCount: 'todayAddressCount'
 };

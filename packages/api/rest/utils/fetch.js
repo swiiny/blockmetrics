@@ -1,6 +1,6 @@
 // get blockchains data in the database endpoint
 
-import { EDailyData, EDailyGlobalData } from './variables.js';
+import { EDailyData, EDailyGlobalData, EGlobalData } from './variables.js';
 
 // TODO : protect from sql injection
 export const getBlockchains = async (pool, params) => {
@@ -163,5 +163,47 @@ export const getChartGlobalByType = async (pool, type) => {
 	} catch (err) {
 		console.error('getChartGlobalByType', err);
 		return [];
+	}
+};
+
+export const getGlobalDataByType = async (pool, type) => {
+	let valueLabel = '';
+
+	try {
+		switch (type) {
+			case EGlobalData.blockchainPowerConsumption:
+				valueLabel = 'blockchain_power_consumption';
+				break;
+			case EGlobalData.tokenCount:
+				valueLabel = 'token_count';
+				break;
+			case EGlobalData.nodeCount:
+				valueLabel = 'node_count';
+				break;
+			case EGlobalData.transactionCount:
+				valueLabel = 'transaction_count';
+				break;
+			case EGlobalData.todayTransactionsCount:
+				valueLabel = 'today_transaction_count';
+				break;
+			case EGlobalData.addressCount:
+				valueLabel = 'address_count';
+				break;
+			case EGlobalData.todayAddressCount:
+				valueLabel = 'today_address_count';
+				break;
+			default:
+				return [];
+		}
+
+		// sum of all rows with the same valueLabel from blockchain table
+		const res = await pool.query(`SELECT SUM(${valueLabel}) AS value FROM blockchain`);
+		return {
+			value: res[0][0].value,
+			dailyChange: 0
+		};
+	} catch (err) {
+		console.error('getGlobalDataByType', err);
+		return null;
 	}
 };
