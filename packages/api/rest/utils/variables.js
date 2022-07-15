@@ -11,3 +11,9 @@ export const EDailyData = {
 	nodeCount: 'nodeCount',
 	transactionCount: 'transactionCount'
 };
+
+export const EDailyGlobalData = {
+	activeUsers: 'activeUsers',
+	transactionsCount: 'transactionsCount',
+	powerConsumption: 'powerConsumption'
+};

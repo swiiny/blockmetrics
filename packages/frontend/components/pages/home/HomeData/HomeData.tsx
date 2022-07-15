@@ -1,6 +1,6 @@
 import React, { FC, useCallback, useEffect } from 'react';
 import Flex from '../../../../styles/layout/Flex';
-import { EChartType, EDailyData, EFlex } from '../../../../styles/theme/utils/enum';
+import { EChartType, EDailyGlobalData, EFlex } from '../../../../styles/theme/utils/enum';
 import HomeCard from '../HomeCard';
 import { IHomeCardData } from './HomeData.type';
 
@@ -12,7 +12,7 @@ const PLACEHOLDER_DATA: IHomeCardData[] = [
 		iconSrc: '/assets/images/icons/profile-tick.svg',
 		chartTitle: 'Daily Active Users',
 		chartType: EChartType.bar,
-		chartDataType: EDailyData.globalActiveUsers
+		chartDataType: EDailyGlobalData.activeUsers
 	},
 	{
 		title: 'Total Transactions Count',
@@ -21,7 +21,7 @@ const PLACEHOLDER_DATA: IHomeCardData[] = [
 		iconSrc: '/assets/images/icons/arrow-swap-horizontal.svg',
 		chartTitle: 'Daily Transactions count',
 		chartType: EChartType.bar,
-		chartDataType: EDailyData.globalDailyTransactionCount
+		chartDataType: EDailyGlobalData.transactionsCount
 	},
 	{
 		title: 'Last 24h Power Consumption',
@@ -33,7 +33,7 @@ const PLACEHOLDER_DATA: IHomeCardData[] = [
 		dailyChangeUnit: '%',
 		chartTitle: 'Daily Power Consumption',
 		chartType: EChartType.bar,
-		chartDataType: EDailyData.globalDailyPowerConsumption
+		chartDataType: EDailyGlobalData.powerConsumption
 	}
 ];
 

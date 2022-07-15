@@ -7,7 +7,7 @@ export const StyledChartContainer = styled.div<{ chartHeight?: number }>`
 		width: 100%;
 		height: ${`${p.chartHeight}px`};
 		z-index: 0;
-		#chart-container {
+		[id^='chart-container'] {
 			position: absolute;
 			top: 0;
 			bottom: 0;

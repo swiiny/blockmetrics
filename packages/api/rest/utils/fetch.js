@@ -1,6 +1,6 @@
 // get blockchains data in the database endpoint
 
-import { EDailyData } from './variables.js';
+import { EDailyData, EDailyGlobalData } from './variables.js';
 
 // TODO : protect from sql injection
 export const getBlockchains = async (pool, params) => {
@@ -109,13 +109,59 @@ export const getChartByIdAndType = async (pool, id, type) => {
 				return [];
 		}
 
-		let query = `SELECT date, ${valueLabel} FROM ${tableLabel} WHERE blockchain_id = ? AND date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`;
+		let query = `SELECT date, ${valueLabel} AS value FROM ${tableLabel} WHERE blockchain_id = ? AND date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`;
 
 		const res = await pool.query(query, [id]);
 
 		return res;
 	} catch (err) {
 		console.error('getChartByIdAndType', err);
+		return [];
+	}
+};
+
+export const getChartGlobalByType = async (pool, type) => {
+	try {
+		let data;
+
+		switch (type) {
+			case EDailyGlobalData.activeUsers:
+				data = await pool.query(
+					`SELECT date, active_user_count AS value FROM daily_active_users_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+				);
+				break;
+			case EDailyGlobalData.transactionsCount:
+				data = await pool.query(
+					`SELECT date, transaction_count AS value FROM daily_transaction_count_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+				);
+				break;
+			case EDailyGlobalData.powerConsumption:
+				console.log('ADD TABLE daily_power_consumption_history');
+				data = await pool.query(
+					`SELECT date, blockchain_power_consumption AS value FROM daily_blockchain_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+				);
+				break;
+			default:
+				break;
+		}
+
+		// sum all values with the same day and return an array of objects with the date and the sum
+		const result = data[0].reduce((acc, cur) => {
+			const date = cur.date;
+			const value = cur.value;
+
+			if (acc[date]) {
+				acc[date] += value;
+			} else {
+				acc[date] = value;
+			}
+
+			return acc;
+		}, {});
+
+		return Object.keys(result).map((key) => ({ date: key, value: result[key] }));
+	} catch (err) {
+		console.error('getChartGlobalByType', err);
 		return [];
 	}
 };

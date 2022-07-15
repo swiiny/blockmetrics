@@ -2,9 +2,15 @@ import express from 'express';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
 import cors from 'cors';
-import { getBlockchainById, getBlockchains, getChartByIdAndType, getMetadataById } from './utils/fetch.js';
+import {
+	getBlockchainById,
+	getBlockchains,
+	getChartByIdAndType,
+	getChartGlobalByType,
+	getMetadataById
+} from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
-import { EDailyData } from './utils/variables.js';
+import { EDailyData, EDailyGlobalData } from './utils/variables.js';
 // import httpsRedirect from 'express-https-redirect';
 
 // connection pool
@@ -193,6 +199,39 @@ app.get(`/get/blockchain/chart`, async (req, res) => {
 		console.error('/get/blockchain/chart?type=X&id=Y', err);
 
 		res.status(500).send('Error fetching blockchain chart data where id is ' + id + ' and type is ' + type);
+		return;
+	}
+});
+
+app.get(`/get/global/chart`, async (req, res) => {
+	const { type } = req.query;
+
+	try {
+		if (!type) {
+			res.status(500).send('Missing type');
+			return;
+		} else {
+			const isValidType = Object.values(EDailyGlobalData).includes(type);
+
+			if (!isValidType) {
+				res.status(500).send('Invalid type');
+				return;
+			}
+		}
+
+		//const result = await getChartByIdAndType(pool, id, type);
+		const result = await getChartGlobalByType(pool, type);
+
+		if (result?.length) {
+			res.send(result);
+			return;
+		} else {
+			throw new Error('get blockchain chart failed');
+		}
+	} catch (err) {
+		console.error('/get/global/chart', err);
+
+		res.status(500).send('Error fetching blockchain chart data where type is ' + type);
 		return;
 	}
 });

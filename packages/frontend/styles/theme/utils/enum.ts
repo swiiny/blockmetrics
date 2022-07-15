@@ -112,10 +112,13 @@ export enum EDailyData {
 	newTokens = 'newTokens',
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
-	transactionCount = 'transactionCount',
-	globalActiveUsers = 'globalActiveUsers',
-	globalDailyTransactionCount = 'globalDailyTransactionCount',
-	globalDailyPowerConsumption = 'globalDailyPowerConsumption'
+	transactionCount = 'transactionCount'
+}
+
+export enum EDailyGlobalData {
+	activeUsers = 'activeUsers',
+	transactionsCount = 'transactionsCount',
+	powerConsumption = 'powerConsumption'
 }
 
 export enum EChartType {

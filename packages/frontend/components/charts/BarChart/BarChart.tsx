@@ -2,11 +2,8 @@ import React, { FC, useCallback, useEffect, useMemo, useReducer, useState } from
 import { Chart, Filler, CategoryScale, LinearScale, BarElement } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { StyledChartContainer } from './BarChart.styles';
-import { IChartContainer } from './BarChart.type';
-import useResponsive from '../../../hooks/useResponsive';
 import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
 import { axiosRest } from '../../../utils/variables';
-import { getDailyValueFromType } from '../../../styles/theme/utils/functions';
 
 // required to get the gradient in the charts
 Chart.register(Filler, CategoryScale, LinearScale, BarElement);
@@ -14,6 +11,8 @@ Chart.register(Filler, CategoryScale, LinearScale, BarElement);
 const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = false, chartHeight = 150 }) => {
 	const [chartData, setChartData] = useState<IBarLineChartData[]>([]);
 	const [loading, updateLoading] = useReducer((_: boolean, value: boolean) => value, false);
+
+	const chartId = useMemo(() => `chart-container-${dailyType}-${chainId}`, [dailyType, chainId]);
 
 	const xData = useMemo(() => {
 		try {
@@ -133,16 +132,22 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 	}, [yData, minValue, maxValue, chartOptions]);
 
 	const fetchChartData = useCallback(async () => {
-		if (dailyType && chainId) {
+		if (dailyType) {
 			updateLoading(true);
 			try {
-				const result = await axiosRest(`/get/blockchain/chart?type=${dailyType}&id=${chainId}`);
+				let result;
+
+				if (chainId) {
+					result = await axiosRest(`/get/blockchain/chart?type=${dailyType}&id=${chainId}`);
+				} else {
+					result = await axiosRest(`/get/global/chart?type=${dailyType}`);
+				}
 
 				// format result in IBarLineChartData
 				const formattedData: IBarLineChartData[] = result.data.map((t: any) => {
 					return {
 						x: new Date(t.date).toLocaleString(),
-						y: t[getDailyValueFromType(dailyType)]
+						y: t.value
 					};
 				});
 
@@ -153,16 +158,6 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 				updateLoading(false);
 				console.error('Error fetchChartData', err);
 			}
-		} else if (dailyType) {
-			// @todo(fetch global data)
-			/*
-			switch (dailyType) {
-				case '':
-					break;
-				default:
-					break;
-			}
-			*/
 		}
 	}, [dailyType, chainId]);
 
@@ -172,11 +167,11 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 
 	return loading ? (
 		<StyledChartContainer chartHeight={chartHeight}>
-			<div id='chart-container' className='relative overflow-hidden' />
+			<div id={chartId} className='relative overflow-hidden' />
 		</StyledChartContainer>
 	) : (
 		<StyledChartContainer chartHeight={chartHeight}>
-			<div id='chart-container'>
+			<div id={chartId}>
 				{/* @ts-ignore */}
 				<Bar options={chartOptions} data={chartReady ? datas : null} />
 			</div>
