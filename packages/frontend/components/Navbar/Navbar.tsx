@@ -1,6 +1,6 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Flex from '../../styles/layout/Flex';
 import Spacing from '../../styles/layout/Spacing';
 import BMButton from '../../styles/theme/components/BMButton';
@@ -46,8 +46,28 @@ const Navbar = () => {
 		return false;
 	}, [pathname]);
 
+	const [navbarBlurred, setNavbarBlurred] = useState(false);
+
+	useEffect(() => {
+		// detect scroll and call blurNavbar after 100 px from top
+		const handleScroll = () => {
+			const scrollTop = window.pageYOffset;
+			if (scrollTop - 100 >= 0) {
+				setNavbarBlurred(true);
+			} else {
+				setNavbarBlurred(false);
+			}
+		};
+
+		window.addEventListener('scroll', handleScroll);
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, []);
+
 	return (
-		<StyledNavbar isHidden={navbarHidden}>
+		<StyledNavbar isHidden={navbarHidden} isBlurred={navbarBlurred}>
 			<Flex vertical={EFlex.center}>
 				<div className='logo' />
 
