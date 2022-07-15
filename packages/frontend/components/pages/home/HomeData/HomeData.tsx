@@ -20,7 +20,7 @@ const PLACEHOLDER_DATA: IHomeCardData[] = [
 		dailyChange: 350675,
 		iconSrc: '/assets/images/icons/arrow-swap-horizontal.svg',
 		chartTitle: 'Daily Transactions count',
-		chartType: EChartType.bar,
+		chartType: EChartType.line,
 		chartDataType: EDailyGlobalData.transactionsCount
 	},
 	{

@@ -6,6 +6,7 @@ import BMHeading from '../../../../styles/theme/components/BMHeading';
 import BMText from '../../../../styles/theme/components/BMText';
 import { EChartType, EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
 import BarChart from '../../../charts/BarChart';
+import LineChart from '../../../charts/LineChart';
 import { IHomeCardData } from '../HomeData/HomeData.type';
 import { StyledHomeCard, StyledIcon, StyledIconContainer } from './HomeCard.styles';
 
@@ -139,7 +140,7 @@ const HomeCard: FC<IHomeCardData> = ({
 			<Spacing size={ESize.xs} />
 
 			{chartType === EChartType.line ? (
-				<></>
+				<LineChart dailyType={chartDataType} deactivateLegend chartHeight={120} />
 			) : chartType === EChartType.bar ? (
 				<BarChart dailyType={chartDataType} deactivateLegend chartHeight={120} />
 			) : (
