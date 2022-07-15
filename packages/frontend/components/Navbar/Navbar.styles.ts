@@ -1,8 +1,8 @@
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import { EMediaQuery } from '../../styles/theme/utils/enum';
-import { mq } from '../../styles/theme/utils/functions';
+import { addTransition, mq } from '../../styles/theme/utils/functions';
 
-export const StyledNavbar = styled.nav<{ isHidden?: boolean }>`
+export const StyledNavbar = styled.nav<{ isHidden?: boolean; isBlurred: boolean }>`
 	display: flex;
 	justify-content: space-between;
 	align-items: center;
@@ -20,7 +20,12 @@ export const StyledNavbar = styled.nav<{ isHidden?: boolean }>`
 
 	height: 120px;
 
+	${addTransition()}
+
+	backdrop-filter: blur(10px);
+
 	${(p) => (p.isHidden ? `display: none;` : '')}
+	${(p) => (p.isBlurred ? `background-color: ${p.theme.colors.bg}50;` : `background-color: ${p.theme.colors.bg}00;`)}
 `;
 
 export const StyledList = styled.ul`

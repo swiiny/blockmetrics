@@ -10,46 +10,24 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 -   [x] Buy block-metrics domain name
 -   [x] Buy blockmetrics.eth
-
-### UI/UX
-
--   [ ] Create awesome UI :construction:
--   [ ] Improve UX
-
-### Before start development :white_check_mark:
-
--   [x] Setup file structure
--   [x] Create Dockerfiles
-    -   [x] Database
-    -   [x] Server
-    -   [x] API
-    -   [x] Frontend
--   [x] Setup docker-compose file
+-   [ ] setup jelatic https for APIs
+-   [ ] Create readme for each service
+-   [ ] Update this readme with link to others
 
 ### Database :white_check_mark:
 
--   [x] Create schema using MySQLWorkbench
--   [x] Export SQL
--   [x] Import SQL into the database
--   [x] TODO : update database by removing account table, add action, first_action_at and last_action_at in blockchain_has_account table
 -   [ ] add TVL in blockchain table
--   [x] add metadata table and remove description from blockchain table
+-   [ ] Create daily_blockchain_power_consumption_history table
 
 ### Server
 
--   [x] Init server.js file
--   [x] Fetch blockchains data and fill the db with :white_checl_mark:
+-   [ ] fetch PoW blockchains power consumption
 -   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
--   [x] ~~Setup data update cycle~~
--   [x] fetch new blocks with Websockets API ~~(only when all the db is update with all blocks data)~~
--   [ ] get blockchain power consumption for proof of work networks
 -   [ ] prevent bitcoin webscoket from disconnecting
 
 ### API - REST :white_check_mark:
 
--   [x] Add CORS policies
--   [x] Add Rate limiter
--   [x] Create Single blockchain endpoint
+-   [ ] separate endpoints in multiple files
 
 ### API - Websocket
 
@@ -58,22 +36,12 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 ### Frontend
 
--   [ ] Create awesome theme based on UI/UX :construction:
--   [ ] API Hook
 -   [ ] Homepage
 -   [ ] Blockchains
     -   [ ] Index
     -   [ ] Single blockchain page
 -   [ ] Compare
 -   [ ] About us
-    -   [ ] Powerd by ...
-
-### DevOps :white_check_mark:
-
--   [x] Setup DockerHub account
--   [x] Setup Jelastic server
--   [x] Setup Database
--   [x] Create CI/CD scripts
 
 ### Integrated Blockchains
 

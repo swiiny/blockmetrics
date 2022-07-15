@@ -1,17 +1,17 @@
-import { EChartType, EDailyData } from '../../../../styles/theme/utils/enum';
-import { IBarLineChartData } from '../../../../types/charts';
+import { EChartType, EDailyGlobalData, EGlobalData } from '../../../../styles/theme/utils/enum';
 
 interface IHomeCardData {
 	title: string;
-	value: number;
+	value?: number;
+	valueType: EGlobalData;
 	unit?: string;
-	dailyChange: number;
+	dailyChange?: number;
 	dailyChangeUnit?: string;
 	dailyChangeColorReversed?: boolean;
 	iconSrc: string;
 	chartTitle: string;
 	chartType: EChartType;
-	chartDataType: EDailyData;
+	chartDataType: EDailyGlobalData;
 }
 
 export type { IHomeCardData };

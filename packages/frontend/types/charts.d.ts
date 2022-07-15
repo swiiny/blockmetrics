@@ -1,8 +1,8 @@
-import { EChartType, EDailyData } from '../styles/theme/utils/enum';
+import { EChartType, EDailyData, EDailyGlobalData } from '../styles/theme/utils/enum';
 
 interface IBarLineChart {
 	chartType?: EChartType;
-	dailyType: EDailyData;
+	dailyType: EDailyData | EDailyGlobalData;
 	chainId?: TBlockchain['id'];
 	deactivateLegend?: boolean;
 	heightFactor?: number;

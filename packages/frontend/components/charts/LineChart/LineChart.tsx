@@ -1,14 +1,14 @@
 import React, { FC, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { Chart, Filler, CategoryScale, LinearScale, BarElement } from 'chart.js';
-import { Bar } from 'react-chartjs-2';
-import { StyledChartContainer } from './BarChart.styles';
+import { Chart, Filler, PointElement, LineElement } from 'chart.js';
+import { Line } from 'react-chartjs-2';
+import { StyledChartContainer } from './LineChart.styles';
 import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
 import { axiosRest } from '../../../utils/variables';
 
 // required to get the gradient in the charts
-Chart.register(Filler, CategoryScale, LinearScale, BarElement);
+Chart.register(Filler, PointElement, LineElement);
 
-const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = false, chartHeight = 150 }) => {
+const LineChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = false, chartHeight = 150 }) => {
 	const [chartData, setChartData] = useState<IBarLineChartData[]>([]);
 	const [loading, updateLoading] = useReducer((_: boolean, value: boolean) => value, false);
 
@@ -54,12 +54,12 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 		try {
 			ctx = document.getElementsByTagName('canvas')[0].getContext('2d');
 			borderFill = ctx?.createLinearGradient(chartHeight || 500, 0, 100, 0);
-			borderFill?.addColorStop(1, '#7AD1BF');
-			borderFill?.addColorStop(0, '#25B0C4');
+			borderFill?.addColorStop(1, '#6AD4F3');
+			borderFill?.addColorStop(0, '#25A9DC');
 
-			gradientFill = ctx?.createLinearGradient(0, 0, 0, chartHeight || 500); // replace 500 by chart Height
-			gradientFill?.addColorStop(0, `${'#25A9DC' /* props.theme.colors.gradientStart */}`);
-			gradientFill?.addColorStop(1, `${'#6AD4F3' /* props.theme.colors.gradientEnd */}`);
+			gradientFill = ctx?.createLinearGradient(0, 0, 0, chartHeight || 150);
+			gradientFill?.addColorStop(0, `${'#25A9DC30' /* props.theme.colors.gradientStart */}`);
+			gradientFill?.addColorStop(1, `${'#6AD4F300' /* props.theme.colors.gradientEnd */}`);
 		} catch {
 			//
 		}
@@ -70,19 +70,18 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 			datasets: [
 				{
 					data: yData,
-					//backgroundColor: 'rgba(255, 99, 132, 0.5)',
 					radius: 2,
-					// borderWidth: 1,
+					borderWidth: 2,
 					grid: { display: false },
-					// fill: true,
-					// pointRadius: 0,
-					// tension: 0.1,
-					backgroundColor: gradientFill
-					//borderColor: borderFill,
-					//pointBorderColor: borderFill,
-					//pointBackgroundColor: borderFill,
-					//pointHoverBackgroundColor: borderFill,
-					//pointHoverBorderColor: borderFill
+					fill: true,
+					pointRadius: 0,
+					tension: 0.5,
+					backgroundColor: gradientFill,
+					borderColor: borderFill,
+					pointBorderColor: borderFill,
+					pointBackgroundColor: borderFill,
+					pointHoverBackgroundColor: borderFill,
+					pointHoverBorderColor: borderFill
 				}
 			]
 		};
@@ -104,6 +103,7 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 				},
 				y: {
 					display: !deactivateLegend, // check if we need to display the y axis
+					type: 'linear',
 					grid: {
 						display: false
 					},
@@ -114,8 +114,8 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 							return `${Math.floor(value)}`;
 						}
 					},
-					min: minValue,
-					max: maxValue
+					min: minValue >= 0 ? minValue : 0,
+					max: maxValue >= 0 ? maxValue : 0
 				}
 			}
 		};
@@ -173,10 +173,10 @@ const BarChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = fa
 		<StyledChartContainer chartHeight={chartHeight}>
 			<div id={chartId}>
 				{/* @ts-ignore */}
-				<Bar options={chartOptions} data={chartReady ? datas : null} />
+				<Line options={chartOptions} data={chartReady ? datas : null} />
 			</div>
 		</StyledChartContainer>
 	);
 };
 
-export { BarChart };
+export { LineChart };

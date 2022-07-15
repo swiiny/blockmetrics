@@ -10,24 +10,24 @@ export async function fetchEVMBlockFor(chain, provider, blockNumber, con) {
 		const block = await provider.getBlockWithTransactions(blockNumber);
 		const transactions = block?.transactions || [];
 
-		const txPromises =
+		const formattedTransactions =
 			transactions?.map(({ from, gasPrice }) => ({
 				public_address: from,
 				timestamp: block.timestamp,
 				gasPrice: gasPrice
 			})) || [];
 
-		const resolvedTxPromises = (await Promise.all(txPromises)) || [];
-
 		if (process.env.DEBUG_LOGS === 'activated') {
 			// console.log('fetching EVM block for', name, blockNumber, ' with ', resolvedTxPromises.length, ' transactions');
+			// use ethers to format unit decimals to hex
 		}
 
-		const averageGasPrice = resolvedTxPromises.reduce(
+		const blockAverageGasPrice = formattedTransactions.reduce(
 			(acc, { gasPrice }) => acc.add(gasPrice),
 			ethers.BigNumber.from(0)
 		);
-		const averageGasPriceInWei = averageGasPrice.div(ethers.BigNumber.from(transactions.length || 1));
+
+		const averageGasPriceInWei = blockAverageGasPrice.div(ethers.BigNumber.from(transactions.length || 1));
 
 		if (averageGasPriceInWei?.toString() !== '0') {
 			savedAverageGasPrice[id] = averageGasPriceInWei?.toString();
@@ -35,9 +35,22 @@ export async function fetchEVMBlockFor(chain, provider, blockNumber, con) {
 
 		// get timestamp of this day at  midnight
 		const day = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
-
+		/*
+		if (chain.id === 'avalanche') {
+			console.log(
+				'Avalanche block n°',
+				blockNumber,
+				'data => txCount:',
+				transactions.length,
+				'gasPrice:',
+				averageGasPriceInWei.toString(),
+				'addresses:',
+				resolvedTxPromises.length
+			);
+		}
+*/
 		const promises = [
-			resolvedTxPromises.map((tx) => con.query(insertNewTodayActiveAddress, [tx.public_address, id, day])),
+			formattedTransactions.map((tx) => con.query(insertNewTodayActiveAddress, [tx.public_address, id, day])),
 			con.query(updateBlockchainWithNewBlockData, [
 				block?.timestamp || Math.floor(Date.now() / 1000),
 				transactions?.length || 0,
@@ -45,7 +58,8 @@ export async function fetchEVMBlockFor(chain, provider, blockNumber, con) {
 				id
 			])
 		];
-		await Promise.all(promises);
+
+		Promise.all(promises);
 	} catch (err) {
 		console.error('fetch blocks n°' + blockNumber + ' on ' + name, err);
 	}
