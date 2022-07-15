@@ -1,14 +1,14 @@
 import React, { FC, useCallback, useEffect } from 'react';
 import Flex from '../../../../styles/layout/Flex';
-import { EChartType, EDailyGlobalData, EFlex } from '../../../../styles/theme/utils/enum';
+import { EChartType, EDailyGlobalData, EFlex, EGlobalData } from '../../../../styles/theme/utils/enum';
 import HomeCard from '../HomeCard';
 import { IHomeCardData } from './HomeData.type';
 
-const PLACEHOLDER_DATA: IHomeCardData[] = [
+const HOMECARD_DATA: IHomeCardData[] = [
 	{
-		title: 'Total Users Count',
-		value: 79120000,
-		dailyChange: 10354137,
+		title: 'Today Users Count',
+		valueType: EGlobalData.todayAddressCount,
+		dailyChange: 0,
 		iconSrc: '/assets/images/icons/profile-tick.svg',
 		chartTitle: 'Daily Active Users',
 		chartType: EChartType.bar,
@@ -16,8 +16,8 @@ const PLACEHOLDER_DATA: IHomeCardData[] = [
 	},
 	{
 		title: 'Total Transactions Count',
-		value: 2109000000000,
-		dailyChange: 350675,
+		valueType: EGlobalData.transactionCount,
+		dailyChange: 0,
 		iconSrc: '/assets/images/icons/arrow-swap-horizontal.svg',
 		chartTitle: 'Daily Transactions count',
 		chartType: EChartType.line,
@@ -25,9 +25,9 @@ const PLACEHOLDER_DATA: IHomeCardData[] = [
 	},
 	{
 		title: 'Last 24h Power Consumption',
-		value: 10350000000000,
+		valueType: EGlobalData.blockchainPowerConsumption,
 		unit: 'W/h',
-		dailyChange: 0.28,
+		dailyChange: 0,
 		dailyChangeColorReversed: true,
 		iconSrc: '/assets/images/icons/flash.svg',
 		dailyChangeUnit: '%',
@@ -38,24 +38,10 @@ const PLACEHOLDER_DATA: IHomeCardData[] = [
 ];
 
 const HomeData: FC = () => {
-	const [cards, setCards] = React.useState<IHomeCardData[]>([]);
-
-	const fetchData = useCallback(async () => {
-		// @todo(fetch total users count)
-		// @todo(fetch total transaction count)
-		// @todo(fetch total power consumption)
-
-		setCards(PLACEHOLDER_DATA);
-	}, []);
-
-	useEffect(() => {
-		fetchData();
-	}, [fetchData]);
-
 	return (
 		<section>
 			<Flex fullWidth as='ul' horizontal={EFlex.between}>
-				{cards.map((card) => (
+				{HOMECARD_DATA.map((card) => (
 					<HomeCard key={card.title} {...card} />
 				))}
 			</Flex>

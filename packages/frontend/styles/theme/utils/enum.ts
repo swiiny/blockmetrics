@@ -127,3 +127,13 @@ export enum EChartType {
 	pie = 'pie',
 	doughnut = 'doughnut'
 }
+
+export enum EGlobalData {
+	blockchainPowerConsumption = 'blockchainPowerConsumption',
+	tokenCount = 'tokenCount',
+	nodeCount = 'nodeCount',
+	transactionCount = 'transactionCount',
+	todayTransactionsCount = 'todayTransactionCount',
+	addressCount = 'addressCount',
+	todayAddressCount = 'todayAddressCount'
+}

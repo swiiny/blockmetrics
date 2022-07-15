@@ -140,7 +140,7 @@ const LineChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = f
 				if (chainId) {
 					result = await axiosRest(`/get/blockchain/chart?type=${dailyType}&id=${chainId}`);
 				} else {
-					result = await axiosRest(`/get/global/chart?type=${dailyType}`);
+					result = await axiosRest(`/get/blockchains/chart?type=${dailyType}`);
 				}
 
 				// format result in IBarLineChartData
