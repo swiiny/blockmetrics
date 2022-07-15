@@ -27,7 +27,7 @@ export const setFontSize = (size: ESize) => {
 			: size === ESize.m
 			? `
             font-size: 1rem;
-            line-height: 1.3rem;
+            line-height: 1.5rem;
             `
 			: size === ESize.l
 			? `

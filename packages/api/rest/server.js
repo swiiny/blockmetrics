@@ -5,8 +5,7 @@ import cors from 'cors';
 import { getBlockchainById, getBlockchains, getChartByIdAndType, getMetadataById } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
 import { EDailyData } from './utils/variables.js';
-
-const BASE_URL_V1 = '/v1/api/rest';
+// import httpsRedirect from 'express-https-redirect';
 
 // connection pool
 let pool;
@@ -19,15 +18,33 @@ const limiter = rateLimit({
 });
 
 const corsOptions = {
-	origin: process.env.FRONTEND_URL,
+	origin: [
+		process.env.FRONTEND_URL,
+		'http://blockmetrics.jcloud-ver-jpc.ik-server.com',
+		'https://blockmetrics.jcloud-ver-jpc.ik-server.com',
+		'https://block-metrics.io',
+		'http://block-metrics.io',
+		'https://block-metrics.com',
+		'http://block-metrics.com',
+		'http://blockmetrics.jcloud-ver-jpc.ik-server.com/',
+		'https://blockmetrics.jcloud-ver-jpc.ik-server.com/',
+		'https://block-metrics.io/',
+		'http://block-metrics.io/',
+		'https://block-metrics.com/',
+		'http://block-metrics.com/'
+	],
+	methods: ['GET'],
 	optionsSuccessStatus: 200
 };
 
 const app = express();
+// app.enable('trust proxy');
 
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(limiter);
+//app.use('/', httpsRedirect());
+//app.use(`/ping`, httpsRedirect());
 
 // returns blockchains sorted by default by rank
 // query parameters could be
@@ -35,7 +52,7 @@ app.use(limiter);
 // - desc: boolean
 // - offset: unsigned number less than limit
 // - limit: unsigned number greater than offset
-app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
+app.get(`/get/blockchains`, async (req, res) => {
 	const { sortBy = 'blockchain_power_consumption', desc = false, offset = 0, limit = 30 } = req.query;
 
 	try {
@@ -62,7 +79,7 @@ app.get(`${BASE_URL_V1}/get/blockchains`, async (req, res) => {
 	}
 });
 
-app.get(`${BASE_URL_V1}/get/blockchain`, async (req, res) => {
+app.get(`/get/blockchain`, async (req, res) => {
 	const { id } = req.query;
 
 	try {
@@ -87,7 +104,7 @@ app.get(`${BASE_URL_V1}/get/blockchain`, async (req, res) => {
 	}
 });
 
-app.get(`${BASE_URL_V1}/get/blockchain/metadata`, async (req, res) => {
+app.get(`/get/blockchain/metadata`, async (req, res) => {
 	const { id, language } = req.query;
 
 	try {
@@ -112,7 +129,7 @@ app.get(`${BASE_URL_V1}/get/blockchain/metadata`, async (req, res) => {
 	}
 });
 
-app.get(`${BASE_URL_V1}/get/blockchain/all`, async (req, res) => {
+app.get(`/get/blockchain/all`, async (req, res) => {
 	const { id, language } = req.query;
 
 	try {
@@ -143,7 +160,7 @@ app.get(`${BASE_URL_V1}/get/blockchain/all`, async (req, res) => {
 	}
 });
 
-app.get(`${BASE_URL_V1}/get/blockchain/chart`, async (req, res) => {
+app.get(`/get/blockchain/chart`, async (req, res) => {
 	const { id, type } = req.query;
 
 	try {
@@ -180,10 +197,18 @@ app.get(`${BASE_URL_V1}/get/blockchain/chart`, async (req, res) => {
 	}
 });
 
-// test endpoint, should respond the string "pong"
-app.get(`${BASE_URL_V1}/ping`, async (req, res) => {
-	res.send('pong');
+app.get(`/pong`, async (req, res) => {
+	res.send('ping');
 });
+/*
+app.use(function (request, response, next) {
+	if (process.env.NODE_ENV !== 'development' && !request.secure) {
+		return response.redirect('https://' + request.headers.host + request.url);
+	}
+
+	next();
+});
+*/
 
 app.listen(process.env.API_PORT, async () => {
 	console.log(`Server listening on port ${process.env.API_PORT}`);

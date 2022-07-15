@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import Flex from '../../../../styles/layout/Flex';
-import Text from '../../../../styles/theme/components/Text';
+import BMText from '../../../../styles/theme/components/BMText';
 import { EMediaQuery } from '../../../../styles/theme/utils/enum';
 import { mq } from '../../../../styles/theme/utils/functions';
 
@@ -31,7 +31,7 @@ export const StyledTextContainer = styled.div`
 	${mq(EMediaQuery.md, `max-width: calc(100% - 130px);`)}
 `;
 
-export const TextEx = styled(Text)`
+export const TextEx = styled(BMText)`
 	font-weight: 300;
 	font-style: italic;
 	quotes: initial;

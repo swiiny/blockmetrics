@@ -360,10 +360,21 @@ async function initWebsocketProvider(chain, con) {
 	let pingTimeout = null;
 	let keepAliveInterval = null;
 
-	const wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
+	if (process.env.DEBUG_LOGS === 'activated') {
+		console.log('WS opened', chain.name, dateString);
+	}
+
+	let wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 	wsProvider.on('block', async (blockNumber) => {
-		fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+		if (chain.id === CHAINS.avalanche.id) {
+			// wait a second to be sure that the block is fully processed (mainly avalanche issue)
+			setTimeout(() => {
+				fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+			}, 2000);
+		} else {
+			fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+		}
 	});
 
 	// check each 7.5 seconds if websocket is still connected
@@ -386,7 +397,20 @@ async function initWebsocketProvider(chain, con) {
 			clearTimeout(pingTimeout);
 		}
 
-		console.log('on close called');
+		// get current date with hour and minutes
+		const date = new Date();
+		const dateString = `${date.getFullYear()}-${
+			date.getMonth() + 1
+		}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
+
+		if (process.env.DEBUG_LOGS === 'activated') {
+			console.log('WS closed', chain.name, dateString);
+		}
+
+		wsProvider = null;
+		keepAliveInterval = null;
+		pingTimeout = null;
+
 		initWebsocketProvider(chain, con);
 	});
 

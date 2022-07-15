@@ -3,8 +3,10 @@ const nextConfig = {
 	reactStrictMode: true,
 	env: {
 		SERVER_URL: process.env.SERVER_URL,
-		API_URL: process.env.API_URL,
-		WS_URL: process.env.WS_URL
+		API_URL: process.env.API_URL || 'https://api-rest.block-metrics.io',
+		WS_URL: process.env.WS_URL || 'https://api-ws.block-metrics.io'
+		//API_URL: process.env.NEXT_PUBLIC_API_URL,
+		//WS_URL: process.env.NEXT_PUBLIC_WS_URL
 	},
 	compiler: {
 		// remove .babelrc to test these changes

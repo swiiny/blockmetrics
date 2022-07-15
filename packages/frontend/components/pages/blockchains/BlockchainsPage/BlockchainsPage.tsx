@@ -29,15 +29,22 @@ const BlockchainsPage: NextPage = () => {
 		let type;
 		let strToRemove;
 
-		if (process.env.NODE_ENV === 'production') {
-			type = 'wss';
-			strToRemove = 'https://';
-		} else {
+		// if process.env.WS_URL start with http then replace it by ws
+		if ((process.env.WS_URL as string).startsWith('http://')) {
 			type = 'ws';
 			strToRemove = 'http://';
+		} else {
+			type = 'wss';
+			strToRemove = 'https://';
 		}
 
 		const removed = process.env.WS_URL?.replace(strToRemove, '');
+
+		console.log('in initWebsocket removed =====>');
+
+		console.log('ws_url', process.env.WS_URL);
+		console.log('res', `${type}://${removed}/`);
+
 		ws = new W3CWebSocket(`${type}://${removed}/`);
 
 		ws.onopen = () => {
@@ -62,19 +69,29 @@ const BlockchainsPage: NextPage = () => {
 		};
 	};
 
-	const refresh = (isActivated: boolean) => {
-		if (!isActivated) {
-			initWebsocket();
-		}
-	};
+	const fetchData = async (isActivated: boolean = false) => {
+		console.log('NODE_ENV ===========>');
+		console.log('node_env', process.env.NODE_ENV);
+		console.log('API_URL ===========>');
+		console.log('api_url', process.env.API_URL);
+		console.log('api_url_complete', process.env.API_URL);
 
-	const fetchData = async () => {
+		console.log('WS_URL ===========>');
+		console.log('ws_url', process.env.WS_URL);
+
 		try {
 			const res = await axiosRest('/get/blockchains');
 			setBlockchains(res.data);
-			initWebsocket();
 		} catch (err) {
-			console.error('fetchData', err);
+			console.error('fetch rest data', err);
+		}
+
+		try {
+			if (!isActivated) {
+				initWebsocket();
+			}
+		} catch (err) {
+			console.error('fetch ws data', err);
 		}
 	};
 
@@ -95,7 +112,7 @@ const BlockchainsPage: NextPage = () => {
 			<Header
 				title={HeaderData.title}
 				subtitle={HeaderData.subtitle}
-				refreshAction={!wsConnected ? () => refresh(wsConnected) : undefined}
+				refreshAction={!wsConnected ? () => fetchData() : undefined}
 			/>
 
 			<Main>

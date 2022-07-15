@@ -3,8 +3,8 @@ import Link from 'next/link';
 import React, { FC, useMemo, useState } from 'react';
 import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
-import Heading from '../../../styles/theme/components/Heading';
-import Text from '../../../styles/theme/components/Text';
+import BMHeading from '../../../styles/theme/components/BMHeading';
+import BMText from '../../../styles/theme/components/BMText';
 import { EFlex, ESize, ETextType } from '../../../styles/theme/utils/enum';
 import { BLOCKCHAINS_ARRAY } from '../../../utils/variables';
 import { NAVBAR_LINKS } from '../../Navbar/Navbar';
@@ -89,7 +89,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	return (
 		<StyledBlockchainCard gradientStart={blockchain.colors.gradient.start} gradientEnd={blockchain.colors.gradient.end}>
 			<StylesCardHeader>
-				<Heading type={ETextType.h4}>{name}</Heading>
+				<BMHeading type={ETextType.h4}>{name}</BMHeading>
 
 				<StyledLogoContainer>
 					<div>
@@ -102,28 +102,28 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 			<Flex as='ul' fullWidth direction={EFlex.column}>
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<Text type={ETextType.p}>Rank</Text>
-					<Text type={ETextType.p}>{note}</Text>
+					<BMText type={ETextType.p}>Rank</BMText>
+					<BMText type={ETextType.p}>{note}</BMText>
 				</Flex>
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<Text type={ETextType.p}>Tokens</Text>
-					<Text type={ETextType.p}>{token_count}</Text>
+					<BMText type={ETextType.p}>Tokens</BMText>
+					<BMText type={ETextType.p}>{token_count}</BMText>
 				</Flex>
 				{gweiGasPrice && (
 					<Flex as='li' fullWidth horizontal={EFlex.between}>
-						<Text type={ETextType.p}>Gas price</Text>
-						<Text type={ETextType.p}>
+						<BMText type={ETextType.p}>Gas price</BMText>
+						<BMText type={ETextType.p}>
 							<CountUp preserveValue end={gweiGasPrice} duration={0.5} separator=',' style={{ color: 'inherit' }} />
-						</Text>
+						</BMText>
 					</Flex>
 				)}
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<Text type={ETextType.p}>Nodes</Text>
-					<Text type={ETextType.p}>{node_count}</Text>
+					<BMText type={ETextType.p}>Nodes</BMText>
+					<BMText type={ETextType.p}>{node_count}</BMText>
 				</Flex>
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<Text type={ETextType.p}>Today transactions</Text>
-					<Text type={ETextType.p}>
+					<BMText type={ETextType.p}>Today transactions</BMText>
+					<BMText type={ETextType.p}>
 						<CountUp
 							preserveValue
 							start={initTodayTransactionCount}
@@ -132,12 +132,12 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 							separator=','
 							style={{ color: 'inherit' }}
 						/>
-					</Text>
+					</BMText>
 				</Flex>
 
 				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<Text type={ETextType.p}>Today Addresses</Text>
-					<Text type={ETextType.p}>
+					<BMText type={ETextType.p}>Today Addresses</BMText>
+					<BMText type={ETextType.p}>
 						<CountUp
 							preserveValue
 							start={initTodayAddressCount}
@@ -146,7 +146,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 							separator=','
 							style={{ color: 'inherit' }}
 						/>
-					</Text>
+					</BMText>
 				</Flex>
 			</Flex>
 
@@ -155,9 +155,9 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 			<Link href={linkTo}>
 				<a>
 					<Flex as='span' vertical={EFlex.center} horizontal={EFlex.end}>
-						<Text size={ESize.s} type={ETextType.span} inheritStyle={false}>
+						<BMText size={ESize.s} type={ETextType.span} inheritStyle={false}>
 							Show more
-						</Text>
+						</BMText>
 					</Flex>
 					<StyledExtendedLink />
 				</a>

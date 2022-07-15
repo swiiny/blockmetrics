@@ -3,8 +3,8 @@ import React from 'react';
 import useResponsive from '../../hooks/useResponsive';
 import Flex from '../../styles/layout/Flex';
 import Spacing from '../../styles/layout/Spacing';
-import Heading from '../../styles/theme/components/Heading';
-import Text from '../../styles/theme/components/Text';
+import BMHeading from '../../styles/theme/components/BMHeading';
+import BMText from '../../styles/theme/components/BMText';
 import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../styles/theme/utils/enum';
 import { StyledHeader, StyledImageContainer } from './Header.styles';
 import { IHeader } from './Header.type';
@@ -16,7 +16,7 @@ const Header: React.FC<IHeader> = ({ title, subtitle, image, refreshAction = nul
 		<StyledHeader>
 			<Flex vertical={EFlex.center} horizontal={EFlex.between}>
 				<Flex vertical={EFlex.center} wrapItems={false}>
-					<Heading type={ETextType.h1}>{title}</Heading>
+					<BMHeading type={ETextType.h1}>{title}</BMHeading>
 
 					{image ? (
 						<>
@@ -36,9 +36,9 @@ const Header: React.FC<IHeader> = ({ title, subtitle, image, refreshAction = nul
 
 			<Spacing size={ESize.l} />
 
-			<Text weight={ETextWeight.bold} size={ESize.l} textColor={ETextColor.default} opacityReduced>
+			<BMText weight={ETextWeight.semiBold} size={ESize.l} textColor={ETextColor.default} opacityReduced>
 				{subtitle}
-			</Text>
+			</BMText>
 		</StyledHeader>
 	);
 };

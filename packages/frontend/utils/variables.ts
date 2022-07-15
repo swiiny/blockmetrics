@@ -72,13 +72,20 @@ export const BLOCKCHAINS = {
 export const BLOCKCHAINS_ARRAY = Object.values(BLOCKCHAINS);
 
 export const axiosServer = axios.create({
-	baseURL: process.env.SERVER_URL + '/v1/server'
+	baseURL: process.env.SERVER_URL
 });
 
 export const axiosRest = axios.create({
-	baseURL: process.env.API_URL + '/v1/api/rest'
+	baseURL: process.env.API_URL || 'https://api-rest.block-metrics.io',
+	headers: {
+		'Content-Type': 'application/json',
+		Accept: 'application/json',
+		'Access-Control-Allow-Origin': '*',
+		'Access-Control-Allow-Methods': 'GET',
+		'Access-Control-Allow-Headers': 'Origin, X-Requested-With, Content-Type, Accept'
+	}
 });
 
 export const axiosWs = axios.create({
-	baseURL: process.env.WS_URL
+	baseURL: process.env.WS_URL || 'https://api-ws.block-metrics.io'
 });

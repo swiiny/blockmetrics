@@ -2,8 +2,8 @@ import Image from 'next/image';
 import React from 'react';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
-import Text from '../../../../styles/theme/components/Text';
-import TextWithGradient from '../../../../styles/theme/components/TextWithGradient';
+import BMText from '../../../../styles/theme/components/BMText';
+import TextWithGradient from '../../../../styles/theme/components/BMTextWithGradient';
 import { EFlex, ESize } from '../../../../styles/theme/utils/enum';
 import { FlexEx, StyledImageContainer, StyledTextContainer, TextEx } from './Presentation.styles';
 
@@ -15,14 +15,17 @@ const Presentation: React.FC = () => {
 			</StyledImageContainer>
 
 			<StyledTextContainer>
-				<Text>Jeremy Theintz</Text>
-				<Text size={ESize.s}>
+				<BMText>Jeremy Theintz</BMText>
+				<BMText size={ESize.s}>
 					<TextWithGradient>Web3 builder</TextWithGradient>
-				</Text>
+				</BMText>
 
 				<Spacing size={ESize.xs} />
 
-				<TextEx opacityReduced>Lorem ispum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</TextEx>
+				<TextEx opacityReduced>
+					Lorem ispum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
+					magna aliqua.
+				</TextEx>
 			</StyledTextContainer>
 		</FlexEx>
 	);

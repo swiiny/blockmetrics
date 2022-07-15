@@ -6,8 +6,8 @@ import Flex from '../../../../styles/layout/Flex';
 import { EFlex, ESize, ETextAlign } from '../../../../styles/theme/utils/enum';
 import Presentation from '../Presentation';
 import Spacing from '../../../../styles/layout/Spacing';
-import TextWithGradient from '../../../../styles/theme/components/TextWithGradient';
-import Text from '../../../../styles/theme/components/Text';
+import TextWithGradient from '../../../../styles/theme/components/BMTextWithGradient';
+import BMText from '../../../../styles/theme/components/BMText';
 import PoweredBySection from '../PoweredBySection';
 import { TextEx } from './AboutPage.styles';
 import Main from '../../../../styles/layout/Main';
@@ -62,16 +62,16 @@ const AboutPage: NextPage = () => {
 						variants={sectionVariants}
 						viewport={{ once: true, amount: 0.8 }}
 					>
-						<Text opacityReduced size={ESize.xl} textAlign={ETextAlign.center}>
+						<BMText opacityReduced size={ESize.xl} textAlign={ETextAlign.center}>
 							Your favorite blockchain isn’t listed?
-						</Text>
+						</BMText>
 
 						<Spacing size={ESize.xs} />
 
 						<a href='https://github.com/JeremyTheintz/block-metrics/issues' target='_blank' rel='noopener noreferrer'>
-							<Text size={ESize['2xl']} textAlign={ETextAlign.center}>
+							<BMText size={ESize['2xl']} textAlign={ETextAlign.center}>
 								Create a <TextWithGradient>Github issue</TextWithGradient> with some details
-							</Text>
+							</BMText>
 						</a>
 					</motion.section>
 
@@ -84,9 +84,9 @@ const AboutPage: NextPage = () => {
 						variants={sectionVariants}
 						viewport={{ once: true, amount: 0.8 }}
 					>
-						<Text size={ESize['xl']} textAlign={ETextAlign.center}>
+						<BMText size={ESize['xl']} textAlign={ETextAlign.center}>
 							Want to help me improve Blockmetrics?
-						</Text>
+						</BMText>
 
 						<Spacing size={ESize.xs} />
 

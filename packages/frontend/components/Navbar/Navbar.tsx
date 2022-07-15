@@ -1,10 +1,11 @@
-import axios from 'axios';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useEffect, useMemo } from 'react';
-import Text from '../../styles/theme/components/Text';
-import { ESize, ETextColor, ETextType } from '../../styles/theme/utils/enum';
-import { axiosServer } from '../../utils/variables';
+import React, { useMemo } from 'react';
+import Flex from '../../styles/layout/Flex';
+import Spacing from '../../styles/layout/Spacing';
+import BMButton from '../../styles/theme/components/BMButton';
+import BMText from '../../styles/theme/components/BMText';
+import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../styles/theme/utils/enum';
 import { StyledNavbar, StyledNavbarItem, StyledList } from './Navbar.styles';
 
 export const NAVBAR_LINKS = {
@@ -21,7 +22,7 @@ export const NAVBAR_LINKS = {
 		href: '/compare'
 	},
 	about: {
-		label: 'About',
+		label: 'About Blockmetrics',
 		href: '/about'
 	}
 };
@@ -31,20 +32,6 @@ export const INTERNAL_LINKS = {
 		label: 'Story',
 		href: '/story'
 	}
-};
-
-const deactivateFetchingData = async (): Promise<void> => {
-	console.log('deactivateFetchingData');
-	const res = await axiosServer.get('/fetch/stop');
-
-	console.log('res', res);
-};
-
-const activateFetchingData = async (): Promise<void> => {
-	console.log('activateFetchingData');
-	const res = await axiosServer.get('/fetch/start');
-
-	console.log('res', res);
 };
 
 const Navbar = () => {
@@ -61,29 +48,36 @@ const Navbar = () => {
 
 	return (
 		<StyledNavbar isHidden={navbarHidden}>
-			<div className='logo' />
+			<Flex vertical={EFlex.center}>
+				<div className='logo' />
 
-			<StyledList>
-				<button onClick={() => deactivateFetchingData()}>stop server</button>
-				<button onClick={() => activateFetchingData()}>start server</button>
+				<Spacing size={ESize.xl} />
 
-				{Object.values(NAVBAR_LINKS).map(({ label, href }) => (
-					<StyledNavbarItem key={href}>
-						<Link href={href}>
-							<a>
-								<Text
-									type={ETextType.span}
-									inheritStyle={false}
-									size={ESize.m}
-									textColor={pathname === href ? ETextColor.gradient : ETextColor.default}
-								>
-									{label}
-								</Text>
-							</a>
-						</Link>
-					</StyledNavbarItem>
-				))}
-			</StyledList>
+				<StyledList>
+					{Object.values(NAVBAR_LINKS).map(({ label, href }) => (
+						<StyledNavbarItem key={href}>
+							<Link href={href}>
+								<a>
+									<BMText
+										type={ETextType.span}
+										inheritStyle={false}
+										weight={ETextWeight.light}
+										size={ESize.m}
+										className={pathname === href ? 'navbar-active' : ''}
+										textColor={pathname === href ? ETextColor.light : ETextColor.default}
+									>
+										{label}
+									</BMText>
+								</a>
+							</Link>
+						</StyledNavbarItem>
+					))}
+				</StyledList>
+			</Flex>
+
+			<BMButton size={ESize.m} secondary onClick={() => alert('Work in progress')}>
+				What is a blockchain ?
+			</BMButton>
 		</StyledNavbar>
 	);
 };
