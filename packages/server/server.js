@@ -57,43 +57,6 @@ let wsProviders = [];
 
 let pool;
 
-// fetch blockchains gas price and update the database
-async function updateGasPrice() {
-	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('========== UPDATE GAS PRICE START ==========', Date.now());
-	}
-
-	const con = await pool.getConnection();
-
-	try {
-		const promises = Object.values(CHAINS)
-			.filter((chain) => chain.rpc)
-			.map(async (chain) =>
-				getGasPrice(chain.rpc).then((gasPrice) => {
-					updateDbGasPrice(con, chain.id, gasPrice);
-				})
-			);
-
-		await Promise.all(promises);
-
-		con.release();
-
-		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('========== UPDATE GAS PRICE END ==========', Date.now());
-		}
-
-		return 0;
-	} catch (err) {
-		console.error('updateGasPrice', err);
-
-		if (process.env.DEBUG_LOGS === 'activated') {
-			console.log('========== UPDATE GAS PRICE END WITH ERROR ==========', Date.now());
-		}
-
-		return 2;
-	}
-}
-
 async function updatePowerConsumption() {
 	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('========== UPDATE POWER CONSUMPTION START ==========', Date.now());
