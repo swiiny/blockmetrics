@@ -23,7 +23,7 @@ const HomeCard: FC<IHomeCardData> = ({
 	chartDataType,
 	...otherProps
 }) => {
-	const [valueData, setValueData]: { value: number; dailyChange: number } = useState({
+	const [valueData, setValueData] = useState<{ value: number; dailyChange: number }>({
 		value: 0,
 		dailyChange: 0
 	});
