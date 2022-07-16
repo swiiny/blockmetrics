@@ -1,5 +1,6 @@
 import styled from 'styled-components';
-import { ESize } from '../../theme/utils/enum';
+import { EMediaQuery, ESize } from '../../theme/utils/enum';
+import { mq } from '../../theme/utils/functions';
 
 const Main = styled.main<{
 	noMarginTop?: boolean;
@@ -10,6 +11,13 @@ const Main = styled.main<{
 	padding-bottom: 160px;
 
 	${({ noMarginTop }) => (!noMarginTop ? 'margin-top: 120px;' : 'margin-top: 0;')}
+
+	${mq(
+		EMediaQuery.sm,
+		`
+		padding-bottom: 80px;
+	`
+	)}
 
 	${(p) => {
 		switch (p.paddingTop) {

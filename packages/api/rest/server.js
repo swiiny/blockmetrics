@@ -12,7 +12,6 @@ import {
 } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
 import { EDailyData, EDailyGlobalData, EGlobalData } from './utils/variables.js';
-// import httpsRedirect from 'express-https-redirect';
 
 // connection pool
 let pool;
@@ -27,31 +26,21 @@ const limiter = rateLimit({
 const corsOptions = {
 	origin: [
 		process.env.FRONTEND_URL,
-		'http://blockmetrics.jcloud-ver-jpc.ik-server.com',
-		'https://blockmetrics.jcloud-ver-jpc.ik-server.com',
-		'https://block-metrics.io',
-		'http://block-metrics.io',
-		'https://block-metrics.com',
-		'http://block-metrics.com',
-		'http://blockmetrics.jcloud-ver-jpc.ik-server.com/',
 		'https://blockmetrics.jcloud-ver-jpc.ik-server.com/',
 		'https://block-metrics.io/',
-		'http://block-metrics.io/',
+		'https://www.block-metrics.io/',
 		'https://block-metrics.com/',
-		'http://block-metrics.com/'
+		'https://www.block-metrics.com/'
 	],
 	methods: ['GET'],
 	optionsSuccessStatus: 200
 };
 
 const app = express();
-// app.enable('trust proxy');
 
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(limiter);
-//app.use('/', httpsRedirect());
-//app.use(`/ping`, httpsRedirect());
 
 // returns blockchains sorted by default by rank
 // query parameters could be
@@ -273,15 +262,6 @@ app.get(`/get/blockchains/total`, async (req, res) => {
 app.get(`/ping`, async (req, res) => {
 	res.send('pong');
 });
-/*
-app.use(function (request, response, next) {
-	if (process.env.NODE_ENV !== 'development' && !request.secure) {
-		return response.redirect('https://' + request.headers.host + request.url);
-	}
-
-	next();
-});
-*/
 
 app.listen(process.env.API_PORT, async () => {
 	console.log(`Server listening on port ${process.env.API_PORT}`);

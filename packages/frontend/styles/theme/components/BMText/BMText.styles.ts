@@ -16,7 +16,7 @@ const generateTextStyle = (p: any) => {
 		${p.singleLine ? 'line-height: 1rem;' : ''}
 		${p.inheritStyle
 			? css`
-					font-size: inherit;
+					font-size: inherit !important;
 					font-weight: inherit;
 					letter-spacing: inherit;
 					text-align: inherit;

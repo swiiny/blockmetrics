@@ -38,7 +38,7 @@ const HomeHeader: FC = () => {
 
 					<BMHeading type={ETextType.h1} weight={ETextWeight.light}>
 						Blockchain
-						<BMText type={ETextType.span} weight={ETextWeight.semiBold}>
+						<BMText type={ETextType.span} inheritStyle weight={ETextWeight.semiBold}>
 							{` Data`}
 						</BMText>
 					</BMHeading>
