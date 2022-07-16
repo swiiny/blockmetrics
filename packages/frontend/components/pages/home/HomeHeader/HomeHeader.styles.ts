@@ -10,6 +10,16 @@ export const StyledHomeHeader = styled.header`
 
 	align-items: center;
 
+	${mq(
+		EMediaQuery.sm,
+		`
+		align-items: flex-start;
+		min-height: unset;
+		
+		padding-bottom: 80px;
+	`
+	)} {
+
 	${(p) => css`
 		&:before {
 			content: ' ';
