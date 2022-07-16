@@ -26,11 +26,11 @@ const limiter = rateLimit({
 const corsOptions = {
 	origin: [
 		process.env.FRONTEND_URL,
-		'https://blockmetrics.jcloud-ver-jpc.ik-server.com/',
-		'https://block-metrics.io/',
-		'https://www.block-metrics.io/',
-		'https://block-metrics.com/',
-		'https://www.block-metrics.com/'
+		'https://blockmetrics.jcloud-ver-jpc.ik-server.com',
+		'https://block-metrics.io',
+		'https://www.block-metrics.io',
+		'https://block-metrics.com',
+		'https://www.block-metrics.com'
 	],
 	methods: ['GET'],
 	optionsSuccessStatus: 200
