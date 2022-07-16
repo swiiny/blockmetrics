@@ -40,7 +40,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 const HomeData: FC = () => {
 	return (
 		<section>
-			<Flex fullWidth as='ul' horizontal={EFlex.between}>
+			<Flex fullWidth as='ul' wrapItems horizontal={EFlex.between} mdDirection={EFlex.column}>
 				{HOMECARD_DATA.map((card) => (
 					<HomeCard key={card.title} {...card} />
 				))}

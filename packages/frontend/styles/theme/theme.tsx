@@ -7,6 +7,7 @@ export const defaultTheme = {
 		l: '7px'
 	},
 	spacing: {
+		unset: 'unset',
 		'4xs': '8px',
 		'3xs': '12px',
 		'2xs': '16px',

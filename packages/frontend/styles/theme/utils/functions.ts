@@ -56,7 +56,7 @@ export const setFontSize = (size: ESize) => {
 					`
 			: ''};
 
-		@media only screen and (max-width: ${EMediaQuery.sm}) {
+		@media only screen and (max-width: ${EMediaQuery.md}) {
 			${size === ESize.s
 				? `
             font-size: 0.75rem;
@@ -163,8 +163,9 @@ export const addPaddingStyles = (p: any) => {
 };
 
 export function getSpacingFromESize(size: ESize, theme: DefaultTheme): string {
-	// @ts-ignore
-	return theme.spacing[size];
+	// get value from ESize using typescript
+	const value = theme.spacing[size as keyof DefaultTheme['spacing']];
+	return value ? `${value}` : '';
 }
 
 // convert ETextColor to to theme color
