@@ -12,7 +12,6 @@ import {
 } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
 import { EDailyData, EDailyGlobalData, EGlobalData } from './utils/variables.js';
-// import httpsRedirect from 'express-https-redirect';
 
 // connection pool
 let pool;
@@ -38,7 +37,6 @@ const corsOptions = {
 };
 
 const app = express();
-// app.enable('trust proxy');
 
 app.use(cors(corsOptions));
 app.use(helmet());
