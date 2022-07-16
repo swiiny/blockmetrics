@@ -13,6 +13,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] setup jelatic https for APIs
 -   [ ] Create readme for each service
 -   [ ] Update this readme with link to others
+-   [ ] Add Cypress E2E tests
 
 ### Database :white_check_mark:
 
