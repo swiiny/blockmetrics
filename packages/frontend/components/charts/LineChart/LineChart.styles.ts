@@ -1,5 +1,4 @@
 import styled, { css } from 'styled-components';
-import { IChartContainer } from './BarChart.type';
 
 export const StyledChartContainer = styled.div<{ chartHeight?: number }>`
 	${(p) => css`

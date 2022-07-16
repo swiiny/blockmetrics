@@ -361,17 +361,21 @@ async function initWebsocketProvider(chain, con) {
 	let keepAliveInterval = null;
 
 	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('WS opened', chain.name, dateString);
+		console.log('WS opened', chain.name);
 	}
 
 	let wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 	wsProvider.on('block', async (blockNumber) => {
 		if (chain.id === CHAINS.avalanche.id) {
+			//console.log('Avalanche block:', blockNumber);
 			// wait a second to be sure that the block is fully processed (mainly avalanche issue)
-			setTimeout(() => {
-				fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
-			}, 2000);
+			setTimeout(
+				() => {
+					fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
+				},
+				process.env.NODE_ENV === 'production' ? 3000 : 0
+			);
 		} else {
 			fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
 		}
