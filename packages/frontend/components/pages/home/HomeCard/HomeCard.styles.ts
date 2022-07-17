@@ -1,15 +1,48 @@
 import styled, { css } from 'styled-components';
+import { EMediaQuery } from '../../../../styles/theme/utils/enum';
+import { mq } from '../../../../styles/theme/utils/functions';
 
 export const StyledHomeCard = styled.li`
 	${(p) => css`
 		position: relative;
 
 		width: 32%;
-		height: 440px;
+		height: auto;
 
 		border-radius: 30px;
 
 		padding: ${p.theme.spacing.m};
+
+		${mq(
+			EMediaQuery.lg,
+			`
+			width: 48%;
+
+			margin-top: ${p.theme.spacing.m};
+
+			padding: ${p.theme.spacing.s};
+
+			height: auto;
+		`
+		)}
+
+		${mq(
+			EMediaQuery.md,
+			`
+			width: 100%;
+			//height: 300px;
+		`
+		)}
+
+		${mq(
+			EMediaQuery.sm,
+			`
+			&:nth-child(1) {
+				margin-top: 0;
+			}
+
+		`
+		)}
 
 		&::before {
 			content: ' ';
@@ -43,6 +76,15 @@ export const StyledIconContainer = styled.div`
 	border-radius: 20px;
 
 	background-color: #ffffff10;
+
+	${mq(
+		EMediaQuery.md,
+		`
+			height: 60px;
+			width: 60px;
+			border-radius: 30px;
+		`
+	)}
 `;
 
 export const StyledIcon = styled.img`

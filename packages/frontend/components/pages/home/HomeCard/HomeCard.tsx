@@ -138,13 +138,13 @@ const HomeCard: FC<IHomeCardData> = ({
 						{title}
 					</BMText>
 
-					<Spacing size={ESize.xs} />
+					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
 					<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold}>
 						{formattedValue}
 					</BMHeading>
 
-					<Spacing size={ESize.xs} />
+					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
 					{valueData.dailyChange ? (
 						<BMText size={ESize.s} weight={ETextWeight.light} textColor={dailyTextColor}>
@@ -156,7 +156,7 @@ const HomeCard: FC<IHomeCardData> = ({
 				</Flex>
 			</Flex>
 
-			<BMGradientSeparator margin={ESize.xl} />
+			<BMGradientSeparator margin={ESize.xl} mdMargin={ESize.s} lgMargin={ESize.m} />
 
 			<BMText size={ESize.m} weight={ETextWeight.medium}>
 				{chartTitle}

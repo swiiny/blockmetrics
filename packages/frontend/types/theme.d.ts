@@ -9,6 +9,7 @@ declare module 'styled-components' {
 			l: string;
 		};
 		spacing: {
+			unset: string;
 			'4xs': string;
 			'3xs': string;
 			'2xs': string;

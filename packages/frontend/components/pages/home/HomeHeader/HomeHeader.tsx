@@ -1,5 +1,6 @@
 import Image from 'next/image';
 import React, { FC } from 'react';
+import useResponsive from '../../../../hooks/useResponsive';
 import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
@@ -18,6 +19,8 @@ import {
 } from './HomeHeader.styles';
 
 const HomeHeader: FC = () => {
+	const { isSmallerThanSm } = useResponsive();
+
 	return (
 		<StyledHomeHeader>
 			<StyledHivePattern>
@@ -28,7 +31,7 @@ const HomeHeader: FC = () => {
 				<StyledBlockImage src='/assets/images/pattern-2.svg' alt='' draggable={false} />
 			</StyledBlockPattern>
 
-			<Eclipse size={ESize.s} position={EPosition.topRight} zIndex={0} />
+			<Eclipse size={ESize.s} position={!isSmallerThanSm ? EPosition.topRight : EPosition.top} zIndex={0} />
 
 			<Column columns={5} sm={12} md={8} xl={6}>
 				<Flex direction={EFlex.column} fullWidth>
