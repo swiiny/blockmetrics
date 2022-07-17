@@ -11,7 +11,7 @@ export const StyledHomeHeader = styled.header`
 	align-items: center;
 
 	${mq(
-		EMediaQuery.sm,
+		EMediaQuery.md,
 		`
 	align-items: flex-start;
 	min-height: unset;
