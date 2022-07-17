@@ -136,9 +136,8 @@ export const getChartGlobalByType = async (pool, type) => {
 				);
 				break;
 			case EDailyGlobalData.powerConsumption:
-				console.log('ADD TABLE daily_power_consumption_history');
 				data = await pool.query(
-					`SELECT date, blockchain_power_consumption AS value FROM daily_blockchain_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+					`SELECT date, power_consumption AS value FROM daily_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
 				);
 				break;
 			default:
@@ -171,7 +170,7 @@ export const getGlobalDataByType = async (pool, type) => {
 
 	try {
 		switch (type) {
-			case EGlobalData.blockchainPowerConsumption:
+			case EGlobalData.powerConsumption:
 				valueLabel = 'blockchain_power_consumption';
 				break;
 			case EGlobalData.tokenCount:

@@ -25,7 +25,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 	},
 	{
 		title: 'Last 24h Power Consumption',
-		valueType: EGlobalData.blockchainPowerConsumption,
+		valueType: EGlobalData.powerConsumption,
 		unit: 'W/h',
 		dailyChange: 0,
 		dailyChangeColorReversed: true,

@@ -22,7 +22,7 @@ export const EDailyGlobalData = {
 
 // sum of data fetched for all blockchains
 export const EGlobalData = {
-	blockchainPowerConsumption: 'blockchainPowerConsumption',
+	powerConsumption: 'powerConsumption',
 	tokenCount: 'tokenCount',
 	nodeCount: 'nodeCount',
 	transactionCount: 'transactionCount',

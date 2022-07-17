@@ -129,7 +129,7 @@ export enum EChartType {
 }
 
 export enum EGlobalData {
-	blockchainPowerConsumption = 'blockchainPowerConsumption',
+	powerConsumption = 'powerConsumption',
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
 	transactionCount = 'transactionCount',

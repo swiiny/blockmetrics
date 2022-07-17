@@ -18,3 +18,5 @@ package-lock.json
 .npmrc
 
 test_files/
+
+spmdb/
