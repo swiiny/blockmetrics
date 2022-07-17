@@ -1,12 +1,13 @@
 import Link from 'next/link';
 import { useRouter } from 'next/router';
-import React, { useCallback, useEffect, useMemo, useReducer, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import useResponsive from '../../hooks/useResponsive';
 import Flex from '../../styles/layout/Flex';
 import Spacing from '../../styles/layout/Spacing';
 import BMButton from '../../styles/theme/components/BMButton';
 import BMText from '../../styles/theme/components/BMText';
 import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../styles/theme/utils/enum';
+import Collapse from '../utils/Collapse';
 import {
 	StyledNavbar,
 	StyledNavbarItem,
@@ -48,8 +49,43 @@ const Navbar = () => {
 
 	const { pathname } = router;
 
+	const navbarRef = useRef<any>();
 	const [navbarBlurred, setNavbarBlurred] = useState(false);
-	const [burgerMenuOpen, setBurgerMenuOpen] = useState(false);
+	const [isNavbarOpen, setIsNavbarOpen] = useState(false);
+
+	const [burgerClickCount, incrementBurgerClickCount] = useReducer((count) => {
+		if (count + 1 > 5) {
+			return 0;
+		} else {
+			return count + 1;
+		}
+	}, 0);
+
+	const onClickOutside = useCallback(
+		(event: MouseEvent) => {
+			const { target } = event;
+
+			if (!isNavbarOpen) {
+				return;
+			}
+
+			// close navbar if click outside
+			if (target instanceof Node && !navbarRef?.current?.contains(target)) {
+				handleBurgerClick();
+			}
+		},
+		[isNavbarOpen, setIsNavbarOpen]
+	);
+
+	const handleBurgerClick = useCallback(() => {
+		incrementBurgerClickCount();
+		setIsNavbarOpen(!isNavbarOpen);
+	}, [isNavbarOpen, incrementBurgerClickCount]);
+
+	const closeNavbar = useCallback(() => {
+		incrementBurgerClickCount();
+		setIsNavbarOpen(false);
+	}, [incrementBurgerClickCount]);
 
 	const navbarHidden = useMemo(() => {
 		if (pathname === INTERNAL_LINKS.story.href) {
@@ -63,7 +99,7 @@ const Navbar = () => {
 		return (
 			<StyledList>
 				{Object.values(NAVBAR_LINKS).map(({ label, href }) => (
-					<StyledNavbarItem key={href}>
+					<StyledNavbarItem key={href} onClick={isSmallerThanMd ? () => closeNavbar() : undefined}>
 						<Link href={href}>
 							<a>
 								<BMText
@@ -84,19 +120,6 @@ const Navbar = () => {
 		);
 	}, [pathname]);
 
-	const [burgerClickCount, incrementBurgerClickCount] = useReducer((count) => {
-		if (count + 1 > 5) {
-			return 0;
-		} else {
-			return count + 1;
-		}
-	}, 0);
-
-	const handleBurgerClick = useCallback(() => {
-		incrementBurgerClickCount();
-		setBurgerMenuOpen(!burgerMenuOpen);
-	}, [burgerMenuOpen, incrementBurgerClickCount]);
-
 	const burgerButton = useMemo(() => {
 		return (
 			<StyledBurgerButton onClick={() => handleBurgerClick()}>
@@ -111,7 +134,7 @@ const Navbar = () => {
 				</StyledCube>
 			</StyledBurgerButton>
 		);
-	}, [burgerMenuOpen, burgerClickCount]);
+	}, [isNavbarOpen, burgerClickCount]);
 
 	useEffect(() => {
 		// detect scroll and call blurNavbar after 100 px from top
@@ -131,19 +154,36 @@ const Navbar = () => {
 		};
 	}, []);
 
+	useEffect(() => {
+		if (isSmallerThanMd) {
+			if (isNavbarOpen) {
+				document.addEventListener('click', onClickOutside);
+			} else {
+				document.removeEventListener('click', onClickOutside);
+			}
+		}
+
+		return () => {
+			document.removeEventListener('click', onClickOutside);
+		};
+	}, [isNavbarOpen, onClickOutside, isSmallerThanMd]);
+
 	return (
-		<StyledNavbar isHidden={navbarHidden} isBlurred={navbarBlurred}>
-			<Flex vertical={EFlex.center} mdHorizontal={EFlex.between}>
+		<StyledNavbar ref={navbarRef} isHidden={navbarHidden} isBlurred={navbarBlurred}>
+			<Flex fullWidth={isSmallerThanMd} vertical={EFlex.center} mdHorizontal={EFlex.between}>
 				<div className='logo' />
 
 				<Spacing size={ESize.xl} />
 
 				{isSmallerThanMd ? <>{burgerButton}</> : <>{navbarLinks}</>}
 			</Flex>
-
-			<BMButton size={ESize.m} secondary onClick={() => alert('Work in progress')}>
-				What is a blockchain ?
-			</BMButton>
+			{!isSmallerThanMd ? (
+				<BMButton size={ESize.m} secondary onClick={() => alert('Work in progress')}>
+					What is a blockchain ?
+				</BMButton>
+			) : (
+				<Collapse isOpen={isNavbarOpen}>{navbarLinks}</Collapse>
+			)}
 		</StyledNavbar>
 	);
 };

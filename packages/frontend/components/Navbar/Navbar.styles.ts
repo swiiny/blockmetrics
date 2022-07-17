@@ -10,15 +10,27 @@ export const StyledNavbar = styled.nav<{ isHidden?: boolean; isBlurred: boolean 
 	position: fixed;
 	top: 0;
 	left: 0;
-	width: 100%;
-
 	z-index: 100;
+
+	width: 100%;
+	height: 120px;
 
 	padding: 0 ${(p) => p.theme.spacing['4xl']};
 
+	${mq(
+		EMediaQuery.md,
+		`
+		flex-direction: column;
+		justify-content: flex-start;
+		height: auto;
+
+		& > div:nth-child(1) {
+			height: 120px;
+		}
+	`
+	)}
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
-	height: 120px;
 
 	${addTransition()}
 
@@ -33,6 +45,8 @@ export const StyledList = styled.ul`
 	flex-direction: row;
 	justify-content: space-between;
 	align-items: center;
+
+	${mq(EMediaQuery.sm, `flex-direction: column;`)}
 `;
 
 export const StyledNavbarItem = styled.li`
@@ -49,6 +63,16 @@ export const StyledNavbarItem = styled.li`
 	&:nth-last-child(1) a {
 		margin-right: 0;
 	}
+
+	${mq(
+		EMediaQuery.sm,
+		`
+		& > a {
+			margin-left: 0;
+			margin-right: 0;
+		}
+	`
+	)}
 `;
 
 export const StyledBurgerButton = styled.button`

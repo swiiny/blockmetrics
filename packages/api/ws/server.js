@@ -1,3 +1,5 @@
+'use strict';
+
 import { getBlockchains } from './utils/fetch.js';
 import { WebSocketServer } from 'ws';
 import { createDbPool } from './utils/pool.js';

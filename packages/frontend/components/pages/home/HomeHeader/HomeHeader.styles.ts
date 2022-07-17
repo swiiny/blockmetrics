@@ -13,12 +13,12 @@ export const StyledHomeHeader = styled.header`
 	${mq(
 		EMediaQuery.sm,
 		`
-		align-items: flex-start;
-		min-height: unset;
-		
-		padding-bottom: 80px;
+	align-items: flex-start;
+	min-height: unset;
+
+	padding-bottom: 80px;
 	`
-	)} {
+	)}
 
 	${(p) => css`
 		&:before {
@@ -38,6 +38,14 @@ export const StyledHomeHeader = styled.header`
         right: -100vw;
       `,
 				'min'
+			)}
+
+			${mq(
+				EMediaQuery.sm,
+				`
+				left: -15px;
+        right: -15px;
+			`
 			)}
 		}
 	`}
@@ -66,6 +74,8 @@ export const StyledHivePattern = styled.div`
 
 		display: flex;
 		justify-content: flex-end;
+
+		${mq(EMediaQuery.md, `right: 0;`)}
 	`}
 `;
 
