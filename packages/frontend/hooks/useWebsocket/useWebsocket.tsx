@@ -55,7 +55,6 @@ function useWebsocket(): IUseWebsocket {
 
 		ws.onmessage = (e: any) => {
 			const res = JSON.parse(e.data);
-			console.log('res', res);
 
 			if (res?.data === 'ping') {
 				// used to check if user is connected

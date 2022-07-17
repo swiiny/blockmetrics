@@ -124,8 +124,8 @@ const Navbar = () => {
 		return (
 			<StyledBurgerButton onClick={() => handleBurgerClick()}>
 				<StyledCube value={burgerClickCount}>
-					{Array.from({ length: 6 }, (_, i) => (
-						<StyledFace faceIndex={i + 1} faceVisible={burgerClickCount === i}>
+					{Array.from({ length: 6 }, (value, i) => (
+						<StyledFace key={'face-' + value} faceIndex={i + 1} faceVisible={burgerClickCount === i}>
 							<span />
 							<span />
 							<span />
