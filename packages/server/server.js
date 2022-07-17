@@ -1,4 +1,5 @@
-import { getGasPrice } from './utils/fetch/gasPrice.js';
+'use strict';
+
 import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
 import { calculatePowerConsumption } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
@@ -12,7 +13,6 @@ import {
 	updateTodayAddressCountInBlockchain,
 	updateTxCountInBlockchain
 } from './utils/sql.js';
-import { updateDbGasPrice } from './utils/update/gasPrice.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
 import { CHAINS, CHAINS_ARRAY } from './variables.js';
 import schedule from 'node-schedule';
@@ -45,6 +45,9 @@ import {
 import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
+
+import pkg from 'spm-agent-nodejs';
+const { spmAgent } = pkg;
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
