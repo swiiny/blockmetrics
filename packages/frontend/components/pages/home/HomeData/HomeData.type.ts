@@ -4,6 +4,8 @@ interface IHomeCardData {
 	title: string;
 	value?: number;
 	valueType: EGlobalData;
+	dailyChangeType: EGlobalData;
+	dailyCustomLabel?: string;
 	unit?: string;
 	dailyChange?: number;
 	dailyChangeUnit?: string;

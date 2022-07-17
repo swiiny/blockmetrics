@@ -8,6 +8,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 	{
 		title: 'Today Users Count',
 		valueType: EGlobalData.todayAddressCount,
+		dailyChangeType: EGlobalData.todayAddressCount,
 		dailyChange: 0,
 		iconSrc: '/assets/images/icons/profile-tick.svg',
 		chartTitle: 'Daily Active Users',
@@ -17,7 +18,9 @@ const HOMECARD_DATA: IHomeCardData[] = [
 	{
 		title: 'Total Transactions Count',
 		valueType: EGlobalData.transactionCount,
+		dailyChangeType: EGlobalData.todayTransactionsCount,
 		dailyChange: 0,
+		dailyCustomLabel: 'today',
 		iconSrc: '/assets/images/icons/arrow-swap-horizontal.svg',
 		chartTitle: 'Daily Transactions count',
 		chartType: EChartType.line,
@@ -26,6 +29,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 	{
 		title: 'Last 24h Power Consumption',
 		valueType: EGlobalData.powerConsumption,
+		dailyChangeType: EGlobalData.powerConsumption,
 		unit: 'W/h',
 		dailyChange: 0,
 		dailyChangeColorReversed: true,

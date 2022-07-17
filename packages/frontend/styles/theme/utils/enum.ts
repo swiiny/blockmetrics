@@ -137,3 +137,16 @@ export enum EGlobalData {
 	addressCount = 'addressCount',
 	todayAddressCount = 'todayAddressCount'
 }
+
+export enum ESubscribeType {
+	blockchains = 'blockchains',
+	blockchain = 'blockchain',
+	usersCount = 'usersCount',
+	totalTransactionCount = 'totalTransactionCount',
+	ethereum = 'ethereum',
+	bitcoin = 'bitcoin',
+	polygon = 'polygon',
+	fantom = 'fantom',
+	bsc = 'binance-smart-chain',
+	avalanche = 'avalanche'
+}

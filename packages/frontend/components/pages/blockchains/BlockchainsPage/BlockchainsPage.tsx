@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
@@ -7,6 +7,10 @@ import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import BlockchainCard from '../../../cards/BlockchainCard';
 import { StyledBlockchainList } from './BlockchainsPage.styles';
 import { axiosRest } from '../../../../utils/variables';
+import useWebsocket from '../../../../hooks/useWebsocket';
+import BMButton from '../../../../styles/theme/components/BMButton';
+import { ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
+import Spacing from '../../../../styles/layout/Spacing';
 
 const HeaderData = {
 	title: 'Blockchains',
@@ -14,106 +18,26 @@ const HeaderData = {
 };
 
 const BlockchainsPage: NextPage = () => {
-	const [loading, setLoading] = useState(true);
-	const [wsConnected, setWsConnected] = useState(false);
+	const { subscribeTo, message, wsConnected } = useWebsocket();
 	const [blockchains, setBlockchains] = useState([]);
 
-	let ws: W3CWebSocket;
-
-	const initWebsocket = async () => {
-		if (ws) {
-			ws.close();
+	useEffect(() => {
+		if (message?.channel === ESubscribeType.blockchains) {
+			setBlockchains(message.data);
 		}
-
-		setLoading(true);
-		let type;
-		let strToRemove;
-
-		// if process.env.WS_URL start with http then replace it by ws
-		if ((process.env.WS_URL as string).startsWith('http://')) {
-			type = 'ws';
-			strToRemove = 'http://';
-		} else {
-			type = 'wss';
-			strToRemove = 'https://';
-		}
-
-		const removed = process.env.WS_URL?.replace(strToRemove, '');
-
-		console.log('in initWebsocket removed =====>');
-
-		console.log('ws_url', process.env.WS_URL);
-		console.log('res', `${type}://${removed}/`);
-
-		ws = new W3CWebSocket(`${type}://${removed}/`);
-
-		ws.onopen = () => {
-			setLoading(false);
-			setWsConnected(true);
-		};
-
-		ws.onmessage = (e: any) => {
-			const res = JSON.parse(e.data);
-
-			if (res?.length) {
-				setBlockchains(res);
-			}
-		};
-
-		ws.onerror = (e: any) => {
-			console.error('socket error', e);
-		};
-
-		ws.onclose = () => {
-			setWsConnected(false);
-		};
-	};
-
-	const fetchData = async (isActivated: boolean = false) => {
-		console.log('NODE_ENV ===========>');
-		console.log('node_env', process.env.NODE_ENV);
-		console.log('API_URL ===========>');
-		console.log('api_url', process.env.API_URL);
-		console.log('api_url_complete', process.env.API_URL);
-
-		console.log('WS_URL ===========>');
-		console.log('ws_url', process.env.WS_URL);
-
-		try {
-			const res = await axiosRest('/get/blockchains');
-			setBlockchains(res.data);
-		} catch (err) {
-			console.error('fetch rest data', err);
-		}
-
-		try {
-			if (!isActivated) {
-				initWebsocket();
-			}
-		} catch (err) {
-			console.error('fetch ws data', err);
-		}
-	};
+	}, [message]);
 
 	useEffect(() => {
-		fetchData();
-
-		return () => {
-			if (ws) {
-				ws.close();
-			}
-		};
-	}, []);
+		if (wsConnected) {
+			subscribeTo(ESubscribeType.blockchains);
+		}
+	}, [wsConnected]);
 
 	return (
 		<>
 			<Meta title='Blockchains' />
 
-			<Header
-				title={HeaderData.title}
-				subtitle={HeaderData.subtitle}
-				refreshAction={!wsConnected ? () => fetchData() : undefined}
-			/>
+			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 
 			<Main>
 				<StyledBlockchainList>

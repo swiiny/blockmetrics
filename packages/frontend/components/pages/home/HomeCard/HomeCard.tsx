@@ -14,6 +14,8 @@ import { StyledHomeCard, StyledIcon, StyledIconContainer } from './HomeCard.styl
 const HomeCard: FC<IHomeCardData> = ({
 	title,
 	valueType,
+	dailyChangeType,
+	dailyCustomLabel = '24h',
 	unit,
 	dailyChangeUnit,
 	dailyChangeColorReversed,
@@ -23,13 +25,10 @@ const HomeCard: FC<IHomeCardData> = ({
 	chartDataType,
 	...otherProps
 }) => {
-	const [valueData, setValueData] = useState<{ value: number; dailyChange: number }>({
-		value: 0,
-		dailyChange: 0
-	});
+	const [value, setValue] = useState<number>(0);
+	const [dailyChange, setDailyChange] = useState<number>(0);
 
 	const formattedValue = useMemo(() => {
-		const { value } = valueData;
 		// convert value to ingeniery notation
 		let newValue: string = `${value}`;
 
@@ -53,11 +52,9 @@ const HomeCard: FC<IHomeCardData> = ({
 		}
 
 		return newValue;
-	}, [valueData.value, unit]);
+	}, [value, unit]);
 
 	const formattedDailyChange = useMemo(() => {
-		const { dailyChange } = valueData;
-
 		// convert value to ingeniery notation
 		let newValue: string = `${dailyChange}`;
 
@@ -86,11 +83,10 @@ const HomeCard: FC<IHomeCardData> = ({
 			newValue = `+${newValue}`;
 		}
 
-		return newValue + ' (24h)';
-	}, [valueData.dailyChange, dailyChangeUnit]);
+		return newValue + ' (' + dailyCustomLabel + ')';
+	}, [dailyChange, dailyChangeUnit, dailyCustomLabel]);
 
 	const dailyTextColor = useMemo(() => {
-		const { dailyChange } = valueData;
 		let positive = ETextColor.positive;
 		let negative = ETextColor.negative;
 
@@ -106,23 +102,33 @@ const HomeCard: FC<IHomeCardData> = ({
 		}
 
 		return ETextColor.default;
-	}, [valueData.dailyChange, dailyChangeColorReversed]);
+	}, [dailyChange, dailyChangeColorReversed]);
 
-	const fetchData = useCallback(async () => {
+	const fetchValue = useCallback(async () => {
 		try {
 			const { data } = await axiosRest('/get/blockchains/total?type=' + valueType);
-			setValueData({
-				value: data.value,
-				dailyChange: data.dailyChange || 0
-			});
+			setValue(data.value || 0);
+		} catch (err) {
+			console.error('HomeCard fetchData', err);
+		}
+	}, [valueType]);
+
+	const fetchDailyChange = useCallback(async () => {
+		try {
+			const { data } = await axiosRest('/get/blockchains/total?type=' + dailyChangeType);
+			setDailyChange(data.value || 0);
 		} catch (err) {
 			console.error('HomeCard fetchData', err);
 		}
 	}, [valueType]);
 
 	useEffect(() => {
-		valueType && fetchData();
-	}, [fetchData, valueType]);
+		valueType && fetchValue();
+	}, [fetchValue, valueType]);
+
+	useEffect(() => {
+		dailyChangeType && fetchDailyChange();
+	}, [fetchDailyChange, dailyChangeType]);
 
 	return (
 		<StyledHomeCard {...otherProps}>
@@ -146,7 +152,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
-					{valueData.dailyChange ? (
+					{dailyChange ? (
 						<BMText size={ESize.s} weight={ETextWeight.light} textColor={dailyTextColor}>
 							{formattedDailyChange}
 						</BMText>

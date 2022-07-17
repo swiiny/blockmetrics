@@ -167,7 +167,6 @@ export const getChartGlobalByType = async (pool, type) => {
 
 export const getGlobalDataByType = async (pool, type) => {
 	let valueLabel = '';
-
 	try {
 		switch (type) {
 			case EGlobalData.powerConsumption:
@@ -197,9 +196,9 @@ export const getGlobalDataByType = async (pool, type) => {
 
 		// sum of all rows with the same valueLabel from blockchain table
 		const res = await pool.query(`SELECT SUM(${valueLabel}) AS value FROM blockchain`);
+
 		return {
-			value: res[0][0].value,
-			dailyChange: 0
+			value: res[0][0].value
 		};
 	} catch (err) {
 		console.error('getGlobalDataByType', err);
