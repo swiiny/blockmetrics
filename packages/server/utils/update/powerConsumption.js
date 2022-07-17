@@ -5,6 +5,7 @@ export async function updatePowerConsumptionInDb(con, chains) {
 		if (!(chains.length >= 0)) {
 			throw new Error('no chains to update');
 		}
+
 		const timestamp = Date.now() / 1000;
 
 		const promises = chains.map(async (chain) => {
