@@ -1,5 +1,5 @@
 import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
-import { EDailyData, EMediaQuery, ESize, ETextColor } from './enum';
+import { EDailyData, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
 	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {
@@ -189,3 +189,17 @@ export const getTextColor = (p: any) => {
 			return `${p.theme.colors.text.default};`;
 	}
 };
+
+export function getESubscribeTypeFromValue(value: string): ESubscribeType {
+	try {
+		const indexOfValue = Object.values(ESubscribeType).indexOf(value as unknown as ESubscribeType);
+
+		const key = Object.keys(ESubscribeType)[indexOfValue] as keyof typeof ESubscribeType;
+
+		return ESubscribeType[key];
+	} catch (err) {
+		console.error('getESubscribeTypeFromValue', err);
+
+		return ESubscribeType.unset;
+	}
+}
