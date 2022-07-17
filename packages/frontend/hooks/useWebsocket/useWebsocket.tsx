@@ -55,7 +55,14 @@ function useWebsocket(): IUseWebsocket {
 
 		ws.onmessage = (e: any) => {
 			const res = JSON.parse(e.data);
-			setMessage(res);
+			console.log('res', res);
+
+			if (res?.data === 'ping') {
+				// used to check if user is connected
+				ws?.send('pong');
+			} else {
+				setMessage(res);
+			}
 		};
 
 		ws.onerror = (e: any) => {

@@ -43,11 +43,6 @@ const wss = new WebSocketServer({
 // user connected to the websocket
 export const clients = new Map();
 
-// set client to be alive
-function heartbeat() {
-	this.isAlive = true;
-}
-
 function checkSubscriptions(con, client) {
 	if (!isBlockchainsActivated) {
 		fetchAndSendBlockchains(pool);
@@ -68,18 +63,17 @@ function checkSubscriptions(con, client) {
 async function startWebsocketServer() {
 	const con = await pool.getConnection();
 	// heartbeat detect and delete dead connection
-	const interval = setInterval(function ping() {
+	setInterval(() => {
 		wss.clients.forEach(function each(ws) {
 			if (ws.isAlive === false) return ws.terminate();
 
 			ws.isAlive = false;
-			ws.ping();
+			ws.send(JSON.stringify({ data: 'ping' }));
 		});
-	}, 3000);
+	}, 30000);
 
 	wss.on('connection', (ws) => {
 		ws.isAlive = true;
-		ws.on('pong', heartbeat);
 
 		ws.on('message', (message) => {
 			const strMessage = message?.toString();
@@ -88,9 +82,12 @@ async function startWebsocketServer() {
 				return;
 			}
 
-			const data = JSON.parse(strMessage);
+			if (strMessage === 'pong') {
+				ws.isAlive = true;
+				return;
+			}
 
-			console.log('data: ', data);
+			const data = JSON.parse(strMessage);
 
 			if (data?.type === 'subscribe') {
 				if (!ws.subscriptions) {
@@ -120,7 +117,6 @@ async function startWebsocketServer() {
 
 			if (clients.size === 0) {
 				console.log('=> streaming stopped');
-				clearInterval(interval);
 			}
 		});
 	});
