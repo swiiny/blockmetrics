@@ -1,13 +1,21 @@
 'use strict';
 
-import { getBlockchains } from './utils/fetch.js';
 import { WebSocketServer } from 'ws';
 import { createDbPool } from './utils/pool.js';
+import {
+	fetchAndSendBlockchains,
+	fetchAndSendBlockchainsToClient,
+	isBlockchainsActivated
+} from './subscriptions/blockchains.js';
+import { blockchainId } from './utils/variables.js';
+import {
+	blockchainActivated,
+	fetchAndSendSingleBlockchainToClient,
+	fetchSingleBlockchain
+} from './subscriptions/blockchain.js';
 
 // connection pool
 let pool;
-
-// TODO : SETUP SECURE CONNECTION
 
 const wss = new WebSocketServer({
 	port: process.env.WS_PORT,
@@ -33,62 +41,74 @@ const wss = new WebSocketServer({
 });
 
 // user connected to the websocket
-const clients = new Map();
-let isFetchDeactivate = true;
+export const clients = new Map();
 
-async function fetchAndSendBlockchains() {
-	while (!isFetchDeactivate) {
-		// console.log('start new loop process');
-		const res = await getBlockchains(pool, {
-			sortBy: 'blockchain_power_consumption',
-			desc: false,
-			limit: 30
-		});
-
-		if (res?.length) {
-			const outbound = JSON.stringify(res[0]);
-
-			// log lengths of clients
-			// console.log(`${clients.size} clients connected`);
-			[...clients.keys()].forEach((client) => {
-				client.send(outbound);
-			});
-		}
-
-		// wait 3 seconds
-		await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
+function checkSubscriptions(con, client) {
+	if (!isBlockchainsActivated) {
+		fetchAndSendBlockchains(pool);
+	} else {
+		// send data to clients without delay
+		fetchAndSendBlockchainsToClient(con, client);
 	}
-}
 
-// set client to be alive
-function heartbeat() {
-	this.isAlive = true;
+	Object.values(blockchainId).map((id) => {
+		if (!blockchainActivated[id]) {
+			fetchSingleBlockchain(pool, id);
+		} else {
+			fetchAndSendSingleBlockchainToClient(con, client, id);
+		}
+	});
 }
 
 async function startWebsocketServer() {
+	const con = await pool.getConnection();
 	// heartbeat detect and delete dead connection
-	const interval = setInterval(function ping() {
+	setInterval(() => {
 		wss.clients.forEach(function each(ws) {
 			if (ws.isAlive === false) return ws.terminate();
 
 			ws.isAlive = false;
-			ws.ping();
+			ws.send(JSON.stringify({ data: 'ping' }));
 		});
-	}, 3000);
+	}, 30000);
 
 	wss.on('connection', (ws) => {
 		ws.isAlive = true;
-		ws.on('pong', heartbeat);
+
+		ws.on('message', (message) => {
+			const strMessage = message?.toString();
+
+			if (!strMessage) {
+				return;
+			}
+
+			if (strMessage === 'pong') {
+				ws.isAlive = true;
+				return;
+			}
+
+			const data = JSON.parse(strMessage);
+
+			if (data?.type === 'subscribe') {
+				if (!ws.subscriptions) {
+					ws.subscriptions = [];
+				}
+
+				ws.subscriptions.push(data.channel);
+
+				checkSubscriptions(con, ws);
+			} else if (data?.type === 'unsubscribe') {
+				if (!ws.subscriptions) {
+					return;
+				}
+
+				ws.subscriptions = ws.subscriptions.filter((sub) => sub !== data.channel);
+			}
+		});
 
 		clients.set(ws);
 
 		console.log('current clients: ', clients.size);
-
-		if (isFetchDeactivate) {
-			console.log('=> start streaming blockchains');
-			isFetchDeactivate = false;
-			fetchAndSendBlockchains();
-		}
 
 		ws.on('close', () => {
 			clients.delete(ws);
@@ -97,8 +117,6 @@ async function startWebsocketServer() {
 
 			if (clients.size === 0) {
 				console.log('=> streaming stopped');
-				isFetchDeactivate = true;
-				clearInterval(interval);
 			}
 		});
 	});

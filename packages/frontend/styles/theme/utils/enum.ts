@@ -129,11 +129,25 @@ export enum EChartType {
 }
 
 export enum EGlobalData {
-	blockchainPowerConsumption = 'blockchainPowerConsumption',
+	powerConsumption = 'powerConsumption',
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
 	transactionCount = 'transactionCount',
 	todayTransactionsCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
 	todayAddressCount = 'todayAddressCount'
+}
+
+export enum ESubscribeType {
+	unset = 'unset',
+	blockchains = 'blockchains',
+	blockchain = 'blockchain',
+	usersCount = 'usersCount',
+	totalTransactionCount = 'totalTransactionCount',
+	ethereum = 'ethereum',
+	bitcoin = 'bitcoin',
+	polygon = 'polygon',
+	fantom = 'fantom',
+	bsc = 'binance-smart-chain',
+	avalanche = 'avalanche'
 }

@@ -136,9 +136,8 @@ export const getChartGlobalByType = async (pool, type) => {
 				);
 				break;
 			case EDailyGlobalData.powerConsumption:
-				console.log('ADD TABLE daily_power_consumption_history');
 				data = await pool.query(
-					`SELECT date, blockchain_power_consumption AS value FROM daily_blockchain_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+					`SELECT date, power_consumption AS value FROM daily_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
 				);
 				break;
 			default:
@@ -168,10 +167,9 @@ export const getChartGlobalByType = async (pool, type) => {
 
 export const getGlobalDataByType = async (pool, type) => {
 	let valueLabel = '';
-
 	try {
 		switch (type) {
-			case EGlobalData.blockchainPowerConsumption:
+			case EGlobalData.powerConsumption:
 				valueLabel = 'blockchain_power_consumption';
 				break;
 			case EGlobalData.tokenCount:
@@ -198,9 +196,9 @@ export const getGlobalDataByType = async (pool, type) => {
 
 		// sum of all rows with the same valueLabel from blockchain table
 		const res = await pool.query(`SELECT SUM(${valueLabel}) AS value FROM blockchain`);
+
 		return {
-			value: res[0][0].value,
-			dailyChange: 0
+			value: res[0][0].value
 		};
 	} catch (err) {
 		console.error('getGlobalDataByType', err);

@@ -7,24 +7,31 @@ import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
 import { getBlockchainAndMetadataById } from '../../../../utils/fetch';
 import { useRouter } from 'next/router';
 import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
-import { EChartType, EDailyData, EFlex, ELanguage, ESize, ETextColor } from '../../../../styles/theme/utils/enum';
+import {
+	EChartType,
+	EDailyData,
+	EFlex,
+	ELanguage,
+	ESize,
+	ESubscribeType,
+	ETextColor
+} from '../../../../styles/theme/utils/enum';
 import Column from '../../../../styles/layout/Column';
 import BMText from '../../../../styles/theme/components/BMText';
 import Flex from '../../../../styles/layout/Flex';
 import { DataText } from '../../../texts/DataText/DataText';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import Spacing from '../../../../styles/layout/Spacing';
 import BarChart from '../../../charts/BarChart';
 import { IBarLineChart } from '../../../../types/charts';
-
-let ws: W3CWebSocket | null;
-let wsTimeout: NodeJS.Timeout | null;
+import useWebsocket from '../../../../hooks/useWebsocket';
+import { getESubscribeTypeFromValue } from '../../../../styles/theme/utils/functions';
 
 const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
+	const [blockchainChannel, setBlockchainChannel] = useState<ESubscribeType>();
+
 	const [metadata, setMetadata] = useState<TBlockchainMetadata>();
-	const [wsConnected, setWsConnected] = useState<boolean>(false);
-	const [wsAlreaddyConnected, setWsAlreadyConnected] = useState<boolean>(false);
+	const { subscribeTo, message, wsConnected } = useWebsocket();
 
 	const { query } = useRouter();
 	const { name } = query;
@@ -97,85 +104,30 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		const blockchainId = BLOCKCHAINS_ARRAY.find((bc) => bc.name.toLowerCase().replace(/\s/g, '-') === name)?.id;
 
 		if (blockchainId) {
+			setBlockchainChannel(getESubscribeTypeFromValue(blockchainId));
+			// @todo(fetch only metadata because ws send first value without pause)
 			const result = await getBlockchainAndMetadataById(blockchainId || '', ELanguage.en);
 			const { blockchain: fetchedBlockchain, metadata: fetchMetadata } = result || {};
 
-			setBlockchain(fetchedBlockchain);
 			setMetadata(fetchMetadata);
 		}
 	}, [name]);
 
-	const initWebsocket = useCallback(() => {
-		if (ws) {
-			ws.close();
+	useEffect(() => {
+		if (blockchainChannel && message?.channel === blockchainChannel) {
+			setBlockchain(message?.data);
 		}
-
-		let type;
-		let strToRemove;
-
-		// if process.env.WS_URL start with http then replace it by ws
-		if ((process.env.WS_URL as string).startsWith('http://')) {
-			type = 'ws';
-			strToRemove = 'http://';
-		} else {
-			type = 'wss';
-			strToRemove = 'https://';
-		}
-
-		const removed = process.env.WS_URL?.replace(strToRemove, '');
-		ws = new W3CWebSocket(`${type}://${removed}/`);
-
-		ws.onopen = () => {
-			setWsAlreadyConnected(true);
-			setWsConnected(true);
-		};
-
-		ws.onmessage = (e: any) => {
-			const res = JSON.parse(e.data);
-
-			if (res?.length) {
-				const newBlockchain = res.find((bc: TBlockchain) => bc.id === blockchain?.id);
-
-				if (newBlockchain) {
-					setBlockchain(newBlockchain);
-				}
-			}
-		};
-
-		ws.onerror = (e: any) => {
-			console.error('socket error', e);
-			setWsConnected(false);
-		};
-
-		ws.onclose = () => {
-			setWsConnected(false);
-		};
-	}, [blockchain]);
+	}, [message, blockchainChannel]);
 
 	useEffect(() => {
-		name && !blockchain && initData();
-	}, [name, blockchain]);
-
-	useEffect(() => {
-		if (blockchain?.id && !wsAlreaddyConnected) {
-			initWebsocket();
+		if (wsConnected && blockchainChannel) {
+			subscribeTo(blockchainChannel);
 		}
-	}, [blockchain, wsAlreaddyConnected]);
+	}, [wsConnected, blockchainChannel]);
 
 	useEffect(() => {
-		if (!wsConnected && wsAlreaddyConnected) {
-			wsTimeout && clearTimeout(wsTimeout);
-			wsTimeout = setTimeout(() => {
-				initWebsocket();
-			}, 5000);
-		} else if (wsTimeout) {
-			clearTimeout(wsTimeout);
-		}
-	}, [wsConnected, wsAlreaddyConnected]);
-
-	useEffect(() => {
-		return () => ws?.close();
-	}, []);
+		name && initData();
+	}, [name, initData]);
 
 	return (
 		<>
@@ -184,7 +136,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 			<Header
 				title={blockchain?.name || ''}
 				subtitle={metadata?.tagline || ''}
-				image={`/assets/images/blockchains/${blockchain?.id}.svg`}
+				image={blockchain?.id ? `/assets/images/blockchains/${blockchain?.id}.svg` : undefined}
 			/>
 
 			<Main paddingTop={ESize.unset} noMarginTop>
