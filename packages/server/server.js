@@ -381,7 +381,10 @@ async function initWebsocketProvider(chain, con) {
 		keepAliveInterval = null;
 		pingTimeout = null;
 
-		initWebsocketProvider(chain, con);
+		// try to reconnect every 5 minutes
+		setTimeout(() => {
+			initWebsocketProvider(chain, con);
+		}, 30 * 1000);
 	});
 
 	wsProvider._websocket.on('pong', () => {
@@ -464,7 +467,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			//rule.hour = 2;
-			rule.minute = [0, 20, 40];
+			rule.minute = [0, 20, 40, 51];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {

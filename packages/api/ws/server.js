@@ -7,12 +7,17 @@ import {
 	fetchAndSendBlockchainsToClient,
 	isBlockchainsActivated
 } from './subscriptions/blockchains.js';
-import { blockchainId } from './utils/variables.js';
+import { blockchainId, blockchainTotal, subscribeType } from './utils/variables.js';
 import {
 	blockchainActivated,
 	fetchAndSendSingleBlockchainToClient,
 	fetchSingleBlockchain
 } from './subscriptions/blockchain.js';
+import {
+	blockchainsTotalActivated,
+	fetchBlockchainTotal,
+	fetchBlockchainTotalToClient
+} from './subscriptions/blockchainsTotal.js';
 
 // connection pool
 let pool;
@@ -43,21 +48,46 @@ const wss = new WebSocketServer({
 // user connected to the websocket
 export const clients = new Map();
 
-function checkSubscriptions(con, client) {
-	if (!isBlockchainsActivated) {
-		fetchAndSendBlockchains(pool);
-	} else {
-		// send data to clients without delay
-		fetchAndSendBlockchainsToClient(con, client);
+function checkSubscriptions(con, client, channelToCheck) {
+	if (channelToCheck === subscribeType.blockchains) {
+		if (!isBlockchainsActivated) {
+			fetchAndSendBlockchains(pool);
+		} else {
+			// send data to clients without delay
+			fetchAndSendBlockchainsToClient(con, client);
+		}
+
+		return;
 	}
 
-	Object.values(blockchainId).map((id) => {
-		if (!blockchainActivated[id]) {
-			fetchSingleBlockchain(pool, id);
-		} else {
-			fetchAndSendSingleBlockchainToClient(con, client, id);
-		}
-	});
+	if (blockchainId[channelToCheck]) {
+		Object.values(blockchainId)
+			.filter((id) => id === channelToCheck)
+			.map((id) => {
+				console.log('=> fetching blockchain: ', id);
+				if (!blockchainActivated[id]) {
+					fetchSingleBlockchain(pool, id);
+				} else {
+					fetchAndSendSingleBlockchainToClient(con, client, id);
+				}
+			});
+
+		return;
+	}
+
+	if (blockchainTotal[channelToCheck]) {
+		Object.values(blockchainTotal)
+			.filter((channel) => channel === channelToCheck)
+			.map((channel) => {
+				if (!blockchainsTotalActivated[channel]) {
+					fetchBlockchainTotal(pool, channel);
+				} else {
+					fetchBlockchainTotalToClient(con, client, channel);
+				}
+			});
+
+		return;
+	}
 }
 
 async function startWebsocketServer() {
@@ -96,7 +126,7 @@ async function startWebsocketServer() {
 
 				ws.subscriptions.push(data.channel);
 
-				checkSubscriptions(con, ws);
+				checkSubscriptions(con, ws, data.channel);
 			} else if (data?.type === 'unsubscribe') {
 				if (!ws.subscriptions) {
 					return;
