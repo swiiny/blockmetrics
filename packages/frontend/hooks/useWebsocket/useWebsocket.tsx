@@ -3,6 +3,8 @@ import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { ESubscribeType } from '../../styles/theme/utils/enum';
 import { IMessage, IUseWebsocket } from './useWebsocket.type';
 
+let ws: W3CWebSocket | null;
+
 const waitForWsReady = async (ws: W3CWebSocket | null) => {
 	if (!ws) {
 		return;
@@ -13,9 +15,7 @@ const waitForWsReady = async (ws: W3CWebSocket | null) => {
 	}
 };
 
-let ws: W3CWebSocket | null;
-
-function useWebsocket(): IUseWebsocket {
+const useWebsocket = (): IUseWebsocket => {
 	if (typeof window === 'undefined') {
 		return {
 			subscribeTo: () => {},
@@ -112,6 +112,6 @@ function useWebsocket(): IUseWebsocket {
 		wsConnected,
 		loading
 	};
-}
+};
 
 export { useWebsocket };

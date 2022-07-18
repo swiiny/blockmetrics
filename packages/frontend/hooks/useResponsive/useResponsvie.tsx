@@ -11,7 +11,7 @@ function getResponsive(): number {
 	return width;
 }
 
-function useResponsive(): IUseResponsive {
+const useResponsive = (): IUseResponsive => {
 	const mqSm: number = 660;
 	const mqMd: number = 900;
 	const mqLg: number = 1200;
@@ -46,6 +46,6 @@ function useResponsive(): IUseResponsive {
 		isSmallerThanLg,
 		isSmallerThanXl
 	};
-}
+};
 
 export { useResponsive };
