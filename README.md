@@ -10,7 +10,6 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 -   [x] Buy block-metrics domain name
 -   [x] Buy blockmetrics.eth
--   [ ] setup jelatic https for APIs
 -   [ ] Create readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
@@ -18,7 +17,6 @@ The main objective is to offer everyone an easy way to understand what a blockch
 ### Database :white_check_mark:
 
 -   [ ] add TVL in blockchain table
--   [ ] Create daily_blockchain_power_consumption_history table
 
 ### Server
 
@@ -29,11 +27,6 @@ The main objective is to offer everyone an easy way to understand what a blockch
 ### API - REST :white_check_mark:
 
 -   [ ] separate endpoints in multiple files
-
-### API - Websocket
-
--   [x] Set up WS Server
--   [ ] set up single blockchain websocket connection
 
 ### Frontend
 

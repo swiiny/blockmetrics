@@ -1,3 +1,5 @@
+import { blockchainTotalToColumnName } from './variables.js';
+
 // get blockchains data in the database endpoint
 // TODO : protect from sql injection
 export const getBlockchains = async (con, params) => {
@@ -19,6 +21,25 @@ export const getBlockchains = async (con, params) => {
 		return res;
 	} catch (err) {
 		console.error('getBlockchains', err);
+		return [];
+	}
+};
+
+export const getBlockchainsTotalForProperty = async (con, params) => {
+	try {
+		const { property } = params;
+
+		if (!Object.values(blockchainTotalToColumnName).includes(property)) {
+			throw new Error('Invalid property');
+		}
+
+		let query = `SELECT SUM(${property}) AS value FROM blockchain`;
+
+		const res = await con.query(query);
+
+		return res;
+	} catch (err) {
+		console.error('getBlockchainsTotalForProperty', err);
 		return [];
 	}
 };

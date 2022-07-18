@@ -7,9 +7,24 @@ export const blockchainId = {
 	fantom: 'fantom'
 };
 
+// the value must be the the column name in the blockchain table in the database
+export const blockchainTotal = {
+	addressCount: 'addressCount',
+	transactionCount: 'transactionCount',
+	todayTransactionCount: 'todayTransactionCount',
+	todayAddressCount: 'todayAddressCount'
+};
+
+export const blockchainTotalToColumnName = {
+	transactionCount: 'transaction_count',
+	addressCount: 'address_count',
+	todayAddressCount: 'today_address_count',
+	todayTransactionCount: 'today_transaction_count'
+};
+
 export const subscribeType = {
 	blockchains: 'blockchains',
 	usersCount: 'usersCount',
-	totalTransactionCount: 'totalTransactionCount',
+	...blockchainTotal,
 	...blockchainId
 };

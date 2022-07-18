@@ -10,12 +10,17 @@ import BarChart from '../../../charts/BarChart';
 import LineChart from '../../../charts/LineChart';
 import { IHomeCardData } from '../HomeData/HomeData.type';
 import { StyledHomeCard, StyledIcon, StyledIconContainer } from './HomeCard.styles';
+import CountUp from 'react-countup';
+import { IDailyChangeValue, IHomeCardValue } from './HomeCard.type';
 
 const HomeCard: FC<IHomeCardData> = ({
 	title,
 	valueType,
 	dailyChangeType,
 	dailyCustomLabel = '24h',
+	wsMessage,
+	subscribeChannel,
+	refreshTime = 0,
 	unit,
 	dailyChangeUnit,
 	dailyChangeColorReversed,
@@ -26,65 +31,107 @@ const HomeCard: FC<IHomeCardData> = ({
 	...otherProps
 }) => {
 	const [value, setValue] = useState<number>(0);
+	const [updatedValue, setUpdatedValue] = useState<number>(0);
 	const [dailyChange, setDailyChange] = useState<number>(0);
+	const [updatedDailyChange, setUpdatedDailyChange] = useState<number>(0);
 
-	const formattedValue = useMemo(() => {
+	const formattedValue = useMemo<IHomeCardValue>(() => {
 		// convert value to ingeniery notation
-		let newValue: string = `${value}`;
+		let newValue: number = updatedValue;
+		let newUnit: string | undefined;
+		let newIngValue: string | undefined;
+		let hasDecimals: boolean = false;
 
-		if (value >= 10 ** 15) {
-			newValue = `${(value / 10 ** 12).toLocaleString(undefined, { maximumFractionDigits: 2 })} T`;
-		} else if (value >= 10 ** 12) {
-			newValue = `${(value / 10 ** 9).toLocaleString(undefined, { maximumFractionDigits: 2 })} G`;
-		} else if (value >= 10 ** 9) {
-			newValue = `${(value / 10 ** 6).toLocaleString(undefined, { maximumFractionDigits: 2 })} M`;
-		} else if (value >= 10 ** 6) {
-			newValue = `${(value / 10 ** 3).toLocaleString(undefined, { maximumFractionDigits: 2 })} k`;
+		if (updatedValue >= 10 ** 15) {
+			newValue = updatedValue / 10 ** 12;
+			newIngValue = 'T';
+		} else if (updatedValue >= 10 ** 12) {
+			newValue = updatedValue / 10 ** 9;
+			newIngValue = 'G';
+		} else if (updatedValue >= 10 ** 9) {
+			newValue = updatedValue / 10 ** 6;
+			newIngValue = 'M';
+		} else if (updatedValue >= 10 ** 6) {
+			newValue = updatedValue / 10 ** 3;
+			newIngValue = 'k';
+		}
+
+		if (newIngValue) {
+			// round to 2 decimal places
+			newValue = Math.round(newValue * 100) / 100;
+			hasDecimals = true;
 		}
 
 		// add unit if needed
 		if (unit) {
-			if (newValue.indexOf(' ') !== -1) {
-				newValue = `${newValue}${unit}`;
-			} else {
-				newValue = `${newValue} ${unit}`;
-			}
+			newUnit = ` ${newIngValue || ''}${unit}`;
+		} else if (newIngValue) {
+			newUnit = ` ${newIngValue}`;
 		}
+
+		return {
+			value: newValue,
+			unit: newUnit || '',
+			hasDecimals
+		};
+	}, [updatedValue, unit]);
+
+	const formattedInitialValue = useMemo<number>(() => {
+		// convert value to ingeniery notation
+		let newValue: number = value;
+
+		if (updatedValue >= 10 ** 15) {
+			newValue = updatedValue / 10 ** 12;
+		} else if (updatedValue >= 10 ** 12) {
+			newValue = updatedValue / 10 ** 9;
+		} else if (updatedValue >= 10 ** 9) {
+			newValue = updatedValue / 10 ** 6;
+		} else if (updatedValue >= 10 ** 6) {
+			newValue = updatedValue / 10 ** 3;
+		}
+
+		// round to 2 decimal places
+		newValue = Math.round(newValue * 100) / 100;
 
 		return newValue;
-	}, [value, unit]);
+	}, [value]);
 
-	const formattedDailyChange = useMemo(() => {
+	const formattedDailyChange = useMemo<IDailyChangeValue>(() => {
 		// convert value to ingeniery notation
-		let newValue: string = `${dailyChange}`;
+		let newValue: number = updatedDailyChange;
+		let newUnit: string | undefined = '';
 
-		if (dailyChange >= 10 ** 15) {
-			newValue = `${(dailyChange / 10 ** 12).toLocaleString(undefined, { maximumFractionDigits: 2 })} T`;
-		} else if (dailyChange >= 10 ** 12) {
-			newValue = `${(dailyChange / 10 ** 9).toLocaleString(undefined, { maximumFractionDigits: 2 })} G`;
-		} else if (dailyChange >= 10 ** 9) {
-			newValue = `${(dailyChange / 10 ** 6).toLocaleString(undefined, { maximumFractionDigits: 2 })} M`;
-		} else if (dailyChange >= 10 ** 6) {
-			newValue = `${(dailyChange / 10 ** 3).toLocaleString(undefined, { maximumFractionDigits: 2 })} k`;
-		}
+		// round to 2 decimal places
+		newValue = Math.round(newValue * 100) / 100;
 
 		// add unit if needed
 		if (dailyChangeUnit) {
 			if (dailyChangeUnit === '%') {
-				newValue = `${newValue}${dailyChangeUnit}`;
-			} else if (newValue.indexOf(' ') !== -1) {
-				newValue = `${newValue}${dailyChangeUnit}`;
+				newUnit = `${dailyChangeUnit}`;
 			} else {
-				newValue = `${newValue} ${dailyChangeUnit}`;
+				newUnit = ` ${dailyChangeUnit}`;
 			}
 		}
 
-		if (dailyChange > 0) {
-			newValue = `+${newValue}`;
-		}
+		console.log('newValue', newValue);
 
-		return newValue + ' (' + dailyCustomLabel + ')';
-	}, [dailyChange, dailyChangeUnit, dailyCustomLabel]);
+		return {
+			symbol: updatedDailyChange > 0 ? '+' : '',
+			value: newValue,
+			unit: newUnit,
+			periodLabel: ' (' + dailyCustomLabel + ')'
+		};
+	}, [updatedDailyChange, dailyChangeUnit, dailyCustomLabel]);
+
+	const formattedInitialDailyChange = useMemo<number>(() => {
+		// convert value to ingeniery notation
+		let newValue: number = dailyChange;
+
+		// round to 2 decimal places
+		newValue = Math.round(newValue * 100) / 100;
+
+		return newValue;
+	}, [dailyChange]);
 
 	const dailyTextColor = useMemo(() => {
 		let positive = ETextColor.positive;
@@ -108,6 +155,7 @@ const HomeCard: FC<IHomeCardData> = ({
 		try {
 			const { data } = await axiosRest('/get/blockchains/total?type=' + valueType);
 			setValue(data.value || 0);
+			setUpdatedValue(data.value || 0);
 		} catch (err) {
 			console.error('HomeCard fetchData', err);
 		}
@@ -116,11 +164,30 @@ const HomeCard: FC<IHomeCardData> = ({
 	const fetchDailyChange = useCallback(async () => {
 		try {
 			const { data } = await axiosRest('/get/blockchains/total?type=' + dailyChangeType);
+			console.log('data', data);
+
 			setDailyChange(data.value || 0);
+			setUpdatedDailyChange(data.value || 0);
 		} catch (err) {
 			console.error('HomeCard fetchData', err);
 		}
 	}, [valueType]);
+
+	const updateValue = useCallback(
+		(newValue: number) => {
+			setUpdatedDailyChange(newValue);
+			setUpdatedValue(Number(value) + newValue);
+		},
+		[value]
+	);
+
+	useEffect(() => {
+		if (subscribeChannel && wsMessage?.channel === subscribeChannel) {
+			const numberMessage = parseInt(wsMessage?.data, 10);
+
+			updateValue(numberMessage);
+		}
+	}, [wsMessage, value]);
 
 	useEffect(() => {
 		valueType && fetchValue();
@@ -147,14 +214,33 @@ const HomeCard: FC<IHomeCardData> = ({
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
 					<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold}>
-						{formattedValue}
+						<CountUp
+							preserveValue={true}
+							start={formattedInitialValue}
+							end={formattedValue.value}
+							duration={refreshTime}
+							decimals={formattedValue.hasDecimals ? 2 : 0}
+							suffix={formattedValue.unit}
+							separator=','
+							style={{ color: 'inherit' }}
+						/>
 					</BMHeading>
 
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
 					{dailyChange ? (
 						<BMText size={ESize.s} weight={ETextWeight.light} textColor={dailyTextColor}>
-							{formattedDailyChange}
+							<CountUp
+								preserveValue={true}
+								start={formattedInitialDailyChange}
+								end={formattedDailyChange.value}
+								duration={refreshTime}
+								decimals={0}
+								prefix={formattedDailyChange.symbol}
+								suffix={formattedDailyChange.unit + formattedDailyChange.periodLabel}
+								separator=','
+								style={{ color: 'inherit' }}
+							/>
 						</BMText>
 					) : (
 						<></>
