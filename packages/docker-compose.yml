@@ -40,14 +40,6 @@ services:
         volumes:
             - ./server:/app
             - /app/node_modules
-            - '/var/run/docker.sock:/var/run/docker.sock'
-        environment:
-            PORT: $SERVER_PORT
-            MONITORING_TOKEN: $MONITORING_TOKEN
-            SPM_RECEIVER_URL: https://spm-receiver.eu.sematext.com/receiver/v1
-            LOGS_RECEIVER_URL: https://logsene-receiver.eu.sematext.com
-            EVENTS_RECEIVER_URL: https://event-receiver.eu.sematext.com
-            INFRA_TOKEN: $INFRA_TOKEN
         ports:
             - $SERVER_PORT:$SERVER_PORT
         restart: always
@@ -83,24 +75,6 @@ services:
         volumes:
             - ./api/ws:/app
             - /app/node_modules
-
-    sematext-agent:
-        image: 'sematext/agent:latest'
-        environment:
-            - INFRA_TOKEN=$INFRA_TOKEN
-            - REGION=EU
-        cap_add:
-            - SYS_ADMIN
-        restart: always
-        volumes:
-            - '/:/hostfs:ro'
-            - '/etc/passwd:/etc/passwd:ro'
-            - '/etc/group:/etc/group:ro'
-            - '/var/run/:/var/run/'
-            - '/sys/kernel/debug:/sys/kernel/debug'
-            - '/sys:/host/sys:ro'
-            - '/dev:/hostfs/dev:ro'
-            - '/var/run/docker.sock:/var/run/docker.sock:ro'
 
 volumes:
     blockmetrics-db:

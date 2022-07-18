@@ -46,9 +46,6 @@ import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 
-import pkg from 'spm-agent-nodejs';
-const { spmAgent } = pkg;
-
 let fetchingDataActivated = true;
 let canStartFetchData = true;
 
@@ -377,12 +374,18 @@ async function initWebsocketProvider(chain, con) {
 			console.log('WS closed', chain.name, dateString);
 		}
 
-		wsProvider = null;
+		wsProvider.removeAllListeners();
+		wsProvider._websocket?.removeAllListeners();
+
 		keepAliveInterval = null;
 		pingTimeout = null;
 
-		// try to reconnect every 5 minutes
+		// remove this wsProvider from wsProviders
+		wsProviders = wsProviders.filter((ws) => ws.connection.url !== wsProvider.connection.url.ws);
+
+		// try to reconnect every 30 seconds
 		setTimeout(() => {
+			wsProvider = null;
 			initWebsocketProvider(chain, con);
 		}, 30 * 1000);
 	});
