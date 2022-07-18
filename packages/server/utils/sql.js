@@ -3,6 +3,7 @@
 // ==============================================================================================
 // get datas to calculate PoS blockchains power consumption
 export const getPowerConsumptionDataForPoS = `SELECT id, single_node_power_consumption, node_count, testnet_node_count FROM blockchain WHERE consensus = 'pos'`;
+export const getPowerConsumptionDataForPoW = `SELECT id, single_transaction_power_consumption, today_transaction_count FROM blockchain WHERE consensus = 'pow'`;
 export const getDailyTokenCount = `SELECT token_count, date FROM daily_token_count_history WHERE blockchain_id = ? AND date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW() ORDER BY date ASC`;
 // return the count of active address for the current day for the given blockchain
 export const getTodayActiveAddressCount = `SELECT COUNT(*) AS count FROM today_active_address WHERE blockchain_id = ? AND day = CURDATE()`;
@@ -24,6 +25,7 @@ export const insertDailyNewTokens = `INSERT INTO daily_new_tokens_history (id, b
 
 export const insertDailyTokenCount = `INSERT INTO daily_token_count_history (id, blockchain_id, token_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyNodeCount = `INSERT INTO daily_node_count_history (id, blockchain_id, node_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
+export const insertDailyTxPowerConsumption = `INSERT INTO daily_transaction_power_consumption_history (id, blockchain_id, power_consumption, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 
 export const insertNewTodayActiveAddress = `INSERT INTO today_active_address (address, blockchain_id, day) VALUES (?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE address = address`;
 
@@ -32,6 +34,8 @@ export const insertNewTodayActiveAddress = `INSERT INTO today_active_address (ad
 // ==============================================================================================
 // update token count in blockchain table by blockchain id
 export const updateTokenCountInBlockchain = `UPDATE blockchain SET token_count = ? WHERE id = ?`;
+// update single transaction power consumption in blockchain table by blockchain id
+export const updateTxPowerConsumptionInBlockchain = `UPDATE blockchain SET single_transaction_power_consumption = ? WHERE id = ?`;
 // increment transactions count by blockchain id
 export const increaseTodayTxCountInBlockchain = `UPDATE blockchain SET today_transaction_count = today_transaction_count + ? WHERE id = ?`;
 // update transaction count by blockchain id

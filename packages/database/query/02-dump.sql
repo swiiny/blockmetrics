@@ -30,6 +30,7 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain` (
   `node_count` INT UNSIGNED NULL DEFAULT NULL,
   `testnet_node_count` INT UNSIGNED NULL DEFAULT NULL,
   `single_node_power_consumption` FLOAT NULL DEFAULT '0',
+  `single_transaction_power_consumption` FLOAT NULL DEFAULT NULL,
   `blockchain_power_consumption` INT NULL DEFAULT NULL,
   `hashrate` DOUBLE NULL DEFAULT NULL,
   `difficulty` BIGINT NULL DEFAULT NULL,
@@ -269,6 +270,24 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`daily_node_count_history` (
   PRIMARY KEY (`id`),
   INDEX `fk_daily_node_count_history_idx` (`blockchain_id` ASC) VISIBLE,
   CONSTRAINT `fk_daily_node_count_history`
+    FOREIGN KEY (`blockchain_id`)
+    REFERENCES `blockmetrics-db`.`blockchain` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
+-- -----------------------------------------------------
+-- Table `blockmetrics-db`.`daily_node_count_history`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`daily_transaction_power_consumption_history` (
+  `id` VARCHAR(255) NOT NULL,
+  `blockchain_id` VARCHAR(255) NOT NULL,
+  `power_consumption` INT NOT NULL,
+  `date` DATETIME NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_daily_transaction_power_consumption_history_idx` (`blockchain_id` ASC) VISIBLE,
+  CONSTRAINT `fk_daily_transaction_power_consumption_history`
     FOREIGN KEY (`blockchain_id`)
     REFERENCES `blockmetrics-db`.`blockchain` (`id`))
 ENGINE = InnoDB

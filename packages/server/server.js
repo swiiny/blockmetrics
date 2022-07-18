@@ -1,10 +1,11 @@
 'use strict';
 
-import { getNodeCountForAllBlockchains } from './utils/fetch/nodeCount.js';
-import { calculatePowerConsumption } from './utils/functions.js';
+import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
+import { calculatePowerConsumptionPoS, calculatePowerConsumptionPoW } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
+	getPowerConsumptionDataForPoW,
 	getTodayActiveAddressCount,
 	removeYesterdayAddressFromTodayActiveAddress,
 	resetTodayAddressCount,
@@ -27,7 +28,8 @@ import {
 	updateDbDailyNewTokens,
 	updateDbDailyNodeCount,
 	updateDbDailyTokenCount,
-	updateDbDailyTransaction
+	updateDbDailyTransaction,
+	updateDbTxPowerConsumption
 } from './utils/update/dailyData.js';
 
 import { getTokensCountForNetworks } from './utils/fetch/coingecko.js';
@@ -45,6 +47,7 @@ import {
 import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
+import { getTxPowerConsumptionForPoWChains } from './utils/fetch/powTxPowerConsumption.js';
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
@@ -69,15 +72,23 @@ async function updatePowerConsumption() {
 		const [posRows] = await con.query(getPowerConsumptionDataForPoS);
 
 		posRows?.forEach((chain) => {
-			chain.powerConsumption = calculatePowerConsumption(
+			chain.powerConsumption = calculatePowerConsumptionPoS(
 				chain.single_node_power_consumption,
 				chain.node_count,
 				chain.testnet_node_count
 			);
 		});
 
-		// TODO : fetch single_node_power_consumption, testnet_node_count and node_count for Proof of Work chains
-		const powRows = [];
+		// For bitcoin and ethreum (PoW chains) the power consumption is calculated from the power consumption of a single transaction
+		// times the number of transactions par day
+		const [powRows] = await con.query(getPowerConsumptionDataForPoW);
+
+		powRows?.forEach((chain) => {
+			chain.powerConsumption = calculatePowerConsumptionPoW(
+				chain.single_transaction_power_consumption,
+				chain.today_transaction_count
+			);
+		});
 
 		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
 
@@ -124,7 +135,14 @@ async function fetchDailyData(factor = 1) {
 		console.error('getNodeCountForAllBlockchains failed');
 	}
 
-	await Promise.all(nodesCountPromises);
+	// FETCH AND UPDATE POWER CONSUMPTION FOR PoW CHAINS
+	const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
+
+	const transactionPowerConsumptionPromises = transactionPowerConsumption?.map(async ({ id, watt }) => {
+		updateDbTxPowerConsumption(con, id, watt);
+	});
+
+	await Promise.all([nodesCountPromises, transactionPowerConsumptionPromises].flat(1));
 
 	// fetch and update blockchains power consumption
 	updatePowerConsumption();
@@ -449,6 +467,8 @@ async function startFetchData() {
 			});
 		} else {
 			// dev stuff
+			//fetchDailyData(1 / 10);
+			/*
 			console.log('start dev');
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
@@ -470,7 +490,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			//rule.hour = 2;
-			rule.minute = [0, 20, 40, 51];
+			rule.minute = [0, 20, 40];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
@@ -493,6 +513,7 @@ async function startFetchData() {
 					}
 				});
 			});
+			*/
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);

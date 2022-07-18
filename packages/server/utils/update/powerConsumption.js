@@ -6,7 +6,8 @@ export async function updatePowerConsumptionInDb(con, chains) {
 			throw new Error('no chains to update');
 		}
 
-		const timestamp = Date.now() / 1000;
+		// get timestamp of this day at  midnight
+		const timestamp = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
 
 		const promises = chains.map(async (chain) => {
 			const uuid = `${chain.id}-${timestamp}-${chain.powerConsumption}`;

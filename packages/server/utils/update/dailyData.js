@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import {
 	insertDailyActiveUsers,
 	insertDailyAddressesCount,
@@ -11,10 +10,12 @@ import {
 	insertDailyNodeCount,
 	insertDailyTokenCount,
 	insertDailyTransactionCount,
+	insertDailyTxPowerConsumption,
 	updateDifficultyInBlockchain,
 	updateHashrateInBlockchain,
 	updateNodeCountInBlockchain,
-	updateTokenCountInBlockchain
+	updateTokenCountInBlockchain,
+	updateTxPowerConsumptionInBlockchain
 } from '../sql.js';
 
 /**
@@ -294,6 +295,33 @@ export const updateDbDailyNodeCount = async (con, id, count) => {
 		const promises = [
 			con.query(insertDailyNodeCount, [uuid, id, count, timestamp]),
 			con.query(updateNodeCountInBlockchain, [count, id])
+		];
+
+		await Promise.all(promises);
+
+		return 0;
+	} catch (err) {
+		console.error('updateDbDailyTokenCount', id, err);
+		return 1;
+	}
+};
+
+export const updateDbTxPowerConsumption = async (con, id, watt) => {
+	try {
+		if (!watt) {
+			throw new Error('watt is not defined for ' + id);
+		}
+
+		// get first timestamp OF today
+		const today = new Date();
+		today.setHours(0, 0, 0, 0);
+		const timestamp = today.getTime() / 1000;
+
+		const uuid = `${id}-${timestamp}-${watt}`;
+
+		const promises = [
+			con.query(insertDailyTxPowerConsumption, [uuid, id, watt, timestamp]),
+			con.query(updateTxPowerConsumptionInBlockchain, [watt, id])
 		];
 
 		await Promise.all(promises);

@@ -14,8 +14,12 @@ export function calculatePowerConsumptionPerDayForPosChain(
 	return Math.round(singleNodePowerConsumption * (nodeCount + testnetNodeCount) * 24);
 }
 
-export function calculatePowerConsumption(singleNodePowerConsumption, nodeCount, testnetNodeCount = 0) {
+export function calculatePowerConsumptionPoS(singleNodePowerConsumption, nodeCount, testnetNodeCount = 0) {
 	return Math.round(singleNodePowerConsumption * (nodeCount + testnetNodeCount));
+}
+
+export function calculatePowerConsumptionPoW(singleTransactionPowerConsumption, todayAddressCount) {
+	return Math.round(singleTransactionPowerConsumption * todayAddressCount);
 }
 
 export const getRpcByChainId = (chainId) => {
