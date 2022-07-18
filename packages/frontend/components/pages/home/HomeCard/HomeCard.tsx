@@ -113,8 +113,6 @@ const HomeCard: FC<IHomeCardData> = ({
 			}
 		}
 
-		console.log('newValue', newValue);
-
 		return {
 			symbol: updatedDailyChange > 0 ? '+' : '',
 			value: newValue,
