@@ -36,7 +36,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		iconSrc: '/assets/images/icons/flash.svg',
 		// dailyChangeUnit: '%',
 		chartTitle: 'Daily Power Consumption',
-		chartType: EChartType.bar,
+		chartType: EChartType.line,
 		chartDataType: EDailyGlobalData.powerConsumption
 	}
 ];

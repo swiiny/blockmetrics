@@ -20,7 +20,6 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 ### Server
 
--   [ ] fetch PoW blockchains power consumption
 -   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
 -   [ ] prevent bitcoin webscoket from disconnecting
 
@@ -30,12 +29,11 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 ### Frontend
 
--   [ ] Homepage
--   [ ] Blockchains
-    -   [ ] Index
-    -   [ ] Single blockchain page
--   [ ] Compare
--   [ ] About us
+-   [ ] BMCard component
+-   [ ] BMSquaredIcon component
+-   [ ] BMListItem with blue dot component
+-   [ ] Chart tooltip
+-   [ ] Switch component
 
 ### Integrated Blockchains
 
