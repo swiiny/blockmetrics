@@ -277,7 +277,7 @@ DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------
--- Table `blockmetrics-db`.`daily_node_count_history`
+-- Table `blockmetrics-db`.`daily_transaction_power_consumption_history`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`daily_transaction_power_consumption_history` (
   `id` VARCHAR(255) NOT NULL,
