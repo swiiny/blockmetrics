@@ -18,11 +18,6 @@ export function calculatePowerConsumptionPoS(singleNodePowerConsumption, nodeCou
 	return Math.round(singleNodePowerConsumption * (nodeCount + testnetNodeCount));
 }
 
-export function calculatePowerConsumptionPoW(singleTransactionPowerConsumption, yesterdayAddressCount) {
-	// split by 24 to convert Wday to Whour
-	return Math.round((singleTransactionPowerConsumption * yesterdayAddressCount) / 24);
-}
-
 export const getRpcByChainId = (chainId) => {
 	try {
 		const chain = Object.values(CHAINS).find((chain) => chain.id === chainId);

@@ -1,11 +1,10 @@
 'use strict';
 
 import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
-import { calculatePowerConsumptionPoS, calculatePowerConsumptionPoW } from './utils/functions.js';
+import { calculatePowerConsumptionPoS } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
-	getPowerConsumptionDataForPoW,
 	getTodayActiveAddressCount,
 	removeYesterdayAddressFromTodayActiveAddress,
 	resetTodayAddressCount,
@@ -28,8 +27,7 @@ import {
 	updateDbDailyNewTokens,
 	updateDbDailyNodeCount,
 	updateDbDailyTokenCount,
-	updateDbDailyTransaction,
-	updateDbTxPowerConsumption
+	updateDbDailyTransaction
 } from './utils/update/dailyData.js';
 
 import { getTokensCountForNetworks } from './utils/fetch/coingecko.js';
@@ -91,7 +89,7 @@ async function updatePowerConsumptionPoS() {
 	}
 }
 
-async function updatePowerConsumptionPoW(yesterdayTxCount) {
+async function updatePowerConsumptionPoW(chainsPowerConsumption) {
 	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('========== UPDATE POWER CONSUMPTION POW START ==========', Date.now());
 	}
@@ -99,18 +97,7 @@ async function updatePowerConsumptionPoW(yesterdayTxCount) {
 	const con = await pool.getConnection();
 
 	try {
-		// For bitcoin and ethreum (PoW chains) the power consumption is calculated from the power consumption of a single transaction
-		// times the number of transactions par day
-		const [powRows] = await con.query(getPowerConsumptionDataForPoW);
-
-		powRows?.forEach((chain) => {
-			chain.powerConsumption = calculatePowerConsumptionPoW(
-				chain.single_transaction_power_consumption,
-				chain.transaction_count
-			);
-		});
-
-		await updatePowerConsumptionInDb(con, powRows);
+		await updatePowerConsumptionInDb(con, chainsPowerConsumption);
 
 		con.release();
 	} catch (err) {
@@ -159,6 +146,12 @@ async function fetchDailyData(factor = 1) {
 
 	// fetch and update blockchains power consumption
 	updatePowerConsumptionPoS();
+
+	// FETCH AND UPDATE POWER CONSUMPTION FOR PoW CHAIN
+	const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
+
+	// fetch and update blockchains power consumption
+	updatePowerConsumptionPoW(transactionPowerConsumption);
 
 	/* ========================================
 	 REMOVE yesterday active addresses
@@ -347,18 +340,6 @@ async function fetchDailyData(factor = 1) {
 
 			console.log('end fetching daily data for', chain.name);
 		}
-
-		// FETCH AND UPDATE POWER CONSUMPTION FOR PoW CHAINS
-		const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
-
-		const transactionPowerConsumptionPromises = transactionPowerConsumption?.map(async ({ id, watt }) => {
-			updateDbTxPowerConsumption(con, id, watt);
-		});
-
-		await Promise.all(transactionPowerConsumptionPromises);
-
-		// fetch and update blockchains power consumption
-		updatePowerConsumptionPoW();
 	});
 }
 
@@ -492,8 +473,7 @@ async function startFetchData() {
 			});
 		} else {
 			// dev stuff
-			fetchDailyData(1 / 10);
-			/*
+
 			console.log('start dev');
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
@@ -524,11 +504,8 @@ async function startFetchData() {
 			});
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
-			// ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 56, 57];
-			ruleFiveMinutes.minute = [
-				0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56,
-				58
-			];
+			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 56, 57];
+			// ruleFiveMinutes.minute = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56,58];
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
@@ -538,7 +515,6 @@ async function startFetchData() {
 					}
 				});
 			});
-			*/
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);

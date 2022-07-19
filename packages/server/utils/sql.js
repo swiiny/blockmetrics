@@ -3,22 +3,6 @@
 // ==============================================================================================
 // get datas to calculate PoS blockchains power consumption
 export const getPowerConsumptionDataForPoS = `SELECT id, single_node_power_consumption, node_count, testnet_node_count FROM blockchain WHERE consensus = 'pos'`;
-//export const getPowerConsumptionDataForPoW = `SELECT id, single_transaction_power_consumption, transaction_count FROM blockchain WHERE consensus = 'pow'`;
-export const getPowerConsumptionDataForPoW = `
-SELECT b.id, b.single_transaction_power_consumption, d.transaction_count, d.date
-FROM blockchain b
-INNER JOIN daily_transaction_count_history d ON b.id = d.blockchain_id
-WHERE b.consensus = 'pow'
-AND d.date = (SELECT MAX(date) FROM daily_transaction_count_history)
-`;
-
-// get transaction_count from daily_transaction_count_history for all blockchains where date is the most recent date
-export const getDailyTransactionCount = `
-SELECT blockchain_id, transaction_count, date
-FROM daily_transaction_count_history
-WHERE date = (SELECT MAX(date) FROM daily_transaction_count_history)
-`;
-
 export const getDailyTokenCount = `SELECT token_count, date FROM daily_token_count_history WHERE blockchain_id = ? AND date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW() ORDER BY date ASC`;
 // return the count of active address for the current day for the given blockchain
 export const getTodayActiveAddressCount = `SELECT COUNT(*) AS count FROM today_active_address WHERE blockchain_id = ? AND day = CURDATE()`;
