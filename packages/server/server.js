@@ -60,9 +60,9 @@ let wsProviders = [];
 
 let pool;
 
-async function updatePowerConsumption() {
+async function updatePowerConsumptionPoS() {
 	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('========== UPDATE POWER CONSUMPTION START ==========', Date.now());
+		console.log('========== UPDATE POWER CONSUMPTION POS TART ==========', Date.now());
 	}
 
 	const con = await pool.getConnection();
@@ -79,18 +79,7 @@ async function updatePowerConsumption() {
 			);
 		});
 
-		// For bitcoin and ethreum (PoW chains) the power consumption is calculated from the power consumption of a single transaction
-		// times the number of transactions par day
-		const [powRows] = await con.query(getPowerConsumptionDataForPoW);
-
-		powRows?.forEach((chain) => {
-			chain.powerConsumption = calculatePowerConsumptionPoW(
-				chain.single_transaction_power_consumption,
-				chain.today_transaction_count
-			);
-		});
-
-		await updatePowerConsumptionInDb(con, [...posRows, ...powRows]);
+		await updatePowerConsumptionInDb(con, posRows);
 
 		con.release();
 	} catch (err) {
@@ -98,7 +87,38 @@ async function updatePowerConsumption() {
 	}
 
 	if (process.env.DEBUG_LOGS === 'activated') {
-		console.log('========== UPDATE POWER CONSUMPTION END ==========', Date.now());
+		console.log('========== UPDATE POWER CONSUMPTION POS END ==========', Date.now());
+	}
+}
+
+async function updatePowerConsumptionPoW(yesterdayTxCount) {
+	if (process.env.DEBUG_LOGS === 'activated') {
+		console.log('========== UPDATE POWER CONSUMPTION POW START ==========', Date.now());
+	}
+
+	const con = await pool.getConnection();
+
+	try {
+		// For bitcoin and ethreum (PoW chains) the power consumption is calculated from the power consumption of a single transaction
+		// times the number of transactions par day
+		const [powRows] = await con.query(getPowerConsumptionDataForPoW);
+
+		powRows?.forEach((chain) => {
+			chain.powerConsumption = calculatePowerConsumptionPoW(
+				chain.single_transaction_power_consumption,
+				chain.transaction_count
+			);
+		});
+
+		await updatePowerConsumptionInDb(con, powRows);
+
+		con.release();
+	} catch (err) {
+		console.error('updatePowerConsumption', err);
+	}
+
+	if (process.env.DEBUG_LOGS === 'activated') {
+		console.log('========== UPDATE POWER CONSUMPTION POW END ==========', Date.now());
 	}
 }
 
@@ -135,17 +155,10 @@ async function fetchDailyData(factor = 1) {
 		console.error('getNodeCountForAllBlockchains failed');
 	}
 
-	// FETCH AND UPDATE POWER CONSUMPTION FOR PoW CHAINS
-	const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
-
-	const transactionPowerConsumptionPromises = transactionPowerConsumption?.map(async ({ id, watt }) => {
-		updateDbTxPowerConsumption(con, id, watt);
-	});
-
-	await Promise.all([nodesCountPromises, transactionPowerConsumptionPromises].flat(1));
+	await Promise.all(nodesCountPromises);
 
 	// fetch and update blockchains power consumption
-	updatePowerConsumption();
+	updatePowerConsumptionPoS();
 
 	/* ========================================
 	 REMOVE yesterday active addresses
@@ -334,6 +347,18 @@ async function fetchDailyData(factor = 1) {
 
 			console.log('end fetching daily data for', chain.name);
 		}
+
+		// FETCH AND UPDATE POWER CONSUMPTION FOR PoW CHAINS
+		const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
+
+		const transactionPowerConsumptionPromises = transactionPowerConsumption?.map(async ({ id, watt }) => {
+			updateDbTxPowerConsumption(con, id, watt);
+		});
+
+		await Promise.all(transactionPowerConsumptionPromises);
+
+		// fetch and update blockchains power consumption
+		updatePowerConsumptionPoW();
 	});
 }
 
@@ -467,7 +492,7 @@ async function startFetchData() {
 			});
 		} else {
 			// dev stuff
-			//fetchDailyData(1 / 10);
+			fetchDailyData(1 / 10);
 			/*
 			console.log('start dev');
 
