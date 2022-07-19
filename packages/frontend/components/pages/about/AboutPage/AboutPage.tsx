@@ -1,6 +1,5 @@
 import React from 'react';
 import type { NextPage } from 'next';
-import { motion, Variants } from 'framer-motion';
 import Header from '../../../Header';
 import Flex from '../../../../styles/layout/Flex';
 import { EFlex, ESize, ETextAlign } from '../../../../styles/theme/utils/enum';
@@ -15,24 +14,9 @@ import Meta from '../../../utils/Meta';
 
 const HeaderData = {
 	title: 'About',
+	titleSemiBold: 'Blockmetrics',
 	subtitle:
 		'Blockchains data may be difficult to find and even more difficult to understand. That is exactly why Blockmetrics is being built.'
-};
-
-const sectionVariants: Variants = {
-	offscreen: {
-		y: 100,
-		opacity: 0.0
-	},
-	onscreen: {
-		y: 0,
-		opacity: 1,
-		transition: {
-			type: 'spring',
-			bounce: 0.05,
-			duration: 1.0
-		}
-	}
 };
 
 const AboutPage: NextPage = () => {
@@ -40,28 +24,18 @@ const AboutPage: NextPage = () => {
 		<>
 			<Meta title='About' />
 
-			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
+			<Header title={HeaderData.title} titleSemiBold={HeaderData.titleSemiBold} subtitle={HeaderData.subtitle} />
 
 			<Main>
 				<Flex direction={EFlex.column} vertical={EFlex.center}>
-					<motion.section
-						initial='offscreen'
-						whileInView='onscreen'
-						variants={sectionVariants}
-						viewport={{ once: true, amount: 0.8 }}
-					>
+					<section>
 						<Presentation />
-					</motion.section>
+					</section>
 
 					<Spacing size={ESize['8xl']} />
 					<Spacing size={ESize['8xl']} />
 
-					<motion.section
-						initial='offscreen'
-						whileInView='onscreen'
-						variants={sectionVariants}
-						viewport={{ once: true, amount: 0.8 }}
-					>
+					<section>
 						<BMText opacityReduced size={ESize.xl} textAlign={ETextAlign.center}>
 							Your favorite blockchain isn’t listed?
 						</BMText>
@@ -73,17 +47,12 @@ const AboutPage: NextPage = () => {
 								Create a <TextWithGradient>Github issue</TextWithGradient> with some details
 							</BMText>
 						</a>
-					</motion.section>
+					</section>
 
 					<Spacing size={ESize['8xl']} />
 					<Spacing size={ESize['8xl']} />
 
-					<motion.section
-						initial='offscreen'
-						whileInView='onscreen'
-						variants={sectionVariants}
-						viewport={{ once: true, amount: 0.8 }}
-					>
+					<section>
 						<BMText size={ESize['xl']} textAlign={ETextAlign.center}>
 							Want to help me improve Blockmetrics?
 						</BMText>
@@ -93,12 +62,12 @@ const AboutPage: NextPage = () => {
 						<TextEx size={ESize['2xl']} textAlign={ETextAlign.center}>
 							<TextWithGradient>0x123456ca3a7b8B5717dd99871167Fc3332805389</TextWithGradient>
 						</TextEx>
-					</motion.section>
+					</section>
 
 					<Spacing size={ESize['8xl']} />
 					<Spacing size={ESize['8xl']} />
 
-					<PoweredBySection variants={sectionVariants} />
+					<PoweredBySection />
 				</Flex>
 			</Main>
 		</>

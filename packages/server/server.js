@@ -476,6 +476,8 @@ async function startFetchData() {
 
 			console.log('start dev');
 
+			//fetchDailyData(1 / 10);
+
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
 			const con = await pool.getConnection();
 

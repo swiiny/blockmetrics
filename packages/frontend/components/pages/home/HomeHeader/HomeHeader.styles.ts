@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components';
+import BMBlockPattern from '../../../../styles/theme/components/BMBlockPattern';
 import { EMediaQuery } from '../../../../styles/theme/utils/enum';
 import { mq } from '../../../../styles/theme/utils/functions';
 
@@ -51,56 +52,16 @@ export const StyledHomeHeader = styled.header`
 	`}
 `;
 
-export const StyledGradientLine = styled.div`
-	width: 45%;
-	height: 6px;
-
-	border-radius: 3px;
-
+export const BMBlockPatternEx = styled(BMBlockPattern)`
 	${(p) => css`
-		background: linear-gradient(to right, ${p.theme.colors.bg} 0%, ${p.theme.colors.primary} 100%);
+		right: -${p.theme.spacing['7xl']};
+
+		${mq(
+			EMediaQuery.xl,
+			`
+        right: -${p.theme.spacing['8xl']};
+      `,
+			'min'
+		)}
 	`}
-`;
-
-export const StyledHivePattern = styled.div`
-	${(p) => css`
-		position: absolute;
-
-		right: -${p.theme.spacing['4xl']};
-		top: -240px;
-		bottom: 0;
-
-		width: 100%;
-
-		display: flex;
-		justify-content: flex-end;
-
-		${mq(EMediaQuery.md, `right: 0;`)}
-	`}
-`;
-
-export const StyledHiveImage = styled.img`
-	width: auto;
-	height: 100%;
-`;
-
-export const StyledBlockPattern = styled.div`
-	${(p) => css`
-		position: absolute;
-
-		right: -${p.theme.spacing['4xl']};
-		top: -20px;
-		bottom: 10px;
-
-		width: 100%;
-
-		display: flex;
-		justify-content: flex-end;
-
-		${mq(EMediaQuery.md, `display: none;`)}
-	`}
-`;
-export const StyledBlockImage = styled.img`
-	width: auto;
-	height: 100%;
 `;

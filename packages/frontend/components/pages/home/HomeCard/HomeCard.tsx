@@ -162,7 +162,6 @@ const HomeCard: FC<IHomeCardData> = ({
 	const fetchDailyChange = useCallback(async () => {
 		try {
 			const { data } = await axiosRest('/get/blockchains/total?type=' + dailyChangeType);
-			console.log('data', data);
 
 			setDailyChange(data.value || 0);
 			setUpdatedDailyChange(data.value || 0);
