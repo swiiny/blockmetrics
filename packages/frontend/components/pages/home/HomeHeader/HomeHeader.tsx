@@ -10,8 +10,10 @@ import BMHeading from '../../../../styles/theme/components/BMHeading';
 import BMHivePattern from '../../../../styles/theme/components/BMHivePattern';
 import BMText from '../../../../styles/theme/components/BMText';
 import { EFlex, EPosition, ESize, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
+import { NAVBAR_LINKS } from '../../../Navbar/Navbar';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledHomeHeader } from './HomeHeader.styles';
+import router from 'next/router';
 
 const HomeHeader: FC = () => {
 	const { isSmallerThanSm } = useResponsive();
@@ -43,7 +45,7 @@ const HomeHeader: FC = () => {
 
 					<Spacing size={ESize.xl} />
 
-					<BMButton size={ESize.m}>
+					<BMButton size={ESize.m} onClick={() => router.push(NAVBAR_LINKS.blockchains.href)}>
 						<Eclipse size={ESize['2xs']} position={EPosition.topRight} zIndex={0} />
 						See Blockchains Data
 					</BMButton>

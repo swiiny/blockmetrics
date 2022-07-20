@@ -9,9 +9,10 @@ import { axiosRest } from '../../../../utils/variables';
 import BarChart from '../../../charts/BarChart';
 import LineChart from '../../../charts/LineChart';
 import { IHomeCardData } from '../HomeData/HomeData.type';
-import { StyledHomeCard, StyledIcon, StyledIconContainer } from './HomeCard.styles';
+import { StyledIcon, StyledIconContainer } from './HomeCard.styles';
 import CountUp from 'react-countup';
 import { IDailyChangeValue, IHomeCardValue } from './HomeCard.type';
+import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
 
 const HomeCard: FC<IHomeCardData> = ({
 	title,
@@ -195,7 +196,7 @@ const HomeCard: FC<IHomeCardData> = ({
 	}, [fetchDailyChange, dailyChangeType]);
 
 	return (
-		<StyledHomeCard {...otherProps}>
+		<BMCardContainer as='li' {...otherProps}>
 			<Flex>
 				<StyledIconContainer>
 					<StyledIcon src={iconSrc} alt='' />
@@ -260,7 +261,7 @@ const HomeCard: FC<IHomeCardData> = ({
 			) : (
 				<></>
 			)}
-		</StyledHomeCard>
+		</BMCardContainer>
 	);
 };
 

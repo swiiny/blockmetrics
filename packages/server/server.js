@@ -476,6 +476,8 @@ async function startFetchData() {
 
 			console.log('start dev');
 
+			//console.log(await fetchDailyTransactionFor(CHAINS.polygon));
+
 			//fetchDailyData(1 / 10);
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
@@ -506,7 +508,7 @@ async function startFetchData() {
 			});
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
-			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55, 56, 57];
+			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 			// ruleFiveMinutes.minute = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56,58];
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {

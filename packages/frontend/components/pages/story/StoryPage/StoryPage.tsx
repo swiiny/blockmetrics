@@ -3,14 +3,13 @@ import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Main from '../../../../styles/layout/Main';
 import Flex from '../../../../styles/layout/Flex';
-import { EFlex, ESize, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
+import { EFlex, ESize, ETextAlign, ETextColor, ETextType } from '../../../../styles/theme/utils/enum';
 import { motion, Variants } from 'framer-motion';
 import BMHeading from '../../../../styles/theme/components/BMHeading';
 import { StyledFullHeightContainer, StyledHalfHeightContainer, StyledScreenHeightContainer } from '../story.styles';
 import Spacing from '../../../../styles/layout/Spacing';
 import { TitleAndValue } from '../TitleAndValue';
 import BMText from '../../../../styles/theme/components/BMText';
-import TextWithGradient from '../../../../styles/theme/components/BMTextWithGradient';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -132,8 +131,8 @@ const StoryPage: NextPage = () => {
 
 							<StyledFullHeightContainer>
 								<Animated>
-									<BMText textAlign={ETextAlign.center}>
-										<TextWithGradient>Discover</TextWithGradient>
+									<BMText textAlign={ETextAlign.center} textColor={ETextColor.gradient}>
+										Discover
 									</BMText>
 								</Animated>
 							</StyledFullHeightContainer>

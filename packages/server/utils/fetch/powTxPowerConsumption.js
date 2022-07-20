@@ -3,9 +3,8 @@ import { CHAINS } from '../../variables.js';
 
 export async function getPowerConsumption(chainId) {
 	try {
-		// get date format YYYYMMDD for yesterday (e.g. 20190101)
+		// get date format YYYYMMDD for yesterday
 		const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0];
-
 		const date = yesterday.replaceAll('-', '');
 
 		const url = `https://digiconomist.net/wp-json/mo/v1/${chainId}/stats/${date}`;
@@ -19,13 +18,13 @@ export async function getPowerConsumption(chainId) {
 	}
 }
 
-export const getTxPowerConsumptionForPoWChains = async () => {
+export const getTxPowerConsumptionForPoWChains = async (date) => {
 	try {
 		const promises = [
-			getPowerConsumption('ethereum')
+			getPowerConsumption('ethereum', date)
 				.then((res) => ({ id: CHAINS.ethereum.id, powerConsumption: res }))
 				.catch(() => null),
-			getPowerConsumption('bitcoin')
+			getPowerConsumption('bitcoin', date)
 				.then((res) => ({ id: CHAINS.bitcoin.id, powerConsumption: res }))
 				.catch(() => null)
 		];

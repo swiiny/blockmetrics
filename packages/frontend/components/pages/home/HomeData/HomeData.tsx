@@ -3,6 +3,7 @@ import useWebsocket from '../../../../hooks/useWebsocket';
 import Flex from '../../../../styles/layout/Flex';
 import { EChartType, EDailyGlobalData, EFlex, EGlobalData, ESubscribeType } from '../../../../styles/theme/utils/enum';
 import HomeCard from '../HomeCard';
+import { StyledList } from './HomeData.styles';
 import { IHomeCardData } from './HomeData.type';
 
 const HOMECARD_DATA: IHomeCardData[] = [
@@ -54,11 +55,11 @@ const HomeData: FC = () => {
 
 	return (
 		<section>
-			<Flex fullWidth as='ul' wrapItems horizontal={EFlex.between} mdDirection={EFlex.column}>
+			<StyledList>
 				{HOMECARD_DATA.map((card) => (
 					<HomeCard key={card.title} wsMessage={message} {...card} />
 				))}
-			</Flex>
+			</StyledList>
 		</section>
 	);
 };

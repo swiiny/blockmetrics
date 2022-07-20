@@ -154,3 +154,33 @@ export enum ESubscribeType {
 	bsc = 'binance-smart-chain',
 	avalanche = 'avalanche'
 }
+
+export enum EIcon {
+	cronos = 'cronos',
+	arbitrum = 'arbitrum',
+	ethereum = 'ethereum',
+	bitcoin = 'bitcoin',
+	bsc = 'binance-smart-chain',
+	polygon = 'polygon',
+	fantom = 'fantom',
+	avalanche = 'avalanche',
+	luna = 'luna',
+	optimism = 'optimism',
+	solana = 'solana',
+	polkadot = 'polkadot',
+	harmony = 'harmony',
+	tron = 'tron',
+	ripple = 'ripple',
+	cardano = 'cardano',
+	celo = 'celo',
+	energy = 'energy',
+	user = 'user',
+	swap = 'swap',
+	gas = 'gas',
+	token = 'token',
+	chart = 'chart',
+	timer = 'timer',
+	issue = 'issue',
+	help = 'help',
+	none = 'none'
+}
