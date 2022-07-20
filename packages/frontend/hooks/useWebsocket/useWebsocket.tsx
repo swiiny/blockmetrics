@@ -13,6 +13,9 @@ const waitForWsReady = async (ws: W3CWebSocket | null) => {
 	while (ws.readyState !== 1) {
 		await new Promise((resolve) => setTimeout(resolve, 100));
 	}
+
+	// prevent ws from crashing
+	await new Promise((resolve) => setTimeout(resolve, 100));
 };
 
 const useWebsocket = (): IUseWebsocket => {
@@ -75,22 +78,30 @@ const useWebsocket = (): IUseWebsocket => {
 
 	const subscribeTo = useCallback(async (channel: ESubscribeType) => {
 		await waitForWsReady(ws);
-		ws?.send(
-			JSON.stringify({
-				type: 'subscribe',
-				channel
-			})
-		);
+		try {
+			ws?.send(
+				JSON.stringify({
+					type: 'subscribe',
+					channel
+				})
+			);
+		} catch (err) {
+			console.error('subscribeTo', err);
+		}
 	}, []);
 
 	const unsubscribeFrom = useCallback(async (channel: ESubscribeType) => {
 		await waitForWsReady(ws);
-		ws?.send(
-			JSON.stringify({
-				type: 'unsubscribe',
-				channel
-			})
-		);
+		try {
+			ws?.send(
+				JSON.stringify({
+					type: 'unsubscribe',
+					channel
+				})
+			);
+		} catch (err) {
+			console.error('unsubscribeFrom', err);
+		}
 	}, []);
 
 	useEffect(() => {
