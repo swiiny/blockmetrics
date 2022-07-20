@@ -12,6 +12,7 @@ const BMText: React.FC<IBMText> = ({
 	href,
 	disabled = false,
 	weight,
+	underline = false,
 	style,
 	singleLine = false,
 	className = '',
@@ -27,6 +28,7 @@ const BMText: React.FC<IBMText> = ({
 					singleLine={singleLine}
 					style={style}
 					weight={weight}
+					underline={underline}
 					textAlign={textAlign}
 					textColor={textColor}
 					opacityReduced={opacityReduced}
@@ -43,6 +45,7 @@ const BMText: React.FC<IBMText> = ({
 					singleLine={singleLine}
 					style={style}
 					weight={weight}
+					underline
 					href={href}
 					rel='noopener noreferrer'
 					textAlign={textAlign}
@@ -62,6 +65,7 @@ const BMText: React.FC<IBMText> = ({
 					singleLine={singleLine}
 					style={style}
 					weight={weight}
+					underline
 					href={href}
 					rel='noopener noreferrer'
 					textAlign={textAlign}
@@ -82,6 +86,7 @@ const BMText: React.FC<IBMText> = ({
 					singleLine={singleLine}
 					style={style}
 					weight={weight}
+					underline
 					textAlign={textAlign}
 					textColor={textColor}
 					size={size}

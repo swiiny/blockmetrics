@@ -18,13 +18,13 @@ export async function getPowerConsumption(chainId) {
 	}
 }
 
-export const getTxPowerConsumptionForPoWChains = async () => {
+export const getTxPowerConsumptionForPoWChains = async (date) => {
 	try {
 		const promises = [
-			getPowerConsumption('ethereum')
+			getPowerConsumption('ethereum', date)
 				.then((res) => ({ id: CHAINS.ethereum.id, powerConsumption: res }))
 				.catch(() => null),
-			getPowerConsumption('bitcoin')
+			getPowerConsumption('bitcoin', date)
 				.then((res) => ({ id: CHAINS.bitcoin.id, powerConsumption: res }))
 				.catch(() => null)
 		];

@@ -479,7 +479,7 @@ async function startFetchData() {
 			//console.log(await fetchDailyTransactionFor(CHAINS.polygon));
 
 			//fetchDailyData(1 / 10);
-			/*
+
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
 			const con = await pool.getConnection();
 
@@ -499,7 +499,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			//rule.hour = 2;
-			rule.minute = [0, 20, 40, 50];
+			rule.minute = [0, 20, 40];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
@@ -519,7 +519,6 @@ async function startFetchData() {
 					}
 				});
 			});
-			*/
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);

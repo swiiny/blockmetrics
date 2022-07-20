@@ -8,6 +8,7 @@ interface IBMText {
 	textAlign?: ETextAlign;
 	href?: string;
 	disabled?: boolean;
+	underline?: boolean;
 	isExternal?: boolean;
 	weight?: ETextWeight;
 	style?: string;

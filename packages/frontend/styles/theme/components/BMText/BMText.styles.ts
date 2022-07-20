@@ -1,6 +1,7 @@
 import { addTransition, getTextColor, setFontSize } from '../../utils/functions';
 import styled, { css } from 'styled-components';
 import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
+import { IBMText } from './BMText.type';
 
 const generateTextStyle = (p: any) => {
 	return css`
@@ -58,38 +59,17 @@ const generateTextStyle = (p: any) => {
 	`;
 };
 
-export const StyledTextParagraph = styled.p<{
-	textColor?: ETextColor;
-	size?: ESize;
-	textAlign?: string;
-	weight?: ETextWeight;
-	style?: string;
-	singleLine?: boolean;
-	opacityReduced?: boolean;
-}>`
+export const StyledTextParagraph = styled.p<IBMText>`
 	${(p) => generateTextStyle(p)}
 `;
 
-export const StyledTextLink = styled.a<{
-	textColor?: ETextColor;
-	size?: ESize;
-	textAlign?: string;
-	disabled?: boolean;
-	weight?: ETextWeight;
-	style?: string;
-	singleLine?: boolean;
-	decoration?: boolean;
-	opacityReduced?: boolean;
-}>`
+export const StyledTextLink = styled.a<IBMText>`
 	${(p) => generateTextStyle(p)}
 
 	${(p) =>
-		p.decoration
+		p.underline
 			? css`
-					text-decoration: underline dotted;
-					text-decoration-thickness: 1px;
-					text-underline-offset: 1ex;
-					text-decoration-color: ${p.theme.colors.text.default + '30'};
+					text-decoration: underline;
 			  `
 			: css`
 					text-decoration: none;
@@ -109,15 +89,6 @@ export const StyledTextLink = styled.a<{
 			  `}
 `;
 
-export const StyledTextSpan = styled.span<{
-	textColor?: ETextColor;
-	size?: ESize;
-	textAlign?: string;
-	weight?: ETextWeight;
-	style?: string;
-	singleLine?: boolean;
-	inheritStyle?: boolean;
-	opacityReduced?: boolean;
-}>`
+export const StyledTextSpan = styled.span<IBMText>`
 	${(p) => generateTextStyle(p)}
 `;
