@@ -10,12 +10,10 @@ import {
 	insertDailyNodeCount,
 	insertDailyTokenCount,
 	insertDailyTransactionCount,
-	insertDailyTxPowerConsumption,
 	updateDifficultyInBlockchain,
 	updateHashrateInBlockchain,
 	updateNodeCountInBlockchain,
-	updateTokenCountInBlockchain,
-	updateTxPowerConsumptionInBlockchain
+	updateTokenCountInBlockchain
 } from '../sql.js';
 
 /**
@@ -214,8 +212,8 @@ export async function updateDbDailyNewTokens(con, id, data) {
 		}
 
 		const promises = data.map(({ date, count }) => {
-			// date to timestamp
-			const timestamp = Math.round(new Date(date).getTime() / 1000);
+			// remove one day to get the date of the previous day from date
+			const timestamp = Math.floor(new Date(date).setDate(new Date(date).getDate() - 1) / 1000);
 
 			const uuid = `${id}-${timestamp}-${count}`;
 
@@ -295,33 +293,6 @@ export const updateDbDailyNodeCount = async (con, id, count) => {
 		const promises = [
 			con.query(insertDailyNodeCount, [uuid, id, count, timestamp]),
 			con.query(updateNodeCountInBlockchain, [count, id])
-		];
-
-		await Promise.all(promises);
-
-		return 0;
-	} catch (err) {
-		console.error('updateDbDailyTokenCount', id, err);
-		return 1;
-	}
-};
-
-export const updateDbTxPowerConsumption = async (con, id, watt) => {
-	try {
-		if (!watt) {
-			throw new Error('watt is not defined for ' + id);
-		}
-
-		// get first timestamp OF today
-		const today = new Date();
-		today.setHours(0, 0, 0, 0);
-		const timestamp = today.getTime() / 1000;
-
-		const uuid = `${id}-${timestamp}-${watt}`;
-
-		const promises = [
-			con.query(insertDailyTxPowerConsumption, [uuid, id, watt, timestamp]),
-			con.query(updateTxPowerConsumptionInBlockchain, [watt, id])
 		];
 
 		await Promise.all(promises);

@@ -3,9 +3,8 @@ import { CHAINS } from '../../variables.js';
 
 export async function getPowerConsumption(chainId) {
 	try {
-		// get date format YYYYMMDD for yesterday (e.g. 20190101)
+		// get date format YYYYMMDD for yesterday
 		const yesterday = new Date(new Date().setDate(new Date().getDate() - 1)).toISOString().split('T')[0];
-
 		const date = yesterday.replaceAll('-', '');
 
 		const url = `https://digiconomist.net/wp-json/mo/v1/${chainId}/stats/${date}`;
