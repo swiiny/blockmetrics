@@ -66,6 +66,7 @@ const BMCardContainer: FC<IBMCardContainer> = ({
 	}, [windowMounted]);
 
 	return (
+		// @ts-ignore
 		<StyledBMCardContainer
 			onMouseMove={(e: MouseEvent) => onMouseMove(e)}
 			onMouseEnter={() => onMouseEnter()}

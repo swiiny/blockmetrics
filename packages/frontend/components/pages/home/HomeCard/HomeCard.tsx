@@ -12,7 +12,7 @@ import { IHomeCardData } from '../HomeData/HomeData.type';
 import { StyledIcon, StyledIconContainer } from './HomeCard.styles';
 import CountUp from 'react-countup';
 import { IDailyChangeValue, IHomeCardValue } from './HomeCard.type';
-import { BMCardContainer } from '../../../../styles/theme/components/BMCardContainer';
+import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
 
 const HomeCard: FC<IHomeCardData> = ({
 	title,
