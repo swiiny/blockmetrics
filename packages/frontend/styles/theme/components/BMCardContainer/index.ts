@@ -1,1 +1,1 @@
-export { BMCardContainer as BMCardContainer } from './BMCardContainer';
+export { BMCardContainer as default } from './BMCardContainer';

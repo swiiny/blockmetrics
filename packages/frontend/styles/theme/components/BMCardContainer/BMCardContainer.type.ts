@@ -4,6 +4,7 @@ import { IPadding } from '../../../../types/padding';
 interface IBMCardContainer extends IPadding {
 	children: ReactNode;
 	clickable?: boolean;
+	isHighlighted?: boolean;
 	as?: string;
 }
 

@@ -29,6 +29,12 @@ export const StyledBMCardContainer = styled.div<any>`
 
 			border: 2px solid ${p.theme.colors.deepBlue}20;
 
+			${p.isHighlighted
+				? `
+				border: 2px solid ${p.theme.colors.deepBlue}75;
+			`
+				: ''}
+
 			background-clip: content-box;
 		}
 

@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { BMCardContainer } from '../../../../styles/theme/components/BMCardContainer';
+import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
 import { EMediaQuery } from '../../../../styles/theme/utils/enum';
 import { mq } from '../../../../styles/theme/utils/functions';
 

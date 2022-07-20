@@ -3,7 +3,12 @@ import { IBMCardContainer } from './BMCardContainer.type';
 import { v4 as uuidv4 } from 'uuid';
 import { StyledBMCardContainer, StyledHoverGlow, SytledFullContainer } from './BMCardContainer.styles';
 
-const BMCardContainer: FC<IBMCardContainer> = ({ children, clickable = false, ...otherProps }) => {
+const BMCardContainer: FC<IBMCardContainer> = ({
+	children,
+	clickable = false,
+	isHighlighted = false,
+	...otherProps
+}) => {
 	const glowContainerUuid = useMemo(() => {
 		return uuidv4();
 	}, []);
@@ -65,6 +70,7 @@ const BMCardContainer: FC<IBMCardContainer> = ({ children, clickable = false, ..
 			onMouseMove={(e: MouseEvent) => onMouseMove(e)}
 			onMouseEnter={() => onMouseEnter()}
 			onMouseLeave={() => onMouseLeave()}
+			isHighlighted={isHighlighted}
 			{...otherProps}
 		>
 			{windowMounted && clickable ? (
