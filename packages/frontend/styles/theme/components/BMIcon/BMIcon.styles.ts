@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { ESize } from '../../utils/enum';
-import { addTransition } from '../../utils/functions';
+import { addTransition, getSpacingFromESize } from '../../utils/functions';
 import { IBMIcon } from './BMIcon.type';
 
 export const StyledIcon = styled.span<IBMIcon>`
@@ -19,6 +19,11 @@ export const StyledIcon = styled.span<IBMIcon>`
 			}
 
 			switch (p.size) {
+				case ESize.xs:
+					return `
+					width: 25px;
+					height: 25px;
+        `;
 				case ESize.s:
 					return `
 					width: 35px;
@@ -46,7 +51,11 @@ export const StyledIcon = styled.span<IBMIcon>`
 	`}
 `;
 
-export const StyledBackground = styled.span<{ backgroundVisible?: boolean }>`
+export const StyledBackground = styled.span<{
+	backgroundVisible?: boolean;
+	backgroundRadius: ESize;
+	backgroundSize: ESize;
+}>`
 	${(p) => css`
 		display: flex;
 		justify-content: center;
@@ -54,10 +63,11 @@ export const StyledBackground = styled.span<{ backgroundVisible?: boolean }>`
 
 		${p.backgroundVisible
 			? `
-				border-radius: 20px;
-				padding: ${p.theme.spacing.m};
+				padding: ${getSpacingFromESize(p.backgroundSize, p.theme)};
 
 				background-color: ${p.theme.colors.text.default + '10'};
+
+				border-radius: ${getSpacingFromESize(p.backgroundRadius, p.theme)};
 			`
 			: `	`}
 	`}

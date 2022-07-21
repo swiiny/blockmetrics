@@ -8,6 +8,9 @@ export const defaultTheme = {
 	},
 	spacing: {
 		unset: 'unset',
+		'7xs': '1px',
+		'6xs': '2px',
+		'5xs': '4px',
 		'4xs': '8px',
 		'3xs': '12px',
 		'2xs': '16px',
@@ -31,6 +34,7 @@ export const darkTheme: DefaultTheme = {
 	colors: {
 		// set theme colors
 		bg: '#131923',
+		darkGrey: '#3F4041',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
 		lightBlue: '#52BBE8',
@@ -44,7 +48,7 @@ export const darkTheme: DefaultTheme = {
 		text: {
 			default: '#FFFFFF',
 			light: '#79DCEF',
-			accent: '#0D9BD7',
+			accent: '#6AD4F3',
 			positive: '#6BFFA6',
 			negative: '#F22C3F',
 			warning: '#FFCA3A', // check color in figma
@@ -58,6 +62,7 @@ export const lightTheme: DefaultTheme = {
 	colors: {
 		// set theme colors
 		bg: '#131923',
+		darkGrey: '#3F4041',
 		primary: '#79DCEF',
 		secondary: '#0D9BD7',
 		lightBlue: '#52BBE8',
@@ -71,7 +76,7 @@ export const lightTheme: DefaultTheme = {
 		text: {
 			default: '#B3FCFF',
 			light: '#79DCEF',
-			accent: '#0D9BD7',
+			accent: '#6AD4F3',
 			positive: '#6BFFA6',
 			negative: '#F22C3F',
 			warning: '#FFCA3A', // check color in figma

@@ -7,6 +7,10 @@ const BMCardContainer: FC<IBMCardContainer> = ({
 	children,
 	clickable = false,
 	isHighlighted = false,
+	secondary = false,
+	tertiary = false,
+	fullWidth = false,
+	fullHeight = false,
 	...otherProps
 }) => {
 	const glowContainerUuid = useMemo(() => {
@@ -72,10 +76,14 @@ const BMCardContainer: FC<IBMCardContainer> = ({
 			onMouseEnter={() => onMouseEnter()}
 			onMouseLeave={() => onMouseLeave()}
 			isHighlighted={isHighlighted}
+			secondary={secondary}
+			tertiary={tertiary}
+			fullWidth={fullWidth}
+			fullHeight={fullHeight}
 			{...otherProps}
 		>
 			{windowMounted && clickable ? (
-				<SytledFullContainer id={glowContainerUuid}>
+				<SytledFullContainer id={glowContainerUuid} secondary={secondary} tertiary={tertiary}>
 					<StyledHoverGlow isVisible={isVisible} style={position} />
 				</SytledFullContainer>
 			) : (

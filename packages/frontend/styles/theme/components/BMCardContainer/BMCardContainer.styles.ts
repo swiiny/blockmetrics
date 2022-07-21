@@ -8,10 +8,17 @@ export const StyledBMCardContainer = styled.div<any>`
 
 		${addTransition()}
 
-		border-radius: 30px;
+		${p.fullWidth ? `width: 100%;` : ''}
+		${p.fullHeight ? `height: 100%;` : ''}
 
-		border: 1px solid;
-		align-self: stretch;
+		${!p.secondary
+			? css`
+					align-self: stretch;
+					border-radius: 30px;
+			  `
+			: css`
+					border-radius: 10px;
+			  `}
 
 		&::before {
 			content: ' ';
@@ -21,13 +28,29 @@ export const StyledBMCardContainer = styled.div<any>`
 			right: 0;
 			bottom: 0;
 
-			border-radius: 30px;
+			${p.secondary
+				? css`
+						border-radius: 10px;
+						background: ${p.theme.colors.gradient.toBottom};
+						opacity: 0.15;
 
-			background: linear-gradient(142.69deg, ${p.theme.colors.bg} 4.17%, ${p.theme.colors.bg} 98.61%);
-			opacity: 0.5;
-			box-shadow: inset 0px 12px 24px #00000030;
+						box-shadow: 0px 10px 20px rgba(69, 189, 230, 0.15), inset 0px 4px 7px rgba(36, 94, 114, 0.44);
+				  `
+				: p.tertiary
+				? css`
+						border-radius: 10px;
+						opacity: 0.15;
 
-			border: 2px solid ${p.theme.colors.deepBlue}20;
+						background: ${p.theme.colors.darkGrey};
+				  `
+				: css`
+						border-radius: 30px;
+						background: linear-gradient(142.69deg, ${p.theme.colors.bg} 4.17%, ${p.theme.colors.bg} 98.61%);
+						opacity: 0.5;
+						box-shadow: inset 0px 12px 24px #00000030;
+
+						border: 2px solid ${p.theme.colors.deepBlue}20;
+				  `}
 
 			${p.isHighlighted
 				? `
@@ -41,6 +64,9 @@ export const StyledBMCardContainer = styled.div<any>`
 		& > span {
 			display: block;
 			${addPaddingStyles(p)}
+
+			${p.fullWidth ? `width: 100%;` : ''}
+			${p.fullHeight ? `height: 100%;` : ''}
 		}
 	`}
 `;
@@ -75,7 +101,7 @@ export const StyledHoverGlow = styled.span<{ isVisible: boolean }>`
 	`}
 `;
 
-export const SytledFullContainer = styled.div<any>`
+export const SytledFullContainer = styled.div<{ secondary?: boolean; tertiary?: boolean }>`
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -84,7 +110,7 @@ export const SytledFullContainer = styled.div<any>`
 
 	z-index: 100;
 
-	border-radius: 30px;
+	border-radius: ${(p) => (p.secondary || p.tertiary ? '10px' : '30px')};
 
 	pointer-events: none;
 	user-select: none;

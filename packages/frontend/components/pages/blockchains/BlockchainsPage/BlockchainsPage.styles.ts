@@ -9,4 +9,9 @@ export const StyledBlockchainList = styled.ul`
 	width: 100%;
 
 	margin-top: -${(p) => p.theme.spacing.xl};
+
+	& > li {
+		width: 32%;
+		height: auto;
+	}
 `;
