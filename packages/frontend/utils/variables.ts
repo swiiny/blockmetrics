@@ -1,10 +1,12 @@
 import axios from 'axios';
+import { EIcon } from '../styles/theme/utils/enum';
 
 export const BLOCKCHAINS = {
 	ethereum: {
 		id: 'ethereum',
 		name: 'Ethereum',
 		estimatedTimeBetweenBlocks: 20,
+		icon: EIcon.ethereum,
 		colors: {
 			gradient: {
 				start: '#454A7580',
@@ -16,6 +18,7 @@ export const BLOCKCHAINS = {
 		id: 'binance-smart-chain',
 		name: 'Binance SC',
 		estimatedTimeBetweenBlocks: 4,
+		icon: EIcon.bsc,
 		colors: {
 			gradient: {
 				start: '#F3BA2F80',
@@ -27,6 +30,7 @@ export const BLOCKCHAINS = {
 		id: 'polygon',
 		name: 'Polygon',
 		estimatedTimeBetweenBlocks: 3,
+		icon: EIcon.polygon,
 		colors: {
 			gradient: {
 				start: '#8247E580',
@@ -38,6 +42,7 @@ export const BLOCKCHAINS = {
 		id: 'bitcoin',
 		name: 'Bitcoin',
 		estimatedTimeBetweenBlocks: 600,
+		icon: EIcon.bitcoin,
 		colors: {
 			gradient: {
 				start: '#F7931A80',
@@ -49,6 +54,7 @@ export const BLOCKCHAINS = {
 		id: 'avalanche',
 		name: 'Avalanche',
 		estimatedTimeBetweenBlocks: 3,
+		icon: EIcon.avalanche,
 		colors: {
 			gradient: {
 				start: '#E8414280',
@@ -60,6 +66,7 @@ export const BLOCKCHAINS = {
 		id: 'fantom',
 		name: 'Fantom',
 		estimatedTimeBetweenBlocks: 3,
+		icon: EIcon.fantom,
 		colors: {
 			gradient: {
 				start: '#13B5EC80',

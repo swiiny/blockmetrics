@@ -5,6 +5,10 @@ interface IBMCardContainer extends IPadding {
 	children: ReactNode;
 	clickable?: boolean;
 	isHighlighted?: boolean;
+	secondary?: boolean;
+	tertiary?: boolean;
+	fullWidth?: boolean;
+	fullHeight?: boolean;
 	as?: string;
 }
 

@@ -10,7 +10,7 @@ export const EDailyData = {
 	newTokens: 'newTokens',
 	tokenCount: 'tokenCount',
 	nodeCount: 'nodeCount',
-	txPowerConsumption: 'txPowerConsumption',
+	powerConsumption: 'powerConsumption',
 	transactionCount: 'transactionCount'
 };
 

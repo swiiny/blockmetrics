@@ -1,5 +1,8 @@
 export enum ESize {
-	unset = 'unset',
+	unset = 'unset§',
+	'7xs' = '7xs',
+	'6xs' = '6xs',
+	'5xs' = '5xs',
 	'4xs' = '4xs',
 	'3xs' = '3xs',
 	'2xs' = '2xs',
@@ -112,6 +115,7 @@ export enum EDailyData {
 	newTokens = 'newTokens',
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
+	powerConsumption = 'powerConsumption',
 	transactionCount = 'transactionCount'
 }
 

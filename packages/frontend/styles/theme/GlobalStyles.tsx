@@ -21,6 +21,7 @@ body {
 	max-width: 1600px;
 	padding: 0 ${(p) => p.theme.spacing['4xl']};
 
+	${(p) => mq(EMediaQuery.lg, `padding: ${p.theme.spacing['xl']}`)}
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
   background: ${(p) => p.theme.colors.bg};

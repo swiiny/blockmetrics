@@ -1,12 +1,12 @@
 import React, { FC, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { Chart, Filler, PointElement, LineElement } from 'chart.js';
+import { Chart, Filler, PointElement, LineElement, CategoryScale, LinearScale } from 'chart.js';
 import { Line } from 'react-chartjs-2';
 import { StyledChartContainer } from './LineChart.styles';
 import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
 import { axiosRest } from '../../../utils/variables';
 
 // required to get the gradient in the charts
-Chart.register(Filler, PointElement, LineElement);
+Chart.register(Filler, PointElement, LineElement, CategoryScale, LinearScale);
 
 const LineChart: FC<IBarLineChart> = ({ dailyType, chainId, deactivateLegend = false, chartHeight = 150 }) => {
 	const [chartData, setChartData] = useState<IBarLineChartData[]>([]);

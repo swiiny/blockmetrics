@@ -1,4 +1,4 @@
-import { ESize } from '../../theme/utils/enum';
+import { ESize } from '../styles/theme/utils/enum';
 
 interface IPadding {
 	padding?: ESize;

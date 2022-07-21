@@ -152,7 +152,7 @@ export const addPaddingStyles = (p: any) => {
 		${p.smPaddingLeft ? mq(EMediaQuery.sm, `padding-left: ${p.theme.spacing[p.smPaddingLeft]};`) : ''}
 		${p.smPaddingRight ? mq(EMediaQuery.sm, `padding-right: ${p.theme.spacing[p.smPaddingRight]};`) : ''}
 
-			${p.padding ? `padding: ${p.theme.spacing[p.padding]};` : ''}
+		${p.padding ? `padding: ${p.theme.spacing[p.padding]};` : ''}
 		${p.paddingX ? `padding-left: ${p.theme.spacing[p.paddingX]}; padding-right: ${p.theme.spacing[p.paddingX]};` : ''}
 		${p.paddingY ? `padding-top: ${p.theme.spacing[p.paddingY]}; padding-bottom: ${p.theme.spacing[p.paddingY]};` : ''}
 		${p.paddingTop ? `padding-top: ${p.theme.spacing[p.paddingTop]};` : ''}

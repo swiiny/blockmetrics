@@ -4,6 +4,7 @@ type TBlockchain = {
 	note: string;
 	node_count: number;
 	testnet_node_count: number;
+	reliability: number;
 	single_node_power_consumption: number;
 	blockchain_power_consumption: number;
 	hashrate: number;

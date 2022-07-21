@@ -101,8 +101,8 @@ export const getChartByIdAndType = async (pool, id, type) => {
 				tableLabel = 'daily_node_count_history';
 				valueLabel = 'node_count';
 				break;
-			case EDailyData.txPowerConsumption:
-				tableLabel = 'daily_transaction_power_consumption_history';
+			case EDailyData.powerConsumption:
+				tableLabel = 'daily_power_consumption_history';
 				valueLabel = 'power_consumption';
 				break;
 			case EDailyData.transactionCount:

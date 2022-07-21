@@ -11,6 +11,13 @@ export const StyledColumn = styled.div<IColumn>`
 	position: relative;
 	width: 100%;
 
+	${(p) =>
+		p.fullHeight
+			? css`
+					align-self: stretch;
+			  `
+			: ``}
+
 	${({ columns, sm, md, lg, xl }) => css`
 		${columns ? `width: ${width(columns)};` : ''}
 		${columns === 0 ? `display: none` : ''}

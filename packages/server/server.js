@@ -25,7 +25,7 @@ import {
 	updateDbDailyNewAddresses,
 	updateDbDailyNewContracts,
 	updateDbDailyNewTokens,
-	updateDbDailyNodeCount,
+	updateDbDailyNodeCountAndReliability,
 	updateDbDailyTokenCount,
 	updateDbDailyTransaction
 } from './utils/update/dailyData.js';
@@ -46,9 +46,7 @@ import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 import { getTxPowerConsumptionForPoWChains } from './utils/fetch/powTxPowerConsumption.js';
-
-let fetchingDataActivated = true;
-let canStartFetchData = true;
+import { addReliabilityFromChains } from './utils/maths.js';
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
@@ -99,11 +97,11 @@ async function updatePowerConsumptionPoW(chainsPowerConsumption) {
 
 	try {
 		await updatePowerConsumptionInDb(con, chainsPowerConsumption);
-
-		con.release();
 	} catch (err) {
 		console.error('updatePowerConsumption', err);
 	}
+
+	con.release();
 
 	if (process.env.DEBUG_LOGS === 'activated') {
 		console.log('========== UPDATE POWER CONSUMPTION POW END ==========', Date.now());
@@ -150,8 +148,10 @@ async function fetchDailyData(factor = 1) {
 
 	const nodesCount = await getNodeCountForAllBlockchains();
 
-	const nodesCountPromises = nodesCount?.map(({ id, count }) => {
-		updateDbDailyNodeCount(con, id, count);
+	const chainsWithReliability = addReliabilityFromChains(nodesCount);
+
+	const nodesCountPromises = chainsWithReliability?.map(({ id, count, reliability }) => {
+		updateDbDailyNodeCountAndReliability(con, id, count, reliability);
 	});
 
 	if (!nodesCount) {
@@ -348,6 +348,8 @@ async function fetchDailyData(factor = 1) {
 			console.log('end fetching daily data for', chain.name);
 		}
 	});
+
+	con.release();
 }
 
 async function initWebsocketProvider(chain, con) {
@@ -431,21 +433,16 @@ async function initWebsocketProvider(chain, con) {
 }
 
 async function startFetchData() {
-	canStartFetchData = false;
 	try {
-		const con = await pool.getConnection();
+		let con = await pool.getConnection();
 
 		con.destroy();
-
-		if (!fetchingDataActivated) {
-			return 0;
-		}
 
 		if (process.env.NODE_ENV === 'production') {
 			console.log('start production');
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
-			const con = await pool.getConnection();
+			con = await pool.getConnection();
 
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
 				console.log('start ws provider for', chain.name);
@@ -493,12 +490,10 @@ async function startFetchData() {
 
 			console.log('start dev');
 
-			//console.log(await fetchDailyTransactionFor(CHAINS.polygon));
-
-			//fetchDailyData(1 / 10);
+			// fetchDailyData(1 / 10);
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
-			const con = await pool.getConnection();
+			con = await pool.getConnection();
 
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
@@ -516,7 +511,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			//rule.hour = 2;
-			rule.minute = [0, 20, 40];
+			rule.minute = [0, 30, 25];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
@@ -539,29 +534,27 @@ async function startFetchData() {
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
-		if (canStartFetchData) {
-			timeoutFetchData = setTimeout(async () => {
-				console.log('restart fetching data');
+		timeoutFetchData = setTimeout(async () => {
+			console.log('restart fetching data');
 
-				// remove all items from wsProviders
-				wsProviders.forEach((wsProvider) => {
-					wsProvider.removeAllListeners();
-					wsProvider._websocket?.removeAllListeners();
-				});
+			// remove all items from wsProviders
+			wsProviders.forEach((wsProvider) => {
+				wsProvider.removeAllListeners();
+				wsProvider._websocket?.removeAllListeners();
+			});
 
-				wsProviders = [];
+			wsProviders = null;
 
-				const promises = [
-					dailyRoutine.gracefulShutdown(),
-					fiveMinutesRoutine.gracefulShutdown(),
-					middayRoutine.gracefulShutdown()
-				];
+			const promises = [
+				dailyRoutine.gracefulShutdown(),
+				fiveMinutesRoutine.gracefulShutdown(),
+				middayRoutine.gracefulShutdown()
+			];
 
-				await Promise.all(promises);
+			await Promise.all(promises);
 
-				startFetchData();
-			}, 1 * 60 * 1000);
-		}
+			startFetchData();
+		}, 1 * 60 * 1000);
 	}
 }
 
@@ -578,5 +571,3 @@ init();
 process.on('uncaughtException', function (err) {
 	console.log('UNCAUGHT EXCEPTION - keeping process alive:', err.message);
 });
-
-export { fetchingDataActivated };
