@@ -12,7 +12,7 @@ import {
 	insertDailyTransactionCount,
 	updateDifficultyInBlockchain,
 	updateHashrateInBlockchain,
-	updateNodeCountInBlockchain,
+	updateNodeCountAndReliabilityInBlockchain,
 	updateTokenCountInBlockchain
 } from '../sql.js';
 
@@ -229,27 +229,6 @@ export async function updateDbDailyNewTokens(con, id, data) {
 	}
 }
 
-export async function updateDbNodeCount(con, id, data) {
-	try {
-		if (!data) {
-			throw new Error('data is not defined for ' + id);
-		}
-
-		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
-
-			return con.query(insertDailyNodeCount, [uuid, id, count, timestamp]);
-		});
-
-		await Promise.all(promises);
-
-		return 0;
-	} catch (err) {
-		console.error('updateDbNodeCount', id, err);
-		return 1;
-	}
-}
-
 export const updateDbDailyTokenCount = async (con, id, count) => {
 	try {
 		if (!count) {
@@ -277,10 +256,14 @@ export const updateDbDailyTokenCount = async (con, id, count) => {
 	}
 };
 
-export const updateDbDailyNodeCount = async (con, id, count) => {
+export const updateDbDailyNodeCountAndReliability = async (con, id, count, reliability) => {
 	try {
 		if (!count) {
 			throw new Error('count is not defined for ' + id);
+		}
+
+		if (!reliability) {
+			throw new Error('reliability is not defined for ' + id);
 		}
 
 		// get first timestamp OF today
@@ -292,14 +275,14 @@ export const updateDbDailyNodeCount = async (con, id, count) => {
 
 		const promises = [
 			con.query(insertDailyNodeCount, [uuid, id, count, timestamp]),
-			con.query(updateNodeCountInBlockchain, [count, id])
+			con.query(updateNodeCountAndReliabilityInBlockchain, [count, reliability, id])
 		];
 
 		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {
-		console.error('updateDbDailyTokenCount', id, err);
+		console.error('updateDbDailyNodeCountAndReliability', id, err);
 		return 1;
 	}
 };

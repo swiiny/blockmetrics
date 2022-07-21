@@ -25,7 +25,7 @@ import {
 	updateDbDailyNewAddresses,
 	updateDbDailyNewContracts,
 	updateDbDailyNewTokens,
-	updateDbDailyNodeCount,
+	updateDbDailyNodeCountAndReliability,
 	updateDbDailyTokenCount,
 	updateDbDailyTransaction
 } from './utils/update/dailyData.js';
@@ -46,6 +46,7 @@ import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 import { getTxPowerConsumptionForPoWChains } from './utils/fetch/powTxPowerConsumption.js';
+import { addReliabilityFromChains } from './utils/maths.js';
 
 let fetchingDataActivated = true;
 let canStartFetchData = true;
@@ -150,8 +151,10 @@ async function fetchDailyData(factor = 1) {
 
 	const nodesCount = await getNodeCountForAllBlockchains();
 
-	const nodesCountPromises = nodesCount?.map(({ id, count }) => {
-		updateDbDailyNodeCount(con, id, count);
+	const chainsWithReliability = addReliabilityFromChains(nodesCount);
+
+	const nodesCountPromises = chainsWithReliability?.map(({ id, count, reliability }) => {
+		updateDbDailyNodeCountAndReliability(con, id, count, reliability);
 	});
 
 	if (!nodesCount) {
@@ -493,9 +496,7 @@ async function startFetchData() {
 
 			console.log('start dev');
 
-			//console.log(await fetchDailyTransactionFor(CHAINS.polygon));
-
-			//fetchDailyData(1 / 10);
+			// fetchDailyData(1 / 10);
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
 			const con = await pool.getConnection();
@@ -516,7 +517,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			//rule.hour = 2;
-			rule.minute = [0, 30];
+			rule.minute = [0, 13];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {

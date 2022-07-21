@@ -8,7 +8,7 @@ export async function getEthNodeCount() {
 
 		const res = await axios.get(url);
 
-		return res.data.result.TotalNodeCount;
+		return parseInt(res.data.result.TotalNodeCount, 10);
 	} catch (err) {
 		console.error('getEthNodeCount', err);
 		return null;
@@ -102,7 +102,8 @@ export const getNodeCountForAllBlockchains = async () => {
 
 		const resolvedPromises = await Promise.all(promises);
 
-		return resolvedPromises;
+		// add polygon to calc reliability correctly
+		return [...resolvedPromises, { id: CHAINS.polygon.id, count: 100 }];
 	} catch {
 		return null;
 	}

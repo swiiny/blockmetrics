@@ -12,15 +12,15 @@ export const StyledBlockchainList = styled.ul`
 
 	margin-top: -${(p) => p.theme.spacing.xl};
 
-	gap: 15px;
+	gap: 21px;
 
 	& > li {
-		width: calc(((1 / 3) * 100%) - 10px);
+		width: calc(((1 / 3) * 100%) - 14px);
 
 		${mq(
 			EMediaQuery.xl,
 			css`
-				width: calc(((1 / 2) * 100%) - 10px);
+				width: calc(((1 / 2) * 100%) - 14px);
 			`
 		)}
 

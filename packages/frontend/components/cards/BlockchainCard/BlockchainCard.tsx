@@ -16,6 +16,7 @@ import BMButton from '../../../styles/theme/components/BMButton';
 import BMProgressBar from '../../../styles/theme/components/BMProgressBar';
 import ItemLink from '../../utils/ItemLink';
 import useResponsive from '../../../hooks/useResponsive';
+import { calcReliability } from '../../../utils/math';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	const { isSmallerThanSm } = useResponsive();
@@ -35,8 +36,9 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		hashrate,
 		difficulty,
 		last_block_timestamp,
-		token_count,
+		token_count = 0,
 		transaction_count,
+		reliability = 0,
 		gas_price,
 		consensus,
 		address_count,
@@ -92,9 +94,9 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 						<BMIcon
 							type={blockchain.icon}
 							size={isSmallerThanSm ? ESize.s : ESize.s}
-							backgroundVisible={!isSmallerThanSm}
-							backgroundRadius={ESize.s}
-							backgroundSize={ESize.xs}
+							//backgroundVisible={!isSmallerThanSm}
+							//backgroundRadius={ESize.s}
+							//backgroundSize={ESize.xs}
 						/>
 
 						<Spacing size={ESize['2xs']} />
@@ -107,10 +109,10 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 					<BMCardContainer secondary>
 						<FlexEx horizontal={EFlex.between} paddingY={ESize['5xs']} paddingX={ESize['s']}>
 							<BMText size={ESize.m} weight={ETextWeight.medium}>
-								Tokens:
+								Token{token_count > 1 ? 's' : ''}:
 							</BMText>
 							<BMText size={ESize.m} weight={ETextWeight.medium}>
-								<CountUp start={0} prefix=' ' end={token_count || 0} />
+								<CountUp start={0} prefix=' ' end={token_count} />
 							</BMText>
 						</FlexEx>
 					</BMCardContainer>
@@ -172,7 +174,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 				<Flex fullWidth smDirection={EFlex.column} horizontal={EFlex.between} vertical={EFlex.center}>
 					<Column columns={7} sm={12}>
-						<BMProgressBar label='Reliability' value={80} />
+						<BMProgressBar label='Reliability' value={reliability} />
 					</Column>
 
 					<Spacing size={ESize.unset} smSize={ESize.m} />
