@@ -52,6 +52,7 @@ let canStartFetchData = true;
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
+let middayRoutine;
 let fiveMinutesRoutine;
 
 let wsProviders = [];
@@ -109,6 +110,21 @@ async function updatePowerConsumptionPoW(chainsPowerConsumption) {
 	}
 }
 
+async function updatePowerConsumtion() {
+	try {
+		// fetch and update blockchains power consumption
+		updatePowerConsumptionPoS();
+
+		// FETCH AND UPDATE POWER CONSUMPTION FOR PoW CHAIN
+		const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
+
+		// fetch and update blockchains power consumption
+		updatePowerConsumptionPoW(transactionPowerConsumption);
+	} catch (err) {
+		console.error('updatePowerConsumption', err);
+	}
+}
+
 async function fetchDailyData(factor = 1) {
 	const delay = 5000 * factor;
 
@@ -143,15 +159,6 @@ async function fetchDailyData(factor = 1) {
 	}
 
 	await Promise.all(nodesCountPromises);
-
-	// fetch and update blockchains power consumption
-	updatePowerConsumptionPoS();
-
-	// FETCH AND UPDATE POWER CONSUMPTION FOR PoW CHAIN
-	const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
-
-	// fetch and update blockchains power consumption
-	updatePowerConsumptionPoW(transactionPowerConsumption);
 
 	/* ========================================
 	 REMOVE yesterday active addresses
@@ -460,6 +467,16 @@ async function startFetchData() {
 				fetchDailyData();
 			});
 
+			const ruleMidday = new schedule.RecurrenceRule();
+			ruleMidday.hour = 12;
+			ruleMidday.minute = 0;
+			ruleMidday.tz = 'Europe/Amsterdam';
+
+			middayRoutine = schedule.scheduleJob(ruleMidday, async () => {
+				console.log('run schedule');
+				updatePowerConsumtion();
+			});
+
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
 			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
 
@@ -534,7 +551,11 @@ async function startFetchData() {
 
 				wsProviders = [];
 
-				const promises = [dailyRoutine.gracefulShutdown(), fiveMinutesRoutine.gracefulShutdown()];
+				const promises = [
+					dailyRoutine.gracefulShutdown(),
+					fiveMinutesRoutine.gracefulShutdown(),
+					middayRoutine.gracefulShutdown()
+				];
 
 				await Promise.all(promises);
 
