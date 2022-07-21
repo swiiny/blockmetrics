@@ -1,4 +1,4 @@
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
 import BMText from '../../../styles/theme/components/BMText';
@@ -16,10 +16,13 @@ import BMButton from '../../../styles/theme/components/BMButton';
 import BMProgressBar from '../../../styles/theme/components/BMProgressBar';
 import ItemLink from '../../utils/ItemLink';
 import useResponsive from '../../../hooks/useResponsive';
-import { calcReliability } from '../../../utils/math';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	const { isSmallerThanSm } = useResponsive();
+
+	const cardRef = useRef<number>(0);
+
+	const [gasPriceColor, setGasPriceColor] = useState<ETextColor>(ETextColor.accent);
 
 	if (emptyItem) {
 		return <li className='empty' />;
@@ -86,6 +89,18 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		return 'A+';
 	}, [note]);
 
+	useEffect(() => {
+		if (gweiGasPrice) {
+			setGasPriceColor(cardRef.current > gweiGasPrice ? ETextColor.positive : ETextColor.negative);
+
+			cardRef.current = gweiGasPrice;
+
+			setTimeout(() => {
+				setGasPriceColor(ETextColor.accent);
+			}, 700);
+		}
+	}, [gweiGasPrice]);
+
 	return (
 		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm}>
 			<Flex direction={EFlex.column} horizontal={EFlex.center} paddingX={ESize.s} paddingY={ESize.s}>
@@ -132,7 +147,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 							</BMText>
 						</Flex>
 
-						<BMText size={ESize.l} weight={ETextWeight.medium} textColor={ETextColor.accent}>
+						<BMText size={ESize.l} weight={ETextWeight.medium} textColor={gasPriceColor}>
 							{gweiGasPrice ? `${gweiGasPrice} Gwei` : '-'}
 						</BMText>
 					</Flex>
@@ -144,7 +159,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 					<Column columns={8} fullHeight>
 						<BMCardContainer tertiary paddingX={ESize['2xs']} paddingY={ESize['3xs']}>
 							<BMText size={ESize.s} weight={ETextWeight.medium}>
-								Power Consumption Level
+								Power Consumption
 							</BMText>
 
 							<Spacing size={ESize.xs} />

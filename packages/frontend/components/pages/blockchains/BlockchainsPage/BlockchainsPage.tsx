@@ -19,7 +19,6 @@ const BlockchainsPage: NextPage = () => {
 
 	useEffect(() => {
 		if (message?.channel === ESubscribeType.blockchains) {
-			console.log('data', message.data);
 			setBlockchains(message.data);
 		}
 	}, [message]);

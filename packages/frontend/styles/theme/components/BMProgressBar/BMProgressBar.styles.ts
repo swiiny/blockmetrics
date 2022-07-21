@@ -9,7 +9,7 @@ export const StyledBMProgressBar = styled.div<IBMProgressBar>`
 
 		width: 100%;
 
-		background: linear-gradient(to left, #454a75 0%, #ba92b220 100%);
+		background: linear-gradient(to bottom, #454a75 0%, #ba92b220 100%);
 
 		overflow: hidden;
 
@@ -47,7 +47,7 @@ export const StyledBMProgressBar = styled.div<IBMProgressBar>`
 
 			width: ${p.value}%;
 
-			background: ${p.theme.colors.gradient.toLeft};
+			background: ${p.theme.colors.gradient.toBottom};
 
 			border-radius: inherit;
 
