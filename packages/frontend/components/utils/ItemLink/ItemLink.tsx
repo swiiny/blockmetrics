@@ -4,10 +4,10 @@ import { StyledLink } from './ItemLink.styles';
 import { IItemLink } from './ItemLink.type';
 
 // link that covers the whole relative parent element
-const ItemLink: FC<IItemLink> = ({ href }) => {
+const ItemLink: FC<IItemLink> = ({ href, internal = false }) => {
 	return (
 		<Link href={href} passHref>
-			<StyledLink target='_blank' rel='noopener noreferrer' />
+			<StyledLink target={internal ? undefined : '_blank'} rel={internal ? undefined : 'noopener noreferrer'} />
 		</Link>
 	);
 };

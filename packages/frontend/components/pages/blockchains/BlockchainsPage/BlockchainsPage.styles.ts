@@ -1,4 +1,6 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
+import { EMediaQuery } from '../../../../styles/theme/utils/enum';
+import { mq } from '../../../../styles/theme/utils/functions';
 
 export const StyledBlockchainList = styled.ul`
 	display: flex;
@@ -10,8 +12,23 @@ export const StyledBlockchainList = styled.ul`
 
 	margin-top: -${(p) => p.theme.spacing.xl};
 
+	gap: 15px;
+
 	& > li {
-		width: 32%;
-		height: auto;
+		width: calc(((1 / 3) * 100%) - 10px);
+
+		${mq(
+			EMediaQuery.xl,
+			css`
+				width: calc(((1 / 2) * 100%) - 10px);
+			`
+		)}
+
+		${mq(
+			EMediaQuery.md,
+			css`
+				width: 100%;
+			`
+		)}
 	}
 `;

@@ -1,16 +1,12 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import BlockchainCard from '../../../cards/BlockchainCard';
 import { StyledBlockchainList } from './BlockchainsPage.styles';
-import { axiosRest } from '../../../../utils/variables';
 import useWebsocket from '../../../../hooks/useWebsocket';
-import BMButton from '../../../../styles/theme/components/BMButton';
-import { ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
-import Spacing from '../../../../styles/layout/Spacing';
+import { ESubscribeType } from '../../../../styles/theme/utils/enum';
 
 const HeaderData = {
 	title: 'Blockchains',

@@ -1,9 +1,6 @@
-import Image from 'next/image';
-import Link from 'next/link';
 import React, { FC, useMemo, useState } from 'react';
 import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
-import BMHeading from '../../../styles/theme/components/BMHeading';
 import BMText from '../../../styles/theme/components/BMText';
 import { EDailyData, EFlex, EIcon, ESize, ETextColor, ETextType, ETextWeight } from '../../../styles/theme/utils/enum';
 import { BLOCKCHAINS_ARRAY } from '../../../utils/variables';
@@ -15,8 +12,14 @@ import BMIcon from '../../../styles/theme/components/BMIcon';
 import { FlexEx } from './BlockchainCard.styles';
 import Column from '../../../styles/layout/Column';
 import LineChart from '../../charts/LineChart';
+import BMButton from '../../../styles/theme/components/BMButton';
+import BMProgressBar from '../../../styles/theme/components/BMProgressBar';
+import ItemLink from '../../utils/ItemLink';
+import useResponsive from '../../../hooks/useResponsive';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
+	const { isSmallerThanSm } = useResponsive();
+
 	if (emptyItem) {
 		return <li className='empty' />;
 	}
@@ -77,18 +80,19 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		return null;
 	}, [gas_price]);
 
-	const [initTodayTransactionCount, setInitTodayTransactionCount] = useState(today_transaction_count);
-	const [initTodayAddressCount, setInitTodayAddressCount] = useState(today_address_count);
+	const rank = useMemo(() => {
+		return 'A+';
+	}, [note]);
 
 	return (
-		<BMCardContainer as='li'>
-			<Flex direction={EFlex.column} horizontal={EFlex.center} padding={ESize['2xs']}>
-				<Flex fullWidth horizontal={EFlex.between} vertical={EFlex.center}>
+		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm}>
+			<Flex direction={EFlex.column} horizontal={EFlex.center} paddingX={ESize.s} paddingY={ESize.s}>
+				<Flex fullWidth wrapItems horizontal={EFlex.between} vertical={EFlex.center}>
 					<Flex vertical={EFlex.center}>
 						<BMIcon
 							type={blockchain.icon}
-							size={ESize.s}
-							backgroundVisible
+							size={isSmallerThanSm ? ESize.s : ESize.s}
+							backgroundVisible={!isSmallerThanSm}
 							backgroundRadius={ESize.s}
 							backgroundSize={ESize.xs}
 						/>
@@ -114,7 +118,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 				<Spacing size={ESize['xs']} />
 
-				<BMCardContainer secondary fullWidth clickable>
+				<BMCardContainer secondary fullWidth>
 					<Flex fullWidth horizontal={EFlex.between} paddingY={ESize['xs']} paddingX={ESize['s']}>
 						<Flex vertical={EFlex.center}>
 							<BMIcon type={EIcon.gas} size={ESize.xs} />
@@ -151,7 +155,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 						<BMCardContainer tertiary paddingX={ESize['2xs']} paddingY={ESize['3xs']} fullHeight>
 							<Flex fullHeight direction={EFlex.column} horizontal={EFlex.center} vertical={EFlex.center}>
 								<BMText size={ESize['2xl']} weight={ETextWeight.semiBold}>
-									A+
+									{rank}
 								</BMText>
 
 								<Spacing size={ESize['4xs']} />
@@ -163,7 +167,23 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 						</BMCardContainer>
 					</Column>
 				</Flex>
+
+				<Spacing size={ESize['xs']} />
+
+				<Flex fullWidth smDirection={EFlex.column} horizontal={EFlex.between} vertical={EFlex.center}>
+					<Column columns={7} sm={12}>
+						<BMProgressBar label='Reliability' value={80} />
+					</Column>
+
+					<Spacing size={ESize.unset} smSize={ESize.m} />
+
+					<BMButton fullWidth={isSmallerThanSm} secondary size={ESize.s}>
+						Show More
+					</BMButton>
+				</Flex>
 			</Flex>
+
+			<ItemLink href={linkTo} internal />
 		</BMCardContainer>
 	);
 };

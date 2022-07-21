@@ -17,20 +17,22 @@ export const StyledNavbar = styled.nav<{ isHidden?: boolean; isBlurred: boolean 
 
 	padding: 0 ${(p) => p.theme.spacing['4xl']};
 
+	${(p) => mq(EMediaQuery.lg, `padding: 0 ${p.theme.spacing['xl']}`)}
+
 	${mq(
 		EMediaQuery.md,
+		css`
+			flex-direction: column;
+			justify-content: flex-start;
+			height: auto;
+
+			& > div:nth-child(1) {
+				height: 120px;
+			}
 		`
-		flex-direction: column;
-		justify-content: flex-start;
-		height: auto;
-
-		& > div:nth-child(1) {
-			height: 120px;
-		}
-	`
 	)}
-	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
+	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
 	${addTransition()}
 
