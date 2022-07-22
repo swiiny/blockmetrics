@@ -164,7 +164,13 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 							<Spacing size={ESize.xs} />
 
-							<LineChart dailyType={EDailyData.powerConsumption} chainId={id} deactivateLegend chartHeight={54} />
+							<LineChart
+								color={ETextColor.negative}
+								dailyType={EDailyData.powerConsumption}
+								chainId={id}
+								deactivateLegend
+								chartHeight={54}
+							/>
 						</BMCardContainer>
 					</Column>
 
