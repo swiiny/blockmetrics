@@ -55,6 +55,7 @@ export const updateLastBlockTimestamp = `UPDATE blockchain SET last_block_timest
 export const updatePowerConsumptionInBlockchain = `UPDATE blockchain SET blockchain_power_consumption = ? WHERE id = ?`;
 // update blockchain data for each block
 export const updateBlockchainWithNewBlockData = `UPDATE blockchain SET last_block_timestamp = ?, today_transaction_count = today_transaction_count + ?, gas_price = ? WHERE id = ?`;
+export const updateBlockchainWithNewBlockDataWithoutGasPrice = `UPDATE blockchain SET last_block_timestamp = ?, today_transaction_count = today_transaction_count + ? WHERE id = ?`;
 
 // update transaction count with value equal to 0
 export const resetTodayTransactionCount = `UPDATE blockchain SET today_transaction_count = 0 WHERE id = ?`;

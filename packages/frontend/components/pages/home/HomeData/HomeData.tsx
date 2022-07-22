@@ -24,7 +24,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		refreshTime: 3,
 		iconSrc: '/assets/images/icons/arrow-swap-horizontal.svg',
 		chartTitle: 'Daily Transactions count',
-		chartType: EChartType.line,
+		chartType: EChartType.bar,
 		chartDataType: EDailyGlobalData.transactionsCount
 	},
 	{
