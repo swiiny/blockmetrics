@@ -58,6 +58,7 @@ export enum ETextWeight {
 
 export enum EMediaQuery {
 	xs = '0px',
+	ssm = '550px',
 	sm = '660px',
 	md = '900px',
 	lg = '1200px',

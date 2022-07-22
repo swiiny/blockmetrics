@@ -25,8 +25,6 @@ export const getBlockchainMetadataById = async (
 	try {
 		const { data } = await axiosRest.get(`/get/blockchain/metadata?id=${id}&language=${language || 'en'}`);
 
-		console.log('res: ', data);
-
 		return data as TBlockchainMetadata;
 	} catch (error) {
 		if (axios.isAxiosError(error)) {

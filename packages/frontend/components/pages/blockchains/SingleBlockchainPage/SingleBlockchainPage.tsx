@@ -4,7 +4,7 @@ import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
 import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
-import { getBlockchainAndMetadataById } from '../../../../utils/fetch';
+import { getBlockchainMetadataById } from '../../../../utils/fetch';
 import { useRouter } from 'next/router';
 import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
 import {
@@ -20,12 +20,15 @@ import {
 import Column from '../../../../styles/layout/Column';
 import BMText from '../../../../styles/theme/components/BMText';
 import Flex from '../../../../styles/layout/Flex';
-import { DataText } from '../../../texts/DataText/DataText';
+import { DataCard } from '../../../texts/DataCard/DataCard';
 import Spacing from '../../../../styles/layout/Spacing';
 import BarChart from '../../../charts/BarChart';
 import { IBarLineChart } from '../../../../types/charts';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import { getEIconTypeFromValue, getESubscribeTypeFromValue } from '../../../../styles/theme/utils/functions';
+import { IDataCard } from '../../../texts/DataCard/DataCard.type';
+import { StyledList } from './SingleBlockchainPage.styles';
+import { getEngNotation } from '../../../../utils/convert';
 
 const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
@@ -37,42 +40,58 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const { query } = useRouter();
 	const { name } = query;
 
-	const selectedData = useMemo(() => {
+	// @todo(typescript)
+	const selectedData = useMemo<IDataCard[]>(() => {
 		const result = [];
 
-		const { gas_price, token_count, hashrate, last_block_timestamp } = blockchain || {};
-
-		if (gas_price) {
-			result.push({
-				value: Math.floor(gas_price * 10 ** -9),
-				unit: 'Gwei',
-				isAnimated: true,
-				label: 'Gas Price'
-			});
-		}
+		const { gas_price, token_count, hashrate, last_block_timestamp, blockchain_power_consumption } = blockchain || {};
 
 		if (token_count) {
 			result.push({
 				value: token_count,
 				isAnimated: true,
-				label: 'Tokens'
+				label: 'Tokens',
+				icon: EIcon.token,
+				colorAnimationOnUpdate: true,
+				reverseColor: true
+			});
+		}
+
+		if (blockchain_power_consumption) {
+			const { value, unit, hasDecimals } = getEngNotation(blockchain_power_consumption, 'Wh');
+
+			result.push({
+				value: value,
+				unit: unit,
+				isAnimated: true,
+				label: '24H Power Consumption',
+				icon: EIcon.energy,
+				colorAnimationOnUpdate: true,
+				reverseColor: true
+			});
+		}
+
+		if (gas_price) {
+			result.push({
+				value: Math.floor(gas_price * 10 ** -9),
+				unit: 'Gwei',
+				label: 'Gas Price',
+				icon: EIcon.gas,
+				colorAnimationOnUpdate: true
 			});
 		}
 
 		if (hashrate) {
-			let tempHashrate = hashrate;
-			let tempUnit = 'TH/s';
-
-			if (Math.floor(tempHashrate) > 1000000) {
-				tempHashrate = Math.floor(tempHashrate * 10 ** -3);
-				tempUnit = 'PH/s';
-			}
+			const { value, unit, hasDecimals } = getEngNotation(hashrate * 10 ** 12, 'H/s');
 
 			result.push({
-				value: tempHashrate,
-				unit: tempUnit,
+				value: value,
+				unit: unit,
 				isAnimated: true,
-				label: 'Hashrate'
+				valueHasDecimals: hasDecimals,
+				label: 'Hashrate',
+				icon: EIcon.chart,
+				colorAnimationOnUpdate: true
 			});
 		}
 
@@ -81,11 +100,14 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 				value: last_block_timestamp,
 				unit: 's',
 				isTimer: true,
-				label: 'Time from last block'
+				label: 'Time from last block',
+				icon: EIcon.timer,
+				colorAnimationOnUpdate: true,
+				reverseColor: true
 			});
 		}
 
-		return result;
+		return result.slice(0, 4);
 	}, [blockchain]);
 
 	const chainLogo = useMemo<EIcon>(() => {
@@ -115,10 +137,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		if (blockchainId) {
 			setBlockchainChannel(getESubscribeTypeFromValue(blockchainId));
 			// @todo(fetch only metadata because ws send first value without pause)
-			const result = await getBlockchainAndMetadataById(blockchainId || '', ELanguage.en);
-			const { blockchain: fetchedBlockchain, metadata: fetchMetadata } = result || {};
+			const result = await getBlockchainMetadataById(blockchainId || '', ELanguage.en);
 
-			setMetadata(fetchMetadata);
+			result && setMetadata(result);
 		}
 	}, [name]);
 
@@ -145,21 +166,11 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 			<Header title={blockchain?.name || ''} subtitle={metadata?.tagline || ''} icon={chainLogo} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
-				<Column columns={9} md={12} lg={8}>
-					<Flex as='ul' horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
-						{selectedData.map(({ value, label, unit, isAnimated, isTimer }) => (
-							<DataText
-								key={label}
-								as='li'
-								value={value}
-								label={label}
-								unit={unit}
-								isAnimated={isAnimated}
-								isTimer={isTimer}
-							/>
-						))}
-					</Flex>
-				</Column>
+				<StyledList>
+					{selectedData.map((data: IDataCard) => (
+						<DataCard key={data.label} as='li' {...data} />
+					))}
+				</StyledList>
 
 				<Column columns={6} md={12} lg={8}>
 					<BMText textColor={ETextColor.light}>{metadata?.description || ''}</BMText>

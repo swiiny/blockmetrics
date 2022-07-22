@@ -1,5 +1,5 @@
 import { IMessage } from '../../../../hooks/useWebsocket/useWebsocket.type';
-import { EChartType, EDailyGlobalData, EGlobalData, ESubscribeType } from '../../../../styles/theme/utils/enum';
+import { EChartType, EDailyGlobalData, EGlobalData, EIcon, ESubscribeType } from '../../../../styles/theme/utils/enum';
 
 interface IHomeCardData {
 	title: string;
@@ -14,7 +14,7 @@ interface IHomeCardData {
 	dailyChange?: number;
 	dailyChangeUnit?: string;
 	dailyChangeColorReversed?: boolean;
-	iconSrc: string;
+	icon: EIcon;
 	chartTitle: string;
 	chartType: EChartType;
 	chartDataType: EDailyGlobalData;

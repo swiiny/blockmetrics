@@ -438,7 +438,7 @@ async function startFetchData() {
 
 		con.destroy();
 
-		if (process.env.NODE_ENV === 'production') {
+		if (process.env.NODE_ENV !== 'production') {
 			console.log('start production');
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
