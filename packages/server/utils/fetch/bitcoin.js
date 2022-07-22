@@ -1,5 +1,4 @@
 import axios from 'axios';
-import { ethers } from 'ethers';
 import { CHAINS } from '../../variables.js';
 import {
 	increaseTodayTxCountInBlockchain,
@@ -11,6 +10,7 @@ import {
 import WebSocket from 'ws';
 
 let ws;
+let updatableCon = null;
 
 const fetchLastBitcoinBlockData = async (con) => {
 	const { id } = CHAINS.bitcoin;
@@ -62,8 +62,6 @@ const fetchLastBitcoinBlockData = async (con) => {
 export async function fetchBitcoinData(pool) {
 	const { id, name } = CHAINS.bitcoin;
 
-	let updatableCon = null;
-
 	if (!updatableCon) {
 		try {
 			updatableCon = await pool.getConnection();
@@ -73,11 +71,6 @@ export async function fetchBitcoinData(pool) {
 	}
 
 	try {
-		if (ws) {
-			ws.close();
-			ws = null;
-		}
-
 		ws = new WebSocket(`wss://ws.blockchain.info/inv`);
 
 		ws.on('open', () => {
@@ -132,7 +125,8 @@ export async function fetchBitcoinData(pool) {
 		};
 
 		ws.onerror = () => {
-			console.error('socket error');
+			console.error('bitcoin socket error');
+
 			restart(pool);
 		};
 	} catch (err) {
@@ -144,9 +138,12 @@ function restart(pool) {
 	console.error('fetchBitcoinBlocks', err);
 
 	updatableCon?.destroy();
-
 	bitcoinTimeout = setTimeout(() => {
 		console.log('restart fetchBitcoinData after error');
+
+		ws = null;
+		updatableCon = null;
+
 		fetchBitcoinData(pool);
 	}, 1 * 60 * 1000);
 }
