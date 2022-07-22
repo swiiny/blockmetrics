@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-	reactStrictMode: true,
+	reactStrictMode: false,
 	env: {
 		SERVER_URL: process.env.SERVER_URL,
 		API_URL: process.env.API_URL || 'https://api-rest.block-metrics.io',
