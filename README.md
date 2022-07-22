@@ -34,6 +34,8 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] BMListItem with blue dot component
 -   [ ] Chart tooltip
 -   [ ] Switch component
+-   [ ] Add skeleton and alert pop when api not available
+
 
 ### Integrated Blockchains
 
@@ -47,8 +49,11 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] Celo
 -   [ ] Harmony
 -   [ ] Gnosis
--   [ ] Arbitrum
--   [ ] Moonbeam
+-   [ ] Moonbeam :pushpin: (https://moonscan.io/charts)
+-   [ ] Arbitrum :pushpin: (https://arbiscan.io/charts)
+-   [ ] Optimism :pushpin: (https://optimistic.etherscan.io/charts)
+-   [ ] Nervos :pushpin: (https://explorer.nervos.org/charts)
+-   [ ] Near :pushpin: :triangular_flag_on_post: (https://nearblocks.io/charts/txns)
 
 #### Webhook to deploy an updated image from dockerhub to jelastic cloud
 
