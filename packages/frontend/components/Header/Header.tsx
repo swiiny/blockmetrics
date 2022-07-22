@@ -1,17 +1,26 @@
-import Image from 'next/image';
 import React from 'react';
 import useResponsive from '../../hooks/useResponsive';
 import Flex from '../../styles/layout/Flex';
 import Spacing from '../../styles/layout/Spacing';
 import BMHeading from '../../styles/theme/components/BMHeading';
+import BMIcon from '../../styles/theme/components/BMIcon';
 import BMText from '../../styles/theme/components/BMText';
-import { EFlex, EPosition, ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../styles/theme/utils/enum';
+import {
+	EFlex,
+	EIcon,
+	EPosition,
+	ESize,
+	ETextAlign,
+	ETextColor,
+	ETextType,
+	ETextWeight
+} from '../../styles/theme/utils/enum';
 import { BMBlockPatternEx } from '../pages/home/HomeHeader/HomeHeader.styles';
 import Eclipse from '../utils/Eclipse';
-import { StyledHeader, StyledImageContainer } from './Header.styles';
+import { StyledHeader } from './Header.styles';
 import { IHeader } from './Header.type';
 
-const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, image }) => {
+const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon }) => {
 	const { isSmallerThanSm } = useResponsive();
 
 	return (
@@ -31,13 +40,11 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, image }) =>
 						)}
 					</BMHeading>
 
-					{image ? (
+					{icon && icon !== EIcon.none ? (
 						<>
 							<Spacing size={!isSmallerThanSm ? ESize.m : ESize.s} />
 
-							<StyledImageContainer>
-								<img src={image} alt={title} />
-							</StyledImageContainer>
+							<BMIcon type={icon} size={ESize.l} />
 						</>
 					) : (
 						<></>

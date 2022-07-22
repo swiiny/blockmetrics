@@ -11,6 +11,7 @@ import {
 	EChartType,
 	EDailyData,
 	EFlex,
+	EIcon,
 	ELanguage,
 	ESize,
 	ESubscribeType,
@@ -24,7 +25,7 @@ import Spacing from '../../../../styles/layout/Spacing';
 import BarChart from '../../../charts/BarChart';
 import { IBarLineChart } from '../../../../types/charts';
 import useWebsocket from '../../../../hooks/useWebsocket';
-import { getESubscribeTypeFromValue } from '../../../../styles/theme/utils/functions';
+import { getEIconTypeFromValue, getESubscribeTypeFromValue } from '../../../../styles/theme/utils/functions';
 
 const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
@@ -87,6 +88,14 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		return result;
 	}, [blockchain]);
 
+	const chainLogo = useMemo<EIcon>(() => {
+		if (blockchain?.id) {
+			return getEIconTypeFromValue(blockchain?.id);
+		}
+
+		return EIcon.none;
+	}, [blockchain?.id]);
+
 	const chartsToDisplay: IBarLineChart[] = useMemo(() => {
 		const result: IBarLineChart[] = [];
 
@@ -133,11 +142,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		<>
 			<Meta title={blockchain?.name || ''} />
 
-			<Header
-				title={blockchain?.name || ''}
-				subtitle={metadata?.tagline || ''}
-				image={blockchain?.id ? `/assets/images/blockchains/${blockchain?.id}.svg` : undefined}
-			/>
+			<Header title={blockchain?.name || ''} subtitle={metadata?.tagline || ''} icon={chainLogo} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
 				<Column columns={9} md={12} lg={8}>

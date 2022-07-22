@@ -1,5 +1,5 @@
 import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
-import { EDailyData, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
+import { EDailyData, EIcon, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
 	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {
@@ -201,5 +201,19 @@ export function getESubscribeTypeFromValue(value: string): ESubscribeType {
 		console.error('getESubscribeTypeFromValue', err);
 
 		return ESubscribeType.unset;
+	}
+}
+
+export function getEIconTypeFromValue(value: string): EIcon {
+	try {
+		const indexOfValue = Object.values(EIcon).indexOf(value as unknown as EIcon);
+
+		const key = Object.keys(EIcon)[indexOfValue] as keyof typeof EIcon;
+
+		return EIcon[key];
+	} catch (err) {
+		console.error('getESubscribeTypeFromValue', err);
+
+		return EIcon.none;
 	}
 }
