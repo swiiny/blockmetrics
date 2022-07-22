@@ -23,7 +23,7 @@ const BMIcon: FC<IBMIcon> = ({
 			backgroundSize={backgroundSize}
 		>
 			<StyledIcon size={size} {...otherProps}>
-				<Image src={`/assets/icons/${type}.svg`} layout='fill' />
+				<Image src={`/assets/icons/${type}.svg`} layout='fill' alt='' />
 			</StyledIcon>
 		</StyledBackground>
 	);
