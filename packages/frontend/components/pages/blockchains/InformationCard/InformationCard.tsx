@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
 import useResponsive from '../../../../hooks/useResponsive';
 import Column from '../../../../styles/layout/Column';
@@ -9,15 +8,7 @@ import BMGradientSeparator from '../../../../styles/theme/components/BMGradientS
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMProgressBar from '../../../../styles/theme/components/BMProgressBar';
 import BMText from '../../../../styles/theme/components/BMText';
-import {
-	EFlex,
-	ELanguage,
-	EPosition,
-	ESize,
-	ETextColor,
-	ETextType,
-	ETextWeight
-} from '../../../../styles/theme/utils/enum';
+import { ELanguage, EPosition, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
 import { getBlockchainMetadataById } from '../../../../utils/fetch';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList } from './InformationCard.styles';
