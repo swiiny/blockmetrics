@@ -118,13 +118,15 @@ export enum EDailyData {
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
 	powerConsumption = 'powerConsumption',
-	transactionCount = 'transactionCount'
+	transactionCount = 'transactionCount',
+	totalValueLocked = 'totalValueLocked'
 }
 
 export enum EDailyGlobalData {
 	activeUsers = 'activeUsers',
 	transactionsCount = 'transactionsCount',
-	powerConsumption = 'powerConsumption'
+	powerConsumption = 'powerConsumption',
+	totalValueLocked = 'totalValueLocked'
 }
 
 export enum EChartType {

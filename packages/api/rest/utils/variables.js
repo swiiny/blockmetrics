@@ -11,14 +11,16 @@ export const EDailyData = {
 	tokenCount: 'tokenCount',
 	nodeCount: 'nodeCount',
 	powerConsumption: 'powerConsumption',
-	transactionCount: 'transactionCount'
+	transactionCount: 'transactionCount',
+	totalValueLocked: 'totalValueLocked'
 };
 
 // fetch chart data for all blockchains
 export const EDailyGlobalData = {
 	activeUsers: 'activeUsers',
 	transactionsCount: 'transactionsCount',
-	powerConsumption: 'powerConsumption'
+	powerConsumption: 'powerConsumption',
+	totalValueLocked: 'totalValueLocked'
 };
 
 // sum of data fetched for all blockchains
