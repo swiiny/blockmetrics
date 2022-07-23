@@ -149,6 +149,7 @@ export enum EGlobalData {
 export enum ESubscribeType {
 	unset = 'unset',
 	blockchains = 'blockchains',
+	blockchainCards = 'blockchainCards',
 	blockchain = 'blockchain',
 	usersCount = 'usersCount',
 	transactionCount = 'transactionCount',

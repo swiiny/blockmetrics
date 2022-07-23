@@ -24,6 +24,7 @@ export const blockchainTotalToColumnName = {
 
 export const subscribeType = {
 	blockchains: 'blockchains',
+	blockchainCards: 'blockchainCards',
 	usersCount: 'usersCount',
 	...blockchainTotal,
 	...blockchainId
