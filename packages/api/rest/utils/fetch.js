@@ -125,6 +125,9 @@ export const getChartByIdAndType = async (pool, id, type) => {
 			case EDailyData.transactionCount:
 				tableLabel = 'daily_transaction_count_history';
 				valueLabel = 'transaction_count';
+			case EDailyData.totalValueLocked:
+				tableLabel = 'daily_total_value_locked_history';
+				valueLabel = 'total_value_locked';
 				break;
 			default:
 				return [];
@@ -159,6 +162,10 @@ export const getChartGlobalByType = async (pool, type) => {
 			case EDailyGlobalData.powerConsumption:
 				data = await pool.query(
 					`SELECT date, power_consumption AS value FROM daily_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+				);
+			case EDailyGlobalData.totalValueLocked:
+				data = await pool.query(
+					`SELECT date, total_value_locked AS value FROM daily_total_value_locked_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
 				);
 				break;
 			default:

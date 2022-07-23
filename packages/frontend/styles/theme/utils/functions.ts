@@ -1,5 +1,5 @@
 import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
-import { EDailyData, EIcon, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
+import { EIcon, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
 	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {

@@ -4,18 +4,9 @@ import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
 import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
-import { getBlockchainMetadataById } from '../../../../utils/fetch';
 import { useRouter } from 'next/router';
 import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
-import {
-	EChartType,
-	EDailyData,
-	EFlex,
-	EIcon,
-	ELanguage,
-	ESize,
-	ESubscribeType
-} from '../../../../styles/theme/utils/enum';
+import { EChartType, EDailyData, EFlex, EIcon, ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
 import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import { DataCard } from '../../../texts/DataCard/DataCard';
