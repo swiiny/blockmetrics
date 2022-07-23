@@ -27,26 +27,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		return <li className='empty' />;
 	}
 
-	const {
-		id,
-		name,
-		note,
-		node_count,
-		testnet_node_count,
-		single_node_power_consumption,
-		blockchain_power_consumption,
-		hashrate,
-		difficulty,
-		last_block_timestamp,
-		token_count = 0,
-		transaction_count,
-		reliability = 0,
-		gas_price,
-		consensus,
-		address_count,
-		today_address_count,
-		today_transaction_count
-	} = data || {};
+	const { id, name, rank, token_count = 0, reliability = 0, gas_price } = data || {};
 
 	const blockchain = useMemo((): {
 		estimatedTimeBetweenBlocks: number;
@@ -83,10 +64,6 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 		return null;
 	}, [gas_price]);
-
-	const rank = useMemo(() => {
-		return 'A+';
-	}, [note]);
 
 	useEffect(() => {
 		if (gweiGasPrice) {

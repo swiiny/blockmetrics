@@ -122,7 +122,9 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 					))}
 				</StyledUsefulLinkList>
 			);
-		} catch {}
+		} catch {
+			return <></>;
+		}
 	}, [metadata.links]);
 
 	const initData = useCallback(async () => {
