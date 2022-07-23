@@ -25,7 +25,6 @@ USE `blockmetrics-db` ;
 CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain` (
   `id` VARCHAR(255) NOT NULL,
   `name` VARCHAR(128) NOT NULL,
-  `note` TINYINT NULL DEFAULT NULL,
   `consensus` VARCHAR(20) NOT NULL,
   `node_count` INT UNSIGNED NULL DEFAULT NULL,
   `testnet_node_count` INT UNSIGNED NULL DEFAULT NULL,
@@ -80,7 +79,7 @@ COLLATE = utf8mb4_unicode_ci;
 CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain_score` (
   `id` VARCHAR(255) NOT NULL,
   `blockchain_id` VARCHAR(255) NOT NULL,
-  `rank` VARCHAR(2) NOT NULL,
+  `rank` VARCHAR(4) NOT NULL,
   `score` TINYINT NULL DEFAULT NULL,
   `reliability` FLOAT UNSIGNED NULL DEFAULT '0',
   `token_count` FLOAT UNSIGNED NULL DEFAULT '0',

@@ -28,3 +28,14 @@ type TBlockchainMetadata = {
 	links: string | undefined;
 	blockchain_id?: string;
 };
+
+type TBlockchainScore = {
+	id: string;
+	rank: string;
+	score: number;
+	reliability: number;
+	token_count: number;
+	power_consumption: number;
+	total_value_locked: number;
+	speed: number;
+};

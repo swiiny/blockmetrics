@@ -37,6 +37,44 @@ export const getBlockchainMetadataById = async (
 	}
 };
 
+export const getBlockchainMetadataAndScoreById = async (
+	id: string,
+	language: ELanguage
+): Promise<{ metadata: TBlockchainMetadata; score: TBlockchainScore } | null> => {
+	try {
+		const { data } = await axiosRest.get(`/get/blockchain/metadataAndScore?id=${id}&language=${language || 'en'}`);
+
+		return {
+			metadata: {
+				tagline: data.tagline,
+				description: data.description,
+				genesis_block: data.genesis_block,
+				source: data.source,
+				links: data.links,
+				blockchain_id: data.id
+			},
+			score: {
+				id: data.id,
+				rank: data.rank,
+				score: data.score,
+				reliability: data.reliability,
+				token_count: data.token_count,
+				power_consumption: data.power_consumption,
+				total_value_locked: data.total_value_locked,
+				speed: data.speed
+			}
+		};
+	} catch (error) {
+		if (axios.isAxiosError(error)) {
+			console.error('getBlockchainMetadataById', error);
+		} else {
+			console.error('getBlockchainMetadataById', error);
+		}
+
+		return null;
+	}
+};
+
 export const getBlockchainAndMetadataById = async (
 	id: string,
 	language?: ELanguage

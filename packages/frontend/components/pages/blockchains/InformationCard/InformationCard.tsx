@@ -17,7 +17,7 @@ import {
 	ETextType,
 	ETextWeight
 } from '../../../../styles/theme/utils/enum';
-import { getBlockchainMetadataById } from '../../../../utils/fetch';
+import { getBlockchainMetadataAndScoreById, getBlockchainMetadataById } from '../../../../utils/fetch';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList, StyledUsefulLinkList } from './InformationCard.styles';
 import { IInformationCard } from './InformationCard.type';
@@ -31,6 +31,26 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		genesis_block: '',
 		source: '',
 		links: ''
+	});
+
+	const [score, setScore] = useState<{
+		id: string;
+		rank: string;
+		score: number;
+		reliability: number;
+		token_count: number;
+		power_consumption: number;
+		total_value_locked: number;
+		speed: number;
+	}>({
+		id: '',
+		rank: '',
+		score: 0,
+		reliability: 0,
+		token_count: 0,
+		power_consumption: 0,
+		total_value_locked: 0,
+		speed: 0
 	});
 
 	const genesisBlockDate = useMemo(() => {
@@ -58,22 +78,23 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 		items.push({
 			label: 'Tokens count',
-			value: 60
+			value: score.token_count
 		});
 
 		items.push({
 			label: 'Reliability',
-			value: 40
+			value: score.reliability
 		});
 
 		items.push({
 			label: 'Power Consumption',
-			value: 10
+			value: score.power_consumption
 		});
 
 		items.push({
-			label: 'Speed',
-			value: 90
+			//label: 'Speed', // @todo(change value saved in speed column in the database)
+			label: 'Community index',
+			value: score.speed
 		});
 
 		return items.map((item) => (
@@ -81,7 +102,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} />
 			</BMListItem>
 		));
-	}, [metadata, isSmallerThanMd]);
+	}, [score, isSmallerThanMd]);
 
 	const formattedLinks = useMemo(() => {
 		try {
@@ -106,13 +127,17 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 	const initData = useCallback(async () => {
 		if (chainId) {
-			const result = await getBlockchainMetadataById(chainId || '', ELanguage.en);
+			const result = await getBlockchainMetadataAndScoreById(chainId || '', ELanguage.en);
 
-			console.log('result', result);
+			const { metadata: newMetadata, score: newScore } = result || {};
 
-			if (result) {
-				setMetadata(result);
-				result.tagline && onGetTagline(result.tagline);
+			if (newMetadata) {
+				setMetadata(newMetadata);
+				newMetadata.tagline && onGetTagline(newMetadata.tagline);
+			}
+
+			if (newScore) {
+				setScore(newScore);
 			}
 		}
 	}, [chainId]);
@@ -148,14 +173,18 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 							</BMText>
 						</BMListItem>
 
-						<BMListItem>
-							<Flex direction={EFlex.column}>
-								<BMText size={ESize.m} weight={ETextWeight.light}>
-									Useful links
-								</BMText>
-								{formattedLinks}
-							</Flex>
-						</BMListItem>
+						{metadata?.links?.length ? (
+							<BMListItem>
+								<Flex direction={EFlex.column}>
+									<BMText size={ESize.m} weight={ETextWeight.light}>
+										Useful links
+									</BMText>
+									{formattedLinks}
+								</Flex>
+							</BMListItem>
+						) : (
+							<></>
+						)}
 					</StyledList>
 				</Column>
 
@@ -171,8 +200,13 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 					<StyledList marginTop={ESize.xl}>
 						<BMListItem dotHidden>
-							Blockmetrics give a rank from F to A+, F being the worst and A+ the best, to blockchains depending on some
-							caracteristics. Mainly the four below.
+							<BMText size={ESize.m} weight={ETextWeight.light}>
+								Blockmetrics give a rank from F to A+, F being the worst and A+ the best, to blockchains depending on
+								some caracteristics. Mainly the four below.
+								<br />
+								{/* @todo(add link ti the calculation details page) */}
+								See more about the ranking calculation here
+							</BMText>
 						</BMListItem>
 
 						{rankingDetails}
