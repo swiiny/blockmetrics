@@ -1,9 +1,11 @@
 import Link from 'next/link';
 import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import useResponsive from '../../../../hooks/useResponsive';
 import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
 import BMExternalLink from '../../../../styles/theme/components/BMExternalLink';
+import BMGradientSeparator from '../../../../styles/theme/components/BMGradientSeparator';
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMProgressBar from '../../../../styles/theme/components/BMProgressBar';
 import BMText from '../../../../styles/theme/components/BMText';
@@ -13,6 +15,8 @@ import { StyledList } from './InformationCard.styles';
 import { IInformationCard } from './InformationCard.type';
 
 const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = () => {}, ...otherProps }) => {
+	const { isSmallerThanMd, isSmallerThanLg } = useResponsive();
+
 	const [metadata, setMetadata] = useState<TBlockchainMetadata>({
 		tagline: '',
 		description: '',
@@ -66,10 +70,10 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 		return items.map((item) => (
 			<BMListItem dotHidden>
-				<BMProgressBar size={ESize.m} {...item} />
+				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} />
 			</BMListItem>
 		));
-	}, [metadata]);
+	}, [metadata, isSmallerThanMd]);
 
 	const initData = useCallback(async () => {
 		if (chainId) {
@@ -88,8 +92,8 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 	return (
 		<BMCardContainer isHighlighted {...otherProps}>
-			<Flex fullWidth wrapItems padding={ESize['2xl']}>
-				<Column columns={5}>
+			<Flex fullWidth wrapItems padding={ESize['2xl']} mdPadding={ESize.l} smPaddingX={ESize.s}>
+				<Column columns={5} lg={12}>
 					<BMText as='h3' singleLine weight={ETextWeight.semiBold} size={ESize['2xl']}>
 						Informations
 					</BMText>
@@ -121,9 +125,11 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 					</StyledList>
 				</Column>
 
-				<Column columns={1} />
+				<Column columns={1} lg={0} />
 
-				<Column columns={5}>
+				{isSmallerThanLg ? <BMGradientSeparator margin={ESize.xl} /> : <></>}
+
+				<Column columns={5} lg={12}>
 					<BMText as='h3' singleLine weight={ETextWeight.semiBold} size={ESize['2xl']}>
 						Blockmetrics Ranking
 					</BMText>
