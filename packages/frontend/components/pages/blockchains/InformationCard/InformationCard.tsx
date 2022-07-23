@@ -9,8 +9,17 @@ import BMGradientSeparator from '../../../../styles/theme/components/BMGradientS
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMProgressBar from '../../../../styles/theme/components/BMProgressBar';
 import BMText from '../../../../styles/theme/components/BMText';
-import { EFlex, ELanguage, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
+import {
+	EFlex,
+	ELanguage,
+	EPosition,
+	ESize,
+	ETextColor,
+	ETextType,
+	ETextWeight
+} from '../../../../styles/theme/utils/enum';
 import { getBlockchainMetadataById } from '../../../../utils/fetch';
+import Eclipse from '../../../utils/Eclipse';
 import { StyledList } from './InformationCard.styles';
 import { IInformationCard } from './InformationCard.type';
 
@@ -69,7 +78,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		});
 
 		return items.map((item) => (
-			<BMListItem dotHidden>
+			<BMListItem key={item.label} dotHidden>
 				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} />
 			</BMListItem>
 		));
@@ -130,6 +139,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 				{isSmallerThanLg ? <BMGradientSeparator margin={ESize.xl} /> : <></>}
 
 				<Column columns={5} lg={12}>
+					<Eclipse size={ESize.xs} position={EPosition.center} />
 					<BMText as='h3' singleLine weight={ETextWeight.semiBold} size={ESize['2xl']}>
 						Blockmetrics Ranking
 					</BMText>
