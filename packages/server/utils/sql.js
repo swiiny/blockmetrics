@@ -6,6 +6,15 @@ export const getPowerConsumptionDataForPoS = `SELECT id, single_node_power_consu
 export const getDailyTokenCount = `SELECT token_count, date FROM daily_token_count_history WHERE blockchain_id = ? AND date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW() ORDER BY date ASC`;
 // return the count of active address for the current day for the given blockchain
 export const getTodayActiveAddressCount = `SELECT COUNT(*) AS count FROM today_active_address WHERE blockchain_id = ? AND day = CURDATE()`;
+// fetch data used to calculate the score
+export const getScoreCalculationData = `
+SELECT b.id, b.token_count, b.reliability, b.blockchain_power_consumption, b.transaction_count, b.total_value_locked, CAST(AVG(t.transaction_count) AS DECIMAL(10,0)) AS average_transaction_count
+FROM daily_transaction_count_history t
+INNER JOIN blockchain b
+ON t.blockchain_id = b.id
+WHERE t.date BETWEEN DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW() 
+GROUP BY b.id
+`;
 
 // ==============================================================================================
 // ======= INSERT ===============================================================================
@@ -33,6 +42,8 @@ export const insertNewTodayActiveAddress = `INSERT INTO today_active_address (ad
 // ==============================================================================================
 // update token count in blockchain table by blockchain id
 export const updateTokenCountInBlockchain = `UPDATE blockchain SET token_count = ? WHERE id = ?`;
+// update total value blocked in blockchain table by blockchain id
+export const updateTotalValueLockedInBlockchain = `UPDATE blockchain SET total_value_locked = ? WHERE id = ?`;
 // update single transaction power consumption in blockchain table by blockchain id
 export const updateTxPowerConsumptionInBlockchain = `UPDATE blockchain SET single_transaction_power_consumption = ? WHERE id = ?`;
 // increment transactions count by blockchain id
@@ -56,6 +67,8 @@ export const updatePowerConsumptionInBlockchain = `UPDATE blockchain SET blockch
 // update blockchain data for each block
 export const updateBlockchainWithNewBlockData = `UPDATE blockchain SET last_block_timestamp = ?, today_transaction_count = today_transaction_count + ?, gas_price = ? WHERE id = ?`;
 export const updateBlockchainWithNewBlockDataWithoutGasPrice = `UPDATE blockchain SET last_block_timestamp = ?, today_transaction_count = today_transaction_count + ? WHERE id = ?`;
+// update blockchain_score by blockchain id
+export const updateBlockchainsRankingInBlockchainScore = `UPDATE blockchain_score SET \`rank\` = ?, score = ?, reliability = ?, token_count = ?, power_consumption = ?, total_value_locked = ?, speed = ? WHERE blockchain_id = ?`;
 
 // update transaction count with value equal to 0
 export const resetTodayTransactionCount = `UPDATE blockchain SET today_transaction_count = 0 WHERE id = ?`;

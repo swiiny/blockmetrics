@@ -10,7 +10,9 @@ import {
 	resetTodayAddressCount,
 	resetTodayTransactionCount,
 	updateAddressCountInBlockchain,
+	updateBlockchainsRankingInBlockchainScore,
 	updateTodayAddressCountInBlockchain,
+	updateTotalValueLockedInBlockchain,
 	updateTxCountInBlockchain
 } from './utils/sql.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
@@ -40,13 +42,15 @@ import {
 	fetchDailyUniqueAddressesFor,
 	fetchDailyVerifiedContractsFor,
 	fetchDifficultyFor,
-	fetchHashrateFor
+	fetchHashrateFor,
+	fetchScoreCalculationData,
+	fetchTotalValueLockedForAllChains
 } from './utils/fetch/fetch.js';
 import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 import { getTxPowerConsumptionForPoWChains } from './utils/fetch/powTxPowerConsumption.js';
-import { addReliabilityFromChains } from './utils/maths.js';
+import { calculateScoreForChains, getAverageOf } from './utils/maths.js';
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
@@ -108,7 +112,7 @@ async function updatePowerConsumptionPoW(chainsPowerConsumption) {
 	}
 }
 
-async function updatePowerConsumtion() {
+async function updatePowerConsumption() {
 	try {
 		// fetch and update blockchains power consumption
 		updatePowerConsumptionPoS();
@@ -117,9 +121,94 @@ async function updatePowerConsumtion() {
 		const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
 
 		// fetch and update blockchains power consumption
-		updatePowerConsumptionPoW(transactionPowerConsumption);
+		await updatePowerConsumptionPoW(transactionPowerConsumption);
+
+		/* ========================================
+	 UPDATE SCORE FOR BLOCKCHAINS
+	 ======================================== */
+
+		const con = await pool.getConnection();
+
+		await updateBlockchainsRanking(con);
+
+		con.release();
 	} catch (err) {
 		console.error('updatePowerConsumption', err);
+	}
+}
+
+async function fetchAndUpdateTVL(con) {
+	try {
+		const chainsTvl = await fetchTotalValueLockedForAllChains();
+
+		const promises = chainsTvl.map(async ({ id, tvl }) => {
+			con.query(updateTotalValueLockedInBlockchain, [tvl, id]);
+		});
+
+		await Promise.all(promises);
+	} catch (err) {
+		console.error('fetchAndUpdateTVL', err);
+	}
+}
+
+async function updateBlockchainsRanking(con) {
+	try {
+		let blockchainsRows = await fetchScoreCalculationData(con);
+
+		// calc score for token_count
+		blockchainsRows = calculateScoreForChains(blockchainsRows, 'token_count');
+
+		// calc score for average_transaction_count for the 30 last days
+		blockchainsRows = calculateScoreForChains(blockchainsRows, 'average_transaction_count');
+
+		// calc score for power_consumption
+		blockchainsRows = calculateScoreForChains(blockchainsRows, 'blockchain_power_consumption', undefined, true);
+
+		// calc score for total_value_locked
+		blockchainsRows = calculateScoreForChains(blockchainsRows, 'total_value_locked');
+
+		// calc average of all scores
+		blockchainsRows.forEach((chain) => {
+			const score = getAverageOf([
+				chain.reliability,
+				chain.token_count_res,
+				chain.average_transaction_count_res,
+				chain.blockchain_power_consumption_res,
+				chain.total_value_locked_res
+			]);
+
+			chain.score = score;
+			chain.rank = 'N/A'; // @todo(creat the rank calaculator function)
+		});
+
+		// update blockchains ranking
+		const promises = blockchainsRows.map(
+			async ({
+				id,
+				rank,
+				score,
+				reliability,
+				token_count_res,
+				blockchain_power_consumption_res,
+				total_value_locked_res,
+				average_transaction_count_res
+			}) => {
+				con.query(updateBlockchainsRankingInBlockchainScore, [
+					rank,
+					score,
+					reliability,
+					token_count_res,
+					blockchain_power_consumption_res,
+					total_value_locked_res,
+					average_transaction_count_res,
+					id
+				]);
+			}
+		);
+
+		await Promise.all(promises);
+	} catch (err) {
+		console.error('updateBlockchainsRanking', err);
 	}
 }
 
@@ -148,10 +237,10 @@ async function fetchDailyData(factor = 1) {
 
 	const nodesCount = await getNodeCountForAllBlockchains();
 
-	const chainsWithReliability = addReliabilityFromChains(nodesCount);
+	const chainsWithReliability = calculateScoreForChains(nodesCount, 'reliability', 12000);
 
-	const nodesCountPromises = chainsWithReliability?.map(({ id, count, reliability }) => {
-		updateDbDailyNodeCountAndReliability(con, id, count, reliability);
+	const nodesCountPromises = chainsWithReliability?.map(({ id, count, reliability_res }) => {
+		updateDbDailyNodeCountAndReliability(con, id, count, reliability_res);
 	});
 
 	if (!nodesCount) {
@@ -165,7 +254,12 @@ async function fetchDailyData(factor = 1) {
 	 ======================================== */
 	await con.query(removeYesterdayAddressFromTodayActiveAddress);
 
-	// wait 20 minutes to be sure that the scrapped data is udpated
+	/* ========================================
+	 FETCH AND UPDATE TOTAL VALUE LOCKED FOR ALL CHAINS
+	 ======================================== */
+	await fetchAndUpdateTVL(con);
+
+	// wait 10 minutes to be sure that the scrapped data is udpated
 	await new Promise((resolve) => setTimeout(resolve, 10 * 60 * 1000 * factor));
 
 	CHAINS_ARRAY.forEach(async (chain) => {
@@ -349,6 +443,12 @@ async function fetchDailyData(factor = 1) {
 		}
 	});
 
+	/* ========================================
+	 UPDATE SCORE FOR BLOCKCHAINS
+	 ======================================== */
+
+	await updateBlockchainsRanking(con);
+
 	con.release();
 }
 
@@ -363,6 +463,7 @@ async function initWebsocketProvider(chain, con) {
 	let wsProvider = new ethers.providers.WebSocketProvider(chain.rpcWs);
 
 	wsProvider.on('block', async (blockNumber) => {
+		/* uncomment if use Ankr node
 		if (chain.id === CHAINS.avalanche.id) {
 			//console.log('Avalanche block:', blockNumber);
 			// wait a second to be sure that the block is fully processed (mainly avalanche issue)
@@ -373,8 +474,9 @@ async function initWebsocketProvider(chain, con) {
 				process.env.NODE_ENV === 'production' ? 3000 : 0
 			);
 		} else {
-			fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
 		}
+		*/
+		fetchEVMBlockFor(chain, wsProvider, blockNumber, con);
 	});
 
 	// check each 7.5 seconds if websocket is still connected
@@ -436,14 +538,10 @@ async function startFetchData() {
 	try {
 		let con = await pool.getConnection();
 
-		con.destroy();
-
-		if (process.env.NODE_ENV !== 'production') {
+		if (process.env.NODE_ENV === 'production') {
 			console.log('start production');
 
 			// INIT WEBSOCKET PROVIDERS CONNECTIONS
-			con = await pool.getConnection();
-
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
 				console.log('start ws provider for', chain.name);
 
@@ -471,7 +569,7 @@ async function startFetchData() {
 
 			middayRoutine = schedule.scheduleJob(ruleMidday, async () => {
 				console.log('run schedule');
-				updatePowerConsumtion();
+				updatePowerConsumption();
 			});
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
@@ -490,11 +588,10 @@ async function startFetchData() {
 
 			console.log('start dev');
 
+			updateBlockchainsRanking(con);
+
 			// fetchDailyData(1 / 10);
-
-			// INIT WEBSOCKET PROVIDERS CONNECTIONS
-			con = await pool.getConnection();
-
+			/*
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
 
@@ -531,6 +628,7 @@ async function startFetchData() {
 					}
 				});
 			});
+			*/
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);

@@ -1,40 +1,65 @@
-export function addReliabilityFromChains(chains) {
-	// considering full reliable if a chain has at least 12k nodes
-	const maxValue = 12000;
+// @todo(fix reverse function by doing f-1 de f)
+export function calculateScoreForChains(chains, property, maxValue, reverse = false) {
+	let usedMaxValue = maxValue;
 
-	// get max value of chains.count
-	//const maxValue = Math.max(...chains.filter((chain) => typeof chain.count === 'number').map((chain) => chain.count));
+	if (!usedMaxValue) {
+		// auto select as max the max value of the choosen property in the chains
+		// get max value of chains.count
+		usedMaxValue = Math.max(
+			...chains.filter((chain) => typeof chain[property] !== 'undefined').map((chain) => chain[property])
+		);
+	}
 
 	const calcLog = (value) => {
-		if (typeof value !== 'number' || value < 0) {
+		if (typeof value !== 'number') {
+			try {
+				value = parseInt(value, 10);
+			} catch {
+				return 0;
+			}
+		}
+
+		if (value < 0) {
 			return 0;
 		}
 
-		if (value > maxValue) {
-			return Math.log(maxValue) * Math.log(maxValue);
+		if (value > usedMaxValue) {
+			return Math.log(usedMaxValue) * Math.log(usedMaxValue);
 		}
 
-		return Math.log(value) * Math.log(maxValue);
+		return Math.log(value) * Math.log(usedMaxValue);
 	};
 
-	const logs = chains.map((chain) => calcLog(chain.count));
+	const logs = chains.map((chain) => calcLog(chain[property]));
 
-	// get max value of logs to define the reliability percentage
+	// get max value of logs to define the result score
 	const maxLogs = Math.max(...logs);
 
 	chains.forEach((chain) => {
-		let newReliability = Math.floor((calcLog(chain.count) / maxLogs) * 100);
+		let newValue = Math.floor((calcLog(chain[property]) / maxLogs) * 100);
 
-		if (newReliability > 100) {
-			newReliability = 100;
-		} else if (newReliability < 0) {
-			newReliability = 0;
+		if (newValue > 100) {
+			newValue = 100;
+		} else if (newValue < 0) {
+			newValue = 0;
 		}
 
-		console.log(`${chain.id} has ${chain.count} nodes and is ${newReliability}% reliable`);
+		if (reverse) {
+			newValue = 100 - newValue;
+		}
 
-		chain.reliability = newReliability || 0;
+		chain[property + '_res'] = newValue || 0;
 	});
 
 	return chains;
 }
+
+// get average of an array of numbers
+export const getAverageOf = (items) => {
+	try {
+		return Math.floor((items.reduce((p, c) => p + c, 0) / items.length) * 100) / 100;
+	} catch (err) {
+		console.error('getAverageOf', err);
+		return null;
+	}
+};

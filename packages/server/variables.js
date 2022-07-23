@@ -6,6 +6,7 @@ export const CHAINS = {
 		consensus: 'POW',
 		chartPrefix: 'https://etherscan.io/chart',
 		coingeckoId: 'ethereum',
+		defiLamaId: 'ethereum',
 		rpc: process.env.RPC_ETHEREUM,
 		rpcWs: process.env.RPC_ETHEREUM_WS
 	},
@@ -15,6 +16,7 @@ export const CHAINS = {
 		type: 'EVM',
 		chartPrefix: 'https://bscscan.com/chart',
 		coingeckoId: 'binance-smart-chain',
+		defiLamaId: 'binancecoin',
 		rpc: process.env.RPC_BSC,
 		rpcWs: process.env.RPC_BSC_WS
 	},
@@ -24,6 +26,7 @@ export const CHAINS = {
 		type: 'EVM',
 		chartPrefix: 'https://polygonscan.com/chart',
 		coingeckoId: 'polygon-pos',
+		defiLamaId: 'matic-network',
 		rpc: process.env.RPC_POLYGON,
 		rpcWs: process.env.RPC_POLYGON_WS
 	},
@@ -41,6 +44,7 @@ export const CHAINS = {
 		type: 'EVM',
 		chartPrefix: 'https://snowtrace.io/chart',
 		coingeckoId: 'avalanche',
+		defiLamaId: 'avalanche-2',
 		rpc: process.env.RPC_AVALANCHE,
 		rpcWs: process.env.RPC_AVALANCHE_WS
 	},
@@ -50,6 +54,7 @@ export const CHAINS = {
 		type: 'EVM',
 		chartPrefix: 'https://ftmscan.com/chart',
 		coingeckoId: 'fantom',
+		defiLamaId: 'fantom',
 		rpc: process.env.RPC_FANTOM,
 		rpcWs: process.env.RPC_FANTOM_WS
 	}

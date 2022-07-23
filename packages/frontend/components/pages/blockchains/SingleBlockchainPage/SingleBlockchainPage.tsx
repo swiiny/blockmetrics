@@ -80,6 +80,18 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 			});
 		}
 
+		if (last_block_timestamp) {
+			result.push({
+				value: last_block_timestamp,
+				unit: 's',
+				isTimer: true,
+				label: 'Time from last block',
+				icon: EIcon.timer,
+				colorAnimationOnUpdate: true,
+				reverseColor: true
+			});
+		}
+
 		if (hashrate) {
 			const { value, unit, hasDecimals } = getEngNotation(hashrate * 10 ** 12, 'H/s');
 
@@ -91,18 +103,6 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 				label: 'Hashrate',
 				icon: EIcon.chart,
 				colorAnimationOnUpdate: true
-			});
-		}
-
-		if (last_block_timestamp) {
-			result.push({
-				value: last_block_timestamp,
-				unit: 's',
-				isTimer: true,
-				label: 'Time from last block',
-				icon: EIcon.timer,
-				colorAnimationOnUpdate: true,
-				reverseColor: true
 			});
 		}
 

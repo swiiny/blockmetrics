@@ -55,6 +55,23 @@ export const getMetadataById = async (pool, id, language) => {
 	}
 };
 
+export const getMetadataAndScoreById = async (pool, id, language) => {
+	try {
+		let query = `SELECT m.blockchain_id as id, m.description, m.tagline, m.genesis_block, m.source, m.links, s.score, s.rank, s.reliability, s.token_count, s.power_consumption, s.total_value_locked, s.speed
+									FROM blockchain_metadata m
+									INNER JOIN blockchain_score s
+									ON m.blockchain_id = s.blockchain_id
+									WHERE m.blockchain_id = '${id}' AND m.language = '${language}'`;
+
+		const res = await pool.query(query);
+
+		return res;
+	} catch (err) {
+		console.error('getBlockchainById', err);
+		return [];
+	}
+};
+
 export const getChartByIdAndType = async (pool, id, type) => {
 	try {
 		let tableLabel = '';

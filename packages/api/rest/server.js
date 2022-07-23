@@ -10,6 +10,7 @@ import {
 	getChartByIdAndType,
 	getChartGlobalByType,
 	getGlobalDataByType,
+	getMetadataAndScoreById,
 	getMetadataById
 } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
@@ -117,6 +118,31 @@ app.get(`/get/blockchain/metadata`, async (req, res) => {
 		}
 
 		const result = await getMetadataById(pool, id, language || 'en');
+
+		if (result[0][0]) {
+			res.send(result[0][0]);
+			return;
+		} else {
+			throw new Error('get metadata failed');
+		}
+	} catch (err) {
+		console.error('/get/blockchain', err);
+
+		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
+		return;
+	}
+});
+
+app.get(`/get/blockchain/metadataAndScore`, async (req, res) => {
+	const { id, language } = req.query;
+
+	try {
+		if (!id) {
+			res.status(500).send('Missing id');
+			return;
+		}
+
+		const result = await getMetadataAndScoreById(pool, id, language || 'en');
 
 		if (result[0][0]) {
 			res.send(result[0][0]);
