@@ -1,8 +1,6 @@
 import styled, { css } from 'styled-components';
-import Flex from '../../../../styles/layout/Flex';
 import { EMediaQuery } from '../../../../styles/theme/utils/enum';
 import { addPaddingStyles, mq } from '../../../../styles/theme/utils/functions';
-import { IPadding } from '../../../../types/padding';
 
 export const StyledList = styled.ul`
 	${(p) => css`

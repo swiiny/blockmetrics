@@ -22,5 +22,8 @@ type TBlockchain = {
 type TBlockchainMetadata = {
 	tagline: string;
 	description: string;
-	blockchain_id: string;
+	genesis_block: string;
+	source: string;
+	links: string[] | undefined;
+	blockchain_id?: string;
 };

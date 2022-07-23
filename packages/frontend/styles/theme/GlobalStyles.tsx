@@ -46,8 +46,7 @@ span,
 a,
 p,
 input,
-textarea { // TODO : Set font family
-	//font-family: SetFontFamily, Helvetica, sans-serif;
+textarea {
   font-family: 'Outfit', sans-serif;
 	color: ${(p) => p.theme.colors.text.default};
 

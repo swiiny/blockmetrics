@@ -11,7 +11,6 @@ const generateTextStyle = (p: any) => {
 		${addTransition()}
 
 		font-weight: normal;
-		letter-spacing: -0.02em;
 		text-align: ${p.textAlign};
 
 		${p.singleLine ? 'line-height: 1rem;' : ''}

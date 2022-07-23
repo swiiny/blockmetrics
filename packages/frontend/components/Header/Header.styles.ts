@@ -45,7 +45,7 @@ export const StyledHeader = styled.header`
 		}
 	`}
 
-	& > div > p {
+	& > div > h2 {
 		max-width: 650px;
 		min-height: 48px;
 	}

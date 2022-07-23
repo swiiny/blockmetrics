@@ -50,6 +50,7 @@ export enum ETextAlign {
 }
 
 export enum ETextWeight {
+	thin = '100',
 	light = '300',
 	normal = '400',
 	medium = '500',

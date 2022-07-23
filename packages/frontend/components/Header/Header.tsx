@@ -54,6 +54,7 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon }) => 
 				<Spacing size={ESize.l} />
 
 				<BMText
+					as='h2'
 					weight={ETextWeight.light}
 					size={ESize.m}
 					textColor={ETextColor.default}

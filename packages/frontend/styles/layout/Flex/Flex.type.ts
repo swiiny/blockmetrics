@@ -1,5 +1,5 @@
 import React from 'react';
-import { IPadding } from '../../../types/padding';
+import { IPadding } from '../../../types/layouts';
 import { EFlex } from '../../theme/utils/enum';
 
 interface IFlex extends IPadding {

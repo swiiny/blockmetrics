@@ -14,11 +14,9 @@ import {
 	EIcon,
 	ELanguage,
 	ESize,
-	ESubscribeType,
-	ETextColor
+	ESubscribeType
 } from '../../../../styles/theme/utils/enum';
 import Column from '../../../../styles/layout/Column';
-import BMText from '../../../../styles/theme/components/BMText';
 import Flex from '../../../../styles/layout/Flex';
 import { DataCard } from '../../../texts/DataCard/DataCard';
 import Spacing from '../../../../styles/layout/Spacing';
@@ -29,12 +27,13 @@ import { getEIconTypeFromValue, getESubscribeTypeFromValue } from '../../../../s
 import { IDataCard } from '../../../texts/DataCard/DataCard.type';
 import { StyledList } from './SingleBlockchainPage.styles';
 import { getEngNotation } from '../../../../utils/convert';
+import InformationCard from '../InformationCard';
 
 const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
 	const [blockchainChannel, setBlockchainChannel] = useState<ESubscribeType>();
+	const [tagline, setTagline] = useState<string>('');
 
-	const [metadata, setMetadata] = useState<TBlockchainMetadata>();
 	const { subscribeTo, message, wsConnected } = useWebsocket();
 
 	const { query } = useRouter();
@@ -50,7 +49,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 			result.push({
 				value: token_count,
 				isAnimated: true,
-				label: 'Tokens',
+				label: token_count <= 1 ? 'Token' : 'Tokens',
 				icon: EIcon.token,
 				colorAnimationOnUpdate: true,
 				reverseColor: true
@@ -121,13 +120,14 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const chartsToDisplay: IBarLineChart[] = useMemo(() => {
 		const result: IBarLineChart[] = [];
 
-		// TODO : select charts to display
-		result.push({
-			chartType: EChartType.bar,
-			dailyType: EDailyData.averageBlocktime,
-			chainId: blockchain?.id || ''
-		});
-
+		if (blockchain?.id) {
+			// TODO : select charts to display
+			result.push({
+				chartType: EChartType.bar,
+				dailyType: EDailyData.transactionCount,
+				chainId: blockchain?.id || ''
+			});
+		}
 		return result;
 	}, [blockchain]);
 
@@ -136,10 +136,6 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 
 		if (blockchainId) {
 			setBlockchainChannel(getESubscribeTypeFromValue(blockchainId));
-			// @todo(fetch only metadata because ws send first value without pause)
-			const result = await getBlockchainMetadataById(blockchainId || '', ELanguage.en);
-
-			result && setMetadata(result);
 		}
 	}, [name]);
 
@@ -163,7 +159,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		<>
 			<Meta title={blockchain?.name || ''} />
 
-			<Header title={blockchain?.name || ''} subtitle={metadata?.tagline || ''} icon={chainLogo} />
+			<Header title={blockchain?.name || ''} subtitle={tagline} icon={chainLogo} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
 				<StyledList>
@@ -172,9 +168,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 					))}
 				</StyledList>
 
-				<Column columns={6} md={12} lg={8}>
-					<BMText textColor={ETextColor.light}>{metadata?.description || ''}</BMText>
-				</Column>
+				<Spacing size={ESize.xl} />
+
+				<InformationCard chainId={blockchain?.id} onGetTagline={(tagline) => setTagline(tagline)} />
 
 				<Spacing size={ESize.xl} />
 

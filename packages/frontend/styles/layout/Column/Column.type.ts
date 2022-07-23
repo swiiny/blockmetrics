@@ -1,4 +1,4 @@
-import { IPadding } from '../../../types/padding';
+import { IPadding } from '../../../types/layouts';
 
 interface IColumn extends IPadding {
 	children?: React.ReactNode;
