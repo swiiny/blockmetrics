@@ -13,6 +13,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] Create readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
+-   [ ] remove "note" from blockchain table, remove note column fetching from APIs
 
 ### Database :white_check_mark:
 
