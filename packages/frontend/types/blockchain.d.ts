@@ -5,6 +5,7 @@ type TBlockchain = {
 	node_count: number;
 	testnet_node_count: number;
 	reliability: number;
+	total_value_locked: number;
 	single_node_power_consumption: number;
 	blockchain_power_consumption: number;
 	hashrate: number;
@@ -24,6 +25,6 @@ type TBlockchainMetadata = {
 	description: string;
 	genesis_block: string;
 	source: string;
-	links: string[] | undefined;
+	links: string | undefined;
 	blockchain_id?: string;
 };

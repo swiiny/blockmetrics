@@ -7,3 +7,10 @@ export const StyledList = styled.ul<IMargin>`
 
 	${(p) => addMarginStyles(p)}
 `;
+
+export const StyledUsefulLinkList = styled.ul`
+	width: 100%;
+	list-style: inside;
+
+	padding-left: 12px;
+`;

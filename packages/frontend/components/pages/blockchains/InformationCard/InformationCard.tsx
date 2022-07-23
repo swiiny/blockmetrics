@@ -8,10 +8,18 @@ import BMGradientSeparator from '../../../../styles/theme/components/BMGradientS
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMProgressBar from '../../../../styles/theme/components/BMProgressBar';
 import BMText from '../../../../styles/theme/components/BMText';
-import { ELanguage, EPosition, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
+import {
+	EFlex,
+	ELanguage,
+	EPosition,
+	ESize,
+	ETextColor,
+	ETextType,
+	ETextWeight
+} from '../../../../styles/theme/utils/enum';
 import { getBlockchainMetadataById } from '../../../../utils/fetch';
 import Eclipse from '../../../utils/Eclipse';
-import { StyledList } from './InformationCard.styles';
+import { StyledList, StyledUsefulLinkList } from './InformationCard.styles';
 import { IInformationCard } from './InformationCard.type';
 
 const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = () => {}, ...otherProps }) => {
@@ -22,7 +30,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		description: '',
 		genesis_block: '',
 		source: '',
-		links: []
+		links: ''
 	});
 
 	const genesisBlockDate = useMemo(() => {
@@ -75,9 +83,32 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		));
 	}, [metadata, isSmallerThanMd]);
 
+	const formattedLinks = useMemo(() => {
+		try {
+			const { links } = metadata;
+			if (!links) {
+				return <></>;
+			}
+
+			const results = links.split(',');
+
+			return (
+				<StyledUsefulLinkList>
+					{results.map((link) => (
+						<li key={link}>
+							<BMExternalLink href={link} size={ESize.m} weight={ETextWeight.thin} />
+						</li>
+					))}
+				</StyledUsefulLinkList>
+			);
+		} catch {}
+	}, [metadata.links]);
+
 	const initData = useCallback(async () => {
 		if (chainId) {
 			const result = await getBlockchainMetadataById(chainId || '', ELanguage.en);
+
+			console.log('result', result);
 
 			if (result) {
 				setMetadata(result);
@@ -118,9 +149,12 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 						</BMListItem>
 
 						<BMListItem>
-							<BMText size={ESize.m} weight={ETextWeight.light}>
-								Useful links
-							</BMText>
+							<Flex direction={EFlex.column}>
+								<BMText size={ESize.m} weight={ETextWeight.light}>
+									Useful links
+								</BMText>
+								{formattedLinks}
+							</Flex>
 						</BMListItem>
 					</StyledList>
 				</Column>
