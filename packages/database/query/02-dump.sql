@@ -29,12 +29,13 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain` (
   `consensus` VARCHAR(20) NOT NULL,
   `node_count` INT UNSIGNED NULL DEFAULT NULL,
   `testnet_node_count` INT UNSIGNED NULL DEFAULT NULL,
-  `reliability` FLOAT UNSIGNED NULL DEFAULT 0,
+  `reliability` FLOAT UNSIGNED NULL DEFAULT '0',
   `single_node_power_consumption` FLOAT NULL DEFAULT '0',
   `blockchain_power_consumption` BIGINT NULL DEFAULT NULL,
   `hashrate` DOUBLE NULL DEFAULT NULL,
   `difficulty` BIGINT NULL DEFAULT NULL,
   `last_block_timestamp` INT NULL DEFAULT NULL,
+  `total_value_locked` DOUBLE NOT NULL DEFAULT 0 COMMENT '$',
   `token_count` INT UNSIGNED NULL DEFAULT NULL,
   `transaction_count` BIGINT NOT NULL DEFAULT 0,
   `today_transaction_count` INT UNSIGNED NOT NULL DEFAULT '0',
@@ -72,6 +73,30 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+
+-- -----------------------------------------------------
+-- Table `blockmetrics-db`.`blockchain_score`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain_score` (
+  `id` VARCHAR(255) NOT NULL,
+  `blockchain_id` VARCHAR(255) NOT NULL,
+  `rank` VARCHAR(2) NOT NULL,
+  `score` TINYINT NULL DEFAULT NULL,
+  `reliability` FLOAT UNSIGNED NULL DEFAULT '0',
+  `token_count` FLOAT UNSIGNED NULL DEFAULT '0',
+  `power_consumption` FLOAT UNSIGNED NULL DEFAULT '0',
+  `total_value_locked` FLOAT UNSIGNED NULL DEFAULT '0',
+  `speed` FLOAT UNSIGNED NULL DEFAULT '0',
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_blockchain_score_blockchain_idx` (`blockchain_id` ASC) VISIBLE,
+  CONSTRAINT `fk_blockchain_score_blockchain`
+    FOREIGN KEY (`blockchain_id`)
+    REFERENCES `blockmetrics-db`.`blockchain` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
 
 -- -----------------------------------------------------
 -- Table `blockmetrics-db`.`daily_active_users_history`
