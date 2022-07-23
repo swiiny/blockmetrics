@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { IPadding } from '../../../../types/padding';
+import { IPadding } from '../../../../types/layouts';
 
 interface IBMCardContainer extends IPadding {
 	children: ReactNode;

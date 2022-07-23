@@ -6,7 +6,6 @@ import { EDailyData, EFlex, EIcon, ESize, ETextColor, ETextType, ETextWeight } f
 import { BLOCKCHAINS_ARRAY } from '../../../utils/variables';
 import { NAVBAR_LINKS } from '../../Navbar/Navbar';
 import { IBlockchainCard } from './BlockchainCard.type';
-import CountUp from 'react-countup';
 import BMCardContainer from '../../../styles/theme/components/BMCardContainer';
 import BMIcon from '../../../styles/theme/components/BMIcon';
 import { FlexEx } from './BlockchainCard.styles';
@@ -127,7 +126,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 								Token{token_count > 1 ? 's' : ''}:
 							</BMText>
 							<BMText size={ESize.m} weight={ETextWeight.medium}>
-								<CountUp start={0} prefix=' ' end={token_count} />
+								{token_count}
 							</BMText>
 						</FlexEx>
 					</BMCardContainer>

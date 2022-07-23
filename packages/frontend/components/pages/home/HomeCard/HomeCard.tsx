@@ -11,8 +11,11 @@ import LineChart from '../../../charts/LineChart';
 import { IHomeCardData } from '../HomeData/HomeData.type';
 import { StyledIcon, StyledIconContainer } from './HomeCard.styles';
 import CountUp from 'react-countup';
-import { IDailyChangeValue, IHomeCardValue } from './HomeCard.type';
+import { IDailyChangeValue } from './HomeCard.type';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
+import { getEngNotation } from '../../../../utils/convert';
+import { IEngineeringNotation } from '../../../../types/maths';
+import BMIcon from '../../../../styles/theme/components/BMIcon';
 
 const HomeCard: FC<IHomeCardData> = ({
 	title,
@@ -25,7 +28,7 @@ const HomeCard: FC<IHomeCardData> = ({
 	unit,
 	dailyChangeUnit,
 	dailyChangeColorReversed,
-	iconSrc,
+	icon,
 	chartTitle,
 	chartType,
 	chartDataType,
@@ -36,63 +39,16 @@ const HomeCard: FC<IHomeCardData> = ({
 	const [dailyChange, setDailyChange] = useState<number>(0);
 	const [updatedDailyChange, setUpdatedDailyChange] = useState<number>(0);
 
-	const formattedValue = useMemo<IHomeCardValue>(() => {
+	const formattedValue = useMemo<IEngineeringNotation>(() => {
 		// convert value to ingeniery notation
-		let newValue: number = updatedValue;
-		let newUnit: string | undefined;
-		let newIngValue: string | undefined;
-		let hasDecimals: boolean = false;
-
-		if (updatedValue >= 10 ** 15) {
-			newValue = updatedValue / 10 ** 12;
-			newIngValue = 'T';
-		} else if (updatedValue >= 10 ** 12) {
-			newValue = updatedValue / 10 ** 9;
-			newIngValue = 'G';
-		} else if (updatedValue >= 10 ** 9) {
-			newValue = updatedValue / 10 ** 6;
-			newIngValue = 'M';
-		} else if (updatedValue >= 10 ** 6) {
-			newValue = updatedValue / 10 ** 3;
-			newIngValue = 'k';
-		}
-
-		if (newIngValue) {
-			// round to 2 decimal places
-			newValue = Math.round(newValue * 100) / 100;
-			hasDecimals = true;
-		}
-
-		// add unit if needed
-		if (unit) {
-			newUnit = ` ${newIngValue || ''}${unit}`;
-		} else if (newIngValue) {
-			newUnit = ` ${newIngValue}`;
-		}
-
-		return {
-			value: newValue,
-			unit: newUnit || '',
-			hasDecimals
-		};
+		return getEngNotation(updatedValue, unit);
 	}, [updatedValue, unit]);
 
 	const formattedInitialValue = useMemo<number>(() => {
 		// convert value to ingeniery notation
 		let newValue: number = value;
 
-		if (updatedValue >= 10 ** 15) {
-			newValue = updatedValue / 10 ** 12;
-		} else if (updatedValue >= 10 ** 12) {
-			newValue = updatedValue / 10 ** 9;
-		} else if (updatedValue >= 10 ** 9) {
-			newValue = updatedValue / 10 ** 6;
-		} else if (updatedValue >= 10 ** 6) {
-			newValue = updatedValue / 10 ** 3;
-		}
-
-		// round to 2 decimal places
-		newValue = Math.round(newValue * 100) / 100;
+		newValue = getEngNotation(newValue).value;
 
 		return newValue;
 	}, [value]);
@@ -199,7 +155,7 @@ const HomeCard: FC<IHomeCardData> = ({
 		<BMCardContainer as='li' {...otherProps}>
 			<Flex>
 				<StyledIconContainer>
-					<StyledIcon src={iconSrc} alt='' />
+					<BMIcon type={icon} size={ESize.m} />
 				</StyledIconContainer>
 
 				<Spacing size={ESize.s} />

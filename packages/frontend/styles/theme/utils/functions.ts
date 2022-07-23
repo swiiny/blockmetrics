@@ -1,5 +1,5 @@
 import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
-import { EDailyData, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
+import { EDailyData, EIcon, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
 	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {
@@ -22,7 +22,7 @@ export const setFontSize = (size: ESize) => {
 		${size === ESize.s
 			? `
             font-size: 0.875rem;
-            line-height: 1rem;
+            line-height: 1.2rem;
             `
 			: size === ESize.m
 			? `
@@ -162,6 +162,92 @@ export const addPaddingStyles = (p: any) => {
 	`;
 };
 
+export const addMarginStyles = (p: any) => {
+	return css`
+		${p.xlMargin ? mq(EMediaQuery.xl, `margin: ${p.theme.spacing[p.xlMargin]};`) : ''}
+		${p.xlMarginX
+			? mq(
+					EMediaQuery.xl,
+					`margin-left: ${p.theme.spacing[p.xlMarginX]}; margin-right: ${p.theme.spacing[p.xlMarginX]};`
+			  )
+			: ''}
+		${p.xlMarginY
+			? mq(
+					EMediaQuery.xl,
+					`margin-top: ${p.theme.spacing[p.xlMarginY]}; margin-bottom: ${p.theme.spacing[p.xlMarginY]};`
+			  )
+			: ''}
+		${p.xlMarginTop ? mq(EMediaQuery.xl, `margin-top: ${p.theme.spacing[p.xlMarginTop]};`) : ''}
+		${p.xlMarginBottom ? mq(EMediaQuery.xl, `margin-bottom: ${p.theme.spacing[p.xlMarginBottom]};`) : ''}
+		${p.xlMarginLeft ? mq(EMediaQuery.xl, `margin-left: ${p.theme.spacing[p.xlMarginLeft]};`) : ''}
+		${p.xlMarginRight ? mq(EMediaQuery.xl, `margin-right: ${p.theme.spacing[p.xlMarginRight]};`) : ''}
+	
+
+			${p.lgMargin ? mq(EMediaQuery.lg, `margin: ${p.theme.spacing[p.lgMargin]};`) : ''}
+			${p.lgMarginX
+			? mq(
+					EMediaQuery.lg,
+					`margin-left: ${p.theme.spacing[p.lgMarginX]}; margin-right: ${p.theme.spacing[p.lgMarginX]};`
+			  )
+			: ''}
+		${p.lgMarginY
+			? mq(
+					EMediaQuery.lg,
+					`margin-top: ${p.theme.spacing[p.lgMarginY]}; margin-bottom: ${p.theme.spacing[p.lgMarginY]};`
+			  )
+			: ''}
+		${p.lgMarginTop ? mq(EMediaQuery.lg, `margin-top: ${p.theme.spacing[p.lgMarginTop]};`) : ''}
+		${p.lgMarginBottom ? mq(EMediaQuery.lg, `margin-bottom: ${p.theme.spacing[p.lgMarginBottom]};`) : ''}
+		${p.lgMarginLeft ? mq(EMediaQuery.lg, `margin-left: ${p.theme.spacing[p.lgMarginLeft]};`) : ''}
+		${p.lgMarginRight ? mq(EMediaQuery.lg, `margin-right: ${p.theme.spacing[p.lgMarginRight]};`) : ''}
+
+		
+	${p.mdMargin ? mq(EMediaQuery.md, `margin: ${p.theme.spacing[p.mdMargin]};`) : ''}
+			${p.mdMarginX
+			? mq(
+					EMediaQuery.md,
+					`margin-left: ${p.theme.spacing[p.mdMarginX]}; margin-right: ${p.theme.spacing[p.mdMarginX]};`
+			  )
+			: ''}
+		${p.mdMarginY
+			? mq(
+					EMediaQuery.md,
+					`margin-top: ${p.theme.spacing[p.mdMarginY]}; margin-bottom: ${p.theme.spacing[p.mdMarginY]};`
+			  )
+			: ''}
+		${p.mdMarginTop ? mq(EMediaQuery.md, `margin-top: ${p.theme.spacing[p.mdMarginTop]};`) : ''}
+		${p.mdMarginBottom ? mq(EMediaQuery.md, `margin-bottom: ${p.theme.spacing[p.mdMarginBottom]};`) : ''}
+		${p.mdMarginLeft ? mq(EMediaQuery.md, `margin-left: ${p.theme.spacing[p.mdMarginLeft]};`) : ''}
+		${p.mdMarginRight ? mq(EMediaQuery.md, `margin-right: ${p.theme.spacing[p.mdMarginRight]};`) : ''}
+
+		${p.smMargin ? mq(EMediaQuery.sm, `margin: ${p.theme.spacing[p.smMargin]};`) : ''}
+			${p.smMarginX
+			? mq(
+					EMediaQuery.sm,
+					`margin-left: ${p.theme.spacing[p.smMarginX]}; margin-right: ${p.theme.spacing[p.smMarginX]};`
+			  )
+			: ''}
+		${p.smMarginY
+			? mq(
+					EMediaQuery.sm,
+					`margin-top: ${p.theme.spacing[p.smMarginY]}; margin-bottom: ${p.theme.spacing[p.smMarginY]};`
+			  )
+			: ''}
+		${p.smMarginTop ? mq(EMediaQuery.sm, `margin-top: ${p.theme.spacing[p.smMarginTop]};`) : ''}
+		${p.smMarginBottom ? mq(EMediaQuery.sm, `margin-bottom: ${p.theme.spacing[p.smMarginBottom]};`) : ''}
+		${p.smMarginLeft ? mq(EMediaQuery.sm, `margin-left: ${p.theme.spacing[p.smMarginLeft]};`) : ''}
+		${p.smMarginRight ? mq(EMediaQuery.sm, `margin-right: ${p.theme.spacing[p.smMarginRight]};`) : ''}
+
+		${p.margin ? `margin: ${p.theme.spacing[p.margin]};` : ''}
+		${p.marginX ? `margin-left: ${p.theme.spacing[p.marginX]}; margin-right: ${p.theme.spacing[p.marginX]};` : ''}
+		${p.marginY ? `margin-top: ${p.theme.spacing[p.marginY]}; margin-bottom: ${p.theme.spacing[p.marginY]};` : ''}
+		${p.marginTop ? `margin-top: ${p.theme.spacing[p.marginTop]};` : ''}
+		${p.marginBottom ? `margin-bottom: ${p.theme.spacing[p.marginBottom]};` : ''}
+		${p.marginLeft ? `margin-left: ${p.theme.spacing[p.marginLeft]};` : ''}
+		${p.marginRight ? `margin-right: ${p.theme.spacing[p.marginRight]};` : ''}
+	`;
+};
+
 export function getSpacingFromESize(size: ESize, theme: DefaultTheme): string {
 	// get value from ESize using typescript
 	const value = theme.spacing[size as keyof DefaultTheme['spacing']];
@@ -201,5 +287,19 @@ export function getESubscribeTypeFromValue(value: string): ESubscribeType {
 		console.error('getESubscribeTypeFromValue', err);
 
 		return ESubscribeType.unset;
+	}
+}
+
+export function getEIconTypeFromValue(value: string): EIcon {
+	try {
+		const indexOfValue = Object.values(EIcon).indexOf(value as unknown as EIcon);
+
+		const key = Object.keys(EIcon)[indexOfValue] as keyof typeof EIcon;
+
+		return EIcon[key];
+	} catch (err) {
+		console.error('getESubscribeTypeFromValue', err);
+
+		return EIcon.none;
 	}
 }

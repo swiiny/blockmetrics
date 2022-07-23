@@ -1,9 +1,3 @@
-interface IHomeCardValue {
-	value: number;
-	unit: string;
-	hasDecimals: boolean;
-}
-
 interface IDailyChangeValue {
 	symbol: string;
 	value: number;
@@ -11,4 +5,4 @@ interface IDailyChangeValue {
 	periodLabel: string;
 }
 
-export type { IDailyChangeValue, IHomeCardValue };
+export type { IDailyChangeValue };

@@ -50,6 +50,7 @@ export enum ETextAlign {
 }
 
 export enum ETextWeight {
+	thin = '100',
 	light = '300',
 	normal = '400',
 	medium = '500',
@@ -58,6 +59,7 @@ export enum ETextWeight {
 
 export enum EMediaQuery {
 	xs = '0px',
+	ssm = '550px',
 	sm = '660px',
 	md = '900px',
 	lg = '1200px',

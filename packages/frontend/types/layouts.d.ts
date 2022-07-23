@@ -42,4 +42,46 @@ interface IPadding {
 	xlPaddingY?: ESize;
 }
 
-export type { IPadding };
+interface IMargin {
+	margin?: ESize;
+	marginBottom?: ESize;
+	marginTop?: ESize;
+	marginLeft?: ESize;
+	marginRight?: ESize;
+	marginX?: ESize;
+	marginY?: ESize;
+
+	smMargin?: ESize;
+	smMarginBottom?: ESize;
+	smMarginTop?: ESize;
+	smMarginLeft?: ESize;
+	smMarginRight?: ESize;
+	smMarginX?: ESize;
+	smMarginY?: ESize;
+
+	mdMargin?: ESize;
+	mdMarginBottom?: ESize;
+	mdMarginTop?: ESize;
+	mdMarginLeft?: ESize;
+	mdMarginRight?: ESize;
+	mdMarginX?: ESize;
+	mdMarginY?: ESize;
+
+	lgMargin?: ESize;
+	lgMarginBottom?: ESize;
+	lgMarginTop?: ESize;
+	lgMarginLeft?: ESize;
+	lgMarginRight?: ESize;
+	lgMarginX?: ESize;
+	lgMarginY?: ESize;
+
+	xlMargin?: ESize;
+	xlMarginBottom?: ESize;
+	xlMarginTop?: ESize;
+	xlMarginLeft?: ESize;
+	xlMarginRight?: ESize;
+	xlMarginX?: ESize;
+	xlMarginY?: ESize;
+}
+
+export type { IPadding, IMargin };

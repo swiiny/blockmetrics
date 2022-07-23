@@ -1,7 +1,14 @@
 import React, { FC, useCallback, useEffect } from 'react';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import Flex from '../../../../styles/layout/Flex';
-import { EChartType, EDailyGlobalData, EFlex, EGlobalData, ESubscribeType } from '../../../../styles/theme/utils/enum';
+import {
+	EChartType,
+	EDailyGlobalData,
+	EFlex,
+	EGlobalData,
+	EIcon,
+	ESubscribeType
+} from '../../../../styles/theme/utils/enum';
 import HomeCard from '../HomeCard';
 import { StyledList } from './HomeData.styles';
 import { IHomeCardData } from './HomeData.type';
@@ -10,7 +17,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 	{
 		title: 'Total Addresses Count',
 		valueType: EGlobalData.addressCount,
-		iconSrc: '/assets/images/icons/profile-tick.svg',
+		icon: EIcon.user,
 		chartTitle: 'Daily Active Addresses',
 		chartType: EChartType.bar,
 		chartDataType: EDailyGlobalData.activeUsers
@@ -22,7 +29,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		subscribeChannel: ESubscribeType.todayTransactionCount,
 		dailyChangeType: EGlobalData.todayTransactionsCount,
 		refreshTime: 3,
-		iconSrc: '/assets/images/icons/arrow-swap-horizontal.svg',
+		icon: EIcon.swap,
 		chartTitle: 'Daily Transactions count',
 		chartType: EChartType.bar,
 		chartDataType: EDailyGlobalData.transactionsCount
@@ -34,7 +41,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		unit: 'W/h',
 		// dailyChange: 0,
 		dailyChangeColorReversed: true,
-		iconSrc: '/assets/images/icons/flash.svg',
+		icon: EIcon.energy,
 		// dailyChangeUnit: '%',
 		chartTitle: 'Daily Power Consumption',
 		chartType: EChartType.line,

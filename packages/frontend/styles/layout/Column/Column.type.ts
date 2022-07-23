@@ -1,6 +1,6 @@
-import { IPadding } from '../../../types/padding';
+import { IMargin, IPadding } from '../../../types/layouts';
 
-interface IColumn extends IPadding {
+interface IColumn extends IPadding, IMargin {
 	children?: React.ReactNode;
 	as?: any;
 	id?: any;

@@ -44,7 +44,7 @@ export const getBlockchainById = async (pool, id) => {
 
 export const getMetadataById = async (pool, id, language) => {
 	try {
-		let query = `SELECT blockchain_id, description, tagline FROM blockchain_metadata WHERE blockchain_id = '${id}' AND language = '${language}'`;
+		let query = `SELECT blockchain_id, description, tagline, genesis_block, source, links FROM blockchain_metadata WHERE blockchain_id = '${id}' AND language = '${language}'`;
 
 		const res = await pool.query(query);
 

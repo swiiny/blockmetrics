@@ -27,6 +27,7 @@ export const StyledBMCardContainer = styled.div<any>`
 			left: 0;
 			right: 0;
 			bottom: 0;
+			z-index: -1;
 
 			${p.secondary
 				? css`
@@ -87,7 +88,7 @@ export const StyledHoverGlow = styled.span<{ isVisible: boolean }>`
 	pointer-events: none;
 
 	background-image: ${(p) =>
-		`radial-gradient(ellipse at center, ${p.theme.colors.deepBlue + '20'} 0%, ${p.theme.colors.deepBlue + '00'} 50%);`};
+		`radial-gradient(ellipse at center, ${p.theme.colors.deepBlue + '10'} 0%, ${p.theme.colors.deepBlue + '00'} 50%);`};
 
 	${addTransition('opacity', 0.4)}
 
