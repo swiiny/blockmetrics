@@ -22,6 +22,7 @@ GROUP BY b.id
 // INSERT NEW DAILY DATAS
 export const insertDailyActiveUsers = `INSERT INTO daily_active_users_history (id, blockchain_id, active_user_count, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyPowerConsumption = `INSERT INTO daily_power_consumption_history (id, blockchain_id, power_consumption, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
+export const insertDailyTvlConsumption = `INSERT INTO daily_total_value_locked_history (id, blockchain_id, total_value_locked, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyAverageBlockTime = `INSERT INTO daily_average_blocktime_history (id, blockchain_id, second, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyAverageGasPrice = `INSERT INTO daily_average_gas_price_history (id, blockchain_id, gas_price, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 export const insertDailyDifficulty = `INSERT INTO daily_difficulty_history (id, blockchain_id, difficulty, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;

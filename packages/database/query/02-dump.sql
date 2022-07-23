@@ -115,6 +115,25 @@ ENGINE = InnoDB
 DEFAULT CHARACTER SET = utf8mb4
 COLLATE = utf8mb4_unicode_ci;
 
+
+-- -----------------------------------------------------
+-- Table `blockmetrics-db`.`daily_total_value_locked_history`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`daily_total_value_locked_history` (
+  `id` VARCHAR(255) NOT NULL,
+  `blockchain_id` VARCHAR(255) NOT NULL,
+  `total_value_locked` DOUBLE NOT NULL DEFAULT '0',
+  `date` DATETIME NOT NULL,
+  `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  INDEX `fk_daily_total_value_locked_history_blockchain_idx` (`blockchain_id` ASC) VISIBLE,
+  CONSTRAINT `fk_daily_total_value_locked_history_blockchain`
+    FOREIGN KEY (`blockchain_id`)
+    REFERENCES `blockmetrics-db`.`blockchain` (`id`))
+ENGINE = InnoDB
+DEFAULT CHARACTER SET = utf8mb4
+COLLATE = utf8mb4_unicode_ci;
+
 -- -----------------------------------------------------
 -- Table `blockmetrics-db`.`daily_power_consumption_history`
 -- -----------------------------------------------------

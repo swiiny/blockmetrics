@@ -6,6 +6,7 @@ import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
 	getTodayActiveAddressCount,
+	insertDailyTvlConsumption,
 	removeYesterdayAddressFromTodayActiveAddress,
 	resetTodayAddressCount,
 	resetTodayTransactionCount,
@@ -141,9 +142,22 @@ async function fetchAndUpdateTVL(con) {
 	try {
 		const chainsTvl = await fetchTotalValueLockedForAllChains();
 
-		const promises = chainsTvl.map(async ({ id, tvl }) => {
-			con.query(updateTotalValueLockedInBlockchain, [tvl, id]);
-		});
+		// get timestamp of yesterday
+		const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+		// get timestamp of yesterday at  midnight
+		const timestamp = Math.floor(new Date(yesterday).setHours(0, 0, 0, 0) / 1000);
+
+		const promises = chainsTvl
+			.map(async ({ id, tvl }) => {
+				const uuid = `${id}-${timestamp}`;
+
+				return [
+					con.query(updateTotalValueLockedInBlockchain, [tvl, id]),
+					con.query(insertDailyTvlConsumption, [uuid, id, tvl, timestamp])
+				];
+			})
+			.flat(1);
 
 		await Promise.all(promises);
 	} catch (err) {
@@ -545,7 +559,11 @@ async function startFetchData() {
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach((chain) => {
 				console.log('start ws provider for', chain.name);
 
-				initWebsocketProvider(chain, con);
+				try {
+					initWebsocketProvider(chain, con);
+				} catch {
+					console.error('error connecting to ws provider for', chain.name, err);
+				}
 			});
 
 			// INIT BITCOIN WEBSOCKET PROVIDER
@@ -587,8 +605,6 @@ async function startFetchData() {
 			// dev stuff
 
 			console.log('start dev');
-
-			updateBlockchainsRanking(con);
 
 			// fetchDailyData(1 / 10);
 			/*
