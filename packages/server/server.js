@@ -112,7 +112,7 @@ async function updatePowerConsumptionPoW(chainsPowerConsumption) {
 	}
 }
 
-async function updatePowerConsumtion() {
+async function updatePowerConsumption() {
 	try {
 		// fetch and update blockchains power consumption
 		updatePowerConsumptionPoS();
@@ -121,7 +121,17 @@ async function updatePowerConsumtion() {
 		const transactionPowerConsumption = await getTxPowerConsumptionForPoWChains();
 
 		// fetch and update blockchains power consumption
-		updatePowerConsumptionPoW(transactionPowerConsumption);
+		await updatePowerConsumptionPoW(transactionPowerConsumption);
+
+		/* ========================================
+	 UPDATE SCORE FOR BLOCKCHAINS
+	 ======================================== */
+
+		const con = await pool.getConnection();
+
+		await updateBlockchainsRanking(con);
+
+		con.release();
 	} catch (err) {
 		console.error('updatePowerConsumption', err);
 	}
@@ -168,7 +178,7 @@ async function updateBlockchainsRanking(con) {
 			]);
 
 			chain.score = score;
-			chain.rank = 'N/A';
+			chain.rank = 'N/A'; // @todo(creat the rank calaculator function)
 		});
 
 		// update blockchains ranking
@@ -433,6 +443,12 @@ async function fetchDailyData(factor = 1) {
 		}
 	});
 
+	/* ========================================
+	 UPDATE SCORE FOR BLOCKCHAINS
+	 ======================================== */
+
+	await updateBlockchainsRanking(con);
+
 	con.release();
 }
 
@@ -553,7 +569,7 @@ async function startFetchData() {
 
 			middayRoutine = schedule.scheduleJob(ruleMidday, async () => {
 				console.log('run schedule');
-				updatePowerConsumtion();
+				updatePowerConsumption();
 			});
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
