@@ -163,6 +163,7 @@ export const getChartGlobalByType = async (pool, type) => {
 				data = await pool.query(
 					`SELECT date, power_consumption AS value FROM daily_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
 				);
+				break;
 			case EDailyGlobalData.totalValueLocked:
 				data = await pool.query(
 					`SELECT date, total_value_locked AS value FROM daily_total_value_locked_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
