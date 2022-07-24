@@ -212,8 +212,8 @@ app.get(`/get/blockchain/chart`, async (req, res) => {
 
 		const result = await getChartByIdAndType(pool, id, type);
 
-		if (result[0].length) {
-			res.send(result[0]);
+		if (result.length) {
+			res.send(result);
 			return;
 		} else {
 			throw new Error('get blockchain chart failed');
