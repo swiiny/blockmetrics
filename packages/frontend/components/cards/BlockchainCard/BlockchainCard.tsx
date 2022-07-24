@@ -152,7 +152,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 									Power Consumption
 								</BMText>
 
-								<BMText size={ESize.s} weight={ETextWeight.medium} textColor={ETextColor.negative}>
+								<BMText size={ESize.s} weight={ETextWeight.normal} textColor={ETextColor.negative}>
 									{formattedPowerConsumption}
 								</BMText>
 							</Flex>
