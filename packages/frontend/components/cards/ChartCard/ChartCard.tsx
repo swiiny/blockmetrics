@@ -18,7 +18,7 @@ const ChartCard: FC<IChartCard> = ({
 	...otherProps
 }) => {
 	return (
-		<BMCardContainer as='li' {...otherProps}>
+		<BMCardContainer as='li' {...otherProps} animateApparition={5}>
 			<BMText size={ESize.m} weight={ETextWeight.medium}>
 				{label}
 			</BMText>
