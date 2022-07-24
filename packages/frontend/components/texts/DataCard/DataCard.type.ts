@@ -10,6 +10,7 @@ interface IDataCard {
 	reverseColor?: boolean;
 	isTimer?: boolean;
 	as?: string;
+	index?: number;
 }
 
 export type { IDataCard };

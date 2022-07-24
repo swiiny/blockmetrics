@@ -18,13 +18,13 @@ const BlockchainsPage: NextPage = () => {
 	const [blockchains, setBlockchains] = useState([]);
 
 	useEffect(() => {
-		if (message?.channel === ESubscribeType.blockchains) {
+		if (message?.channel === ESubscribeType.blockchainCards) {
 			setBlockchains(message.data);
 		}
 	}, [message]);
 
 	useEffect(() => {
-		subscribeTo(ESubscribeType.blockchains);
+		subscribeTo(ESubscribeType.blockchainCards);
 	}, [subscribeTo]);
 
 	return (

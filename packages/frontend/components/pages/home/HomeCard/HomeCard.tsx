@@ -152,7 +152,7 @@ const HomeCard: FC<IHomeCardData> = ({
 	}, [fetchDailyChange, dailyChangeType]);
 
 	return (
-		<BMCardContainer as='li' {...otherProps}>
+		<BMCardContainer as='li' animateApparition {...otherProps}>
 			<Flex>
 				<StyledIconContainer>
 					<BMIcon type={icon} size={ESize.m} />

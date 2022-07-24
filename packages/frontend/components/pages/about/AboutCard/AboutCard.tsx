@@ -10,7 +10,7 @@ import { IAboutCard } from './AboutCard.type';
 
 const AboutCard: FC<IAboutCard> = ({ icon = EIcon.none, label, bottomContent, link }) => {
 	return (
-		<BMCardContainer clickable isHighlighted>
+		<BMCardContainer clickable isHighlighted animateApparition>
 			<Flex fullWidth direction={EFlex.column} horizontal={EFlex.center} vertical={EFlex.center} padding={ESize.m}>
 				<BMIcon type={icon} size={ESize.m} backgroundVisible />
 

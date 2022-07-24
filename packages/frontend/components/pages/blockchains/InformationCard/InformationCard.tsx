@@ -122,7 +122,9 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 					))}
 				</StyledUsefulLinkList>
 			);
-		} catch {}
+		} catch {
+			return <></>;
+		}
 	}, [metadata.links]);
 
 	const initData = useCallback(async () => {
@@ -147,7 +149,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 	}, [initData, chainId, metadata]);
 
 	return (
-		<BMCardContainer isHighlighted {...otherProps}>
+		<BMCardContainer isHighlighted animateApparition={4} {...otherProps}>
 			<Flex fullWidth wrapItems padding={ESize['2xl']} mdPadding={ESize.l} smPaddingX={ESize.s}>
 				<Column columns={5} lg={12}>
 					<BMText as='h3' singleLine weight={ETextWeight.semiBold} size={ESize['2xl']}>

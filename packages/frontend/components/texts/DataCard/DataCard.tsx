@@ -18,6 +18,7 @@ const DataCard: FC<IDataCard> = ({
 	icon = EIcon.none,
 	label,
 	unit,
+	index,
 	isAnimated = false,
 	isTimer = false,
 	colorAnimationOnUpdate = false,
@@ -69,7 +70,13 @@ const DataCard: FC<IDataCard> = ({
 	}, [value, colorAnimationOnUpdate, reverseColor]);
 
 	return (
-		<BMCardContainer {...otherProps} padding={ESize.m} smPaddingX={ESize.s} smPaddingY={ESize.xs}>
+		<BMCardContainer
+			animateApparition={index}
+			padding={ESize.m}
+			smPaddingX={ESize.s}
+			smPaddingY={ESize.xs}
+			{...otherProps}
+		>
 			<Flex direction={EFlex.column} lgDirection={EFlex.row} vertical={EFlex.center} smHorizontal={EFlex.between}>
 				<BMIcon
 					type={icon}

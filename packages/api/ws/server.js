@@ -18,6 +18,7 @@ import {
 	fetchBlockchainTotal,
 	fetchBlockchainTotalToClient
 } from './subscriptions/blockchainsTotal.js';
+import { fetchAndSendBlockchainCards, fetchAndSendBlockchainCardToClient } from './subscriptions/blockchainCards.js';
 
 // connection pool
 let pool;
@@ -55,6 +56,17 @@ function checkSubscriptions(con, client, channelToCheck) {
 		} else {
 			// send data to clients without delay
 			fetchAndSendBlockchainsToClient(con, client);
+		}
+
+		return;
+	}
+
+	if (channelToCheck === subscribeType.blockchainCards) {
+		if (!isBlockchainsActivated) {
+			fetchAndSendBlockchainCards(pool);
+		} else {
+			// send data to clients without delay
+			fetchAndSendBlockchainCardToClient(con, client);
 		}
 
 		return;

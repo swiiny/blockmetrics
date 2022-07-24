@@ -1,7 +1,8 @@
 import { ReactNode } from 'react';
 import { IPadding } from '../../../../types/layouts';
+import { IAnimation } from '../../../../types/styled';
 
-interface IBMCardContainer extends IPadding {
+interface IBMCardContainer extends IPadding, IAnimation {
 	children: ReactNode;
 	clickable?: boolean;
 	isHighlighted?: boolean;

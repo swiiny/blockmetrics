@@ -4,11 +4,22 @@ import { getAvalancheStats } from './fetch.js';
 
 export async function getEthNodeCount() {
 	try {
-		const url = `${process.env.ETHERSCAN_API_URL}?module=stats&action=nodecount&apikey=${process.env.ETHERSCAN_API_KEY}`;
+		// const url = `${process.env.ETHERSCAN_API_URL}?module=stats&action=nodecount&apikey=${process.env.ETHERSCAN_API_KEY}`;
+		// const res = await axios.get(url);
+		// return parseInt(res.data.result.TotalNodeCount, 10);
 
-		const res = await axios.get(url);
+		const { data } = await axios.get('https://ethernodes.org/history');
 
-		return parseInt(res.data.result.TotalNodeCount, 10);
+		// keep only first line of data
+		const [firstLine] = data.split('\n');
+
+		// remove all content before [[
+		const [, rest] = firstLine.split('lineChartData = ');
+
+		// convert string to array
+		const arrayOfNodes = JSON.parse(rest);
+
+		return arrayOfNodes[arrayOfNodes.length - 1][1];
 	} catch (err) {
 		console.error('getEthNodeCount', err);
 		return null;
