@@ -1,5 +1,5 @@
 import { css, DefaultTheme, FlattenSimpleInterpolation } from 'styled-components';
-import { EDailyData, EMediaQuery, ESize, ETextColor } from './enum';
+import { EIcon, EMediaQuery, ESize, ESubscribeType, ETextColor } from './enum';
 
 export const mq = (mediaQuery: EMediaQuery, children: string | FlattenSimpleInterpolation, minOrMax = 'max') => {
 	return `@media only screen and (${minOrMax}-width: ${mediaQuery}) {
@@ -22,7 +22,7 @@ export const setFontSize = (size: ESize) => {
 		${size === ESize.s
 			? `
             font-size: 0.875rem;
-            line-height: 1rem;
+            line-height: 1.2rem;
             `
 			: size === ESize.m
 			? `
@@ -56,7 +56,7 @@ export const setFontSize = (size: ESize) => {
 					`
 			: ''};
 
-		@media only screen and (max-width: ${EMediaQuery.sm}) {
+		@media only screen and (max-width: ${EMediaQuery.md}) {
 			${size === ESize.s
 				? `
             font-size: 0.75rem;
@@ -152,7 +152,7 @@ export const addPaddingStyles = (p: any) => {
 		${p.smPaddingLeft ? mq(EMediaQuery.sm, `padding-left: ${p.theme.spacing[p.smPaddingLeft]};`) : ''}
 		${p.smPaddingRight ? mq(EMediaQuery.sm, `padding-right: ${p.theme.spacing[p.smPaddingRight]};`) : ''}
 
-			${p.padding ? `padding: ${p.theme.spacing[p.padding]};` : ''}
+		${p.padding ? `padding: ${p.theme.spacing[p.padding]};` : ''}
 		${p.paddingX ? `padding-left: ${p.theme.spacing[p.paddingX]}; padding-right: ${p.theme.spacing[p.paddingX]};` : ''}
 		${p.paddingY ? `padding-top: ${p.theme.spacing[p.paddingY]}; padding-bottom: ${p.theme.spacing[p.paddingY]};` : ''}
 		${p.paddingTop ? `padding-top: ${p.theme.spacing[p.paddingTop]};` : ''}
@@ -162,9 +162,119 @@ export const addPaddingStyles = (p: any) => {
 	`;
 };
 
+export const addMarginStyles = (p: any) => {
+	return css`
+		${p.xlMargin ? mq(EMediaQuery.xl, `margin: ${p.theme.spacing[p.xlMargin]};`) : ''}
+		${p.xlMarginX
+			? mq(
+					EMediaQuery.xl,
+					`margin-left: ${p.theme.spacing[p.xlMarginX]}; margin-right: ${p.theme.spacing[p.xlMarginX]};`
+			  )
+			: ''}
+		${p.xlMarginY
+			? mq(
+					EMediaQuery.xl,
+					`margin-top: ${p.theme.spacing[p.xlMarginY]}; margin-bottom: ${p.theme.spacing[p.xlMarginY]};`
+			  )
+			: ''}
+		${p.xlMarginTop ? mq(EMediaQuery.xl, `margin-top: ${p.theme.spacing[p.xlMarginTop]};`) : ''}
+		${p.xlMarginBottom ? mq(EMediaQuery.xl, `margin-bottom: ${p.theme.spacing[p.xlMarginBottom]};`) : ''}
+		${p.xlMarginLeft ? mq(EMediaQuery.xl, `margin-left: ${p.theme.spacing[p.xlMarginLeft]};`) : ''}
+		${p.xlMarginRight ? mq(EMediaQuery.xl, `margin-right: ${p.theme.spacing[p.xlMarginRight]};`) : ''}
+	
+
+			${p.lgMargin ? mq(EMediaQuery.lg, `margin: ${p.theme.spacing[p.lgMargin]};`) : ''}
+			${p.lgMarginX
+			? mq(
+					EMediaQuery.lg,
+					`margin-left: ${p.theme.spacing[p.lgMarginX]}; margin-right: ${p.theme.spacing[p.lgMarginX]};`
+			  )
+			: ''}
+		${p.lgMarginY
+			? mq(
+					EMediaQuery.lg,
+					`margin-top: ${p.theme.spacing[p.lgMarginY]}; margin-bottom: ${p.theme.spacing[p.lgMarginY]};`
+			  )
+			: ''}
+		${p.lgMarginTop ? mq(EMediaQuery.lg, `margin-top: ${p.theme.spacing[p.lgMarginTop]};`) : ''}
+		${p.lgMarginBottom ? mq(EMediaQuery.lg, `margin-bottom: ${p.theme.spacing[p.lgMarginBottom]};`) : ''}
+		${p.lgMarginLeft ? mq(EMediaQuery.lg, `margin-left: ${p.theme.spacing[p.lgMarginLeft]};`) : ''}
+		${p.lgMarginRight ? mq(EMediaQuery.lg, `margin-right: ${p.theme.spacing[p.lgMarginRight]};`) : ''}
+
+		
+	${p.mdMargin ? mq(EMediaQuery.md, `margin: ${p.theme.spacing[p.mdMargin]};`) : ''}
+			${p.mdMarginX
+			? mq(
+					EMediaQuery.md,
+					`margin-left: ${p.theme.spacing[p.mdMarginX]}; margin-right: ${p.theme.spacing[p.mdMarginX]};`
+			  )
+			: ''}
+		${p.mdMarginY
+			? mq(
+					EMediaQuery.md,
+					`margin-top: ${p.theme.spacing[p.mdMarginY]}; margin-bottom: ${p.theme.spacing[p.mdMarginY]};`
+			  )
+			: ''}
+		${p.mdMarginTop ? mq(EMediaQuery.md, `margin-top: ${p.theme.spacing[p.mdMarginTop]};`) : ''}
+		${p.mdMarginBottom ? mq(EMediaQuery.md, `margin-bottom: ${p.theme.spacing[p.mdMarginBottom]};`) : ''}
+		${p.mdMarginLeft ? mq(EMediaQuery.md, `margin-left: ${p.theme.spacing[p.mdMarginLeft]};`) : ''}
+		${p.mdMarginRight ? mq(EMediaQuery.md, `margin-right: ${p.theme.spacing[p.mdMarginRight]};`) : ''}
+
+		${p.smMargin ? mq(EMediaQuery.sm, `margin: ${p.theme.spacing[p.smMargin]};`) : ''}
+			${p.smMarginX
+			? mq(
+					EMediaQuery.sm,
+					`margin-left: ${p.theme.spacing[p.smMarginX]}; margin-right: ${p.theme.spacing[p.smMarginX]};`
+			  )
+			: ''}
+		${p.smMarginY
+			? mq(
+					EMediaQuery.sm,
+					`margin-top: ${p.theme.spacing[p.smMarginY]}; margin-bottom: ${p.theme.spacing[p.smMarginY]};`
+			  )
+			: ''}
+		${p.smMarginTop ? mq(EMediaQuery.sm, `margin-top: ${p.theme.spacing[p.smMarginTop]};`) : ''}
+		${p.smMarginBottom ? mq(EMediaQuery.sm, `margin-bottom: ${p.theme.spacing[p.smMarginBottom]};`) : ''}
+		${p.smMarginLeft ? mq(EMediaQuery.sm, `margin-left: ${p.theme.spacing[p.smMarginLeft]};`) : ''}
+		${p.smMarginRight ? mq(EMediaQuery.sm, `margin-right: ${p.theme.spacing[p.smMarginRight]};`) : ''}
+
+		${p.margin ? `margin: ${p.theme.spacing[p.margin]};` : ''}
+		${p.marginX ? `margin-left: ${p.theme.spacing[p.marginX]}; margin-right: ${p.theme.spacing[p.marginX]};` : ''}
+		${p.marginY ? `margin-top: ${p.theme.spacing[p.marginY]}; margin-bottom: ${p.theme.spacing[p.marginY]};` : ''}
+		${p.marginTop ? `margin-top: ${p.theme.spacing[p.marginTop]};` : ''}
+		${p.marginBottom ? `margin-bottom: ${p.theme.spacing[p.marginBottom]};` : ''}
+		${p.marginLeft ? `margin-left: ${p.theme.spacing[p.marginLeft]};` : ''}
+		${p.marginRight ? `margin-right: ${p.theme.spacing[p.marginRight]};` : ''}
+	`;
+};
+
+export function addAnimationStyles(p: any) {
+	return css`
+		@keyframes fadeIn {
+			0% {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			100% {
+				opacity: 1;
+				transform: translateY(0px);
+			}
+		}
+
+		${() => {
+			if (typeof p.animateApparition === 'boolean') {
+				return `animation: fadeIn 0.5s ease-in-out;`;
+			} else {
+				return `animation: fadeIn 0.5s ${p.animateApparition * 0.1}s  ease-in-out both;`;
+			}
+		}}
+	`;
+}
+
 export function getSpacingFromESize(size: ESize, theme: DefaultTheme): string {
-	// @ts-ignore
-	return theme.spacing[size];
+	// get value from ESize using typescript
+	const value = theme.spacing[size as keyof DefaultTheme['spacing']];
+	return value ? `${value}` : '';
 }
 
 // convert ETextColor to to theme color
@@ -188,3 +298,31 @@ export const getTextColor = (p: any) => {
 			return `${p.theme.colors.text.default};`;
 	}
 };
+
+export function getESubscribeTypeFromValue(value: string): ESubscribeType {
+	try {
+		const indexOfValue = Object.values(ESubscribeType).indexOf(value as unknown as ESubscribeType);
+
+		const key = Object.keys(ESubscribeType)[indexOfValue] as keyof typeof ESubscribeType;
+
+		return ESubscribeType[key];
+	} catch (err) {
+		console.error('getESubscribeTypeFromValue', err);
+
+		return ESubscribeType.unset;
+	}
+}
+
+export function getEIconTypeFromValue(value: string): EIcon {
+	try {
+		const indexOfValue = Object.values(EIcon).indexOf(value as unknown as EIcon);
+
+		const key = Object.keys(EIcon)[indexOfValue] as keyof typeof EIcon;
+
+		return EIcon[key];
+	} catch (err) {
+		console.error('getESubscribeTypeFromValue', err);
+
+		return EIcon.none;
+	}
+}

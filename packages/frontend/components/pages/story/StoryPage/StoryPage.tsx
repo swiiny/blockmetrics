@@ -9,8 +9,8 @@ import BMHeading from '../../../../styles/theme/components/BMHeading';
 import { StyledFullHeightContainer, StyledHalfHeightContainer, StyledScreenHeightContainer } from '../story.styles';
 import Spacing from '../../../../styles/layout/Spacing';
 import { TitleAndValue } from '../TitleAndValue';
-import BMText from '../../../../styles/theme/components/BMText';
-import TextWithGradient from '../../../../styles/theme/components/BMTextWithGradient';
+import BMButton from '../../../../styles/theme/components/BMButton';
+import router from 'next/router';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -44,7 +44,7 @@ const StoryPage: NextPage = () => {
 		<>
 			<Meta title='Blockmetrics' />
 
-			<Main noNavbar>
+			<Main noNavbar noMarginTop>
 				<Flex direction={EFlex.column} vertical={EFlex.center}>
 					<StyledScreenHeightContainer>
 						<StyledFullHeightContainer>
@@ -124,7 +124,7 @@ const StoryPage: NextPage = () => {
 						<section>
 							<Animated>
 								<BMHeading type={ETextType.h1} textAlign={ETextAlign.center}>
-									Blockchains are even more...
+									Blockchains are even more than that...
 								</BMHeading>
 							</Animated>
 
@@ -132,9 +132,9 @@ const StoryPage: NextPage = () => {
 
 							<StyledFullHeightContainer>
 								<Animated>
-									<BMText textAlign={ETextAlign.center}>
-										<TextWithGradient>Discover</TextWithGradient>
-									</BMText>
+									<BMButton onClick={() => router.push('/')} size={ESize.l}>
+										Discover
+									</BMButton>
 								</Animated>
 							</StyledFullHeightContainer>
 						</section>

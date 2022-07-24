@@ -1,50 +1,72 @@
 import React, { FC, useCallback, useEffect } from 'react';
+import useWebsocket from '../../../../hooks/useWebsocket';
 import Flex from '../../../../styles/layout/Flex';
-import { EChartType, EDailyGlobalData, EFlex, EGlobalData } from '../../../../styles/theme/utils/enum';
+import {
+	EChartType,
+	EDailyGlobalData,
+	EFlex,
+	EGlobalData,
+	EIcon,
+	ESubscribeType
+} from '../../../../styles/theme/utils/enum';
 import HomeCard from '../HomeCard';
+import { StyledList } from './HomeData.styles';
 import { IHomeCardData } from './HomeData.type';
 
 const HOMECARD_DATA: IHomeCardData[] = [
 	{
-		title: 'Today Users Count',
-		valueType: EGlobalData.todayAddressCount,
-		dailyChange: 0,
-		iconSrc: '/assets/images/icons/profile-tick.svg',
-		chartTitle: 'Daily Active Users',
+		title: 'Total Addresses Count',
+		valueType: EGlobalData.addressCount,
+		icon: EIcon.user,
+		chartTitle: 'Daily Active Addresses',
 		chartType: EChartType.bar,
 		chartDataType: EDailyGlobalData.activeUsers
 	},
 	{
 		title: 'Total Transactions Count',
 		valueType: EGlobalData.transactionCount,
-		dailyChange: 0,
-		iconSrc: '/assets/images/icons/arrow-swap-horizontal.svg',
+		dailyCustomLabel: 'today',
+		subscribeChannel: ESubscribeType.todayTransactionCount,
+		dailyChangeType: EGlobalData.todayTransactionsCount,
+		refreshTime: 3,
+		icon: EIcon.swap,
 		chartTitle: 'Daily Transactions count',
-		chartType: EChartType.line,
+		chartType: EChartType.bar,
 		chartDataType: EDailyGlobalData.transactionsCount
 	},
 	{
 		title: 'Last 24h Power Consumption',
-		valueType: EGlobalData.blockchainPowerConsumption,
+		valueType: EGlobalData.powerConsumption,
+		// dailyChangeType: EGlobalData.powerConsumption,
 		unit: 'W/h',
-		dailyChange: 0,
+		// dailyChange: 0,
 		dailyChangeColorReversed: true,
-		iconSrc: '/assets/images/icons/flash.svg',
-		dailyChangeUnit: '%',
+		icon: EIcon.energy,
+		// dailyChangeUnit: '%',
 		chartTitle: 'Daily Power Consumption',
-		chartType: EChartType.bar,
+		chartType: EChartType.line,
 		chartDataType: EDailyGlobalData.powerConsumption
 	}
 ];
 
 const HomeData: FC = () => {
+	const { subscribeTo, message } = useWebsocket();
+
+	useEffect(() => {
+		HOMECARD_DATA.map((data) => {
+			if (data?.subscribeChannel) {
+				subscribeTo(data.subscribeChannel);
+			}
+		});
+	}, [subscribeTo]);
+
 	return (
 		<section>
-			<Flex fullWidth as='ul' horizontal={EFlex.between}>
+			<StyledList>
 				{HOMECARD_DATA.map((card) => (
-					<HomeCard key={card.title} {...card} />
+					<HomeCard key={card.title} wsMessage={message} {...card} />
 				))}
-			</Flex>
+			</StyledList>
 		</section>
 	);
 };

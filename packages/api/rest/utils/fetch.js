@@ -44,7 +44,24 @@ export const getBlockchainById = async (pool, id) => {
 
 export const getMetadataById = async (pool, id, language) => {
 	try {
-		let query = `SELECT blockchain_id, description, tagline FROM blockchain_metadata WHERE blockchain_id = '${id}' AND language = '${language}'`;
+		let query = `SELECT blockchain_id, description, tagline, genesis_block, source, links FROM blockchain_metadata WHERE blockchain_id = '${id}' AND language = '${language}'`;
+
+		const res = await pool.query(query);
+
+		return res;
+	} catch (err) {
+		console.error('getBlockchainById', err);
+		return [];
+	}
+};
+
+export const getMetadataAndScoreById = async (pool, id, language) => {
+	try {
+		let query = `SELECT m.blockchain_id as id, m.description, m.tagline, m.genesis_block, m.source, m.links, s.score, s.rank, s.reliability, s.token_count, s.power_consumption, s.total_value_locked, s.speed
+									FROM blockchain_metadata m
+									INNER JOIN blockchain_score s
+									ON m.blockchain_id = s.blockchain_id
+									WHERE m.blockchain_id = '${id}' AND m.language = '${language}'`;
 
 		const res = await pool.query(query);
 
@@ -101,9 +118,17 @@ export const getChartByIdAndType = async (pool, id, type) => {
 				tableLabel = 'daily_node_count_history';
 				valueLabel = 'node_count';
 				break;
+			case EDailyData.powerConsumption:
+				tableLabel = 'daily_power_consumption_history';
+				valueLabel = 'power_consumption';
+				break;
 			case EDailyData.transactionCount:
 				tableLabel = 'daily_transaction_count_history';
 				valueLabel = 'transaction_count';
+				break;
+			case EDailyData.totalValueLocked:
+				tableLabel = 'daily_total_value_locked_history';
+				valueLabel = 'total_value_locked';
 				break;
 			default:
 				return [];
@@ -113,7 +138,20 @@ export const getChartByIdAndType = async (pool, id, type) => {
 
 		const res = await pool.query(query, [id]);
 
-		return res;
+		// filter out value with the same date
+		const result = res[0].reduce((acc, cur) => {
+			if (acc.length === 0) {
+				acc.push(cur);
+			} else {
+				const last = acc[acc.length - 1];
+				if (last.date.getTime() !== cur.date.getTime()) {
+					acc.push(cur);
+				}
+			}
+			return acc;
+		}, []);
+
+		return result;
 	} catch (err) {
 		console.error('getChartByIdAndType', err);
 		return [];
@@ -136,9 +174,13 @@ export const getChartGlobalByType = async (pool, type) => {
 				);
 				break;
 			case EDailyGlobalData.powerConsumption:
-				console.log('ADD TABLE daily_power_consumption_history');
 				data = await pool.query(
-					`SELECT date, blockchain_power_consumption AS value FROM daily_blockchain_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+					`SELECT date, power_consumption AS value FROM daily_power_consumption_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
+				);
+				break;
+			case EDailyGlobalData.totalValueLocked:
+				data = await pool.query(
+					`SELECT date, total_value_locked AS value FROM daily_total_value_locked_history WHERE date >= DATE_SUB(NOW(), INTERVAL 31 DAY) ORDER BY date ASC`
 				);
 				break;
 			default:
@@ -168,10 +210,9 @@ export const getChartGlobalByType = async (pool, type) => {
 
 export const getGlobalDataByType = async (pool, type) => {
 	let valueLabel = '';
-
 	try {
 		switch (type) {
-			case EGlobalData.blockchainPowerConsumption:
+			case EGlobalData.powerConsumption:
 				valueLabel = 'blockchain_power_consumption';
 				break;
 			case EGlobalData.tokenCount:
@@ -198,9 +239,9 @@ export const getGlobalDataByType = async (pool, type) => {
 
 		// sum of all rows with the same valueLabel from blockchain table
 		const res = await pool.query(`SELECT SUM(${valueLabel}) AS value FROM blockchain`);
+
 		return {
-			value: res[0][0].value,
-			dailyChange: 0
+			value: res[0][0].value
 		};
 	} catch (err) {
 		console.error('getGlobalDataByType', err);

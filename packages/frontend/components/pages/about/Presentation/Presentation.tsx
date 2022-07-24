@@ -1,33 +1,62 @@
 import Image from 'next/image';
-import React from 'react';
+import React, { FC } from 'react';
+import useResponsive from '../../../../hooks/useResponsive';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
 import BMText from '../../../../styles/theme/components/BMText';
-import TextWithGradient from '../../../../styles/theme/components/BMTextWithGradient';
-import { EFlex, ESize } from '../../../../styles/theme/utils/enum';
-import { FlexEx, StyledImageContainer, StyledTextContainer, TextEx } from './Presentation.styles';
+import { EFlex, ESize, ETextColor, ETextWeight } from '../../../../styles/theme/utils/enum';
+import {
+	BMCardContainerEx,
+	StyledCitationContainer,
+	StyledImageContainer,
+	StyledTextContainer
+} from './Presentation.styles';
+
+const Creator: FC<{ isVisible?: boolean }> = ({ isVisible = true }) => {
+	if (!isVisible) {
+		return null;
+	}
+
+	return (
+		<div>
+			<BMText size={ESize['2xl']}>Jeremy Theintz</BMText>
+			<BMText size={ESize.l} weight={ETextWeight.light} textColor={ETextColor.gradient}>
+				Web3 builder
+			</BMText>
+		</div>
+	);
+};
 
 const Presentation: React.FC = () => {
+	const { isSmallerThanMd } = useResponsive();
+
 	return (
-		<FlexEx horizontal={EFlex.between}>
-			<StyledImageContainer>
-				<Image src='/assets/images/dev.png' alt='Picture of Jeremy Theintz' width={1024} height={1024} layout='fill' />
-			</StyledImageContainer>
+		<BMCardContainerEx animateApparition>
+			<StyledCitationContainer>
+				<Image src='/assets/images/citation.svg' alt='' width={83} height={71} />
+			</StyledCitationContainer>
 
-			<StyledTextContainer>
-				<BMText>Jeremy Theintz</BMText>
-				<BMText size={ESize.s}>
-					<TextWithGradient>Web3 builder</TextWithGradient>
-				</BMText>
+			<Flex wrapItems={isSmallerThanMd} horizontal={EFlex.between} mdHorizontal={EFlex.start} padding={ESize.s}>
+				<StyledImageContainer>
+					<Image src='/assets/images/dev.png' alt='Picture of Jeremy Theintz' layout='fill' objectFit='contain' />
+				</StyledImageContainer>
 
-				<Spacing size={ESize.xs} />
+				<Spacing size={ESize.s} />
 
-				<TextEx opacityReduced>
-					Lorem ispum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore
-					magna aliqua.
-				</TextEx>
-			</StyledTextContainer>
-		</FlexEx>
+				<Creator isVisible={isSmallerThanMd} />
+
+				<StyledTextContainer>
+					<Creator isVisible={!isSmallerThanMd} />
+
+					<Spacing size={ESize.xs} />
+
+					<BMText size={ESize.xl} weight={ETextWeight.light}>
+						Lorem ispum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
+						dolore magna aliqua.
+					</BMText>
+				</StyledTextContainer>
+			</Flex>
+		</BMCardContainerEx>
 	);
 };
 

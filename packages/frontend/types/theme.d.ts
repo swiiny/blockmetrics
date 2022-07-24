@@ -9,6 +9,10 @@ declare module 'styled-components' {
 			l: string;
 		};
 		spacing: {
+			unset: string;
+			'7xs': string;
+			'6xs': string;
+			'5xs': string;
 			'4xs': string;
 			'3xs': string;
 			'2xs': string;
@@ -27,6 +31,7 @@ declare module 'styled-components' {
 		};
 		colors: {
 			bg: string;
+			darkGrey: string;
 			primary: string;
 			secondary: string;
 			deepBlue: string;

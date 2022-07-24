@@ -1,4 +1,4 @@
-import { updatePowerConsumptionInBlockchain } from '../sql.js';
+import { insertDailyPowerConsumption, updatePowerConsumptionInBlockchain } from '../sql.js';
 
 export async function updatePowerConsumptionInDb(con, chains) {
 	try {
@@ -6,7 +6,17 @@ export async function updatePowerConsumptionInDb(con, chains) {
 			throw new Error('no chains to update');
 		}
 
-		const promises = chains.map(async (chain) => con.query(updatePowerConsumptionInBlockchain, [chain.powerConsumption, chain.id]));
+		// get timestamp of yesterday
+		const yesterday = new Date(new Date().setDate(new Date().getDate() - 1));
+
+		// get timestamp of yesterday at  midnight
+		const timestamp = Math.floor(new Date(yesterday).setHours(0, 0, 0, 0) / 1000);
+
+		const promises = chains.map(async (chain) => {
+			const uuid = `${chain.id}-${timestamp}-${chain.powerConsumption}`;
+			con.query(updatePowerConsumptionInBlockchain, [chain.powerConsumption, chain.id]);
+			con.query(insertDailyPowerConsumption, [uuid, chain.id, chain.powerConsumption, timestamp]);
+		});
 
 		await Promise.all(promises);
 

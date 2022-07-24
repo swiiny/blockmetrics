@@ -10,19 +10,17 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 -   [x] Buy block-metrics domain name
 -   [x] Buy blockmetrics.eth
--   [ ] setup jelatic https for APIs
 -   [ ] Create readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
+-   [ ] remove "note" from blockchain table, remove note column fetching from APIs
 
 ### Database :white_check_mark:
 
 -   [ ] add TVL in blockchain table
--   [ ] Create daily_blockchain_power_consumption_history table
 
 ### Server
 
--   [ ] fetch PoW blockchains power consumption
 -   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
 -   [ ] prevent bitcoin webscoket from disconnecting
 
@@ -30,19 +28,15 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 -   [ ] separate endpoints in multiple files
 
-### API - Websocket
-
--   [x] Set up WS Server
--   [ ] set up single blockchain websocket connection
-
 ### Frontend
 
--   [ ] Homepage
--   [ ] Blockchains
-    -   [ ] Index
-    -   [ ] Single blockchain page
--   [ ] Compare
--   [ ] About us
+-   [ ] BMCard component
+-   [ ] BMSquaredIcon component
+-   [ ] BMListItem with blue dot component
+-   [ ] Chart tooltip
+-   [ ] Switch component
+-   [ ] Add skeleton and alert pop when api not available
+
 
 ### Integrated Blockchains
 
@@ -56,8 +50,11 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] Celo
 -   [ ] Harmony
 -   [ ] Gnosis
--   [ ] Arbitrum
--   [ ] Moonbeam
+-   [ ] Moonbeam :pushpin: (https://moonscan.io/charts)
+-   [ ] Arbitrum :pushpin: (https://arbiscan.io/charts)
+-   [ ] Optimism :pushpin: (https://optimistic.etherscan.io/charts)
+-   [ ] Nervos :pushpin: (https://explorer.nervos.org/charts)
+-   [ ] Near :pushpin: :triangular_flag_on_post: (https://nearblocks.io/charts/txns)
 
 #### Webhook to deploy an updated image from dockerhub to jelastic cloud
 

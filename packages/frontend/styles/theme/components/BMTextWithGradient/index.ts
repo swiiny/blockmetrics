@@ -1,1 +1,0 @@
-export { TextWithGradient as default } from './TextWithGradient';

@@ -1,5 +1,8 @@
 export enum ESize {
-	unset = 'unset',
+	unset = 'unset§',
+	'7xs' = '7xs',
+	'6xs' = '6xs',
+	'5xs' = '5xs',
 	'4xs' = '4xs',
 	'3xs' = '3xs',
 	'2xs' = '2xs',
@@ -47,14 +50,17 @@ export enum ETextAlign {
 }
 
 export enum ETextWeight {
+	thin = '100',
 	light = '300',
 	normal = '400',
 	medium = '500',
-	semiBold = '600'
+	semiBold = '600',
+	bold = '700'
 }
 
 export enum EMediaQuery {
 	xs = '0px',
+	ssm = '550px',
 	sm = '660px',
 	md = '900px',
 	lg = '1200px',
@@ -112,13 +118,16 @@ export enum EDailyData {
 	newTokens = 'newTokens',
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
-	transactionCount = 'transactionCount'
+	powerConsumption = 'powerConsumption',
+	transactionCount = 'transactionCount',
+	totalValueLocked = 'totalValueLocked'
 }
 
 export enum EDailyGlobalData {
 	activeUsers = 'activeUsers',
 	transactionsCount = 'transactionsCount',
-	powerConsumption = 'powerConsumption'
+	powerConsumption = 'powerConsumption',
+	totalValueLocked = 'totalValueLocked'
 }
 
 export enum EChartType {
@@ -129,11 +138,59 @@ export enum EChartType {
 }
 
 export enum EGlobalData {
-	blockchainPowerConsumption = 'blockchainPowerConsumption',
+	powerConsumption = 'powerConsumption',
 	tokenCount = 'tokenCount',
 	nodeCount = 'nodeCount',
 	transactionCount = 'transactionCount',
 	todayTransactionsCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
 	todayAddressCount = 'todayAddressCount'
+}
+
+export enum ESubscribeType {
+	unset = 'unset',
+	blockchains = 'blockchains',
+	blockchainCards = 'blockchainCards',
+	blockchain = 'blockchain',
+	usersCount = 'usersCount',
+	transactionCount = 'transactionCount',
+	todayTransactionCount = 'todayTransactionCount',
+	addressCount = 'addressCount',
+	todayAddressCount = 'todayAddressCount',
+	ethereum = 'ethereum',
+	bitcoin = 'bitcoin',
+	polygon = 'polygon',
+	fantom = 'fantom',
+	bsc = 'binance-smart-chain',
+	avalanche = 'avalanche'
+}
+
+export enum EIcon {
+	cronos = 'cronos',
+	arbitrum = 'arbitrum',
+	ethereum = 'ethereum',
+	bitcoin = 'bitcoin',
+	bsc = 'binance-smart-chain',
+	polygon = 'polygon',
+	fantom = 'fantom',
+	avalanche = 'avalanche',
+	luna = 'luna',
+	optimism = 'optimism',
+	solana = 'solana',
+	polkadot = 'polkadot',
+	harmony = 'harmony',
+	tron = 'tron',
+	ripple = 'ripple',
+	cardano = 'cardano',
+	celo = 'celo',
+	energy = 'energy',
+	user = 'user',
+	swap = 'swap',
+	gas = 'gas',
+	token = 'token',
+	chart = 'chart',
+	timer = 'timer',
+	issue = 'issue',
+	help = 'help',
+	none = 'none'
 }

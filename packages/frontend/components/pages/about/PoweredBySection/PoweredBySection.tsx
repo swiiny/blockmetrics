@@ -5,6 +5,8 @@ import BMHeading from '../../../../styles/theme/components/BMHeading';
 import { ESize, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
 import { StyledImageContainer, StyledList, StyledPoweredBySection } from './PoweredBySection.styles';
 import { motion, Variants } from 'framer-motion';
+import BMText from '../../../../styles/theme/components/BMText';
+import useResponsive from '../../../../hooks/useResponsive';
 
 const SERVICES = [
 	{
@@ -29,32 +31,26 @@ const SERVICES = [
 	}
 ];
 
-const PoweredBySection: React.FC<{ variants: Variants }> = ({ variants, ...otherProps }: { variants: Variants }) => {
+const PoweredBySection: React.FC = ({ ...otherProps }) => {
+	const { isSmallerThanMd } = useResponsive();
+
 	return (
 		<StyledPoweredBySection {...otherProps}>
-			<motion.div initial='offscreen' whileInView='onscreen' variants={variants} viewport={{ once: true, amount: 0.8 }}>
-				<BMHeading type={ETextType.h3} textAlign={ETextAlign.center}>
-					Powered By
-				</BMHeading>
-			</motion.div>
+			<BMText size={ESize['2xl']} textAlign={isSmallerThanMd ? ETextAlign.center : undefined}>
+				Powered By
+			</BMText>
 
-			<Spacing size={ESize['3xl']} />
+			<Spacing size={ESize['l']} mdSize={ESize['2xl']} />
 
 			<StyledList>
 				{SERVICES.map(({ logoSrc, href }: { logoSrc: string; href: string }) => (
-					<motion.li
-						key={href}
-						initial='offscreen'
-						whileInView='onscreen'
-						variants={variants}
-						viewport={{ once: true, amount: 0.8 }}
-					>
+					<li key={logoSrc}>
 						<a href={href} target='_blank' rel='noopener noreferrer'>
 							<StyledImageContainer>
 								<Image src={logoSrc} alt={href} layout='fill' objectFit='contain' />
 							</StyledImageContainer>
 						</a>
-					</motion.li>
+					</li>
 				))}
 			</StyledList>
 		</StyledPoweredBySection>

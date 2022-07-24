@@ -1,0 +1,9 @@
+interface IEngineeringNotation {
+	value: number;
+	numberValue: number;
+	unit: string | undefined;
+	hasDecimals: boolean;
+	toString: string;
+}
+
+export type { IEngineeringNotation };

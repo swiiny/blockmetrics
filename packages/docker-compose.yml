@@ -40,11 +40,9 @@ services:
         volumes:
             - ./server:/app
             - /app/node_modules
-        environment:
-            PORT: $SERVER_PORT
         ports:
             - $SERVER_PORT:$SERVER_PORT
-        restart: on-failure:10
+        restart: always
 
     api:
         container_name: api

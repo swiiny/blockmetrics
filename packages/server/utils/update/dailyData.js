@@ -1,4 +1,3 @@
-import crypto from 'crypto';
 import {
 	insertDailyActiveUsers,
 	insertDailyAddressesCount,
@@ -13,7 +12,7 @@ import {
 	insertDailyTransactionCount,
 	updateDifficultyInBlockchain,
 	updateHashrateInBlockchain,
-	updateNodeCountInBlockchain,
+	updateNodeCountAndReliabilityInBlockchain,
 	updateTokenCountInBlockchain
 } from '../sql.js';
 
@@ -33,7 +32,7 @@ export async function updateDbDailyActiveUsers(con, id, data) {
 		//const uuid = crypto.randomUUID()
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyActiveUsers, [uuid, id, count, timestamp]);
 		});
@@ -54,7 +53,7 @@ export async function updateDbDailyAverageBlocktime(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, second }) => {
-			const uuid = `${id}-${timestamp}-${second}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyAverageBlockTime, [uuid, id, second, timestamp]);
 		});
@@ -75,7 +74,7 @@ export async function updateDbDailyAverageGasPrice(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, wei }) => {
-			const uuid = `${id}-${timestamp}-${wei}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyAverageGasPrice, [uuid, id, wei, timestamp]);
 		});
@@ -96,7 +95,7 @@ export async function updateDbDailyDifficulty(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, difficulty }) => {
-			const uuid = `${id}-${timestamp}-${difficulty}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyDifficulty, [uuid, id, difficulty, timestamp]);
 		});
@@ -123,7 +122,7 @@ export async function updateDbDailyHashrate(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, hashrateTHs }) => {
-			const uuid = `${id}-${timestamp}-${hashrateTHs}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyHashrate, [uuid, id, hashrateTHs, timestamp]);
 		});
@@ -150,7 +149,7 @@ export async function updateDbDailyNewAddresses(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyAddressesCount, [uuid, id, count, timestamp]);
 		});
@@ -171,7 +170,7 @@ export async function updateDbDailyTransaction(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyTransactionCount, [uuid, id, count, timestamp]);
 		});
@@ -192,7 +191,7 @@ export async function updateDbDailyNewContracts(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyContracts, [uuid, id, count, timestamp]);
 		});
@@ -213,10 +212,10 @@ export async function updateDbDailyNewTokens(con, id, data) {
 		}
 
 		const promises = data.map(({ date, count }) => {
-			// date to timestamp
-			const timestamp = Math.round(new Date(date).getTime() / 1000);
+			// remove one day to get the date of the previous day from date
+			const timestamp = Math.floor(new Date(date).setDate(new Date(date).getDate() - 1) / 1000);
 
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyNewTokens, [uuid, id, count, date]);
 		});
@@ -226,27 +225,6 @@ export async function updateDbDailyNewTokens(con, id, data) {
 		return 0;
 	} catch (err) {
 		console.error('updateDbDailyNewTokens', id, err);
-		return 1;
-	}
-}
-
-export async function updateDbNodeCount(con, id, data) {
-	try {
-		if (!data) {
-			throw new Error('data is not defined for ' + id);
-		}
-
-		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
-
-			return con.query(insertDailyNodeCount, [uuid, id, count, timestamp]);
-		});
-
-		await Promise.all(promises);
-
-		return 0;
-	} catch (err) {
-		console.error('updateDbNodeCount', id, err);
 		return 1;
 	}
 }
@@ -262,7 +240,7 @@ export const updateDbDailyTokenCount = async (con, id, count) => {
 		today.setHours(0, 0, 0, 0);
 		const timestamp = today.getTime() / 1000;
 
-		const uuid = `${id}-${timestamp}-${count}`;
+		const uuid = `${id}-${timestamp}`;
 
 		const promises = [
 			con.query(insertDailyTokenCount, [uuid, id, count, timestamp]),
@@ -278,10 +256,14 @@ export const updateDbDailyTokenCount = async (con, id, count) => {
 	}
 };
 
-export const updateDbDailyNodeCount = async (con, id, count) => {
+export const updateDbDailyNodeCountAndReliability = async (con, id, count, reliability) => {
 	try {
 		if (!count) {
 			throw new Error('count is not defined for ' + id);
+		}
+
+		if (!reliability) {
+			throw new Error('reliability is not defined for ' + id);
 		}
 
 		// get first timestamp OF today
@@ -289,18 +271,18 @@ export const updateDbDailyNodeCount = async (con, id, count) => {
 		today.setHours(0, 0, 0, 0);
 		const timestamp = today.getTime() / 1000;
 
-		const uuid = `${id}-${timestamp}-${count}`;
+		const uuid = `${id}-${timestamp}`;
 
 		const promises = [
 			con.query(insertDailyNodeCount, [uuid, id, count, timestamp]),
-			con.query(updateNodeCountInBlockchain, [count, id])
+			con.query(updateNodeCountAndReliabilityInBlockchain, [count, reliability, id])
 		];
 
 		await Promise.all(promises);
 
 		return 0;
 	} catch (err) {
-		console.error('updateDbDailyTokenCount', id, err);
+		console.error('updateDbDailyNodeCountAndReliability', id, err);
 		return 1;
 	}
 };

@@ -4,67 +4,59 @@ import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
 import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
-import { getBlockchainAndMetadataById } from '../../../../utils/fetch';
-import { useRouter } from 'next/router';
-import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
-import { EChartType, EDailyData, EFlex, ELanguage, ESize, ETextColor } from '../../../../styles/theme/utils/enum';
-import Column from '../../../../styles/layout/Column';
-import BMText from '../../../../styles/theme/components/BMText';
-import Flex from '../../../../styles/layout/Flex';
-import { DataText } from '../../../texts/DataText/DataText';
-import { w3cwebsocket as W3CWebSocket } from 'websocket';
+import { EIcon, ESize } from '../../../../styles/theme/utils/enum';
+import { DataCard } from '../../../texts/DataCard/DataCard';
 import Spacing from '../../../../styles/layout/Spacing';
-import BarChart from '../../../charts/BarChart';
-import { IBarLineChart } from '../../../../types/charts';
+import useWebsocket from '../../../../hooks/useWebsocket';
+import { IDataCard } from '../../../texts/DataCard/DataCard.type';
+import { StyledList } from './SingleBlockchainPage.styles';
+import { getEngNotation } from '../../../../utils/convert';
+import InformationCard from '../InformationCard';
+import BlockchainData from '../BlockchainData';
 
-let ws: W3CWebSocket | null;
-let wsTimeout: NodeJS.Timeout | null;
-
-const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
+const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainLogo, blockchainChannel }) => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
-	const [metadata, setMetadata] = useState<TBlockchainMetadata>();
-	const [wsConnected, setWsConnected] = useState<boolean>(false);
-	const [wsAlreaddyConnected, setWsAlreadyConnected] = useState<boolean>(false);
+	const [tagline, setTagline] = useState<string>('');
 
-	const { query } = useRouter();
-	const { name } = query;
+	const { subscribeTo, message, wsConnected } = useWebsocket();
 
-	const selectedData = useMemo(() => {
+	const selectedData = useMemo<IDataCard[]>(() => {
 		const result = [];
 
-		const { gas_price, token_count, hashrate, last_block_timestamp } = blockchain || {};
-
-		if (gas_price) {
-			result.push({
-				value: Math.floor(gas_price * 10 ** -9),
-				unit: 'Gwei',
-				isAnimated: true,
-				label: 'Gas Price'
-			});
-		}
+		const { gas_price, token_count, hashrate, last_block_timestamp, blockchain_power_consumption } = blockchain || {};
 
 		if (token_count) {
 			result.push({
 				value: token_count,
 				isAnimated: true,
-				label: 'Tokens'
+				label: token_count <= 1 ? 'Token' : 'Tokens',
+				icon: EIcon.token,
+				colorAnimationOnUpdate: true,
+				reverseColor: true
 			});
 		}
 
-		if (hashrate) {
-			let tempHashrate = hashrate;
-			let tempUnit = 'TH/s';
-
-			if (Math.floor(tempHashrate) > 1000000) {
-				tempHashrate = Math.floor(tempHashrate * 10 ** -3);
-				tempUnit = 'PH/s';
-			}
+		if (blockchain_power_consumption) {
+			const { value, unit } = getEngNotation(blockchain_power_consumption, 'Wh');
 
 			result.push({
-				value: tempHashrate,
-				unit: tempUnit,
+				value: value,
+				unit: unit,
 				isAnimated: true,
-				label: 'Hashrate'
+				label: '24H Power Consumption',
+				icon: EIcon.energy,
+				colorAnimationOnUpdate: true,
+				reverseColor: true
+			});
+		}
+
+		if (gas_price) {
+			result.push({
+				value: Math.floor(gas_price * 10 ** -9),
+				unit: 'Gwei',
+				label: 'Gas Price',
+				icon: EIcon.gas,
+				colorAnimationOnUpdate: true
 			});
 		}
 
@@ -73,150 +65,66 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 				value: last_block_timestamp,
 				unit: 's',
 				isTimer: true,
-				label: 'Time from last block'
+				label: 'Time from last block',
+				icon: EIcon.timer,
+				colorAnimationOnUpdate: true,
+				reverseColor: true
 			});
 		}
 
-		return result;
-	}, [blockchain]);
+		if (hashrate) {
+			const { value, unit, hasDecimals } = getEngNotation(hashrate * 10 ** 12, 'H/s');
 
-	const chartsToDisplay: IBarLineChart[] = useMemo(() => {
-		const result: IBarLineChart[] = [];
-
-		// TODO : select charts to display
-		result.push({
-			chartType: EChartType.bar,
-			dailyType: EDailyData.averageBlocktime,
-			chainId: blockchain?.id || ''
-		});
-
-		return result;
-	}, [blockchain]);
-
-	const initData = useCallback(async () => {
-		const blockchainId = BLOCKCHAINS_ARRAY.find((bc) => bc.name.toLowerCase().replace(/\s/g, '-') === name)?.id;
-
-		if (blockchainId) {
-			const result = await getBlockchainAndMetadataById(blockchainId || '', ELanguage.en);
-			const { blockchain: fetchedBlockchain, metadata: fetchMetadata } = result || {};
-
-			setBlockchain(fetchedBlockchain);
-			setMetadata(fetchMetadata);
-		}
-	}, [name]);
-
-	const initWebsocket = useCallback(() => {
-		if (ws) {
-			ws.close();
+			result.push({
+				value: value,
+				unit: unit,
+				isAnimated: true,
+				valueHasDecimals: hasDecimals,
+				label: 'Hashrate',
+				icon: EIcon.chart,
+				colorAnimationOnUpdate: true
+			});
 		}
 
-		let type;
-		let strToRemove;
-
-		// if process.env.WS_URL start with http then replace it by ws
-		if ((process.env.WS_URL as string).startsWith('http://')) {
-			type = 'ws';
-			strToRemove = 'http://';
-		} else {
-			type = 'wss';
-			strToRemove = 'https://';
-		}
-
-		const removed = process.env.WS_URL?.replace(strToRemove, '');
-		ws = new W3CWebSocket(`${type}://${removed}/`);
-
-		ws.onopen = () => {
-			setWsAlreadyConnected(true);
-			setWsConnected(true);
-		};
-
-		ws.onmessage = (e: any) => {
-			const res = JSON.parse(e.data);
-
-			if (res?.length) {
-				const newBlockchain = res.find((bc: TBlockchain) => bc.id === blockchain?.id);
-
-				if (newBlockchain) {
-					setBlockchain(newBlockchain);
-				}
-			}
-		};
-
-		ws.onerror = (e: any) => {
-			console.error('socket error', e);
-			setWsConnected(false);
-		};
-
-		ws.onclose = () => {
-			setWsConnected(false);
-		};
+		return result.slice(0, 4);
 	}, [blockchain]);
 
 	useEffect(() => {
-		name && !blockchain && initData();
-	}, [name, blockchain]);
-
-	useEffect(() => {
-		if (blockchain?.id && !wsAlreaddyConnected) {
-			initWebsocket();
+		if (blockchainChannel && message?.channel === blockchainChannel) {
+			setBlockchain(message?.data);
 		}
-	}, [blockchain, wsAlreaddyConnected]);
+	}, [message, blockchainChannel]);
 
 	useEffect(() => {
-		if (!wsConnected && wsAlreaddyConnected) {
-			wsTimeout && clearTimeout(wsTimeout);
-			wsTimeout = setTimeout(() => {
-				initWebsocket();
-			}, 5000);
-		} else if (wsTimeout) {
-			clearTimeout(wsTimeout);
+		if (wsConnected && blockchainChannel) {
+			subscribeTo(blockchainChannel);
 		}
-	}, [wsConnected, wsAlreaddyConnected]);
-
-	useEffect(() => {
-		return () => ws?.close();
-	}, []);
+	}, [wsConnected, blockchainChannel, subscribeTo]);
 
 	return (
 		<>
 			<Meta title={blockchain?.name || ''} />
 
-			<Header
-				title={blockchain?.name || ''}
-				subtitle={metadata?.tagline || ''}
-				image={`/assets/images/blockchains/${blockchain?.id}.svg`}
-			/>
+			<Header title={blockchain?.name || ''} subtitle={tagline} icon={chainLogo} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
-				<Column columns={9} md={12} lg={8}>
-					<Flex as='ul' horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
-						{selectedData.map(({ value, label, unit, isAnimated, isTimer }) => (
-							<DataText
-								key={label}
-								as='li'
-								value={value}
-								label={label}
-								unit={unit}
-								isAnimated={isAnimated}
-								isTimer={isTimer}
-							/>
-						))}
-					</Flex>
-				</Column>
-
-				<Column columns={6} md={12} lg={8}>
-					<BMText textColor={ETextColor.light}>{metadata?.description || ''}</BMText>
-				</Column>
+				<StyledList>
+					{selectedData.map((data: IDataCard, i: number) => (
+						<DataCard key={data.label} as='li' index={i + 1} {...data} />
+					))}
+				</StyledList>
 
 				<Spacing size={ESize.xl} />
 
-				<Flex as='ul' fullWidth horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
-					{chartsToDisplay.map(({ chartType, dailyType, chainId }) => (
-						<Column as='li' key={dailyType} columns={4}>
-							{chartType === EChartType.bar ? <BarChart dailyType={dailyType} chainId={chainId} /> : <></>}
-						</Column>
-					))}
-				</Flex>
+				{selectedData.length > 0 ? (
+					<InformationCard chainId={chainId} onGetTagline={(tagline) => setTagline(tagline)} />
+				) : (
+					<></>
+				)}
+
+				<Spacing size={ESize.xl} />
+
+				<BlockchainData chainId={chainId} />
 			</Main>
 		</>
 	);

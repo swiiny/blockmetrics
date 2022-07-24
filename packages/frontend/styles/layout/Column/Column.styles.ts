@@ -1,6 +1,6 @@
 import styled, { css } from 'styled-components';
 import { EMediaQuery } from '../../theme/utils/enum';
-import { addPaddingStyles, mq } from '../../theme/utils/functions';
+import { addMarginStyles, addPaddingStyles, mq } from '../../theme/utils/functions';
 import { IColumn } from './Column.type';
 
 function width(factor: number) {
@@ -10,6 +10,13 @@ function width(factor: number) {
 export const StyledColumn = styled.div<IColumn>`
 	position: relative;
 	width: 100%;
+
+	${(p) =>
+		p.fullHeight
+			? css`
+					align-self: stretch;
+			  `
+			: ``}
 
 	${({ columns, sm, md, lg, xl }) => css`
 		${columns ? `width: ${width(columns)};` : ''}
@@ -27,4 +34,5 @@ export const StyledColumn = styled.div<IColumn>`
 	`}
 
 	${(p) => addPaddingStyles(p)}
+	${(p) => addMarginStyles(p)}
 `;

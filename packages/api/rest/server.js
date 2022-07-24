@@ -1,3 +1,5 @@
+'use strict';
+
 import express from 'express';
 import helmet from 'helmet';
 import rateLimit from 'express-rate-limit';
@@ -8,11 +10,11 @@ import {
 	getChartByIdAndType,
 	getChartGlobalByType,
 	getGlobalDataByType,
+	getMetadataAndScoreById,
 	getMetadataById
 } from './utils/fetch.js';
 import { createDbPool } from './utils/pool.js';
 import { EDailyData, EDailyGlobalData, EGlobalData } from './utils/variables.js';
-// import httpsRedirect from 'express-https-redirect';
 
 // connection pool
 let pool;
@@ -27,31 +29,26 @@ const limiter = rateLimit({
 const corsOptions = {
 	origin: [
 		process.env.FRONTEND_URL,
-		'http://blockmetrics.jcloud-ver-jpc.ik-server.com',
 		'https://blockmetrics.jcloud-ver-jpc.ik-server.com',
-		'https://block-metrics.io',
-		'http://block-metrics.io',
-		'https://block-metrics.com',
-		'http://block-metrics.com',
-		'http://blockmetrics.jcloud-ver-jpc.ik-server.com/',
 		'https://blockmetrics.jcloud-ver-jpc.ik-server.com/',
+		'https://block-metrics.io',
 		'https://block-metrics.io/',
-		'http://block-metrics.io/',
+		'https://www.block-metrics.io',
+		'https://www.block-metrics.io/',
+		'https://block-metrics.com',
 		'https://block-metrics.com/',
-		'http://block-metrics.com/'
+		'https://www.block-metrics.com',
+		'https://www.block-metrics.com/'
 	],
 	methods: ['GET'],
 	optionsSuccessStatus: 200
 };
 
 const app = express();
-// app.enable('trust proxy');
 
 app.use(cors(corsOptions));
 app.use(helmet());
 app.use(limiter);
-//app.use('/', httpsRedirect());
-//app.use(`/ping`, httpsRedirect());
 
 // returns blockchains sorted by default by rank
 // query parameters could be
@@ -136,6 +133,31 @@ app.get(`/get/blockchain/metadata`, async (req, res) => {
 	}
 });
 
+app.get(`/get/blockchain/metadataAndScore`, async (req, res) => {
+	const { id, language } = req.query;
+
+	try {
+		if (!id) {
+			res.status(500).send('Missing id');
+			return;
+		}
+
+		const result = await getMetadataAndScoreById(pool, id, language || 'en');
+
+		if (result[0][0]) {
+			res.send(result[0][0]);
+			return;
+		} else {
+			throw new Error('get metadata failed');
+		}
+	} catch (err) {
+		console.error('/get/blockchain', err);
+
+		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
+		return;
+	}
+});
+
 app.get(`/get/blockchain/all`, async (req, res) => {
 	const { id, language } = req.query;
 
@@ -190,8 +212,8 @@ app.get(`/get/blockchain/chart`, async (req, res) => {
 
 		const result = await getChartByIdAndType(pool, id, type);
 
-		if (result[0].length) {
-			res.send(result[0]);
+		if (result.length) {
+			res.send(result);
 			return;
 		} else {
 			throw new Error('get blockchain chart failed');
@@ -273,15 +295,6 @@ app.get(`/get/blockchains/total`, async (req, res) => {
 app.get(`/ping`, async (req, res) => {
 	res.send('pong');
 });
-/*
-app.use(function (request, response, next) {
-	if (process.env.NODE_ENV !== 'development' && !request.secure) {
-		return response.redirect('https://' + request.headers.host + request.url);
-	}
-
-	next();
-});
-*/
 
 app.listen(process.env.API_PORT, async () => {
 	console.log(`Server listening on port ${process.env.API_PORT}`);

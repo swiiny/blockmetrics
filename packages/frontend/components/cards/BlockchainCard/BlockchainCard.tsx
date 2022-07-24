@@ -1,61 +1,40 @@
-import Image from 'next/image';
-import Link from 'next/link';
-import React, { FC, useMemo, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
-import BMHeading from '../../../styles/theme/components/BMHeading';
 import BMText from '../../../styles/theme/components/BMText';
-import { EFlex, ESize, ETextType } from '../../../styles/theme/utils/enum';
+import { EDailyData, EFlex, EIcon, ESize, ETextColor, ETextWeight } from '../../../styles/theme/utils/enum';
 import { BLOCKCHAINS_ARRAY } from '../../../utils/variables';
 import { NAVBAR_LINKS } from '../../Navbar/Navbar';
-import {
-	StyledBlockchainCard,
-	StyledExtendedLink,
-	StyledLogoContainer,
-	StylesCardHeader
-} from './BlockchainCard.styles';
 import { IBlockchainCard } from './BlockchainCard.type';
-import CountUp from 'react-countup';
+import BMCardContainer from '../../../styles/theme/components/BMCardContainer';
+import BMIcon from '../../../styles/theme/components/BMIcon';
+import { FlexEx } from './BlockchainCard.styles';
+import Column from '../../../styles/layout/Column';
+import LineChart from '../../charts/LineChart';
+import BMButton from '../../../styles/theme/components/BMButton';
+import BMProgressBar from '../../../styles/theme/components/BMProgressBar';
+import ItemLink from '../../utils/ItemLink';
+import useResponsive from '../../../hooks/useResponsive';
+import { getEngNotation } from '../../../utils/convert';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
-	if (emptyItem) {
-		return <StyledBlockchainCard emptyItem />;
-	}
+	const { isSmallerThanSm } = useResponsive();
 
-	const {
-		id,
-		name,
-		note,
-		node_count,
-		testnet_node_count,
-		single_node_power_consumption,
-		blockchain_power_consumption,
-		hashrate,
-		difficulty,
-		last_block_timestamp,
-		token_count,
-		transaction_count,
-		gas_price,
-		consensus,
-		address_count,
-		today_address_count,
-		today_transaction_count
-	} = data || {};
+	const cardRef = useRef<number>(0);
+
+	const [gasPriceColor, setGasPriceColor] = useState<ETextColor>(ETextColor.accent);
+
+	const { id, name, rank, token_count = 0, reliability = 0, gas_price, blockchain_power_consumption } = data || {};
 
 	const blockchain = useMemo((): {
 		estimatedTimeBetweenBlocks: number;
-		colors: { gradient: { start: string; end: string } };
+		icon: EIcon;
 	} => {
 		let newBlockchain;
 
 		let defaultBlockchain = {
 			estimatedTimeBetweenBlocks: 0,
-			colors: {
-				gradient: {
-					start: '',
-					end: ''
-				}
-			}
+			icon: EIcon.none
 		};
 
 		if (id) {
@@ -77,92 +56,153 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 	const gweiGasPrice = useMemo(() => {
 		if (gas_price) {
-			return Math.floor(gas_price / 1000000000);
+			return Math.floor(gas_price / 10 ** 9);
 		}
 
 		return null;
 	}, [gas_price]);
 
-	const [initTodayTransactionCount, setInitTodayTransactionCount] = useState(today_transaction_count);
-	const [initTodayAddressCount, setInitTodayAddressCount] = useState(today_address_count);
+	const formattedPowerConsumption = useMemo(() => {
+		if (blockchain_power_consumption) {
+			try {
+				return getEngNotation(blockchain_power_consumption, 'Wh', 2).toString;
+			} catch {
+				return '';
+			}
+		}
+
+		return '';
+	}, [blockchain_power_consumption]);
+
+	useEffect(() => {
+		if (gweiGasPrice) {
+			setGasPriceColor(cardRef.current > gweiGasPrice ? ETextColor.positive : ETextColor.negative);
+
+			cardRef.current = gweiGasPrice;
+
+			setTimeout(() => {
+				setGasPriceColor(ETextColor.accent);
+			}, 700);
+		}
+	}, [gweiGasPrice]);
+
+	if (emptyItem) {
+		return <li className='empty' />;
+	}
 
 	return (
-		<StyledBlockchainCard gradientStart={blockchain.colors.gradient.start} gradientEnd={blockchain.colors.gradient.end}>
-			<StylesCardHeader>
-				<BMHeading type={ETextType.h4}>{name}</BMHeading>
+		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm} animateApparition>
+			<Flex direction={EFlex.column} horizontal={EFlex.center} paddingX={ESize.s} paddingY={ESize.s}>
+				<Flex fullWidth wrapItems horizontal={EFlex.between} vertical={EFlex.center}>
+					<Flex vertical={EFlex.center}>
+						<BMIcon
+							type={blockchain.icon}
+							size={isSmallerThanSm ? ESize.s : ESize.s}
+							//backgroundVisible={!isSmallerThanSm}
+							//backgroundRadius={ESize.s}
+							//backgroundSize={ESize.xs}
+						/>
 
-				<StyledLogoContainer>
-					<div>
-						<Image src={`/assets/images/blockchains/${id}.svg` || ''} layout='fill' objectFit='contain' />
-					</div>
-				</StyledLogoContainer>
-			</StylesCardHeader>
+						<Spacing size={ESize['2xs']} />
 
-			<Spacing size={ESize.s} />
-
-			<Flex as='ul' fullWidth direction={EFlex.column}>
-				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<BMText type={ETextType.p}>Rank</BMText>
-					<BMText type={ETextType.p}>{note}</BMText>
-				</Flex>
-				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<BMText type={ETextType.p}>Tokens</BMText>
-					<BMText type={ETextType.p}>{token_count}</BMText>
-				</Flex>
-				{gweiGasPrice && (
-					<Flex as='li' fullWidth horizontal={EFlex.between}>
-						<BMText type={ETextType.p}>Gas price</BMText>
-						<BMText type={ETextType.p}>
-							<CountUp preserveValue end={gweiGasPrice} duration={0.5} separator=',' style={{ color: 'inherit' }} />
+						<BMText size={ESize.l} weight={ETextWeight.semiBold}>
+							{name}
 						</BMText>
 					</Flex>
-				)}
-				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<BMText type={ETextType.p}>Nodes</BMText>
-					<BMText type={ETextType.p}>{node_count}</BMText>
-				</Flex>
-				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<BMText type={ETextType.p}>Today transactions</BMText>
-					<BMText type={ETextType.p}>
-						<CountUp
-							preserveValue
-							start={initTodayTransactionCount}
-							end={today_transaction_count || 0}
-							duration={blockchain.estimatedTimeBetweenBlocks}
-							separator=','
-							style={{ color: 'inherit' }}
-						/>
-					</BMText>
+
+					<BMCardContainer secondary>
+						<FlexEx horizontal={EFlex.between} paddingY={ESize['5xs']} paddingX={ESize['s']}>
+							<BMText size={ESize.m} weight={ETextWeight.medium}>
+								Token{token_count > 1 ? 's' : ''}:
+							</BMText>
+							<BMText size={ESize.m} weight={ETextWeight.medium}>
+								{token_count}
+							</BMText>
+						</FlexEx>
+					</BMCardContainer>
 				</Flex>
 
-				<Flex as='li' fullWidth horizontal={EFlex.between}>
-					<BMText type={ETextType.p}>Today Addresses</BMText>
-					<BMText type={ETextType.p}>
-						<CountUp
-							preserveValue
-							start={initTodayAddressCount}
-							end={today_address_count || 0}
-							duration={300}
-							separator=','
-							style={{ color: 'inherit' }}
-						/>
-					</BMText>
+				<Spacing size={ESize['xs']} />
+
+				<BMCardContainer secondary fullWidth>
+					<Flex fullWidth horizontal={EFlex.between} paddingY={ESize['xs']} paddingX={ESize['s']}>
+						<Flex vertical={EFlex.center}>
+							<BMIcon type={EIcon.gas} size={ESize.xs} />
+
+							<Spacing size={ESize['4xs']} />
+
+							<BMText size={ESize.m} weight={ETextWeight.medium}>
+								Gas Price
+							</BMText>
+						</Flex>
+
+						<BMText size={ESize.l} weight={ETextWeight.medium} textColor={gasPriceColor}>
+							{gweiGasPrice ? `${gweiGasPrice} Gwei` : '-'}
+						</BMText>
+					</Flex>
+				</BMCardContainer>
+
+				<Spacing size={ESize['xs']} />
+
+				<Flex fullWidth horizontal={EFlex.between}>
+					<Column columns={8} fullHeight>
+						<BMCardContainer tertiary paddingX={ESize['2xs']} paddingY={ESize['3xs']}>
+							<Flex horizontal={EFlex.between} vertical={EFlex.center}>
+								<BMText size={ESize.s} weight={ETextWeight.medium}>
+									Power Consumption
+								</BMText>
+
+								<BMText size={ESize.s} weight={ETextWeight.normal} textColor={ETextColor.negative}>
+									{formattedPowerConsumption}
+								</BMText>
+							</Flex>
+
+							<Spacing size={ESize.xs} />
+
+							<LineChart
+								color={ETextColor.negative}
+								dailyType={EDailyData.powerConsumption}
+								chainId={id}
+								deactivateLegend
+								chartHeight={54}
+							/>
+						</BMCardContainer>
+					</Column>
+
+					<Column columns={3} fullHeight>
+						<BMCardContainer tertiary paddingX={ESize['2xs']} paddingY={ESize['3xs']} fullHeight>
+							<Flex fullHeight direction={EFlex.column} horizontal={EFlex.center} vertical={EFlex.center}>
+								<BMText size={ESize['2xl']} weight={ETextWeight.semiBold}>
+									{rank}
+								</BMText>
+
+								<Spacing size={ESize['4xs']} />
+
+								<BMText size={ESize.s} weight={ETextWeight.normal}>
+									Rank
+								</BMText>
+							</Flex>
+						</BMCardContainer>
+					</Column>
+				</Flex>
+
+				<Spacing size={ESize['xs']} />
+
+				<Flex fullWidth smDirection={EFlex.column} horizontal={EFlex.between} vertical={EFlex.center}>
+					<Column columns={7} sm={12}>
+						<BMProgressBar label='Reliability' value={reliability} />
+					</Column>
+
+					<Spacing size={ESize.unset} smSize={ESize.m} />
+
+					<BMButton fullWidth={isSmallerThanSm} secondary size={ESize.s}>
+						Show More
+					</BMButton>
 				</Flex>
 			</Flex>
 
-			<Spacing size={ESize.s} />
-
-			<Link href={linkTo}>
-				<a>
-					<Flex as='span' vertical={EFlex.center} horizontal={EFlex.end}>
-						<BMText size={ESize.s} type={ETextType.span} inheritStyle={false}>
-							Show more
-						</BMText>
-					</Flex>
-					<StyledExtendedLink />
-				</a>
-			</Link>
-		</StyledBlockchainCard>
+			<ItemLink href={linkTo} internal />
+		</BMCardContainer>
 	);
 };
 

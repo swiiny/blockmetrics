@@ -1,9 +1,11 @@
 type TBlockchain = {
 	id: string;
 	name: string;
-	note: string;
+	rank: string;
 	node_count: number;
 	testnet_node_count: number;
+	reliability: number;
+	total_value_locked: number;
 	single_node_power_consumption: number;
 	blockchain_power_consumption: number;
 	hashrate: number;
@@ -21,5 +23,19 @@ type TBlockchain = {
 type TBlockchainMetadata = {
 	tagline: string;
 	description: string;
-	blockchain_id: string;
+	genesis_block: string;
+	source: string;
+	links: string | undefined;
+	blockchain_id?: string;
+};
+
+type TBlockchainScore = {
+	id: string;
+	rank: string;
+	score: number;
+	reliability: number;
+	token_count: number;
+	power_consumption: number;
+	total_value_locked: number;
+	speed: number;
 };

@@ -14,7 +14,7 @@ export const StyledButton = styled.button<IBMButton>`
 		${!p.disabled ? `cursor: pointer;` : ''}
 		${p.fullWidth ? `width: 100%;` : ''}
 
-    border-radius: 50px;
+    border-radius: 8px;
 
 		${!p.secondary
 			? `

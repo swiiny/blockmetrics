@@ -1,6 +1,9 @@
+import { EIcon, ESubscribeType } from '../../../../styles/theme/utils/enum';
+
 interface ISingleBlockchainPage {
-	blockchain: TBlockchain;
-	metadata: TBlockchainMetadata;
+	chainId: string;
+	chainLogo: EIcon;
+	blockchainChannel: ESubscribeType;
 }
 
 export type { ISingleBlockchainPage };

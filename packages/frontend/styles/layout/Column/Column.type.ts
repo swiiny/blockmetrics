@@ -1,9 +1,10 @@
-import { IPadding } from '../../../types/padding';
+import { IMargin, IPadding } from '../../../types/layouts';
 
-interface IColumn extends IPadding {
+interface IColumn extends IPadding, IMargin {
 	children?: React.ReactNode;
 	as?: any;
 	id?: any;
+	fullHeight?: boolean;
 	columns?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 	sm?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;
 	md?: 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12;

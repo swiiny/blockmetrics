@@ -9,88 +9,86 @@ import { axiosRest } from '../../../../utils/variables';
 import BarChart from '../../../charts/BarChart';
 import LineChart from '../../../charts/LineChart';
 import { IHomeCardData } from '../HomeData/HomeData.type';
-import { StyledHomeCard, StyledIcon, StyledIconContainer } from './HomeCard.styles';
+import { StyledIcon, StyledIconContainer } from './HomeCard.styles';
+import CountUp from 'react-countup';
+import { IDailyChangeValue } from './HomeCard.type';
+import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
+import { getEngNotation } from '../../../../utils/convert';
+import { IEngineeringNotation } from '../../../../types/maths';
+import BMIcon from '../../../../styles/theme/components/BMIcon';
 
 const HomeCard: FC<IHomeCardData> = ({
 	title,
 	valueType,
+	dailyChangeType,
+	dailyCustomLabel = '24h',
+	wsMessage,
+	subscribeChannel,
+	refreshTime = 0,
 	unit,
 	dailyChangeUnit,
 	dailyChangeColorReversed,
-	iconSrc,
+	icon,
 	chartTitle,
 	chartType,
 	chartDataType,
 	...otherProps
 }) => {
-	const [valueData, setValueData]: { value: number; dailyChange: number } = useState({
-		value: 0,
-		dailyChange: 0
-	});
+	const [value, setValue] = useState<number>(0);
+	const [updatedValue, setUpdatedValue] = useState<number>(0);
+	const [dailyChange, setDailyChange] = useState<number>(0);
+	const [updatedDailyChange, setUpdatedDailyChange] = useState<number>(0);
 
-	const formattedValue = useMemo(() => {
-		const { value } = valueData;
+	const formattedValue = useMemo<IEngineeringNotation>(() => {
 		// convert value to ingeniery notation
-		let newValue: string = `${value}`;
+		return getEngNotation(updatedValue, unit);
+	}, [updatedValue, unit]);
 
-		if (value >= 10 ** 15) {
-			newValue = `${(value / 10 ** 12).toLocaleString(undefined, { maximumFractionDigits: 2 })} T`;
-		} else if (value >= 10 ** 12) {
-			newValue = `${(value / 10 ** 9).toLocaleString(undefined, { maximumFractionDigits: 2 })} G`;
-		} else if (value >= 10 ** 9) {
-			newValue = `${(value / 10 ** 6).toLocaleString(undefined, { maximumFractionDigits: 2 })} M`;
-		} else if (value >= 10 ** 6) {
-			newValue = `${(value / 10 ** 3).toLocaleString(undefined, { maximumFractionDigits: 2 })} k`;
-		}
+	const formattedInitialValue = useMemo<number>(() => {
+		// convert value to ingeniery notation
+		let newValue: number = value;
 
-		// add unit if needed
-		if (unit) {
-			if (newValue.indexOf(' ') !== -1) {
-				newValue = `${newValue}${unit}`;
-			} else {
-				newValue = `${newValue} ${unit}`;
-			}
-		}
+		newValue = getEngNotation(newValue).value;
 
 		return newValue;
-	}, [valueData.value, unit]);
+	}, [value]);
 
-	const formattedDailyChange = useMemo(() => {
-		const { dailyChange } = valueData;
-
+	const formattedDailyChange = useMemo<IDailyChangeValue>(() => {
 		// convert value to ingeniery notation
-		let newValue: string = `${dailyChange}`;
+		let newValue: number = updatedDailyChange;
+		let newUnit: string | undefined = '';
 
-		if (dailyChange >= 10 ** 15) {
-			newValue = `${(dailyChange / 10 ** 12).toLocaleString(undefined, { maximumFractionDigits: 2 })} T`;
-		} else if (dailyChange >= 10 ** 12) {
-			newValue = `${(dailyChange / 10 ** 9).toLocaleString(undefined, { maximumFractionDigits: 2 })} G`;
-		} else if (dailyChange >= 10 ** 9) {
-			newValue = `${(dailyChange / 10 ** 6).toLocaleString(undefined, { maximumFractionDigits: 2 })} M`;
-		} else if (dailyChange >= 10 ** 6) {
-			newValue = `${(dailyChange / 10 ** 3).toLocaleString(undefined, { maximumFractionDigits: 2 })} k`;
-		}
+		// round to 2 decimal places
+		newValue = Math.round(newValue * 100) / 100;
 
 		// add unit if needed
 		if (dailyChangeUnit) {
 			if (dailyChangeUnit === '%') {
-				newValue = `${newValue}${dailyChangeUnit}`;
-			} else if (newValue.indexOf(' ') !== -1) {
-				newValue = `${newValue}${dailyChangeUnit}`;
+				newUnit = `${dailyChangeUnit}`;
 			} else {
-				newValue = `${newValue} ${dailyChangeUnit}`;
+				newUnit = ` ${dailyChangeUnit}`;
 			}
 		}
 
-		if (dailyChange > 0) {
-			newValue = `+${newValue}`;
-		}
+		return {
+			symbol: updatedDailyChange > 0 ? '+' : '',
+			value: newValue,
+			unit: newUnit,
+			periodLabel: ' (' + dailyCustomLabel + ')'
+		};
+	}, [updatedDailyChange, dailyChangeUnit, dailyCustomLabel]);
 
-		return newValue + ' (24h)';
-	}, [valueData.dailyChange, dailyChangeUnit]);
+	const formattedInitialDailyChange = useMemo<number>(() => {
+		// convert value to ingeniery notation
+		let newValue: number = dailyChange;
+
+		// round to 2 decimal places
+		newValue = Math.round(newValue * 100) / 100;
+
+		return newValue;
+	}, [dailyChange]);
 
 	const dailyTextColor = useMemo(() => {
-		const { dailyChange } = valueData;
 		let positive = ETextColor.positive;
 		let negative = ETextColor.negative;
 
@@ -106,29 +104,58 @@ const HomeCard: FC<IHomeCardData> = ({
 		}
 
 		return ETextColor.default;
-	}, [valueData.dailyChange, dailyChangeColorReversed]);
+	}, [dailyChange, dailyChangeColorReversed]);
 
-	const fetchData = useCallback(async () => {
+	const fetchValue = useCallback(async () => {
 		try {
 			const { data } = await axiosRest('/get/blockchains/total?type=' + valueType);
-			setValueData({
-				value: data.value,
-				dailyChange: data.dailyChange || 0
-			});
+			setValue(data.value || 0);
+			setUpdatedValue(data.value || 0);
 		} catch (err) {
 			console.error('HomeCard fetchData', err);
 		}
 	}, [valueType]);
 
+	const fetchDailyChange = useCallback(async () => {
+		try {
+			const { data } = await axiosRest('/get/blockchains/total?type=' + dailyChangeType);
+
+			setDailyChange(data.value || 0);
+			setUpdatedDailyChange(data.value || 0);
+		} catch (err) {
+			console.error('HomeCard fetchData', err);
+		}
+	}, [dailyChangeType]);
+
+	const updateValue = useCallback(
+		(newValue: number) => {
+			setUpdatedDailyChange(newValue);
+			setUpdatedValue(Number(value) + newValue);
+		},
+		[value]
+	);
+
 	useEffect(() => {
-		valueType && fetchData();
-	}, [fetchData, valueType]);
+		if (subscribeChannel && wsMessage?.channel === subscribeChannel) {
+			const numberMessage = parseInt(wsMessage?.data, 10);
+
+			updateValue(numberMessage);
+		}
+	}, [wsMessage, value, subscribeChannel, updateValue]);
+
+	useEffect(() => {
+		valueType && fetchValue();
+	}, [fetchValue, valueType]);
+
+	useEffect(() => {
+		dailyChangeType && fetchDailyChange();
+	}, [fetchDailyChange, dailyChangeType]);
 
 	return (
-		<StyledHomeCard {...otherProps}>
+		<BMCardContainer as='li' animateApparition {...otherProps}>
 			<Flex>
 				<StyledIconContainer>
-					<StyledIcon src={iconSrc} alt='' />
+					<BMIcon type={icon} size={ESize.m} />
 				</StyledIconContainer>
 
 				<Spacing size={ESize.s} />
@@ -138,17 +165,36 @@ const HomeCard: FC<IHomeCardData> = ({
 						{title}
 					</BMText>
 
-					<Spacing size={ESize.xs} />
+					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
 					<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold}>
-						{formattedValue}
+						<CountUp
+							preserveValue={true}
+							start={formattedInitialValue}
+							end={formattedValue.value}
+							duration={refreshTime}
+							decimals={formattedValue.hasDecimals ? 2 : 0}
+							suffix={formattedValue.unit}
+							separator=','
+							style={{ color: 'inherit' }}
+						/>
 					</BMHeading>
 
-					<Spacing size={ESize.xs} />
+					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
-					{valueData.dailyChange ? (
+					{dailyChange ? (
 						<BMText size={ESize.s} weight={ETextWeight.light} textColor={dailyTextColor}>
-							{formattedDailyChange}
+							<CountUp
+								preserveValue={true}
+								start={formattedInitialDailyChange}
+								end={formattedDailyChange.value}
+								duration={refreshTime}
+								decimals={0}
+								prefix={formattedDailyChange.symbol}
+								suffix={formattedDailyChange.unit + formattedDailyChange.periodLabel}
+								separator=','
+								style={{ color: 'inherit' }}
+							/>
 						</BMText>
 					) : (
 						<></>
@@ -156,7 +202,7 @@ const HomeCard: FC<IHomeCardData> = ({
 				</Flex>
 			</Flex>
 
-			<BMGradientSeparator margin={ESize.xl} />
+			<BMGradientSeparator margin={ESize.xl} mdMargin={ESize.s} lgMargin={ESize.m} />
 
 			<BMText size={ESize.m} weight={ETextWeight.medium}>
 				{chartTitle}
@@ -171,7 +217,7 @@ const HomeCard: FC<IHomeCardData> = ({
 			) : (
 				<></>
 			)}
-		</StyledHomeCard>
+		</BMCardContainer>
 	);
 };
 

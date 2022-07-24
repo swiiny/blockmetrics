@@ -21,6 +21,7 @@ body {
 	max-width: 1600px;
 	padding: 0 ${(p) => p.theme.spacing['4xl']};
 
+	${(p) => mq(EMediaQuery.lg, `padding: ${p.theme.spacing['xl']}`)}
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
   background: ${(p) => p.theme.colors.bg};
@@ -45,8 +46,7 @@ span,
 a,
 p,
 input,
-textarea { // TODO : Set font family
-	//font-family: SetFontFamily, Helvetica, sans-serif;
+textarea {
   font-family: 'Outfit', sans-serif;
 	color: ${(p) => p.theme.colors.text.default};
 

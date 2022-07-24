@@ -1,44 +1,35 @@
-import Image from 'next/image';
 import React, { FC } from 'react';
+import useResponsive from '../../../../hooks/useResponsive';
 import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
+import BMBlockPattern from '../../../../styles/theme/components/BMBlockPattern';
 import BMButton from '../../../../styles/theme/components/BMButton';
 import BMHeading from '../../../../styles/theme/components/BMHeading';
+import BMHivePattern from '../../../../styles/theme/components/BMHivePattern';
 import BMText from '../../../../styles/theme/components/BMText';
 import { EFlex, EPosition, ESize, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
+import { NAVBAR_LINKS } from '../../../Navbar/Navbar';
 import Eclipse from '../../../utils/Eclipse';
-import {
-	StyledBlockImage,
-	StyledBlockPattern,
-	StyledGradientLine,
-	StyledHiveImage,
-	StyledHivePattern,
-	StyledHomeHeader
-} from './HomeHeader.styles';
+import { StyledHomeHeader } from './HomeHeader.styles';
+import router from 'next/router';
 
 const HomeHeader: FC = () => {
+	const { isSmallerThanSm } = useResponsive();
+
 	return (
 		<StyledHomeHeader>
-			<StyledHivePattern>
-				<StyledHiveImage src='/assets/images/pattern-1.svg' alt='' draggable={false} />
-			</StyledHivePattern>
+			<BMHivePattern />
 
-			<StyledBlockPattern>
-				<StyledBlockImage src='/assets/images/pattern-2.svg' alt='' draggable={false} />
-			</StyledBlockPattern>
+			<BMBlockPattern />
 
-			<Eclipse size={ESize.s} position={EPosition.topRight} zIndex={0} />
+			<Eclipse size={ESize.s} position={!isSmallerThanSm ? EPosition.topRight : EPosition.top} zIndex={0} />
 
 			<Column columns={5} sm={12} md={8} xl={6}>
 				<Flex direction={EFlex.column} fullWidth>
-					<StyledGradientLine />
-
-					<Spacing size={ESize.m} />
-
 					<BMHeading type={ETextType.h1} weight={ETextWeight.light}>
 						Blockchain
-						<BMText type={ETextType.span} weight={ETextWeight.semiBold}>
+						<BMText type={ETextType.span} inheritStyle weight={ETextWeight.semiBold}>
 							{` Data`}
 						</BMText>
 					</BMHeading>
@@ -46,14 +37,14 @@ const HomeHeader: FC = () => {
 					<Spacing size={ESize.m} />
 
 					<BMText size={ESize.m} weight={ETextWeight.light}>
-						Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-						industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-						scrambled it to make a type specimen book.
+						{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
+						industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
+						scrambled it to make a type specimen book.`}
 					</BMText>
 
 					<Spacing size={ESize.xl} />
 
-					<BMButton size={ESize.m}>
+					<BMButton size={ESize.m} onClick={() => router.push(NAVBAR_LINKS.blockchains.href)}>
 						<Eclipse size={ESize['2xs']} position={EPosition.topRight} zIndex={0} />
 						See Blockchains Data
 					</BMButton>

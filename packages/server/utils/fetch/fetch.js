@@ -1,7 +1,7 @@
 import axios from 'axios';
 import CSVToJSON from 'csvtojson';
-import { CHAINS } from '../../variables.js';
-import { getDailyTokenCount } from '../sql.js';
+import { CHAINS, CHAINS_ARRAY } from '../../variables.js';
+import { getDailyTokenCount, getScoreCalculationData } from '../sql.js';
 
 export async function getAvalancheStats() {
 	try {
@@ -26,7 +26,6 @@ export async function getAvalancheStats() {
 		console.error('getAvalancheStats', err);
 		return null;
 	}
-	return null;
 }
 
 // { timestamp: number; count: number}[]
@@ -419,6 +418,39 @@ export async function fetchDailyTokenCountFor(chain, con) {
 		return tokenRows;
 	} catch (err) {
 		console.error('fetchDailyTokenCountFor', err);
+		return null;
+	}
+}
+
+// fetch TVL of chains on defi lama
+export async function fetchTotalValueLockedForAllChains() {
+	try {
+		const { data: evmChains } = await axios.get(`https://api.llama.fi/chains`);
+
+		const idsToKeep = CHAINS_ARRAY.map(({ defiLamaId }) => defiLamaId).filter((id) => id);
+
+		const chainsTvl = evmChains.filter((chain) => idsToKeep.includes(chain.gecko_id));
+
+		return chainsTvl.map(({ tvl, gecko_id }) => {
+			const { id } = CHAINS_ARRAY.find((chain) => chain.defiLamaId === gecko_id);
+			return {
+				id,
+				tvl: parseFloat(tvl)
+			};
+		});
+	} catch {
+		console.error('fetchTotalValueLockedFor', err);
+		return null;
+	}
+}
+
+export async function fetchScoreCalculationData(con) {
+	try {
+		const [blockchainRows] = await con.query(getScoreCalculationData);
+
+		return blockchainRows;
+	} catch (err) {
+		console.error('fetchScoreCalculationData', err);
 		return null;
 	}
 }
