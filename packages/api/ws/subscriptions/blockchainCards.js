@@ -2,13 +2,13 @@ import { clients } from '../server.js';
 import { getBlockchainCards } from '../utils/fetch.js';
 import { subscribeType } from '../utils/variables.js';
 
-export let isBlockchainsActivated = false;
+export let isBlockchainCardsActivated = false;
 
 export async function fetchAndSendBlockchainCards(pool) {
 	let con = await pool.getConnection();
 	const channel = subscribeType.blockchainCards;
 
-	isBlockchainsActivated = true;
+	isBlockchainCardsActivated = true;
 	let channelClient = [...clients.keys()].filter((client) => client?.subscriptions?.includes(channel));
 
 	while (channelClient?.length) {
@@ -37,7 +37,7 @@ export async function fetchAndSendBlockchainCards(pool) {
 		await new Promise((resolve) => setTimeout(resolve, 3 * 1000));
 	}
 
-	isBlockchainsActivated = false;
+	isBlockchainCardsActivated = false;
 
 	await con.release();
 	con = null;
@@ -61,6 +61,8 @@ export async function fetchAndSendBlockchainCardToClient(con, client) {
 		};
 
 		const outbound = JSON.stringify(result);
+
+		console.log('Sending blockchain card to client');
 
 		client.send(outbound);
 	}
