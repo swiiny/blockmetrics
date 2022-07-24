@@ -44,7 +44,7 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon }) => 
 						<>
 							<Spacing size={!isSmallerThanSm ? ESize.m : ESize.s} />
 
-							<BMIcon type={icon} size={ESize.l} />
+							<BMIcon type={icon} size={!isSmallerThanSm ? ESize.l : ESize.m} />
 						</>
 					) : (
 						<></>
