@@ -266,10 +266,10 @@ async function fetchDailyData(factor = 1) {
 
 	const nodesCount = await getNodeCountForAllBlockchains();
 
-	const chainsWithReliability = calculateScoreForChains(nodesCount, 'reliability', 12000);
+	const chainsWithReliability = calculateScoreForChains(nodesCount, 'count', 5000);
 
-	const nodesCountPromises = chainsWithReliability?.map(({ id, count, reliability_res }) => {
-		updateDbDailyNodeCountAndReliability(con, id, count, reliability_res);
+	const nodesCountPromises = chainsWithReliability?.map(({ id, count, count_res }) => {
+		updateDbDailyNodeCountAndReliability(con, id, count, count_res);
 	});
 
 	if (!nodesCount) {
@@ -621,9 +621,6 @@ async function startFetchData() {
 
 			console.log('start dev');
 
-			getEthNodeCount();
-
-			// fetchDailyData(1 / 10);
 			/*
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
