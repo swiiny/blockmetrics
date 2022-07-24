@@ -19,7 +19,7 @@ import {
 } from '../../../../styles/theme/utils/enum';
 import { getBlockchainMetadataAndScoreById, getBlockchainMetadataById } from '../../../../utils/fetch';
 import Eclipse from '../../../utils/Eclipse';
-import { StyledList, StyledUsefulLinkList } from './InformationCard.styles';
+import { StyledList, StyledRank, StyledUsefulLinkList } from './InformationCard.styles';
 import { IInformationCard } from './InformationCard.type';
 
 const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = () => {}, ...otherProps }) => {
@@ -144,15 +144,39 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		}
 	}, [chainId]);
 
+	const rankContainer = useMemo(() => {
+		const { rank } = score;
+		const positive = ['A+', 'A', 'A-', 'B+', 'B', 'B-'];
+		const negative = ['C+', 'C', 'C-', 'D+', 'D', 'D-', 'E+', 'E', 'E-', 'F+', 'F', 'F-'];
+
+		// set rank color
+		let color = ETextColor.default;
+		if (positive.includes(rank)) {
+			color = ETextColor.positive;
+		} else if (negative.includes(rank)) {
+			color = ETextColor.negative;
+		}
+
+		return (
+			<StyledRank>
+				<BMText size={isSmallerThanMd ? ESize['2xl'] : ESize['4xl']} textColor={color} weight={ETextWeight.bold}>
+					{rank}
+				</BMText>
+			</StyledRank>
+		);
+	}, [score.rank, isSmallerThanMd]);
+
 	useEffect(() => {
 		!metadata.tagline && chainId && initData();
 	}, [initData, chainId, metadata]);
 
 	return (
 		<BMCardContainer isHighlighted animateApparition={4} {...otherProps}>
+			{!isSmallerThanLg && rankContainer}
+
 			<Flex fullWidth wrapItems padding={ESize['2xl']} mdPadding={ESize.l} smPaddingX={ESize.s}>
 				<Column columns={5} lg={12}>
-					<BMText as='h3' singleLine weight={ETextWeight.semiBold} size={ESize['2xl']}>
+					<BMText as='h3' weight={ETextWeight.semiBold} size={ESize['2xl']}>
 						Informations
 					</BMText>
 
@@ -196,9 +220,14 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 				<Column columns={5} lg={12}>
 					<Eclipse size={ESize.xs} position={EPosition.center} />
-					<BMText as='h3' singleLine weight={ETextWeight.semiBold} size={ESize['2xl']}>
-						Blockmetrics Ranking
-					</BMText>
+
+					<Flex horizontal={EFlex.between} vertical={EFlex.center}>
+						<BMText as='h3' weight={ETextWeight.semiBold} size={ESize['2xl']}>
+							Blockmetrics Ranking
+						</BMText>
+
+						{isSmallerThanLg && rankContainer}
+					</Flex>
 
 					<StyledList marginTop={ESize.xl}>
 						<BMListItem dotHidden>
