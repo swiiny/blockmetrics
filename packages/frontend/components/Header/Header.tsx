@@ -27,7 +27,7 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon }) => 
 		<StyledHeader>
 			<BMBlockPatternEx size={ESize.s} />
 
-			<Eclipse size={ESize.s} position={EPosition.right} zIndex={0} />
+			{!isSmallerThanSm && <Eclipse size={ESize.s} position={EPosition.right} zIndex={0} />}
 
 			<Flex direction={EFlex.column} vertical={EFlex.center} horizontal={EFlex.center} smVertical={EFlex.start}>
 				<Flex fullWidth={isSmallerThanSm} vertical={EFlex.center} wrapItems={false}>
@@ -44,7 +44,7 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon }) => 
 						<>
 							<Spacing size={!isSmallerThanSm ? ESize.m : ESize.s} />
 
-							<BMIcon type={icon} size={ESize.l} />
+							<BMIcon type={icon} size={!isSmallerThanSm ? ESize.l : ESize.m} />
 						</>
 					) : (
 						<></>

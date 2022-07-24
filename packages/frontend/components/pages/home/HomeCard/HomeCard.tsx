@@ -125,7 +125,7 @@ const HomeCard: FC<IHomeCardData> = ({
 		} catch (err) {
 			console.error('HomeCard fetchData', err);
 		}
-	}, [valueType]);
+	}, [dailyChangeType]);
 
 	const updateValue = useCallback(
 		(newValue: number) => {
@@ -141,7 +141,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 			updateValue(numberMessage);
 		}
-	}, [wsMessage, value]);
+	}, [wsMessage, value, subscribeChannel, updateValue]);
 
 	useEffect(() => {
 		valueType && fetchValue();

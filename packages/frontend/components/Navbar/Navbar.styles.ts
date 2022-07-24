@@ -160,11 +160,11 @@ export const StyledFace = styled.div<{ faceIndex: number; faceVisible: boolean }
 		${({ faceVisible }) => (faceVisible ? 'opacity: 1;' : 'opacity: 0;')}
 
 		&:nth-child(1) {
-			margin-bottom: 20px;
+			margin-bottom: 25px;
 		}
 
 		&:nth-child(3) {
-			margin-top: 20px;
+			margin-top: 25px;
 		}
 
 		${({ faceIndex }) => {

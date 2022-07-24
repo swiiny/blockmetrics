@@ -2,7 +2,7 @@ import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import Flex from '../../../styles/layout/Flex';
 import Spacing from '../../../styles/layout/Spacing';
 import BMText from '../../../styles/theme/components/BMText';
-import { EDailyData, EFlex, EIcon, ESize, ETextColor, ETextType, ETextWeight } from '../../../styles/theme/utils/enum';
+import { EDailyData, EFlex, EIcon, ESize, ETextColor, ETextWeight } from '../../../styles/theme/utils/enum';
 import { BLOCKCHAINS_ARRAY } from '../../../utils/variables';
 import { NAVBAR_LINKS } from '../../Navbar/Navbar';
 import { IBlockchainCard } from './BlockchainCard.type';
@@ -23,10 +23,6 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	const cardRef = useRef<number>(0);
 
 	const [gasPriceColor, setGasPriceColor] = useState<ETextColor>(ETextColor.accent);
-
-	if (emptyItem) {
-		return <li className='empty' />;
-	}
 
 	const { id, name, rank, token_count = 0, reliability = 0, gas_price, blockchain_power_consumption } = data || {};
 
@@ -89,6 +85,10 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 			}, 700);
 		}
 	}, [gweiGasPrice]);
+
+	if (emptyItem) {
+		return <li className='empty' />;
+	}
 
 	return (
 		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm} animateApparition>

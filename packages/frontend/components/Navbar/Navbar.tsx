@@ -61,6 +61,16 @@ const Navbar = () => {
 		}
 	}, 0);
 
+	const handleBurgerClick = useCallback(() => {
+		incrementBurgerClickCount();
+		setIsNavbarOpen(!isNavbarOpen);
+	}, [isNavbarOpen, incrementBurgerClickCount]);
+
+	const closeNavbar = useCallback(() => {
+		incrementBurgerClickCount();
+		setIsNavbarOpen(false);
+	}, [incrementBurgerClickCount]);
+
 	const onClickOutside = useCallback(
 		(event: MouseEvent) => {
 			const { target } = event;
@@ -74,18 +84,8 @@ const Navbar = () => {
 				handleBurgerClick();
 			}
 		},
-		[isNavbarOpen, setIsNavbarOpen]
+		[handleBurgerClick, isNavbarOpen]
 	);
-
-	const handleBurgerClick = useCallback(() => {
-		incrementBurgerClickCount();
-		setIsNavbarOpen(!isNavbarOpen);
-	}, [isNavbarOpen, incrementBurgerClickCount]);
-
-	const closeNavbar = useCallback(() => {
-		incrementBurgerClickCount();
-		setIsNavbarOpen(false);
-	}, [incrementBurgerClickCount]);
 
 	const navbarHidden = useMemo(() => {
 		if (pathname === INTERNAL_LINKS.story.href) {
@@ -118,7 +118,7 @@ const Navbar = () => {
 				))}
 			</StyledList>
 		);
-	}, [pathname]);
+	}, [closeNavbar, isSmallerThanMd, pathname]);
 
 	const burgerButton = useMemo(() => {
 		return (
@@ -134,7 +134,7 @@ const Navbar = () => {
 				</StyledCube>
 			</StyledBurgerButton>
 		);
-	}, [isNavbarOpen, burgerClickCount]);
+	}, [burgerClickCount, handleBurgerClick]);
 
 	useEffect(() => {
 		// detect scroll and call blurNavbar after 100 px from top

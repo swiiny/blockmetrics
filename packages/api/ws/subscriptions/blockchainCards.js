@@ -62,8 +62,6 @@ export async function fetchAndSendBlockchainCardToClient(con, client) {
 
 		const outbound = JSON.stringify(result);
 
-		console.log('Sending blockchain card to client');
-
 		client.send(outbound);
 	}
 }
