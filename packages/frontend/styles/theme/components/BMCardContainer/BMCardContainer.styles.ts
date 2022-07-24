@@ -1,5 +1,5 @@
 import styled, { css } from 'styled-components';
-import { addPaddingStyles, addTransition } from '../../utils/functions';
+import { addAnimationStyles, addPaddingStyles, addTransition } from '../../utils/functions';
 
 export const StyledBMCardContainer = styled.div<any>`
 	${(p) => css`
@@ -7,6 +7,7 @@ export const StyledBMCardContainer = styled.div<any>`
 		z-index: 2;
 
 		${addTransition()}
+		${p.animateApparition ? addAnimationStyles(p) : ''}
 
 		${p.fullWidth ? `width: 100%;` : ''}
 		${p.fullHeight ? `height: 100%;` : ''}

@@ -78,7 +78,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	}, [gweiGasPrice]);
 
 	return (
-		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm}>
+		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm} animateApparition>
 			<Flex direction={EFlex.column} horizontal={EFlex.center} paddingX={ESize.s} paddingY={ESize.s}>
 				<Flex fullWidth wrapItems horizontal={EFlex.between} vertical={EFlex.center}>
 					<Flex vertical={EFlex.center}>

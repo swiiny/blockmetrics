@@ -28,10 +28,10 @@ const Creator: FC<{ isVisible?: boolean }> = ({ isVisible = true }) => {
 };
 
 const Presentation: React.FC = () => {
-	const { isSmallerThanSm, isSmallerThanMd } = useResponsive();
+	const { isSmallerThanMd } = useResponsive();
 
 	return (
-		<BMCardContainerEx>
+		<BMCardContainerEx animateApparition>
 			<StyledCitationContainer>
 				<Image src='/assets/images/citation.svg' alt='' width={83} height={71} />
 			</StyledCitationContainer>

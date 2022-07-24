@@ -248,6 +248,29 @@ export const addMarginStyles = (p: any) => {
 	`;
 };
 
+export function addAnimationStyles(p: any) {
+	return css`
+		@keyframes fadeIn {
+			0% {
+				opacity: 0;
+				transform: translateY(20px);
+			}
+			100% {
+				opacity: 1;
+				transform: translateY(0px);
+			}
+		}
+
+		${() => {
+			if (typeof p.animateApparition === 'boolean') {
+				return `animation: fadeIn 0.5s ease-in-out;`;
+			} else {
+				return `animation: fadeIn 0.5s ${p.animateApparition * 0.1}s  ease-in-out both;`;
+			}
+		}}
+	`;
+}
+
 export function getSpacingFromESize(size: ESize, theme: DefaultTheme): string {
 	// get value from ESize using typescript
 	const value = theme.spacing[size as keyof DefaultTheme['spacing']];

@@ -154,14 +154,18 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 
 			<Main paddingTop={ESize.unset} noMarginTop>
 				<StyledList>
-					{selectedData.map((data: IDataCard) => (
-						<DataCard key={data.label} as='li' {...data} />
+					{selectedData.map((data: IDataCard, i: number) => (
+						<DataCard key={data.label} as='li' index={i + 1} {...data} />
 					))}
 				</StyledList>
 
 				<Spacing size={ESize.xl} />
 
-				<InformationCard chainId={blockchain?.id} onGetTagline={(tagline) => setTagline(tagline)} />
+				{selectedData.length > 0 ? (
+					<InformationCard chainId={blockchain?.id} onGetTagline={(tagline) => setTagline(tagline)} />
+				) : (
+					<></>
+				)}
 
 				<Spacing size={ESize.xl} />
 
