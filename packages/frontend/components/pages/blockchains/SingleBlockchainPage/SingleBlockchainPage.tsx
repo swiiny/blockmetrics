@@ -99,7 +99,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 		if (wsConnected && blockchainChannel) {
 			subscribeTo(blockchainChannel);
 		}
-	}, [wsConnected, blockchainChannel]);
+	}, [wsConnected, blockchainChannel, subscribeTo]);
 
 	return (
 		<>

@@ -156,7 +156,7 @@ const LineChart: FC<IBarLineChart> = ({
 				}
 			]
 		};
-	}, [chartHeight, xData, yData, color, chartId]);
+	}, [xData, yData, color, dynamicColor, chartId, chartHeight, reverseColor]);
 
 	const chartOptions = useMemo(() => {
 		const data: Chart.ChartOptions = {
@@ -194,7 +194,7 @@ const LineChart: FC<IBarLineChart> = ({
 		};
 
 		return data;
-	}, [minValue, maxValue, unit, decimals]);
+	}, [deactivateLegend, maxValue, minValue, unit, decimals]);
 
 	const chartReady = useMemo(() => {
 		if (minValue && maxValue && chartOptions) {
@@ -202,7 +202,7 @@ const LineChart: FC<IBarLineChart> = ({
 		}
 
 		return false;
-	}, [yData, minValue, maxValue, chartOptions, datas]);
+	}, [minValue, maxValue, chartOptions]);
 
 	const fetchChartData = useCallback(async () => {
 		if (dailyType) {
@@ -236,7 +236,7 @@ const LineChart: FC<IBarLineChart> = ({
 
 	useEffect(() => {
 		fetchChartData();
-	}, [dailyType, chainId]);
+	}, [fetchChartData]);
 
 	return loading ? (
 		<StyledChartContainer chartHeight={chartHeight}>

@@ -17,7 +17,7 @@ import {
 	ETextType,
 	ETextWeight
 } from '../../../../styles/theme/utils/enum';
-import { getBlockchainMetadataAndScoreById, getBlockchainMetadataById } from '../../../../utils/fetch';
+import { getBlockchainMetadataAndScoreById } from '../../../../utils/fetch';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList, StyledRank, StyledUsefulLinkList } from './InformationCard.styles';
 import { IInformationCard } from './InformationCard.type';
@@ -71,7 +71,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		});
 
 		return dateString;
-	}, [metadata.genesis_block]);
+	}, [metadata]);
 
 	const rankingDetails = useMemo(() => {
 		const items: { label: string; value: number }[] = [];
@@ -125,7 +125,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		} catch {
 			return <></>;
 		}
-	}, [metadata.links]);
+	}, [metadata]);
 
 	const initData = useCallback(async () => {
 		if (chainId) {
@@ -142,7 +142,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 				setScore(newScore);
 			}
 		}
-	}, [chainId]);
+	}, [chainId, onGetTagline]);
 
 	const rankContainer = useMemo(() => {
 		const { rank } = score;
@@ -164,7 +164,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 				</BMText>
 			</StyledRank>
 		);
-	}, [score.rank, isSmallerThanMd]);
+	}, [score, isSmallerThanMd]);
 
 	useEffect(() => {
 		!metadata.tagline && chainId && initData();
@@ -232,7 +232,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 					<StyledList marginTop={ESize.xl}>
 						<BMListItem dotHidden>
 							<BMText size={ESize.m} weight={ETextWeight.light}>
-								Blockmetrics give a rank from F to A+, F being the worst and A+ the best, to blockchains depending on
+								Blockmetrics give a rank from D- to A+, D- being the worst and A+ the best, to blockchains depending on
 								some caracteristics. Mainly the four below.
 								<br />
 								{/* @todo(add link ti the calculation details page) */}
