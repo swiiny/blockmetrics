@@ -90,7 +90,6 @@ const DataCard: FC<IDataCard> = ({
 
 				<div>
 					<BMText
-						singleLine
 						textAlign={!isSmallerThanLg ? ETextAlign.center : isSmallerThanSm ? ETextAlign.right : ETextAlign.left}
 						textColor={valueColor}
 						weight={ETextWeight.semiBold}

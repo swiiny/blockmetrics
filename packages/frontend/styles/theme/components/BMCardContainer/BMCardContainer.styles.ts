@@ -49,7 +49,13 @@ export const StyledBMCardContainer = styled.div<any>`
 						border-radius: 30px;
 						background: linear-gradient(142.69deg, ${p.theme.colors.bg} 4.17%, ${p.theme.colors.bg} 98.61%);
 						opacity: 0.5;
-						box-shadow: inset 0px 12px 24px #00000030;
+
+						${p.isHighlighted
+							? `
+						box-shadow: 10px 10px 20px rgba(59, 183, 227, 0.12), inset 0px 12px 24px rgba(0, 0, 0, 0.3);
+						`
+							: `box-shadow: inset 0px 12px 24px #00000030;
+							`}
 
 						border: 2px solid ${p.theme.colors.deepBlue}20;
 				  `}

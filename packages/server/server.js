@@ -621,7 +621,6 @@ async function startFetchData() {
 
 			console.log('start dev');
 
-			/*
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
 
@@ -658,7 +657,6 @@ async function startFetchData() {
 					}
 				});
 			});
-			*/
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);

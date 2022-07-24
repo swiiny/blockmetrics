@@ -6,19 +6,16 @@ import Main from '../../../../styles/layout/Main';
 import { ISingleBlockchainPage } from './SingleBlockchainPage.type';
 import { useRouter } from 'next/router';
 import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
-import { EChartType, EDailyData, EFlex, EIcon, ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
-import Column from '../../../../styles/layout/Column';
-import Flex from '../../../../styles/layout/Flex';
+import { EChartType, EDailyData, EIcon, ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
 import { DataCard } from '../../../texts/DataCard/DataCard';
 import Spacing from '../../../../styles/layout/Spacing';
-import BarChart from '../../../charts/BarChart';
-import { IBarLineChart } from '../../../../types/charts';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import { getEIconTypeFromValue, getESubscribeTypeFromValue } from '../../../../styles/theme/utils/functions';
 import { IDataCard } from '../../../texts/DataCard/DataCard.type';
 import { StyledList } from './SingleBlockchainPage.styles';
 import { getEngNotation } from '../../../../utils/convert';
 import InformationCard from '../InformationCard';
+import BlockchainData from '../BlockchainData';
 
 const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
@@ -30,7 +27,6 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 	const { query } = useRouter();
 	const { name } = query;
 
-	// @todo(typescript)
 	const selectedData = useMemo<IDataCard[]>(() => {
 		const result = [];
 
@@ -108,20 +104,6 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 		return EIcon.none;
 	}, [blockchain?.id]);
 
-	const chartsToDisplay: IBarLineChart[] = useMemo(() => {
-		const result: IBarLineChart[] = [];
-
-		if (blockchain?.id) {
-			// TODO : select charts to display
-			result.push({
-				chartType: EChartType.bar,
-				dailyType: EDailyData.transactionCount,
-				chainId: blockchain?.id || ''
-			});
-		}
-		return result;
-	}, [blockchain]);
-
 	const initData = useCallback(async () => {
 		const blockchainId = BLOCKCHAINS_ARRAY.find((bc) => bc.name.toLowerCase().replace(/\s/g, '-') === name)?.id;
 
@@ -169,13 +151,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = () => {
 
 				<Spacing size={ESize.xl} />
 
-				<Flex as='ul' fullWidth horizontal={EFlex.between} wrapItems paddingY={ESize['3xl']}>
-					{chartsToDisplay.map(({ chartType, dailyType, chainId }) => (
-						<Column as='li' key={dailyType} columns={4}>
-							{chartType === EChartType.bar ? <BarChart dailyType={dailyType} chainId={chainId} /> : <></>}
-						</Column>
-					))}
-				</Flex>
+				<BlockchainData chainId={blockchain?.id} />
 			</Main>
 		</>
 	);

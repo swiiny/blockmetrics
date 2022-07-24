@@ -1,7 +1,7 @@
 export const blockchainId = {
 	ethereum: 'ethereum',
 	bitcoin: 'bitcoin',
-	bsc: 'binance-smart-chain',
+	'binance-smart-chain': 'binance-smart-chain',
 	polygon: 'polygon',
 	avalanche: 'avalanche',
 	fantom: 'fantom'
