@@ -32,7 +32,7 @@ export async function updateDbDailyActiveUsers(con, id, data) {
 		//const uuid = crypto.randomUUID()
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyActiveUsers, [uuid, id, count, timestamp]);
 		});
@@ -53,7 +53,7 @@ export async function updateDbDailyAverageBlocktime(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, second }) => {
-			const uuid = `${id}-${timestamp}-${second}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyAverageBlockTime, [uuid, id, second, timestamp]);
 		});
@@ -74,7 +74,7 @@ export async function updateDbDailyAverageGasPrice(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, wei }) => {
-			const uuid = `${id}-${timestamp}-${wei}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyAverageGasPrice, [uuid, id, wei, timestamp]);
 		});
@@ -95,7 +95,7 @@ export async function updateDbDailyDifficulty(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, difficulty }) => {
-			const uuid = `${id}-${timestamp}-${difficulty}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyDifficulty, [uuid, id, difficulty, timestamp]);
 		});
@@ -122,7 +122,7 @@ export async function updateDbDailyHashrate(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, hashrateTHs }) => {
-			const uuid = `${id}-${timestamp}-${hashrateTHs}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyHashrate, [uuid, id, hashrateTHs, timestamp]);
 		});
@@ -149,7 +149,7 @@ export async function updateDbDailyNewAddresses(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyAddressesCount, [uuid, id, count, timestamp]);
 		});
@@ -170,7 +170,7 @@ export async function updateDbDailyTransaction(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyTransactionCount, [uuid, id, count, timestamp]);
 		});
@@ -191,7 +191,7 @@ export async function updateDbDailyNewContracts(con, id, data) {
 		}
 
 		const promises = data.map(({ timestamp, count }) => {
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyContracts, [uuid, id, count, timestamp]);
 		});
@@ -215,7 +215,7 @@ export async function updateDbDailyNewTokens(con, id, data) {
 			// remove one day to get the date of the previous day from date
 			const timestamp = Math.floor(new Date(date).setDate(new Date(date).getDate() - 1) / 1000);
 
-			const uuid = `${id}-${timestamp}-${count}`;
+			const uuid = `${id}-${timestamp}`;
 
 			return con.query(insertDailyNewTokens, [uuid, id, count, date]);
 		});
@@ -240,7 +240,7 @@ export const updateDbDailyTokenCount = async (con, id, count) => {
 		today.setHours(0, 0, 0, 0);
 		const timestamp = today.getTime() / 1000;
 
-		const uuid = `${id}-${timestamp}-${count}`;
+		const uuid = `${id}-${timestamp}`;
 
 		const promises = [
 			con.query(insertDailyTokenCount, [uuid, id, count, timestamp]),
@@ -271,7 +271,7 @@ export const updateDbDailyNodeCountAndReliability = async (con, id, count, relia
 		today.setHours(0, 0, 0, 0);
 		const timestamp = today.getTime() / 1000;
 
-		const uuid = `${id}-${timestamp}-${count}`;
+		const uuid = `${id}-${timestamp}`;
 
 		const promises = [
 			con.query(insertDailyNodeCount, [uuid, id, count, timestamp]),

@@ -5,12 +5,15 @@ import { StyledChartContainer } from './BarChart.styles';
 import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
 import { axiosRest } from '../../../utils/variables';
 import { ETextColor } from '../../../styles/theme/utils/enum';
+import { getEngNotation } from '../../../utils/convert';
 
 // required to get the gradient in the charts
 Chart.register(Filler, CategoryScale, LinearScale, BarElement);
 
 const BarChart: FC<IBarLineChart> = ({
 	dailyType,
+	unit,
+	decimals = 0,
 	chainId,
 	color = ETextColor.default,
 	dynamicColor = false,
@@ -159,13 +162,15 @@ const BarChart: FC<IBarLineChart> = ({
 				y: {
 					display: !deactivateLegend, // check if we need to display the y axis
 					grid: {
+						drawBorder: false,
 						display: false
 					},
 					ticks: {
 						stepSize: (maxValue - minValue) / 2,
 						//stepSize: 1,
 						callback(value: number) {
-							return `${Math.floor(value)}`;
+							const ingValue = getEngNotation(value, unit, decimals);
+							return ingValue.toString;
 						}
 					},
 					min: minValue,
@@ -175,7 +180,7 @@ const BarChart: FC<IBarLineChart> = ({
 		};
 
 		return data;
-	}, [minValue, maxValue]);
+	}, [minValue, maxValue, unit, decimals]);
 
 	const chartReady = useMemo(() => {
 		if (minValue && maxValue && chartOptions) {

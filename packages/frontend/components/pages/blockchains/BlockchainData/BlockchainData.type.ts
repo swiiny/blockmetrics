@@ -1,0 +1,3 @@
+interface IBlockchainData {
+	chainId?: string;
+}

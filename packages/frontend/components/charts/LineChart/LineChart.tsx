@@ -6,12 +6,15 @@ import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
 import { axiosRest } from '../../../utils/variables';
 import { ETextColor } from '../../../styles/theme/utils/enum';
 import dynamic from 'next/dynamic';
+import { getEngNotation } from '../../../utils/convert';
 
 // required to get the gradient in the charts
 Chart.register(Filler, PointElement, LineElement, CategoryScale, LinearScale);
 
 const LineChart: FC<IBarLineChart> = ({
 	dailyType,
+	unit,
+	decimals = 0,
 	chainId,
 	color = ETextColor.default,
 	dynamicColor = false,
@@ -130,11 +133,10 @@ const LineChart: FC<IBarLineChart> = ({
 			gradientFill?.addColorStop(0, `${gradientStartColor /* props.theme.colors.gradientStart */}`);
 			gradientFill?.addColorStop(1, `${gradientEndColor /* props.theme.colors.gradientEnd */}`);
 		} catch (err) {
-			console.log('catch error color', chartId);
+			// console.log('catch error color', chartId);
 		}
 
 		return {
-			// type: 'bar',
 			labels: xData,
 			datasets: [
 				{
@@ -174,13 +176,15 @@ const LineChart: FC<IBarLineChart> = ({
 					display: !deactivateLegend, // check if we need to display the y axis
 					type: 'linear',
 					grid: {
+						drawBorder: false,
 						display: false
 					},
 					ticks: {
 						stepSize: (maxValue - minValue) / 2,
 						//stepSize: 1,
 						callback(value: number) {
-							return `${Math.floor(value)}`;
+							const ingValue = getEngNotation(value, unit, decimals);
+							return ingValue.toString;
 						}
 					},
 					min: minValue >= 0 ? minValue : 0,
@@ -190,7 +194,7 @@ const LineChart: FC<IBarLineChart> = ({
 		};
 
 		return data;
-	}, [minValue, maxValue]);
+	}, [minValue, maxValue, unit, decimals]);
 
 	const chartReady = useMemo(() => {
 		if (minValue && maxValue && chartOptions) {

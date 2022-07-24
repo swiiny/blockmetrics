@@ -1,9 +1,9 @@
 import { IEngineeringNotation } from '../types/maths';
 
 // convert value to Engineering notation
-export const getEngNotation = (value: number, unit?: string): IEngineeringNotation => {
+export const getEngNotation = (value: number, unit?: string, decimals = 2): IEngineeringNotation => {
 	let newValue: number = value;
-	let newUnit: string | undefined;
+	let newUnit: string | undefined = unit;
 	let newIngValue: string | undefined;
 	let hasDecimals: boolean = false;
 
@@ -24,11 +24,15 @@ export const getEngNotation = (value: number, unit?: string): IEngineeringNotati
 		newIngValue = 'k';
 	}
 
-	if (newIngValue) {
-		// round to 2 decimal places
-		newValue = Math.round(newValue * 100) / 100;
+	const decimalsFactore = 10 ** decimals;
+
+	// check if value has decimals
+	if (`${newValue}` !== `${Math.round(newValue * decimalsFactore) / decimalsFactore}`) {
 		hasDecimals = true;
 	}
+
+	// round to 2 decimal places
+	newValue = Math.round(newValue * decimalsFactore) / decimalsFactore;
 
 	// add unit if needed
 	if (unit) {
@@ -41,6 +45,7 @@ export const getEngNotation = (value: number, unit?: string): IEngineeringNotati
 		value: newValue,
 		numberValue: newValue,
 		unit: newUnit,
-		hasDecimals: hasDecimals
+		hasDecimals: hasDecimals,
+		toString: `${newValue}${newUnit || ''}`
 	};
 };

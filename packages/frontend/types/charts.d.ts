@@ -4,6 +4,8 @@ interface IBarLineChart {
 	chartType?: EChartType;
 	dailyType: EDailyData | EDailyGlobalData;
 	chainId?: TBlockchain['id'];
+	unit?: string;
+	decimals?: number;
 	color?: ETextColor;
 	dynamicColor?: boolean;
 	reverseColor?: boolean;

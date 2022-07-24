@@ -3,6 +3,7 @@ interface IEngineeringNotation {
 	numberValue: number;
 	unit: string | undefined;
 	hasDecimals: boolean;
+	toString: string;
 }
 
 export type { IEngineeringNotation };
