@@ -15,6 +15,7 @@ import BMButton from '../../../styles/theme/components/BMButton';
 import BMProgressBar from '../../../styles/theme/components/BMProgressBar';
 import ItemLink from '../../utils/ItemLink';
 import useResponsive from '../../../hooks/useResponsive';
+import { getEngNotation } from '../../../utils/convert';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	const { isSmallerThanSm } = useResponsive();
@@ -27,7 +28,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		return <li className='empty' />;
 	}
 
-	const { id, name, rank, token_count = 0, reliability = 0, gas_price } = data || {};
+	const { id, name, rank, token_count = 0, reliability = 0, gas_price, power_consumption } = data || {};
 
 	const blockchain = useMemo((): {
 		estimatedTimeBetweenBlocks: number;
@@ -64,6 +65,18 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 		return null;
 	}, [gas_price]);
+
+	const formattedPowerConsumption = useMemo(() => {
+		if (power_consumption) {
+			try {
+				return getEngNotation(power_consumption, 'Wh', 2).toString;
+			} catch {
+				return '';
+			}
+		}
+
+		return '';
+	}, [power_consumption]);
 
 	useEffect(() => {
 		if (gweiGasPrice) {
@@ -134,9 +147,15 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 				<Flex fullWidth horizontal={EFlex.between}>
 					<Column columns={8} fullHeight>
 						<BMCardContainer tertiary paddingX={ESize['2xs']} paddingY={ESize['3xs']}>
-							<BMText size={ESize.s} weight={ETextWeight.medium}>
-								Power Consumption
-							</BMText>
+							<Flex horizontal={EFlex.between} vertical={EFlex.center}>
+								<BMText size={ESize.s} weight={ETextWeight.medium}>
+									Power Consumption
+								</BMText>
+
+								<BMText size={ESize.s} weight={ETextWeight.medium} textColor={ETextColor.negative}>
+									{formattedPowerConsumption}
+								</BMText>
+							</Flex>
 
 							<Spacing size={ESize.xs} />
 
