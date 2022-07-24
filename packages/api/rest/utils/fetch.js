@@ -125,6 +125,7 @@ export const getChartByIdAndType = async (pool, id, type) => {
 			case EDailyData.transactionCount:
 				tableLabel = 'daily_transaction_count_history';
 				valueLabel = 'transaction_count';
+				break;
 			case EDailyData.totalValueLocked:
 				tableLabel = 'daily_total_value_locked_history';
 				valueLabel = 'total_value_locked';
@@ -137,7 +138,20 @@ export const getChartByIdAndType = async (pool, id, type) => {
 
 		const res = await pool.query(query, [id]);
 
-		return res;
+		// filter out value with the same date
+		const result = res[0].reduce((acc, cur) => {
+			if (acc.length === 0) {
+				acc.push(cur);
+			} else {
+				const last = acc[acc.length - 1];
+				if (last.date.getTime() !== cur.date.getTime()) {
+					acc.push(cur);
+				}
+			}
+			return acc;
+		}, []);
+
+		return result;
 	} catch (err) {
 		console.error('getChartByIdAndType', err);
 		return [];
