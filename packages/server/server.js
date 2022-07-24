@@ -1,6 +1,6 @@
 'use strict';
 
-import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
+import { getEthNodeCount, getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
 import { calculatePowerConsumptionPoS, getRankFromScore } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
@@ -621,7 +621,7 @@ async function startFetchData() {
 
 			console.log('start dev');
 
-			updateBlockchainsRanking(con);
+			getEthNodeCount();
 
 			// fetchDailyData(1 / 10);
 			/*
