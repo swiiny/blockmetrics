@@ -54,12 +54,15 @@ export function calculateScoreForChains(chains, property, maxValue, reverse = fa
 	return chains;
 }
 
-// get average of an array of numbers
-export const getAverageOf = (items) => {
+// get weighted average of an array of {value, weight}
+export const getWeightedAverageOf = (items) => {
 	try {
-		return Math.floor((items.reduce((p, c) => p + c, 0) / items.length) * 100) / 100;
+		const sum = items.reduce((acc, item) => acc + item.value * item.weight, 0);
+		const sumWeights = items.reduce((acc, item) => acc + item.weight, 0);
+
+		return Math.floor((sum / sumWeights) * 100) / 100;
 	} catch (err) {
-		console.error('getAverageOf', err);
+		console.error('getWeightedAverageOf', err);
 		return null;
 	}
 };

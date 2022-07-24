@@ -1,7 +1,7 @@
 'use strict';
 
 import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
-import { calculatePowerConsumptionPoS } from './utils/functions.js';
+import { calculatePowerConsumptionPoS, getRankFromScore } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
@@ -51,7 +51,7 @@ import { ethers } from 'ethers';
 import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 import { getTxPowerConsumptionForPoWChains } from './utils/fetch/powTxPowerConsumption.js';
-import { calculateScoreForChains, getAverageOf } from './utils/maths.js';
+import { calculateScoreForChains, getWeightedAverageOf } from './utils/maths.js';
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
@@ -183,16 +183,31 @@ async function updateBlockchainsRanking(con) {
 
 		// calc average of all scores
 		blockchainsRows.forEach((chain) => {
-			const score = getAverageOf([
-				chain.reliability,
-				chain.token_count_res,
-				chain.average_transaction_count_res,
-				chain.blockchain_power_consumption_res,
-				chain.total_value_locked_res
+			const score = getWeightedAverageOf([
+				{
+					weight: 10,
+					value: chain.blockchain_power_consumption_res
+				},
+				{
+					weight: 6,
+					value: chain.reliability
+				},
+				{
+					weight: 3,
+					value: chain.token_count_res
+				},
+				{
+					weight: 2,
+					value: chain.total_value_locked_res
+				},
+				{
+					weight: 1,
+					value: chain.average_transaction_count_res
+				}
 			]);
 
 			chain.score = score;
-			chain.rank = 'N/A'; // @todo(creat the rank calaculator function)
+			chain.rank = getRankFromScore(score);
 		});
 
 		// update blockchains ranking
@@ -605,6 +620,8 @@ async function startFetchData() {
 			// dev stuff
 
 			console.log('start dev');
+
+			updateBlockchainsRanking(con);
 
 			// fetchDailyData(1 / 10);
 			/*
