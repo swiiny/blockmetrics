@@ -28,7 +28,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 		return <li className='empty' />;
 	}
 
-	const { id, name, rank, token_count = 0, reliability = 0, gas_price, power_consumption } = data || {};
+	const { id, name, rank, token_count = 0, reliability = 0, gas_price, blockchain_power_consumption } = data || {};
 
 	const blockchain = useMemo((): {
 		estimatedTimeBetweenBlocks: number;
@@ -67,16 +67,16 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	}, [gas_price]);
 
 	const formattedPowerConsumption = useMemo(() => {
-		if (power_consumption) {
+		if (blockchain_power_consumption) {
 			try {
-				return getEngNotation(power_consumption, 'Wh', 2).toString;
+				return getEngNotation(blockchain_power_consumption, 'Wh', 2).toString;
 			} catch {
 				return '';
 			}
 		}
 
 		return '';
-	}, [power_consumption]);
+	}, [blockchain_power_consumption]);
 
 	useEffect(() => {
 		if (gweiGasPrice) {

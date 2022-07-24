@@ -29,7 +29,7 @@ export const getBlockchainCards = async (con, params) => {
 		const { desc, sortBy, limit, offset } = params;
 
 		let query = `
-		SELECT b.id, b.name, b.reliability, b.token_count, b.gas_price, b.blockchain_power_consumption AS power_consumption, s.rank 
+		SELECT b.id, b.name, b.reliability, b.token_count, b.gas_price, b.blockchain_power_consumption, s.rank 
 		FROM blockchain b 
 		INNER JOIN blockchain_score s
 		ON b.id = s.blockchain_id
