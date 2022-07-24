@@ -4,6 +4,7 @@ import { BLOCKCHAINS } from '../../../../utils/variables';
 import ChartCard from '../../../cards/ChartCard';
 import { IChartCard } from '../../../cards/ChartCard/ChartCard.type';
 import { StyledChartList } from './BlockchainData.styles';
+import { IBlockchainData } from './BlockchainData.type';
 
 const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 	const chartsToDisplay: IChartCard[] = useMemo(() => {
