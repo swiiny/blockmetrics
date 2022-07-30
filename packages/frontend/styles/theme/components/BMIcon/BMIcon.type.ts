@@ -3,10 +3,11 @@ import { EIcon, ESize, ETextColor } from '../../utils/enum';
 interface IBMIcon {
 	backgroundVisible?: boolean;
 	type?: EIcon;
-	size?: ESize.xs | ESize.s | ESize.m | ESize.l | ESize.xl;
+	size?: ESize;
 	backgroundRadius?: ESize;
 	backgroundSize?: ESize;
 	color?: ETextColor;
+	id?: string;
 }
 
 export type { IBMIcon };

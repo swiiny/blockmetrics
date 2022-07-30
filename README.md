@@ -15,10 +15,6 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] Add Cypress E2E tests
 -   [ ] remove "note" from blockchain table, remove note column fetching from APIs
 
-### Database :white_check_mark:
-
--   [ ] add TVL in blockchain table
-
 ### Server
 
 -   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
@@ -30,9 +26,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 
 ### Frontend
 
--   [ ] BMCard component
 -   [ ] BMSquaredIcon component
--   [ ] BMListItem with blue dot component
 -   [ ] Chart tooltip
 -   [ ] Switch component
 -   [ ] Add skeleton and alert pop when api not available

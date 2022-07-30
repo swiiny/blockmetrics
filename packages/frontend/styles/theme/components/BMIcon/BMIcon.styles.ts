@@ -19,6 +19,11 @@ export const StyledIcon = styled.span<IBMIcon>`
 			}
 
 			switch (p.size) {
+				case ESize['2xs']:
+					return `
+					width: 15px;
+					height: 15px;
+        `;
 				case ESize.xs:
 					return `
 					width: 25px;

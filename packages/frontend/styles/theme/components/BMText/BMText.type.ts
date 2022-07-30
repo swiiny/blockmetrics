@@ -1,3 +1,4 @@
+import { CSSProperties } from 'react';
 import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../utils/enum';
 
 interface IBMText {
@@ -11,13 +12,14 @@ interface IBMText {
 	underline?: boolean;
 	isExternal?: boolean;
 	weight?: ETextWeight;
-	style?: string;
 	singleLine?: boolean;
 	className?: string;
 	inheritStyle?: boolean;
 	decoration?: boolean;
 	opacityReduced?: boolean;
 	as?: any;
+	id?: string;
+	style?: CSSProperties | string;
 }
 
 export type { IBMText };

@@ -20,7 +20,8 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		icon: EIcon.user,
 		chartTitle: 'Daily Active Addresses',
 		chartType: EChartType.bar,
-		chartDataType: EDailyGlobalData.activeUsers
+		chartDataType: EDailyGlobalData.activeUsers,
+		helpText: 'Total number of addresses used at least once on all listed blockchains.'
 	},
 	{
 		title: 'Total Transactions Count',
@@ -32,7 +33,8 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		icon: EIcon.swap,
 		chartTitle: 'Daily Transactions count',
 		chartType: EChartType.bar,
-		chartDataType: EDailyGlobalData.transactionsCount
+		chartDataType: EDailyGlobalData.transactionsCount,
+		helpText: 'Total number of transactions made on all listed blockchains.'
 	},
 	{
 		title: 'Last 24h Power Consumption',
@@ -45,7 +47,8 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		// dailyChangeUnit: '%',
 		chartTitle: 'Daily Power Consumption',
 		chartType: EChartType.line,
-		chartDataType: EDailyGlobalData.powerConsumption
+		chartDataType: EDailyGlobalData.powerConsumption,
+		helpText: 'Total power consumption of all listed blockchains.'
 	}
 ];
 
