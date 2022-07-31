@@ -1,43 +1,62 @@
-import React, { FC, useCallback, useState } from 'react';
+import React, { FC, useCallback, useMemo, useState } from 'react';
 import Spacing from '../../../styles/layout/Spacing';
 import BMIcon from '../../../styles/theme/components/BMIcon';
 import BMText from '../../../styles/theme/components/BMText';
 import { EIcon, ESize } from '../../../styles/theme/utils/enum';
 import { StyledHelpTooltipContainer, StyledTooltip } from './HelpTooltip.styles';
 import Portal from '../Portal';
+import { v4 as uuidV4 } from 'uuid';
 
 const HelpTooltip: FC<{ content: string }> = ({ content }) => {
 	const [isVisible, setIsVisible] = useState(false);
-	const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+	const [tooltipPosition, setTooltipPosition] = useState<any>(undefined);
 
-	const onMouseMove = useCallback((event: MouseEvent) => {
-		setMousePosition({ x: event.clientX, y: event.clientY });
+	const uuid = useMemo(() => {
+		return uuidV4();
 	}, []);
 
-	const tooltipPosition =
-		typeof window !== 'undefined'
-			? {
-					left: mousePosition.x < window.innerWidth / 2 ? `${mousePosition.x + 10}px` : undefined,
-					top: mousePosition.y < window.innerHeight / 2 ? `${mousePosition.y + 5}px` : undefined,
-					right: mousePosition.x >= window.innerWidth / 2 ? `${window.innerWidth - mousePosition.x + 5}px` : undefined,
-					bottom:
-						mousePosition.y >= window.innerHeight / 2 ? `${window.innerHeight - mousePosition.y + 5}px` : undefined
-			  }
-			: {};
+	const onMouseEnter = useCallback(
+		(event: MouseEvent) => {
+			if (window[`tooltip-timer-${uuid}`]) {
+				clearTimeout(window[`tooltip-timer-${uuid}`]);
+			}
+
+			const mousePosition = { x: event.clientX, y: event.clientY };
+
+			setTooltipPosition({
+				left: mousePosition.x < window.innerWidth / 2 ? `${mousePosition.x + 5}px` : undefined,
+				top: mousePosition.y < window.innerHeight / 2 ? `${mousePosition.y + 5}px` : undefined,
+				right: mousePosition.x >= window.innerWidth / 2 ? `${window.innerWidth - mousePosition.x + 5}px` : undefined,
+				bottom: mousePosition.y >= window.innerHeight / 2 ? `${window.innerHeight - mousePosition.y + 5}px` : undefined
+			});
+
+			setTimeout(() => {
+				setIsVisible(true);
+			}, 10);
+		},
+		[uuid]
+	);
+
+	const onMouseLeave = useCallback(() => {
+		setIsVisible(false);
+
+		// @ts-ignore
+		window[`tooltip-timer-${uuid}`] = setTimeout(() => {
+			setTooltipPosition(undefined);
+		}, 100);
+	}, [uuid]);
 
 	return (
 		<>
 			<Portal selector='body'>
-				<StyledHelpTooltipContainer isVisible={isVisible} style={tooltipPosition}>
-					<BMText size={ESize.s}>{content}</BMText>
-				</StyledHelpTooltipContainer>
+				{tooltipPosition && (
+					<StyledHelpTooltipContainer isVisible={isVisible} style={tooltipPosition}>
+						<BMText size={ESize.s}>{content}</BMText>
+					</StyledHelpTooltipContainer>
+				)}
 			</Portal>
 
-			<StyledTooltip
-				onMouseEnter={() => setIsVisible(true)}
-				onMouseLeave={() => setIsVisible(false)}
-				onMouseMove={(e: any) => onMouseMove(e)}
-			>
+			<StyledTooltip onMouseEnter={(e: any) => onMouseEnter(e)} onMouseLeave={() => onMouseLeave()}>
 				<Spacing size={ESize['4xs']} />
 
 				<BMIcon
