@@ -1,0 +1,267 @@
+openapi: 3.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: SwaggerHub API Auto Mocking
+    url: https://virtserver.swaggerhub.com/JeremyTheintz/Blockmetrics/1.0.0
+  - description: REST API
+    url: https://api-rest.block-metrics.io
+info:
+  description: Blockmetrics REST API
+  version: "1.0.0"
+  title: Blockmetrics REST API
+  contact:
+    email: jeremy@block-metrics.io
+  license:
+    name: Apache 2.0
+    url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
+tags:
+  - name: Blockchains
+    description: Fetch all blockchains data
+  - name: Blockchain
+    description: Fetch single blockchain data
+paths:
+  /blockchains:
+    get:
+      tags:
+        - Blockchains
+      summary: search blockchains
+      operationId: searchBlockchains
+      description: |
+        Return an array blockchains objects.
+      parameters:
+        - in: query
+          name: desc
+          description: Sort result
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: sortBy
+          description: blockchain_power_consumption, name, ...
+          schema:
+            type: string
+        - in: query
+          name: limit
+          description: maximum number of records to return
+          schema:
+            type: integer
+            format: int32
+            minimum: 0
+            maximum: 50
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Blockchain'
+        '400':
+          description: bad input parameter
+  /blockchain:
+    get:
+      tags:
+        - Blockchain
+      summary: search blockchain
+      operationId: searchBlockchain
+      description: |
+        Return an array blockchains objects.
+      parameters:
+        - in: query
+          name: id
+          description: id of the blockchain to fetch
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Blockchain'
+        '400':
+          description: bad input parameter
+  /blockchain/metadata:
+    get:
+      tags:
+        - Blockchain
+      summary: metadata of the blockchain
+      operationId: searchBlockchainMetadata
+      description: |
+        Return the metadata of a blockchain
+      parameters:
+        - in: query
+          name: id
+          description: Fetch metadata of a blockchain
+          required: true
+          schema:
+            type: string
+        - in: query
+          name: language
+          description: Choose the language of the metadata 
+          required: true
+          schema:
+            type: string
+            default: en
+       
+      responses:
+        '200':
+          description: search results matching criteria
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Metadata'
+        '400':
+          description: bad input parameter
+components:
+  schemas:
+    Blockchain:
+      type: object
+      required:
+        - id
+        - name
+        - node_count
+        - testnet_node_count
+        - single_node_power_consumption
+        - blockchain_power_consumption
+        - hashrate
+        - difficulty
+        - last_block_timestamp
+        - token_count 
+        - transaction_count
+        - gas_price 
+        - consensus
+        - today_transaction_count 
+        - address_count 
+        - today_address_count
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ethereum
+        name:
+          type: string
+          example: Ethereum
+        node_count:
+          type: integer
+          example: 5000
+        testnet_node_count:
+          type: integer
+          example: 0
+        single_node_power_consumption:
+          type: number
+          example: 50
+        blockchain_power_consumption:
+          type: number
+          example: 100000
+        hashrate:
+          type: number
+          example: 169.145948
+        difficulty:
+          type: number
+          example: 1359284933
+        last_block_timestamp:
+          type: number
+          example: 1564984100
+        token_count:
+          type: integer
+          example: 4890
+        transaction_count:
+          type: integer
+          example: 178039483
+        gas_price:
+          type: number
+          example: 250000000
+        consensus:
+          type: string
+          example: PoW
+        today_transaction_count:
+          type: integer
+          example: 1928493
+        address_count:
+          type: integer
+          example: 192849345
+        today_address_count:
+          type: integer
+          example: 1928493
+    
+    Metadata:
+      type: object
+      required:
+        - id
+        - blockchain_id
+        - description
+        - tagline
+        - genesis_block
+        - source
+        - links
+
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: ethereum
+        blockchain_id:
+          type: string
+          format: uuid
+          example: ethereum
+        description:
+          type: string
+          example: Ethereum is a decentralized platform that runs on the Ethereum blockchain.
+        tagline:
+          type: string
+          example: Decentralized, open source, community-driven platform for financial transactions.
+        genesis_block:
+          type: number
+          example: 10000000
+        source:
+          type: string
+          example: https://ethereum.org/
+        links:
+          type: array
+          items:
+            type: object
+            required:
+              - url
+            properties:
+              url:
+                type: string
+                example: https://ethereum.org/
+        
+    Score:
+      type: object
+      required:
+        - score
+        - rank
+        - reliability
+        - token_count
+        - power_consumption
+        - total_value_locked
+        - speed
+
+      properties:
+        score:
+            type: number
+            example: 46
+        rank:
+            type: string
+            example: B-
+        reliability:
+          type: number
+          example: 100
+        token_count:
+          type: integer
+          example: 100
+        power_consumption:
+          type: number
+          example: 21
+        total_value_locked:
+          type: number
+          example: 89
+        speed:
+          type: number
+          example: 43
