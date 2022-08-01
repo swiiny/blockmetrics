@@ -77,7 +77,8 @@ Running on node version 16.13.1
 | smHorizontal, mdHorizontal, gHorizontal, xlHorizontal | EFlex.start, EFlex.end, EFlex.between, EFlex.around, EFlex.center | null        | Responsive justify-content   |
 | smVertical, mdVertical, lgVertical, xlVertical        | EFlex.start, EFlex.end, EFlex.between, EFlex.around, EFlex.center | null        | Responsive align-items       |
 
-> The props extends [Padding](#padding)
+# to remove
+> The props extends [Padding](#padding) 
 ---
 
 #### Spacing
