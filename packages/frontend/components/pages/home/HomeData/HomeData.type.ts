@@ -18,6 +18,7 @@ interface IHomeCardData {
 	chartTitle: string;
 	chartType: EChartType;
 	chartDataType: EDailyGlobalData;
+	helpText?: string;
 }
 
 export type { IHomeCardData };

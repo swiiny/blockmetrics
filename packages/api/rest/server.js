@@ -38,7 +38,9 @@ const corsOptions = {
 		'https://block-metrics.com',
 		'https://block-metrics.com/',
 		'https://www.block-metrics.com',
-		'https://www.block-metrics.com/'
+		'https://www.block-metrics.com/',
+		'https://app.swaggerhub.com/',
+		'https://doc.api-rest.block-metrics.io/'
 	],
 	methods: ['GET'],
 	optionsSuccessStatus: 200
@@ -56,7 +58,7 @@ app.use(limiter);
 // - desc: boolean
 // - offset: unsigned number less than limit
 // - limit: unsigned number greater than offset
-app.get(`/get/blockchains`, async (req, res) => {
+app.get(`/blockchains`, async (req, res) => {
 	const { sortBy = 'blockchain_power_consumption', desc = false, offset = 0, limit = 30 } = req.query;
 
 	try {
@@ -76,19 +78,19 @@ app.get(`/get/blockchains`, async (req, res) => {
 			throw new Error('getBlockchains failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchains', err);
+		console.error('/blockchains', err);
 
 		res.status(500).send('Error fetching blockchains data');
 		return;
 	}
 });
 
-app.get(`/get/blockchain`, async (req, res) => {
+app.get(`/blockchain`, async (req, res) => {
 	const { id } = req.query;
 
 	try {
 		if (!id) {
-			res.status(500).send('Missing id');
+			res.status(400).send('Missing id');
 			return;
 		}
 
@@ -101,19 +103,19 @@ app.get(`/get/blockchain`, async (req, res) => {
 			throw new Error('getBlockchain failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchain', err);
+		console.error('/blockchain', err);
 
 		res.status(500).send('Error fetching blockchain data where id is ' + id);
 		return;
 	}
 });
 
-app.get(`/get/blockchain/metadata`, async (req, res) => {
+app.get(`/blockchain/metadata`, async (req, res) => {
 	const { id, language } = req.query;
 
 	try {
 		if (!id) {
-			res.status(500).send('Missing id');
+			res.status(400).send('Missing id');
 			return;
 		}
 
@@ -126,19 +128,19 @@ app.get(`/get/blockchain/metadata`, async (req, res) => {
 			throw new Error('get metadata failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchain', err);
+		console.error('/blockchain', err);
 
 		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
 		return;
 	}
 });
 
-app.get(`/get/blockchain/metadataAndScore`, async (req, res) => {
+app.get(`/blockchain/metadataAndScore`, async (req, res) => {
 	const { id, language } = req.query;
 
 	try {
 		if (!id) {
-			res.status(500).send('Missing id');
+			res.status(400).send('Missing id');
 			return;
 		}
 
@@ -151,19 +153,19 @@ app.get(`/get/blockchain/metadataAndScore`, async (req, res) => {
 			throw new Error('get metadata failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchain', err);
+		console.error('/blockchain', err);
 
-		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
+		res.status(500).send('Error fetching metadata and score data where id is ' + id + ' and language is ' + language);
 		return;
 	}
 });
 
-app.get(`/get/blockchain/all`, async (req, res) => {
+app.get(`/blockchain/all`, async (req, res) => {
 	const { id, language } = req.query;
 
 	try {
 		if (!id) {
-			res.status(500).send('Missing id');
+			res.status(400).send('Missing id');
 			return;
 		}
 
@@ -182,30 +184,32 @@ app.get(`/get/blockchain/all`, async (req, res) => {
 			throw new Error('get metadata failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchain', err);
+		console.error('/blockchain', err);
 
-		res.status(500).send('Error fetching metadata data where id is ' + id + ' and language is ' + language);
+		res
+			.status(500)
+			.send('Error fetching blockchain and metadata data where id is ' + id + ' and language is ' + language);
 		return;
 	}
 });
 
-app.get(`/get/blockchain/chart`, async (req, res) => {
+app.get(`/blockchain/chart`, async (req, res) => {
 	const { id, type } = req.query;
 
 	try {
 		if (!id) {
-			res.status(500).send('Missing id');
+			res.status(400).send('Missing id');
 			return;
 		}
 
 		if (!type) {
-			res.status(500).send('Missing type');
+			res.status(400).send('Missing type');
 			return;
 		} else {
 			const isValidType = Object.values(EDailyData).includes(type);
 
 			if (!isValidType) {
-				res.status(500).send('Invalid type');
+				res.status(400).send('Invalid type');
 				return;
 			}
 		}
@@ -219,25 +223,25 @@ app.get(`/get/blockchain/chart`, async (req, res) => {
 			throw new Error('get blockchain chart failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchain/chart?type=X&id=Y', err);
+		console.error('/blockchain/chart?type=X&id=Y', err);
 
 		res.status(500).send('Error fetching blockchain chart data where id is ' + id + ' and type is ' + type);
 		return;
 	}
 });
 
-app.get(`/get/blockchains/chart`, async (req, res) => {
+app.get(`/blockchains/chart`, async (req, res) => {
 	const { type } = req.query;
 
 	try {
 		if (!type) {
-			res.status(500).send('Missing type');
+			res.status(400).send('Missing type');
 			return;
 		} else {
 			const isValidType = Object.values(EDailyGlobalData).includes(type);
 
 			if (!isValidType) {
-				res.status(500).send('Invalid type');
+				res.status(400).send('Invalid type');
 				return;
 			}
 		}
@@ -252,25 +256,25 @@ app.get(`/get/blockchains/chart`, async (req, res) => {
 			throw new Error('get blockchain chart failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchains/chart', err);
+		console.error('/blockchains/chart', err);
 
 		res.status(500).send('Error fetching blockchain chart data where type is ' + type);
 		return;
 	}
 });
 
-app.get(`/get/blockchains/total`, async (req, res) => {
+app.get(`/blockchains/total`, async (req, res) => {
 	const { type } = req.query;
 
 	try {
 		if (!type) {
-			res.status(500).send('Missing type');
+			res.status(400).send('Missing type');
 			return;
 		} else {
 			const isValidType = Object.values(EGlobalData).includes(type);
 
 			if (!isValidType) {
-				res.status(500).send('Invalid type');
+				res.status(400).send('Invalid type');
 				return;
 			}
 		}
@@ -285,7 +289,7 @@ app.get(`/get/blockchains/total`, async (req, res) => {
 			throw new Error('get blockchains total failed');
 		}
 	} catch (err) {
-		console.error('/get/blockchains/total', err);
+		console.error('/blockchains/total', err);
 
 		res.status(500).send('Error fetching blockchain chart data where type is ' + type);
 		return;

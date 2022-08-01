@@ -548,10 +548,12 @@ async function initWebsocketProvider(chain, con) {
 		wsProviders = wsProviders.filter((ws) => ws.connection.url !== wsProvider.connection.url.ws);
 
 		// try to reconnect every 30 seconds
-		setTimeout(() => {
-			wsProvider = null;
-			initWebsocketProvider(chain, con);
-		}, 30 * 1000);
+		
+		// wait 30 seconds
+		await new Promise((resolve) => setTimeout(resolve, 30000));
+
+		wsProvider = null;
+		initWebsocketProvider(chain, con);
 	});
 
 	wsProvider._websocket.on('pong', () => {
@@ -660,27 +662,33 @@ async function startFetchData() {
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
-		timeoutFetchData = setTimeout(async () => {
-			console.log('restart fetching data');
+		// wait 10 seconds before go to next things
 
-			// remove all items from wsProviders
-			wsProviders.forEach((wsProvider) => {
-				wsProvider.removeAllListeners();
-				wsProvider._websocket?.removeAllListeners();
-			});
+		// remove all items from wsProviders
+		wsProviders.forEach((wsProvider) => {
+			wsProvider.removeAllListeners();
+			wsProvider._websocket?.removeAllListeners();
+		});
 
-			wsProviders = null;
+		await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
 
-			const promises = [
-				dailyRoutine.gracefulShutdown(),
-				fiveMinutesRoutine.gracefulShutdown(),
-				middayRoutine.gracefulShutdown()
-			];
+		console.log('restart fetching data');
 
-			await Promise.all(promises);
+		wsProviders = null;
+		dailyRoutine = null;
+		fiveMinutesRoutine = null;
+		middayRoutine = null;
 
-			startFetchData();
-		}, 1 * 60 * 1000);
+		/*
+		const promises = [
+			dailyRoutine.gracefulShutdown(),
+			fiveMinutesRoutine.gracefulShutdown(),
+			middayRoutine.gracefulShutdown()
+		];
+
+		await Promise.all(promises);
+*/
+		startFetchData();
 	}
 }
 

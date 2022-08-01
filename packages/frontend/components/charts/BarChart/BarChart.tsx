@@ -197,9 +197,9 @@ const BarChart: FC<IBarLineChart> = ({
 				let result;
 
 				if (chainId) {
-					result = await axiosRest(`/get/blockchain/chart?type=${dailyType}&id=${chainId}`);
+					result = await axiosRest(`/blockchain/chart?type=${dailyType}&id=${chainId}`);
 				} else {
-					result = await axiosRest(`/get/blockchains/chart?type=${dailyType}`);
+					result = await axiosRest(`/blockchains/chart?type=${dailyType}`);
 				}
 
 				// format result in IBarLineChartData
