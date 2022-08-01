@@ -519,7 +519,7 @@ async function initWebsocketProvider(chain, con) {
 		}, 7500);
 	});
 
-	wsProvider._websocket.on('close', (err) => {
+	wsProvider._websocket.on('close', async (err) => {
 		if (keepAliveInterval) {
 			clearInterval(keepAliveInterval);
 		}
@@ -548,7 +548,7 @@ async function initWebsocketProvider(chain, con) {
 		wsProviders = wsProviders.filter((ws) => ws.connection.url !== wsProvider.connection.url.ws);
 
 		// try to reconnect every 30 seconds
-		
+
 		// wait 30 seconds
 		await new Promise((resolve) => setTimeout(resolve, 30000));
 
