@@ -14,6 +14,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
 -   [x] remove "note" from blockchain table, remove note column fetching from APIs
+-   [ ] Create text content
 
 ### Server
 
@@ -23,6 +24,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 ### API - REST
 
 -   [ ] separate endpoints in multiple files
+-   [ ] Deploy doc swagger at doc.api-rest.block-metrics.io
 
 ### API - WS
 
@@ -33,6 +35,7 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] BMSquaredIcon component
 -   [ ] Chart tooltip
 -   [ ] Switch component
+-   [ ] Unselect all button
 -   [ ] Add help tooltip where it's necessary
 -   [ ] Add skeleton and alert pop when api not available
 -   [ ] Integrate Comparison page
