@@ -16,7 +16,7 @@ The service work with:
 - [Channels](#channels)
 
 ### How it works
-The subscribe/unsubscribe messages should be built acording to the following structure and be stringified before beeing sent.
+The subscribe/unsubscribe messages should be built according to the following structure and be stringified before beeing sent.
 ```
 {
   type: "subscribe",
