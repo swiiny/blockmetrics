@@ -1,13 +1,10 @@
 openapi: 3.0.0
 servers:
-  # Added by API Auto Mocking Plugin
-  - description: SwaggerHub API Auto Mocking
-    url: https://virtserver.swaggerhub.com/JeremyTheintz/Blockmetrics/1.0.0
   - description: REST API
     url: https://api-rest.block-metrics.io
 info:
   description: Blockmetrics REST API
-  version: "1.0.0"
+  version: '1.0.0'
   title: Blockmetrics REST API
   contact:
     email: jeremy@block-metrics.io
@@ -16,7 +13,7 @@ info:
     url: 'http://www.apache.org/licenses/LICENSE-2.0.html'
 tags:
   - name: Blockchains
-    description: Fetch all blockchains data
+    description: Fetch all listed blockchains data. For the moment the listed blockchains are ethereum, binance-smart-chain, polygon, fantom, avalanche and bitcoin
   - name: Blockchain
     description: Fetch single blockchain data
 paths:
@@ -34,31 +31,143 @@ paths:
           description: Sort result
           required: false
           schema:
-            type: string
+            type: boolean
         - in: query
           name: sortBy
-          description: blockchain_power_consumption, name, ...
           schema:
             type: string
+            enum: [
+                name
+                node_count,
+                testnet_node_count,
+                single_node_power_consumption,
+                blockchain_power_consumption,
+                hashrate,
+                difficulty,
+                last_block_timestamp,
+                token_count,
+                transaction_count,
+                gas_price,
+                consensus,
+                today_transaction_count,
+                address_count,
+                today_address_count
+              ]
         - in: query
           name: limit
           description: maximum number of records to return
           schema:
             type: integer
             format: int32
-            minimum: 0
+            minimum: 1
             maximum: 50
       responses:
         '200':
-          description: search results matching criteria
+          description: Successful operation
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Blockchain'
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching blockchains data
+
+  /blockchains/total:
+    get:
+      tags:
+        - Blockchains
+      summary: search blockchains total
+      operationId: searchBlockchainsTotal
+      description: |
+        Return a sum of a property from blockchains objects.
+      parameters:
+        - in: query
+          name: type
+          description: The property to sum
+          required: true
+          schema:
+            type: string
+            enum:
+              [
+                powerConsumption,
+                tokenCount,
+                nodeCount,
+                transactionCount,
+                todayTransactionCount,
+                addressCount,
+                todayAddressCount
+              ]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: number
+                example: 100
         '400':
           description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Missing parameter
+
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching blockchain chart data where type is ${type}
+
+  /blockchains/chart:
+    get:
+      tags:
+        - Blockchains
+      summary: blockchains monthly chart
+      operationId: blockchainsMonthlyChart
+      description: |
+        Return monthly chart data for the blockchains
+      parameters:
+        - in: query
+          name: type
+          description: the property corresponding to the desired chart
+          required: true
+          schema:
+            type: string
+            enum: [activeUsers, transactionsCount, powerConsumption, totalValueLocked]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChartPoint'
+        '400':
+          description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Missing parameter
+
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching blockchain chart data where type is ${type}
+
   /blockchain:
     get:
       tags:
@@ -74,9 +183,10 @@ paths:
           required: true
           schema:
             type: string
+            enum: [ethereum, binance-smart-chain, polygon, fantom, avalanche, bitcoin]
       responses:
         '200':
-          description: search results matching criteria
+          description: Successful operation
           content:
             application/json:
               schema:
@@ -84,6 +194,69 @@ paths:
                   $ref: '#/components/schemas/Blockchain'
         '400':
           description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Missing id
+
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching blockchain data where id is ${id}
+
+  /blockchain/all:
+    get:
+      tags:
+        - Blockchain
+      summary: blockchain and metadata
+      operationId: searchBlockchainMetadataAndScore
+      description: |
+        Return the blockchain and the metadata
+      parameters:
+        - in: query
+          name: id
+          description: Id of the blockchain to fetch
+          required: true
+          schema:
+            type: string
+            enum: [ethereum, binance-smart-chain, polygon, fantom, avalanche, bitcoin]
+        - in: query
+          name: language
+          description: Choose the language of the metadata
+          required: true
+          schema:
+            type: string
+            default: en
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Blockchain'
+                  - $ref: '#/components/schemas/Metadata'
+        '400':
+          description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Missing id
+
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching blockchain and metadata data where id is ${id}
+
   /blockchain/metadata:
     get:
       tags:
@@ -95,21 +268,22 @@ paths:
       parameters:
         - in: query
           name: id
-          description: Fetch metadata of a blockchain
+          description: Id of the blockchain to fetch
           required: true
           schema:
             type: string
+            enum: [ethereum, binance-smart-chain, polygon, fantom, avalanche, bitcoin]
         - in: query
           name: language
-          description: Choose the language of the metadata 
+          description: Choose the language of the metadata
           required: true
           schema:
             type: string
             default: en
-       
+
       responses:
         '200':
-          description: search results matching criteria
+          description: Successful operation
           content:
             application/json:
               schema:
@@ -117,6 +291,132 @@ paths:
                   $ref: '#/components/schemas/Metadata'
         '400':
           description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Missing id
+
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching blockchain data where id is ${id}
+
+  /blockchain/metadataAndScore:
+    get:
+      tags:
+        - Blockchain
+      summary: metadata and score of the blockchain
+      operationId: searchBlockchainAndMetadata
+      description: |
+        Return the metadata and the score of a blockchain
+      parameters:
+        - in: query
+          name: id
+          description: Id of the blockchain to fetch
+          required: true
+          schema:
+            type: string
+            enum: [ethereum, binance-smart-chain, polygon, fantom, avalanche, bitcoin]
+        - in: query
+          name: language
+          description: Choose the language of the metadata
+          required: true
+          schema:
+            type: string
+            default: en
+
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '#/components/schemas/Metadata'
+                  - $ref: '#/components/schemas/Score'
+        '400':
+          description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Missing id
+
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching metadata and score data where id is ${id}
+
+  /blockchain/chart:
+    get:
+      tags:
+        - Blockchain
+      summary: blockchain monthly chart
+      operationId: blockchainMonthlyChart
+      description: |
+        Return monthly chart data for the blockchain
+      parameters:
+        - in: query
+          name: id
+          description: Id of the blockchain to fetch
+          required: true
+          schema:
+            type: string
+            enum: [ethereum, binance-smart-chain, polygon, fantom, avalanche, bitcoin]
+        - in: query
+          name: type
+          description: the property corresponding to the desired chart
+          required: true
+          schema:
+            type: string
+            enum:
+              [
+                activeUsers,
+                averageBlocktime,
+                averageGasPrice,
+                difficulty,
+                hashrate,
+                newAddress,
+                newContract,
+                newTokens,
+                tokenCount,
+                nodeCount,
+                powerConsumption,
+                transactionCount,
+                totalValueLocked
+              ]
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ChartPoint'
+        '400':
+          description: bad input parameter
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Missing or wrong parameter
+
+        '500':
+          description: The server can't successfuly execute the request
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Error fetching blockchain chart data where id is ${id}
+
 components:
   schemas:
     Blockchain:
@@ -131,12 +431,12 @@ components:
         - hashrate
         - difficulty
         - last_block_timestamp
-        - token_count 
+        - token_count
         - transaction_count
-        - gas_price 
+        - gas_price
         - consensus
-        - today_transaction_count 
-        - address_count 
+        - today_transaction_count
+        - address_count
         - today_address_count
       properties:
         id:
@@ -188,7 +488,7 @@ components:
         today_address_count:
           type: integer
           example: 1928493
-    
+
     Metadata:
       type: object
       required:
@@ -224,14 +524,9 @@ components:
         links:
           type: array
           items:
-            type: object
-            required:
-              - url
-            properties:
-              url:
-                type: string
-                example: https://ethereum.org/
-        
+            type: string
+            example: https://ethereum.org/
+
     Score:
       type: object
       required:
@@ -245,11 +540,11 @@ components:
 
       properties:
         score:
-            type: number
-            example: 46
+          type: number
+          example: 46
         rank:
-            type: string
-            example: B-
+          type: string
+          example: B-
         reliability:
           type: number
           example: 100
@@ -265,3 +560,17 @@ components:
         speed:
           type: number
           example: 43
+
+    ChartPoint:
+      type: object
+      required:
+        - date
+        - value
+
+      properties:
+        date:
+          type: number
+          example: 1847394837
+        value:
+          type: number
+          example: 1888000000

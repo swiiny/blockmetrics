@@ -110,7 +110,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 	const fetchValue = useCallback(async () => {
 		try {
-			const { data } = await axiosRest('/get/blockchains/total?type=' + valueType);
+			const { data } = await axiosRest('/blockchains/total?type=' + valueType);
 			setValue(data.value || 0);
 			setUpdatedValue(data.value || 0);
 		} catch (err) {
@@ -120,7 +120,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 	const fetchDailyChange = useCallback(async () => {
 		try {
-			const { data } = await axiosRest('/get/blockchains/total?type=' + dailyChangeType);
+			const { data } = await axiosRest('/blockchains/total?type=' + dailyChangeType);
 
 			setDailyChange(data.value || 0);
 			setUpdatedDailyChange(data.value || 0);
