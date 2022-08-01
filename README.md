@@ -13,23 +13,29 @@ The main objective is to offer everyone an easy way to understand what a blockch
 -   [ ] Create readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
--   [ ] remove "note" from blockchain table, remove note column fetching from APIs
+-   [x] remove "note" from blockchain table, remove note column fetching from APIs
 
 ### Server
 
 -   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
 -   [ ] prevent bitcoin webscoket from disconnecting
 
-### API - REST :white_check_mark:
+### API - REST
 
 -   [ ] separate endpoints in multiple files
+
+### API - WS
+
+-   [ ] Create doc swagger 
 
 ### Frontend
 
 -   [ ] BMSquaredIcon component
 -   [ ] Chart tooltip
 -   [ ] Switch component
+-   [ ] Add help tooltip where it's necessary
 -   [ ] Add skeleton and alert pop when api not available
+-   [ ] Integrate Comparison page
 
 
 ### Integrated Blockchains

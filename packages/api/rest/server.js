@@ -39,7 +39,8 @@ const corsOptions = {
 		'https://block-metrics.com/',
 		'https://www.block-metrics.com',
 		'https://www.block-metrics.com/',
-		'https://app.swaggerhub.com/'
+		'https://app.swaggerhub.com/',
+		'https://doc.api-rest.block-metrics.io/'
 	],
 	methods: ['GET'],
 	optionsSuccessStatus: 200

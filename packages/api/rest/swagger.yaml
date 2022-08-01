@@ -438,6 +438,7 @@ components:
         - today_transaction_count
         - address_count
         - today_address_count
+        - total_value_locked
       properties:
         id:
           type: string
@@ -488,6 +489,9 @@ components:
         today_address_count:
           type: integer
           example: 1928493
+        total_value_locked:
+          type: integer
+          example: 192849308903
 
     Metadata:
       type: object
