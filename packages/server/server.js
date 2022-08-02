@@ -713,7 +713,9 @@ async function init() {
 			//if(global.gc) global.gc();
 			console.log('Kill process ========>');
 
-			await axios.get(process.env.RESTART_SERVER_URL);
+			if (process.env.NODE_ENV === 'production') {
+				await axios.get(process.env.RESTART_SERVER_URL);
+			}
 		}
 	}, 5 * 60 * 1000);
 }
