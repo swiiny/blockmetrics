@@ -52,6 +52,7 @@ import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 import { getTxPowerConsumptionForPoWChains } from './utils/fetch/powTxPowerConsumption.js';
 import { calculateScoreForChains, getWeightedAverageOf } from './utils/maths.js';
+import axios from 'axios';
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
@@ -702,16 +703,17 @@ async function init() {
 
 	startFetchData();
 
-	setInterval(() => {
+	setInterval(async () => {
 		const used = process.memoryUsage().heapUsed / 1024 / 1024;
 		const mem = Math.round(used * 100) / 100;
 
 		console.log('Memory usage: ' + mem + ' MB');
 
-		if (mem >= 20) {
+		if (mem >= 256) {
 			//if(global.gc) global.gc();
-			console.log('Kill process ======== ');
-			process.exit();
+			console.log('Kill process ========>');
+
+			await axios.get(process.env.RESTART_SERVER_URL);
 		}
 	}, 30 * 1000);
 }
