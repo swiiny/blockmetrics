@@ -38,10 +38,42 @@ export const StyledSpacing = styled.span<ISpacing>`
 		margin: ${getSpacingFromESize(size, theme)};
 
 		${({ theme }) => css`
-			${xlSize ? mq(EMediaQuery.xl, `margin: ${getSpacingFromESize(xlSize, theme)}`) : ''}
-			${lgSize ? mq(EMediaQuery.lg, `margin: ${getSpacingFromESize(lgSize, theme)}`) : ''}
-			${mdSize ? mq(EMediaQuery.md, `margin: ${getSpacingFromESize(mdSize, theme)}`) : ''}
-			${smSize ? mq(EMediaQuery.sm, `margin: ${getSpacingFromESize(smSize, theme)}`) : ''}
+			${xlSize
+				? mq(
+						EMediaQuery.xl,
+						`
+			${xlSize === ESize.unset ? 'display: none;' : ''}
+			margin: ${getSpacingFromESize(xlSize, theme)}
+			`
+				  )
+				: ''}
+			${lgSize
+				? mq(
+						EMediaQuery.lg,
+						`
+			${lgSize === ESize.unset ? 'display: none;' : ''}
+			margin: ${getSpacingFromESize(lgSize, theme)}
+			`
+				  )
+				: ''}
+			${mdSize
+				? mq(
+						EMediaQuery.md,
+						`
+			${mdSize === ESize.unset ? 'display: none;' : ''}
+			margin: ${getSpacingFromESize(mdSize, theme)}
+			`
+				  )
+				: ''}
+			${smSize
+				? mq(
+						EMediaQuery.sm,
+						`
+			${smSize === ESize.unset ? 'display: none;' : ''}
+			margin: ${getSpacingFromESize(smSize, theme)}
+			`
+				  )
+				: ''}
 		`}
 
 		${xlDirection ? setRect(xlDirection, EMediaQuery.xl) : ''}

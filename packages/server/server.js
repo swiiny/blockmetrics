@@ -1,6 +1,6 @@
 'use strict';
 
-import { getEthNodeCount, getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
+import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
 import { calculatePowerConsumptionPoS, getRankFromScore } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
@@ -541,6 +541,9 @@ async function initWebsocketProvider(chain, con) {
 		wsProvider.removeAllListeners();
 		wsProvider._websocket?.removeAllListeners();
 
+		await wsProvider?._websocket?.terminate();
+		await wsProvider?.destroy();
+
 		keepAliveInterval = null;
 		pingTimeout = null;
 
@@ -548,11 +551,11 @@ async function initWebsocketProvider(chain, con) {
 		wsProviders = wsProviders.filter((ws) => ws.connection.url !== wsProvider.connection.url.ws);
 
 		// try to reconnect every 30 seconds
+		wsProvider = null;
 
 		// wait 30 seconds
 		await new Promise((resolve) => setTimeout(resolve, 30000));
 
-		wsProvider = null;
 		initWebsocketProvider(chain, con);
 	});
 
@@ -698,6 +701,19 @@ async function init() {
 	pool = await createDbPool();
 
 	startFetchData();
+
+	setInterval(() => {
+		const used = process.memoryUsage().heapUsed / 1024 / 1024;
+		const mem = Math.round(used * 100) / 100;
+
+		console.log('Memory usage: ' + mem + ' MB');
+
+		if (mem >= 20) {
+			//if(global.gc) global.gc();
+			console.log('Kill process ======== ');
+			process.exit();
+		}
+	}, 30 * 1000);
 }
 
 init();

@@ -41,9 +41,9 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Chart tooltip
 -   [ ] Switch component
 -   [ ] Unselect all button
--   [ ] Add help tooltip where it's necessary
--   [ ] Add skeleton and alert pop when api not available
 -   [ ] Integrate Comparison page
+-   [x] Add help tooltip where it's necessary
+-   [ ] Add skeleton and alert pop when api not available
 
 
 ### Integrated Blockchains

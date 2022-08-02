@@ -1,14 +1,15 @@
 import React, { FC, useEffect, useReducer, useRef, useState } from 'react';
 import Spacing from '../../../styles/layout/Spacing';
-import BMHeading from '../../../styles/theme/components/BMHeading';
 import BMText from '../../../styles/theme/components/BMText';
-import { EFlex, EIcon, ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../../styles/theme/utils/enum';
+import { EFlex, EIcon, ESize, ETextAlign, ETextColor, ETextWeight } from '../../../styles/theme/utils/enum';
 import { IDataCard } from './DataCard.type';
 import CountUp from 'react-countup';
 import BMCardContainer from '../../../styles/theme/components/BMCardContainer';
 import Flex from '../../../styles/layout/Flex';
 import BMIcon from '../../../styles/theme/components/BMIcon';
 import useResponsive from '../../../hooks/useResponsive';
+import HelpTooltip from '../../utils/HelpTooltip';
+import { StyledTooltip } from './DataCard.styles';
 
 // hte ping with the api
 const ping = 1.5;
@@ -23,6 +24,7 @@ const DataCard: FC<IDataCard> = ({
 	isTimer = false,
 	colorAnimationOnUpdate = false,
 	reverseColor = false,
+	helpText,
 	...otherProps
 }) => {
 	const { isSmallerThanSm, isSmallerThanLg } = useResponsive();
@@ -73,10 +75,17 @@ const DataCard: FC<IDataCard> = ({
 		<BMCardContainer
 			animateApparition={index}
 			padding={ESize.m}
-			smPaddingX={ESize.s}
+			smPaddingLeft={ESize.s}
+			lgPaddingRight={ESize.xl}
 			smPaddingY={ESize.xs}
 			{...otherProps}
 		>
+			{helpText && (
+				<StyledTooltip>
+					<HelpTooltip content={helpText} />
+				</StyledTooltip>
+			)}
+
 			<Flex direction={EFlex.column} lgDirection={EFlex.row} vertical={EFlex.center} smHorizontal={EFlex.between}>
 				<BMIcon
 					type={icon}
@@ -113,7 +122,7 @@ const DataCard: FC<IDataCard> = ({
 						{unit ? ` ${unit}` : <></>}
 					</BMText>
 
-					<Spacing size={ESize.m} lgSize={ESize['2xs']} />
+					<Spacing size={ESize.m} lgSize={ESize['2xs']} smSize={ESize.unset} />
 
 					<BMText
 						size={ESize.m}

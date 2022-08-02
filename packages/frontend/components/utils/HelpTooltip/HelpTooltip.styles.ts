@@ -24,7 +24,7 @@ export const StyledHelpTooltipContainer = styled.div<{ isVisible: boolean }>`
 
 	border-radius: 5px;
 
-	max-width: 70vw;
+	max-width: 30vw;
 	max-height: 50vh;
 
 	border: 1px solid ${(p) => p.theme.colors.deepBlue};
@@ -37,6 +37,7 @@ export const StyledHelpTooltipContainer = styled.div<{ isVisible: boolean }>`
 		EMediaQuery.md,
 		`
 		left: calc(50% - 150px);
+		max-width: 70vw;
 	`
 	)}
 

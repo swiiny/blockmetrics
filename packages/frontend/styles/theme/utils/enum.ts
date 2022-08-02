@@ -194,3 +194,10 @@ export enum EIcon {
 	help = 'help',
 	none = 'none'
 }
+
+export enum ETextTransform {
+	none = 'none',
+	uppercase = 'uppercase',
+	lowercase = 'lowercase',
+	capitalize = 'capitalize'
+}

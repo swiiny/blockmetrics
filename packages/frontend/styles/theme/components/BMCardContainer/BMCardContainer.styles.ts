@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import { addAnimationStyles, addPaddingStyles, addTransition } from '../../utils/functions';
+import { EMediaQuery } from '../../utils/enum';
+import { addAnimationStyles, addPaddingStyles, addTransition, mq } from '../../utils/functions';
 
 export const StyledBMCardContainer = styled.div<any>`
 	${(p) => css`
@@ -21,6 +22,20 @@ export const StyledBMCardContainer = styled.div<any>`
 					border-radius: 10px;
 			  `}
 
+				${mq(
+			EMediaQuery.sm,
+			css`
+				${!p.secondary
+					? css`
+							align-self: stretch;
+							border-radius: 15px;
+					  `
+					: css`
+							border-radius: 10px;
+					  `}
+			`
+		)}
+
 		&::before {
 			content: ' ';
 			position: absolute;
@@ -32,7 +47,7 @@ export const StyledBMCardContainer = styled.div<any>`
 
 			${p.secondary
 				? css`
-						border-radius: 10px;
+						border-radius: inherit;
 						background: ${p.theme.colors.gradient.toBottom};
 						opacity: 0.15;
 
@@ -46,7 +61,7 @@ export const StyledBMCardContainer = styled.div<any>`
 						background: ${p.theme.colors.darkGrey};
 				  `
 				: css`
-						border-radius: 30px;
+						border-radius: inherit;
 						background: linear-gradient(142.69deg, ${p.theme.colors.bg} 4.17%, ${p.theme.colors.bg} 98.61%);
 						opacity: 0.5;
 

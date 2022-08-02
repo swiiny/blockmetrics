@@ -12,6 +12,7 @@ const generateTextStyle = (p: any) => {
 
 		font-weight: normal;
 		text-align: ${p.textAlign};
+		text-transform: ${p.textTransform};
 
 		${p.singleLine ? 'line-height: 1rem;' : ''}
 		${p.inheritStyle

@@ -32,7 +32,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				label: token_count <= 1 ? 'Token' : 'Tokens',
 				icon: EIcon.token,
 				colorAnimationOnUpdate: true,
-				reverseColor: true
+				reverseColor: true,
+				helpText: 'The number of tokens available in the blockchain, a token is a crypto currency'
 			});
 		}
 
@@ -46,7 +47,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				label: '24H Power Consumption',
 				icon: EIcon.energy,
 				colorAnimationOnUpdate: true,
-				reverseColor: true
+				reverseColor: true,
+				helpText: 'The last 24 hours power consumption of the blockchain'
 			});
 		}
 
@@ -56,7 +58,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				unit: 'Gwei',
 				label: 'Gas Price',
 				icon: EIcon.gas,
-				colorAnimationOnUpdate: true
+				colorAnimationOnUpdate: true,
+				helpText:
+					'The current gas price of the blockchain, the gas price is used to calculate the fee paid to the miners/validators to execute a transaction.'
 			});
 		}
 
@@ -68,7 +72,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				label: 'Time from last block',
 				icon: EIcon.timer,
 				colorAnimationOnUpdate: true,
-				reverseColor: true
+				reverseColor: true,
+				helpText: 'The time since the last block was mined'
 			});
 		}
 
@@ -82,7 +87,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				valueHasDecimals: hasDecimals,
 				label: 'Hashrate',
 				icon: EIcon.chart,
-				colorAnimationOnUpdate: true
+				colorAnimationOnUpdate: true,
+				helpText:
+					'The hashrate of the blockchain, a speed of 1 hash per second means that each second a new attempt to validate a block is made'
 			});
 		}
 

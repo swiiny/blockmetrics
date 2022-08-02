@@ -26,7 +26,7 @@
 	"scripts": {
 		"test": "echo \"Error: no test specified\" && exit 1",
 		"dev": "nodemon server.js",
-		"start": "NODE_OPTIONS='--max-old-space-size=4096' node server.js"
+		"start": "NODE_OPTIONS='--max-old-space-size=1024' node server.js"
 	},
 	"repository": {
 		"type": "git",
