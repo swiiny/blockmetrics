@@ -2,6 +2,7 @@ import React, { FC, useEffect, useMemo, useState } from 'react';
 import { IBMCardContainer } from './BMCardContainer.type';
 import { v4 as uuidv4 } from 'uuid';
 import { StyledBMCardContainer, StyledHoverGlow, SytledFullContainer } from './BMCardContainer.styles';
+import { ESize } from '../../utils/enum';
 
 const BMCardContainer: FC<IBMCardContainer> = ({
 	children,
@@ -11,6 +12,7 @@ const BMCardContainer: FC<IBMCardContainer> = ({
 	tertiary = false,
 	fullWidth = false,
 	fullHeight = false,
+	borderRadius = ESize.m,
 	...otherProps
 }) => {
 	const glowContainerUuid = useMemo(() => {
@@ -80,6 +82,7 @@ const BMCardContainer: FC<IBMCardContainer> = ({
 			tertiary={tertiary}
 			fullWidth={fullWidth}
 			fullHeight={fullHeight}
+			borderRadius={borderRadius}
 			{...otherProps}
 		>
 			{windowMounted && clickable ? (
