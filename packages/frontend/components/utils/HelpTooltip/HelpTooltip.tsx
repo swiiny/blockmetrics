@@ -17,7 +17,9 @@ const HelpTooltip: FC<{ content: string }> = ({ content }) => {
 
 	const onMouseEnter = useCallback(
 		(event: MouseEvent) => {
+			// @ts-ignore
 			if (window[`tooltip-timer-${uuid}`]) {
+				// @ts-ignore
 				clearTimeout(window[`tooltip-timer-${uuid}`]);
 			}
 
