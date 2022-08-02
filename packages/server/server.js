@@ -709,7 +709,7 @@ async function init() {
 
 		console.log('Memory usage: ' + mem + ' MB');
 
-		if (mem >= 256) {
+		if (mem >= 512) {
 			//if(global.gc) global.gc();
 			console.log('Kill process ========>');
 
