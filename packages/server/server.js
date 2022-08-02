@@ -715,7 +715,7 @@ async function init() {
 
 			await axios.get(process.env.RESTART_SERVER_URL);
 		}
-	}, 30 * 1000);
+	}, 5 * 60 * 1000);
 }
 
 init();
