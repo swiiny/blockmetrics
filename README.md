@@ -35,11 +35,12 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 
 ### Frontend
 
--   [ ] BMSquaredIcon component :construction:
+-   [x] BMSquaredIcon component
 -   [ ] Chart tooltip
 -   [ ] Switch component (secondary)
+-   [ ] Integrate second comparison page variant (MVP)
 -   [x] Unselect all button
--   [ ] Integrate Comparison page :construction:
+-   [x] Integrate Comparison page (MVP)
 -   [x] Add help tooltip where it's necessary
 -   [ ] Add skeleton and alert pop when api not available
 
