@@ -6,7 +6,7 @@ interface IBMIcon {
 	size?: ESize;
 	backgroundRadius?: ESize;
 	backgroundSize?: ESize;
-	color?: ETextColor;
+	isVisible?: boolean;
 	id?: string;
 }
 

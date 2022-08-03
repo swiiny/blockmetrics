@@ -78,6 +78,13 @@ export const BLOCKCHAINS = {
 
 export const BLOCKCHAINS_ARRAY = Object.values(BLOCKCHAINS);
 
+// Object with blockchain id as key and icon as value
+export const BLOCKCHAINS_ICONS = BLOCKCHAINS_ARRAY.reduce((acc, blockchain) => {
+	// @ts-ignore
+	acc[blockchain.id] = blockchain.icon;
+	return acc;
+}, {});
+
 export const axiosServer = axios.create({
 	baseURL: process.env.SERVER_URL
 });

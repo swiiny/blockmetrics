@@ -1,6 +1,13 @@
 import styled, { css } from 'styled-components';
 import { EMediaQuery } from '../../utils/enum';
-import { addAnimationStyles, addPaddingStyles, addTransition, getSpacingFromESize, mq } from '../../utils/functions';
+import {
+	addAnimationStyles,
+	addMarginStyles,
+	addPaddingStyles,
+	addTransition,
+	getSpacingFromESize,
+	mq
+} from '../../utils/functions';
 
 export const StyledBMCardContainer = styled.div<any>`
 	${(p) => {
@@ -87,6 +94,8 @@ export const StyledBMCardContainer = styled.div<any>`
 
 				background-clip: content-box;
 			}
+
+			${addMarginStyles(p)}
 
 			& > span {
 				display: block;

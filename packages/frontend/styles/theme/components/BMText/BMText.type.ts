@@ -1,7 +1,8 @@
 import { CSSProperties } from 'react';
+import { IMargin } from '../../../../types/layouts';
 import { ESize, ETextAlign, ETextColor, ETextTransform, ETextType, ETextWeight } from '../../utils/enum';
 
-interface IBMText {
+interface IBMText extends IMargin {
 	children: React.ReactNode | string;
 	type?: ETextType;
 	textColor?: ETextColor;

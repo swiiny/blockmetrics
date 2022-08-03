@@ -1,4 +1,5 @@
 import { EDailyData } from '../../../styles/theme/utils/enum';
+import { TBlockchain } from '../../../types/blockchain';
 
 interface IBarChart {
 	dailyType: EDailyData;

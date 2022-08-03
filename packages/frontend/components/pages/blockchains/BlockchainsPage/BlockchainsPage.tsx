@@ -7,6 +7,7 @@ import BlockchainCard from '../../../cards/BlockchainCard';
 import { StyledBlockchainList } from './BlockchainsPage.styles';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import { ESubscribeType } from '../../../../styles/theme/utils/enum';
+import { TBlockchain } from '../../../../types/blockchain';
 
 const HeaderData = {
 	title: 'Blockchains',

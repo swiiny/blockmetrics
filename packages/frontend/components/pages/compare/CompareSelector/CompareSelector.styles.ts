@@ -11,9 +11,13 @@ export const StyledSelectSquare = styled.div`
 	border: solid 1px ${(p) => p.theme.colors.primary};
 `;
 
-export const StyledSelectCircle = styled.div<{ isSelected?: boolean }>`
+export const StyledSelectedCircle = styled.div<{ isSelected?: boolean }>`
 	${(p) => css`
 		position: absolute;
+
+		display: flex;
+		justify-content: center;
+		align-items: center;
 
 		right: -5px;
 		top: -5px;

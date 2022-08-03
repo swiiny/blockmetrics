@@ -3,12 +3,13 @@ import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
 import Main from '../../../../styles/layout/Main';
-import Flex from '../../../../styles/layout/Flex';
 import CompareSelector from '../CompareSelector';
 import useWebsocket from '../../../../hooks/useWebsocket';
-import { ESubscribeType } from '../../../../styles/theme/utils/enum';
-import { BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
-import { getEIconTypeFromValue } from '../../../../styles/theme/utils/functions';
+import { ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
+import Spacing from '../../../../styles/layout/Spacing';
+import { CompareBlockchains } from '../CompareBlockchains/CompareBlockchains';
+import { BLOCKCHAINS_ICONS } from '../../../../utils/variables';
+import { TBlockchain } from '../../../../types/blockchain';
 
 const HeaderData = {
 	title: 'Compare',
@@ -41,13 +42,19 @@ const ComparePage: NextPage = () => {
 	);
 
 	useEffect(() => {
-		if (message?.channel === ESubscribeType.blockchainCards) {
-			setBlockchains(message.data);
+		if (message?.channel === ESubscribeType.blockchains) {
+			setBlockchains(
+				message.data.map((data: TBlockchain) => ({
+					...data,
+					isSelected: selectedBlockchainIds.includes(data.id),
+					icon: BLOCKCHAINS_ICONS[data.id as keyof typeof BLOCKCHAINS_ICONS]
+				}))
+			);
 		}
-	}, [message]);
+	}, [message, selectedBlockchainIds]);
 
 	useEffect(() => {
-		subscribeTo(ESubscribeType.blockchainCards);
+		subscribeTo(ESubscribeType.blockchains);
 	}, [subscribeTo]);
 
 	return (
@@ -62,6 +69,10 @@ const ComparePage: NextPage = () => {
 					onSelectBlockchain={(id) => onSelectBlockchain(id)}
 					selectedBlockchainIds={selectedBlockchainIds}
 				/>
+
+				<Spacing size={ESize.l} />
+
+				<CompareBlockchains blockchains={blockchains.filter(({ isSelected }) => isSelected)} />
 			</Main>
 		</>
 	);

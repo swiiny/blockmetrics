@@ -17,6 +17,7 @@ import {
 	ETextType,
 	ETextWeight
 } from '../../../../styles/theme/utils/enum';
+import { TBlockchainMetadata } from '../../../../types/blockchain';
 import { getBlockchainMetadataAndScoreById } from '../../../../utils/fetch';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList, StyledRank, StyledUsefulLinkList } from './InformationCard.styles';

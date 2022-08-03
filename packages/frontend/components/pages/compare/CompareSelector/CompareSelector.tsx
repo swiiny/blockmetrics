@@ -1,13 +1,12 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
 import BMIcon from '../../../../styles/theme/components/BMIcon';
 import BMText from '../../../../styles/theme/components/BMText';
 import { EFlex, EIcon, ESize } from '../../../../styles/theme/utils/enum';
-import { BLOCKCHAINS, BLOCKCHAINS_ARRAY } from '../../../../utils/variables';
 import ItemButton from '../../../utils/ItemButton';
-import { StyledListItem, StyledSelectCircle, StyledSelectSquare } from './CompareSelector.styles';
+import { StyledListItem, StyledSelectedCircle, StyledSelectSquare } from './CompareSelector.styles';
 import { ICompareSelector } from './CompareSelector.type';
 
 const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain, selectedBlockchainIds }) => {
@@ -33,13 +32,15 @@ const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain
 
 			<BMCardContainer fullWidth paddingX={ESize.xl} paddingY={ESize.m}>
 				<Flex as='ul' vertical={EFlex.center} horizontal={EFlex.start} fullWidth>
-					{blockchains.map(({ id, name }) => (
+					{blockchains.map(({ id, icon, name, isSelected }) => (
 						<StyledListItem key={id}>
-							<StyledSelectCircle isSelected={selectedBlockchainIds.includes(id)} />
+							<StyledSelectedCircle isSelected={isSelected}>
+								<BMIcon type={EIcon.check} size={ESize['2xs']} isVisible={isSelected} />
+							</StyledSelectedCircle>
 
 							<Flex direction={EFlex.column} vertical={EFlex.center} horizontal={EFlex.center}>
 								<BMIcon
-									type={BLOCKCHAINS_ARRAY.find(({ id: chainId }) => chainId === id)?.icon}
+									type={icon}
 									size={ESize.s}
 									backgroundVisible
 									backgroundSize={ESize.xs}

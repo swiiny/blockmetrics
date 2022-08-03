@@ -16,10 +16,8 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [x] remove "note" from blockchain table, remove note column fetching from APIs
 -   [ ] Create text content
 
--   [ ] Create an image with a schudeled task to restart the server each 6 hours to prevent High Memory usage (remove when memory leak will be found)
-
-- [ ] setup linters
-- [ ] setup github actions to run tests before merge to production
+-   [ ] setup linters
+-   [ ] setup github actions to run tests before merge to production
 
 ### Server
 
@@ -37,11 +35,11 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 
 ### Frontend
 
--   [ ] BMSquaredIcon component
+-   [ ] BMSquaredIcon component :construction:
 -   [ ] Chart tooltip
--   [ ] Switch component
--   [ ] Unselect all button
--   [ ] Integrate Comparison page
+-   [ ] Switch component (secondary)
+-   [x] Unselect all button
+-   [ ] Integrate Comparison page :construction:
 -   [x] Add help tooltip where it's necessary
 -   [ ] Add skeleton and alert pop when api not available
 
