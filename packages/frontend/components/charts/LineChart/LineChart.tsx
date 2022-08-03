@@ -53,7 +53,7 @@ const LineChart: FC<IBarLineChart> = ({
 
 	const maxValue = useMemo(() => {
 		try {
-			return Math.max(...yData) * 1.005;
+			return Math.max(...yData) * 1.01;
 		} catch {
 			return 0;
 		}
