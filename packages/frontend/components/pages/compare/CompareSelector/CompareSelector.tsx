@@ -9,7 +9,7 @@ import ItemButton from '../../../utils/ItemButton';
 import { StyledListItem, StyledSelectedCircle, StyledSelectSquare } from './CompareSelector.styles';
 import { ICompareSelector } from './CompareSelector.type';
 
-const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain, selectedBlockchainIds }) => {
+const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain }) => {
 	return (
 		<>
 			<Flex fullWidth vertical={EFlex.center} horizontal={EFlex.between}>
@@ -24,7 +24,7 @@ const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain
 						<BMText size={ESize.m}>Unselect all</BMText>
 					</Flex>
 
-					<ItemButton onClick={() => onSelectBlockchain(null)} />
+					<ItemButton onClick={() => onSelectBlockchain(null)} ariaLabel='select or unselect all' />
 				</BMCardContainer>
 			</Flex>
 

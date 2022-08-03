@@ -22,7 +22,7 @@ const CompareBlockchainData: FC<ICompareData> = ({
 	const dataRef = useRef<number>(0);
 
 	const isEmpty = useMemo(() => {
-		return label === 'empty';
+		return label.includes('empty');
 	}, [label]);
 
 	useEffect(() => {

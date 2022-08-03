@@ -74,9 +74,9 @@ const BMCardContainer: FC<IBMCardContainer> = ({
 	return (
 		// @ts-ignore
 		<StyledBMCardContainer
-			onMouseMove={(e: MouseEvent) => onMouseMove(e)}
-			onMouseEnter={() => onMouseEnter()}
-			onMouseLeave={() => onMouseLeave()}
+			onMouseMove={clickable ? (e: MouseEvent) => onMouseMove(e) : undefined}
+			onMouseEnter={clickable ? () => onMouseEnter() : undefined}
+			onMouseLeave={clickable ? () => onMouseLeave() : undefined}
 			isHighlighted={isHighlighted}
 			secondary={secondary}
 			tertiary={tertiary}

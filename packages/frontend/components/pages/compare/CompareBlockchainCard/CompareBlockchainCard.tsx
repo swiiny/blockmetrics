@@ -42,7 +42,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		} else {
 			result.push({
 				value: 0,
-				label: 'empty',
+				label: 'empty-token',
 				icon: EIcon.none
 			});
 		}
@@ -61,7 +61,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		} else {
 			result.push({
 				value: 0,
-				label: 'empty',
+				label: 'empty-energy',
 				icon: EIcon.none
 			});
 		}
@@ -77,7 +77,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		} else {
 			result.push({
 				value: 0,
-				label: 'empty',
+				label: 'empty-gasprice',
 				icon: EIcon.none
 			});
 		}
@@ -96,7 +96,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		} else {
 			result.push({
 				value: 0,
-				label: 'empty',
+				label: 'empty-tvl',
 				icon: EIcon.none
 			});
 		}
