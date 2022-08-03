@@ -1,20 +1,22 @@
 import styled, { css } from 'styled-components';
-import { addTransition } from '../../../../styles/theme/utils/functions';
+import BMGradientSeparator from '../../../../styles/theme/components/BMGradientSeparator';
+import { EMediaQuery } from '../../../../styles/theme/utils/enum';
+import { addTransition, mq } from '../../../../styles/theme/utils/functions';
 
 export const StyledListItem = styled.li<{ isVisible?: boolean }>`
 	${(p) => css`
 		position: relative;
 		width: 100%;
-
-		${addTransition()}
-		${p.isVisible
-			? css`
-					max-height: 200px;
-					opacity: 1;
-			  `
-			: css`
-					max-height: 0px;
-					opacity: 0;
-			  `}
 	`}
+`;
+
+export const BMGradientSeparatorEx = styled(BMGradientSeparator)`
+	height: 60px;
+
+	${mq(
+		EMediaQuery.md,
+		`
+		height: 1px;
+	`
+	)}
 `;

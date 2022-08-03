@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useRef, useState } from 'react';
+import React, { FC, useEffect, useMemo, useRef, useState } from 'react';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
 import BMIcon from '../../../../styles/theme/components/BMIcon';
@@ -6,6 +6,7 @@ import BMText from '../../../../styles/theme/components/BMText';
 import { EFlex, ESize, ETextColor, ETextWeight } from '../../../../styles/theme/utils/enum';
 import { ICompareData } from '../CompareBlockchains/CompareBlockchains.type';
 import CountUp from 'react-countup';
+import { StyledCompareBlockchainData } from './CompareBlockchainData.styles';
 
 const CompareBlockchainData: FC<ICompareData> = ({
 	label,
@@ -19,6 +20,10 @@ const CompareBlockchainData: FC<ICompareData> = ({
 	const [valueColor, setValueColor] = useState<ETextColor>(ETextColor.default);
 
 	const dataRef = useRef<number>(0);
+
+	const isEmpty = useMemo(() => {
+		return label === 'empty';
+	}, [label]);
 
 	useEffect(() => {
 		if (!colorAnimationOnUpdate) {
@@ -45,27 +50,29 @@ const CompareBlockchainData: FC<ICompareData> = ({
 	}, [value, colorAnimationOnUpdate, reverseColor]);
 
 	return (
-		<div>
+		<StyledCompareBlockchainData>
 			<Flex vertical={EFlex.center}>
 				<BMIcon size={ESize.xs} type={icon} />
 
 				<Spacing size={ESize['4xs']} />
 
-				<BMText size={ESize.s}>{label}</BMText>
+				<BMText size={ESize.s}>{isEmpty ? '' : label}</BMText>
 			</Flex>
 
-			<Spacing size={ESize.xs} />
+			<Spacing size={ESize['2xs']} smSize={ESize['7xs']} mdSize={ESize['3xs']} />
 
 			<BMText textColor={valueColor} weight={ETextWeight.semiBold} size={ESize.l} marginLeft={ESize.m}>
 				{isAnimated ? (
 					<CountUp preserveValue end={value} duration={1} separator=',' style={{ color: 'inherit' }} />
+				) : isEmpty ? (
+					'-'
 				) : (
 					value
 				)}
 
 				{unit ? ` ${unit}` : <></>}
 			</BMText>
-		</div>
+		</StyledCompareBlockchainData>
 	);
 };
 

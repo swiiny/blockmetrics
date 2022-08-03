@@ -1,17 +1,17 @@
 import React, { FC, useMemo } from 'react';
+import useResponsive from '../../../../hooks/useResponsive';
 import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
-import BMGradientSeparator from '../../../../styles/theme/components/BMGradientSeparator';
 import BMIcon from '../../../../styles/theme/components/BMIcon';
 import BMText from '../../../../styles/theme/components/BMText';
-import { EDirection, EFlex, EIcon, ESize } from '../../../../styles/theme/utils/enum';
+import { EDirection, EFlex, EIcon, ESize, ETextWeight } from '../../../../styles/theme/utils/enum';
 import { TBlockchain } from '../../../../types/blockchain';
 import { getEngNotation } from '../../../../utils/convert';
 import CompareBlockchainData from '../CompareBlockchainData';
 import { ICompareData } from '../CompareBlockchains/CompareBlockchains.type';
-import { StyledListItem } from './CompareBlockchainsCard.styles';
+import { BMGradientSeparatorEx, StyledListItem } from './CompareBlockchainsCard.styles';
 
 const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 	const {
@@ -26,6 +26,8 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		total_value_locked
 	} = blockchain;
 
+	const { isSmallerThanSm, isSmallerThanMd } = useResponsive();
+
 	const compareData = useMemo<ICompareData[]>(() => {
 		const result = [];
 		if (token_count) {
@@ -36,6 +38,12 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				icon: EIcon.token,
 				colorAnimationOnUpdate: true,
 				reverseColor: true
+			});
+		} else {
+			result.push({
+				value: 0,
+				label: 'empty',
+				icon: EIcon.none
 			});
 		}
 
@@ -48,8 +56,13 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				isAnimated: true,
 				label: '24H Power Consumption',
 				icon: EIcon.energy,
-				colorAnimationOnUpdate: true,
-				reverseColor: true
+				colorAnimationOnUpdate: true
+			});
+		} else {
+			result.push({
+				value: 0,
+				label: 'empty',
+				icon: EIcon.none
 			});
 		}
 
@@ -61,6 +74,12 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				icon: EIcon.gas,
 				colorAnimationOnUpdate: true
 			});
+		} else {
+			result.push({
+				value: 0,
+				label: 'empty',
+				icon: EIcon.none
+			});
 		}
 
 		if (total_value_locked) {
@@ -71,30 +90,52 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				unit: unit,
 				label: 'Total Value Locked',
 				icon: EIcon.chart,
-				colorAnimationOnUpdate: true
+				colorAnimationOnUpdate: true,
+				reverseColor: true
+			});
+		} else {
+			result.push({
+				value: 0,
+				label: 'empty',
+				icon: EIcon.none
 			});
 		}
 
-		return result.slice(0, 4);
-	}, [token_count, blockchain_power_consumption, gas_price, total_value_locked]);
+		const maxItemCount = isSmallerThanSm ? 2 : isSmallerThanMd ? 3 : 4;
+
+		return result.slice(0, maxItemCount);
+	}, [token_count, blockchain_power_consumption, gas_price, total_value_locked, isSmallerThanSm, isSmallerThanMd]);
 
 	return (
 		<StyledListItem key={id} isVisible={isSelected}>
-			<BMCardContainer fullWidth marginTop={ESize.l} padding={ESize.l} animateApparition>
-				<Flex horizontal={EFlex.between} vertical={EFlex.center}>
-					<Column columns={4}>
+			<BMCardContainer
+				fullWidth
+				marginTop={ESize.l}
+				padding={ESize.l}
+				lgPadding={ESize.m}
+				smPadding={ESize.s}
+				animateApparition
+				isHighlighted
+			>
+				<Flex mdDirection={EFlex.column} horizontal={EFlex.between} vertical={EFlex.center}>
+					<Column columns={3} md={12}>
 						<Flex horizontal={EFlex.start} vertical={EFlex.center}>
-							<BMIcon type={icon} size={ESize.m} />
+							<BMIcon type={icon} size={!isSmallerThanMd ? ESize.m : ESize.s} />
 
 							<Spacing size={ESize.s} />
 
-							<BMText size={ESize['3xl']}>{name}</BMText>
+							<BMText size={!isSmallerThanMd ? ESize['2xl'] : ESize.xl} weight={ETextWeight.semiBold}>
+								{name}
+							</BMText>
 						</Flex>
 					</Column>
 
-					<BMGradientSeparator direction={EDirection.vertical} />
+					<BMGradientSeparatorEx
+						direction={!isSmallerThanMd ? EDirection.vertical : EDirection.horizontal}
+						mdMargin={ESize.s}
+					/>
 
-					<Column columns={7}>
+					<Column columns={8} md={12}>
 						<Flex horizontal={EFlex.between} vertical={EFlex.center}>
 							{compareData.map((data: ICompareData) => (
 								<CompareBlockchainData key={data.label} {...data} />

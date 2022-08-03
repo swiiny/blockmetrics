@@ -11,7 +11,7 @@ const CompareBlockchains: FC<ICompareBlockchains> = ({ blockchains }) => {
 	return (
 		<>
 			<Flex fullWidth vertical={EFlex.center} horizontal={EFlex.start}>
-				<BMText size={ESize.xl}>Tokens</BMText>
+				<BMText size={ESize.xl}>Blockchains</BMText>
 
 				<Spacing size={ESize['4xs']} />
 

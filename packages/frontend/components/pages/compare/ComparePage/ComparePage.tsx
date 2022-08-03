@@ -8,7 +8,7 @@ import useWebsocket from '../../../../hooks/useWebsocket';
 import { ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
 import Spacing from '../../../../styles/layout/Spacing';
 import { CompareBlockchains } from '../CompareBlockchains/CompareBlockchains';
-import { BLOCKCHAINS_ICONS } from '../../../../utils/variables';
+import { BLOCKCHAINS_ARRAY, BLOCKCHAINS_ICONS } from '../../../../utils/variables';
 import { TBlockchain } from '../../../../types/blockchain';
 
 const HeaderData = {
@@ -21,7 +21,9 @@ const HeaderData = {
 const ComparePage: NextPage = () => {
 	const { subscribeTo, message } = useWebsocket();
 	const [blockchains, setBlockchains] = useState<TBlockchain[]>([]);
-	const [selectedBlockchainIds, setSelectedBlockchainIds] = useState<string[]>([]);
+	const [selectedBlockchainIds, setSelectedBlockchainIds] = useState<string[]>(
+		BLOCKCHAINS_ARRAY.map((blockchain) => blockchain.id)
+	);
 
 	const onSelectBlockchain = useCallback(
 		(id: string | null) => {
