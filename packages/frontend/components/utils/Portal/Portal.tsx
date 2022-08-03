@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 import { IPortal } from './Portal.type';
 
 // client only
-const Portal: FC<IPortal> = ({ children, selector }) => {
+const Portal: FC<IPortal> = ({ children, selector = 'body' }) => {
 	const ref = useRef<any | undefined>();
 	const [mounted, setMounted] = useState<boolean>(false);
 

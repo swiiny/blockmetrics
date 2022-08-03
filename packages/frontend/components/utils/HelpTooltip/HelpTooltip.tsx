@@ -50,7 +50,7 @@ const HelpTooltip: FC<{ content: string }> = ({ content }) => {
 
 	return (
 		<>
-			<Portal selector='body'>
+			<Portal>
 				{tooltipPosition && (
 					<StyledHelpTooltipContainer isVisible={isVisible} style={tooltipPosition}>
 						<BMText size={ESize.s}>{content}</BMText>
