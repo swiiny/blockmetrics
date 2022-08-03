@@ -25,7 +25,7 @@ const BMIcon: FC<IBMIcon> = ({
 			isVisible={isVisible}
 		>
 			<StyledIcon size={size} {...otherProps}>
-				<Image src={`/assets/icons/${type}.svg`} layout='fill' alt='' />
+				<Image src={`/assets/icons/${type}.svg`} layout='fill' alt='' draggable={false} />
 			</StyledIcon>
 		</StyledBackground>
 	);
