@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { ELanguage } from '../styles/theme/utils/enum';
+import { TBlockchain, TBlockchainMetadata, TBlockchainScore } from '../types/blockchain';
 import { axiosRest } from './variables';
 
 export const getBlockchainById = async (id: string): Promise<TBlockchain | null> => {

@@ -7,6 +7,7 @@ import { IBMIcon } from './BMIcon.type';
 const BMIcon: FC<IBMIcon> = ({
 	type = EIcon.none,
 	size = ESize.l,
+	isVisible = true,
 	backgroundVisible = false,
 	backgroundRadius = ESize.s,
 	backgroundSize = ESize.s,
@@ -21,9 +22,10 @@ const BMIcon: FC<IBMIcon> = ({
 			backgroundVisible={backgroundVisible}
 			backgroundRadius={backgroundRadius}
 			backgroundSize={backgroundSize}
+			isVisible={isVisible}
 		>
 			<StyledIcon size={size} {...otherProps}>
-				<Image src={`/assets/icons/${type}.svg`} layout='fill' alt='' />
+				<Image src={`/assets/icons/${type}.svg`} layout='fill' alt='' draggable={false} />
 			</StyledIcon>
 		</StyledBackground>
 	);

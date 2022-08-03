@@ -1,4 +1,5 @@
 import { EChartType, EDailyData, EDailyGlobalData, ETextColor } from '../styles/theme/utils/enum';
+import { TBlockchain } from './blockchain';
 
 interface IBarLineChart {
 	chartType?: EChartType;

@@ -60,11 +60,16 @@ export const StyledBackground = styled.span<{
 	backgroundVisible?: boolean;
 	backgroundRadius: ESize;
 	backgroundSize: ESize;
+	isVisible?: boolean;
 }>`
 	${(p) => css`
 		display: flex;
 		justify-content: center;
 		align-items: center;
+
+		${addTransition()}
+
+		${!p.isVisible ? `opacity: 0;` : `opacity: 1;`}
 
 		${p.backgroundVisible
 			? `

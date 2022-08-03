@@ -89,6 +89,7 @@ export enum ETextColor {
 	positive = 'positive',
 	negative = 'negative',
 	warning = 'warning',
+	transparent = 'transparent',
 	disabled = 'disabled'
 }
 
@@ -189,6 +190,13 @@ export enum EIcon {
 	gas = 'gas',
 	token = 'token',
 	chart = 'chart',
+	check = 'check',
+	sortBottom = 'sort-bottom',
+	sortTop = 'sort-top',
+	arrowBottom = 'arrow-bottom',
+	arrowTop = 'arrow-top',
+	arrowLeft = 'arrow-left',
+	arrowRight = 'arrow-right',
 	timer = 'timer',
 	issue = 'issue',
 	help = 'help',

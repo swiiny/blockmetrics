@@ -1,3 +1,5 @@
+import { EIcon } from '../styles/theme/utils/enum';
+
 type TBlockchain = {
 	id: string;
 	name: string;
@@ -18,6 +20,8 @@ type TBlockchain = {
 	today_transaction_count: number;
 	address_count: number;
 	today_address_count: number;
+	isSelected?: boolean;
+	icon?: EIcon;
 };
 
 type TBlockchainMetadata = {
@@ -39,3 +43,5 @@ type TBlockchainScore = {
 	total_value_locked: number;
 	speed: number;
 };
+
+export type { TBlockchain, TBlockchainMetadata, TBlockchainScore };

@@ -13,6 +13,7 @@ import { StyledList } from './SingleBlockchainPage.styles';
 import { getEngNotation } from '../../../../utils/convert';
 import InformationCard from '../InformationCard';
 import BlockchainData from '../BlockchainData';
+import { TBlockchain } from '../../../../types/blockchain';
 
 const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainLogo, blockchainChannel }) => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();

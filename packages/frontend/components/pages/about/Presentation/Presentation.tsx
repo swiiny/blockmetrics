@@ -38,7 +38,13 @@ const Presentation: React.FC = () => {
 
 			<Flex wrapItems={isSmallerThanMd} horizontal={EFlex.between} mdHorizontal={EFlex.start} padding={ESize.s}>
 				<StyledImageContainer>
-					<Image src='/assets/images/dev.png' alt='Picture of Jeremy Theintz' layout='fill' objectFit='contain' />
+					<Image
+						src='/assets/images/dev.png'
+						alt='Picture of Jeremy Theintz'
+						layout='fill'
+						objectFit='contain'
+						draggable={false}
+					/>
 				</StyledImageContainer>
 
 				<Spacing size={ESize.s} />
