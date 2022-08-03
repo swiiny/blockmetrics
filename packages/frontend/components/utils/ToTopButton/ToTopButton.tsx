@@ -39,7 +39,7 @@ const ToTopButton: FC = () => {
 				paddingX={ESize['xs']}
 				isVisible={isVisible}
 			>
-				<BMIcon type={EIcon.arrowTop} size={ESize.s} />
+				<BMIcon type={EIcon.arrowTop} size={ESize.xs} />
 
 				<ItemButton onClick={scrollToTop} ariaLabel='Scroll to the top of the page' />
 			</BMCardContainerEx>

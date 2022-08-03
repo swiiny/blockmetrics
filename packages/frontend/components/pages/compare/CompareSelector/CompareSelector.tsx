@@ -52,7 +52,10 @@ const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain
 								<BMText size={ESize.m}>{name}</BMText>
 							</Flex>
 
-							<ItemButton onClick={() => onSelectBlockchain(id)} />
+							<ItemButton
+								onClick={() => onSelectBlockchain(id)}
+								ariaLabel={`${isSelected ? 'un' : ''}select ${name} blockchain`}
+							/>
 						</StyledListItem>
 					))}
 				</Flex>
