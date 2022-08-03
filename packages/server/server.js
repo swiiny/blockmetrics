@@ -714,7 +714,15 @@ async function init() {
 			console.log('Kill process ========>');
 
 			if (process.env.NODE_ENV === 'production') {
-				await axios.get(process.env.RESTART_SERVER_URL);
+				const now = new Date();
+				const hour = now.getHours();
+				const minutes = now.getMinutes();
+
+				// prevent restarting the server near a scheduled task
+				if ((hour !== 2 && hour !== 12) || (minutes > 30 && minutes < 50)) {
+					// restart node on jelastic
+					await axios.get(process.env.RESTART_SERVER_URL);
+				}
 			}
 		}
 	}, 5 * 60 * 1000);
