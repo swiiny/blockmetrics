@@ -45,6 +45,20 @@ export const darkTheme: DefaultTheme = {
 			toTop: 'linear-gradient(to top, #6AD4F3, #25A9DC)',
 			toBottom: 'linear-gradient(to bottom, #6AD4F3, #25A9DC)'
 		},
+		chart: {
+			positive: {
+				gradientStart: '#6BFFA6',
+				gradientEnd: '#a6f5c6'
+			},
+			negative: {
+				gradientStart: '#F22C3F',
+				gradientEnd: '#f64f60'
+			},
+			default: {
+				gradientStart: '#25A9DC',
+				gradientEnd: '#6AD4F3'
+			}
+		},
 		text: {
 			default: '#FFFFFF',
 			light: '#79DCEF',
@@ -72,6 +86,20 @@ export const lightTheme: DefaultTheme = {
 			toLeft: 'linear-gradient(to left, #6AD4F3, #25A9DC)',
 			toTop: 'linear-gradient(to top, #6AD4F3, #25A9DC)',
 			toBottom: 'linear-gradient(to bottom, #6AD4F3, #25A9DC)'
+		},
+		chart: {
+			positive: {
+				gradientStart: '#6BFFA6',
+				gradientEnd: '#a6f5c6'
+			},
+			negative: {
+				gradientStart: '#F22C3F',
+				gradientEnd: '#f64f60'
+			},
+			default: {
+				gradientStart: '#25A9DC',
+				gradientEnd: '#6AD4F3'
+			}
 		},
 		text: {
 			default: '#B3FCFF',

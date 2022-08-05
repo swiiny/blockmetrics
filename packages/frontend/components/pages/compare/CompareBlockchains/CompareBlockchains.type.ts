@@ -9,10 +9,12 @@ interface ICompareData {
 	label: string;
 	icon: EIcon;
 	value: number;
+	fullValue?: string;
 	unit?: string;
 	colorAnimationOnUpdate?: boolean;
 	reverseColor?: boolean;
 	isAnimated?: boolean;
+	loading?: boolean;
 }
 
 export type { ICompareBlockchains, ICompareData };

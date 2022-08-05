@@ -7,6 +7,7 @@ import { EFlex, ESize, ETextColor, ETextWeight } from '../../../../styles/theme/
 import { ICompareData } from '../CompareBlockchains/CompareBlockchains.type';
 import CountUp from 'react-countup';
 import { StyledCompareBlockchainData } from './CompareBlockchainData.styles';
+import ElementTooltip from '../../../utils/ElementTooltip';
 
 const CompareBlockchainData: FC<ICompareData> = ({
 	label,
@@ -15,7 +16,9 @@ const CompareBlockchainData: FC<ICompareData> = ({
 	icon,
 	colorAnimationOnUpdate = false,
 	reverseColor = false,
-	isAnimated = false
+	isAnimated = false,
+	loading = false,
+	fullValue
 }) => {
 	const [valueColor, setValueColor] = useState<ETextColor>(ETextColor.default);
 
@@ -52,26 +55,36 @@ const CompareBlockchainData: FC<ICompareData> = ({
 	return (
 		<StyledCompareBlockchainData>
 			<Flex vertical={EFlex.center}>
-				<BMIcon size={ESize.xs} type={icon} />
+				<BMIcon size={ESize.xs} type={icon} loading={loading} skWidth={25} />
 
 				<Spacing size={ESize['4xs']} />
 
-				<BMText size={ESize.s}>{isEmpty ? '' : label}</BMText>
+				<BMText size={ESize.s} loading={loading} skWidth='50%'>
+					{isEmpty ? '' : label}
+				</BMText>
 			</Flex>
 
 			<Spacing size={ESize['2xs']} smSize={ESize['7xs']} mdSize={ESize['3xs']} />
 
-			<BMText textColor={valueColor} weight={ETextWeight.semiBold} size={ESize.l} marginLeft={ESize.m}>
-				{isAnimated ? (
-					<CountUp preserveValue end={value} duration={1} separator=',' style={{ color: 'inherit' }} />
-				) : isEmpty ? (
-					'-'
-				) : (
-					value
-				)}
+			<ElementTooltip content={fullValue} disabled={!fullValue}>
+				<BMText
+					textColor={valueColor}
+					weight={ETextWeight.semiBold}
+					size={ESize.l}
+					marginLeft={ESize.m}
+					loading={loading}
+				>
+					{isAnimated ? (
+						<CountUp preserveValue end={value} duration={1} separator=',' style={{ color: 'inherit' }} />
+					) : isEmpty ? (
+						'-'
+					) : (
+						value
+					)}
 
-				{unit ? ` ${unit}` : <></>}
-			</BMText>
+					{unit ? ` ${unit}` : <></>}
+				</BMText>
+			</ElementTooltip>
 		</StyledCompareBlockchainData>
 	);
 };

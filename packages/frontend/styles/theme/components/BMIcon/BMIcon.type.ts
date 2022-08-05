@@ -1,6 +1,7 @@
-import { EIcon, ESize, ETextColor } from '../../utils/enum';
+import { EIcon, ESize } from '../../utils/enum';
+import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
 
-interface IBMIcon {
+interface IBMIcon extends ISkeleton {
 	backgroundVisible?: boolean;
 	type?: EIcon;
 	size?: ESize;

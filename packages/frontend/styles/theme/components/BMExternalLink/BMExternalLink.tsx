@@ -1,5 +1,6 @@
 import React, { FC, useMemo } from 'react';
 import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
+import BMSkeleton from '../BMSkeleton';
 import { StyledBMExternalLink } from './BMExternalLink.styles';
 import { IBMExternalLink } from './BMExternalLink.type';
 
@@ -9,6 +10,9 @@ const BMExternalLink: FC<IBMExternalLink> = ({
 	inheritStyles = false,
 	weight = ETextWeight.normal,
 	textColor = ETextColor.accent,
+	loading = false,
+	skWidth,
+	skHeight,
 	...otherProps
 }) => {
 	const formattedLabel = useMemo(() => {
@@ -21,6 +25,10 @@ const BMExternalLink: FC<IBMExternalLink> = ({
 
 		return hrefWithoutProtocol;
 	}, [href]);
+
+	if (loading) {
+		return <BMSkeleton width={skWidth} height={skHeight} />;
+	}
 
 	return (
 		<StyledBMExternalLink

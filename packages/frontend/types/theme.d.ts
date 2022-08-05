@@ -42,6 +42,20 @@ declare module 'styled-components' {
 				toTop: string;
 				toBottom: string;
 			};
+			chart: {
+				positive: {
+					gradientStart: string;
+					gradientEnd: string;
+				};
+				negative: {
+					gradientStart: string;
+					gradientEnd: string;
+				};
+				default: {
+					gradientStart: string;
+					gradientEnd: string;
+				};
+			};
 			text: {
 				default: string;
 				light: string;
