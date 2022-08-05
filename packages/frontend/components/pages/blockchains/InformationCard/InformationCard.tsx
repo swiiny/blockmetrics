@@ -21,7 +21,7 @@ import { TBlockchainMetadata } from '../../../../types/blockchain';
 import { getBlockchainMetadataAndScoreById } from '../../../../utils/fetch';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList, StyledRank, StyledUsefulLinkList } from './InformationCard.styles';
-import { IInformationCard } from './InformationCard.type';
+import { IInformationCard, IRankingDetails } from './InformationCard.type';
 
 const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = () => {}, ...otherProps }) => {
 	const { isSmallerThanMd, isSmallerThanLg } = useResponsive();
@@ -75,21 +75,25 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 	}, [metadata]);
 
 	const rankingDetails = useMemo(() => {
-		const items: { label: string; value: number }[] = [];
+		const items: IRankingDetails[] = [];
 
 		items.push({
 			label: 'Tokens count',
-			value: score.token_count
+			value: score.token_count,
+			helpText: 'We assume that the more token there is, the more likely the blockchain will be used by users'
 		});
 
 		items.push({
 			label: 'Reliability',
-			value: score.reliability
+			value: score.reliability,
+			helpText:
+				'The more nodes a blockchain has, the more reliable it is considered because the more decentralized it is. Decentralization is important to ensure that a group of people cannot agree to take fraudulent actions'
 		});
 
 		items.push({
 			label: 'Power Consumption',
-			value: score.power_consumption
+			value: score.power_consumption,
+			helpText: 'We consider the power consumption of a blockchain really important and has an high impact on the score'
 		});
 
 		items.push({

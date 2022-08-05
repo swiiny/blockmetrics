@@ -45,6 +45,8 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [x] Add skeleton and alert pop when api not available
 -   [ ] Add accessibility
 -   [x] Tooltip full value
+-   [ ] Add comparison data with real life data
+
 
 
 ### Integrated Blockchains
