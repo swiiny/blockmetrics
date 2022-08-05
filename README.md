@@ -36,7 +36,7 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 ### Frontend
 
 -   [x] BMSquaredIcon component
--   [ ] Chart tooltip
+-   [x] Chart tooltip
 -   [ ] Switch component (secondary)
 -   [ ] Integrate second comparison page variant (secondary)
 -   [x] Unselect all button
