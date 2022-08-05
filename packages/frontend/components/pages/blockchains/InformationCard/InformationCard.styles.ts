@@ -14,6 +14,16 @@ export const StyledUsefulLinkList = styled.ul`
 	list-style: inside;
 
 	padding-left: 12px;
+
+	padding-top: 5px;
+
+	& > li {
+		margin-bottom: 5px;
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
 `;
 
 export const StyledRank = styled.div`

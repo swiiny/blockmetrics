@@ -15,7 +15,7 @@ import InformationCard from '../InformationCard';
 import BlockchainData from '../BlockchainData';
 import { TBlockchain } from '../../../../types/blockchain';
 
-const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainLogo, blockchainChannel }) => {
+const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainLogo, name, blockchainChannel }) => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
 	const [tagline, setTagline] = useState<string>('');
 
@@ -114,9 +114,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 
 	return (
 		<>
-			<Meta title={blockchain?.name || ''} />
+			<Meta title={name || ''} />
 
-			<Header title={blockchain?.name || ''} subtitle={tagline} icon={chainLogo} />
+			<Header title={name || ''} subtitle={tagline} icon={chainLogo} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
 				<StyledList>

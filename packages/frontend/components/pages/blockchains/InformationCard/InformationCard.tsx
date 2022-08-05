@@ -104,7 +104,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 		return items.map((item) => (
 			<BMListItem key={item.label} dotHidden>
-				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} />
+				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} loading={!item?.value} />
 			</BMListItem>
 		));
 	}, [score, isSmallerThanMd]);
@@ -113,7 +113,22 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		try {
 			const { links } = metadata;
 			if (!links) {
-				return <></>;
+				return (
+					<StyledUsefulLinkList>
+						{Array.from({ length: 3 }).map((value, index) => (
+							<li key={'skeleton-link-' + value}>
+								<BMExternalLink
+									href={''}
+									size={ESize.m}
+									weight={ETextWeight.thin}
+									loading
+									skHeight={20}
+									skWidth={120}
+								/>
+							</li>
+						))}
+					</StyledUsefulLinkList>
+				);
 			}
 
 			const results = links.split(',');
@@ -189,14 +204,22 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 						<BMListItem>
 							<BMText size={ESize.m} weight={ETextWeight.light}>
 								Genesis block date:
-								<BMText type={ETextType.span} weight={ETextWeight.normal} textColor={ETextColor.positive}>
+								<BMText
+									type={ETextType.span}
+									weight={ETextWeight.normal}
+									textColor={ETextColor.positive}
+									loading={!genesisBlockDate}
+									skWidth={100}
+									skHeight={15}
+									marginLeft={ESize.xs}
+								>
 									{` ${genesisBlockDate}`}
 								</BMText>
 							</BMText>
 						</BMListItem>
 
 						<BMListItem>
-							<BMText size={ESize.m} weight={ETextWeight.light}>
+							<BMText size={ESize.m} weight={ETextWeight.light} loading={!metadata?.description}>
 								{metadata.description}
 								<br />
 								<br />

@@ -1,17 +1,26 @@
 import styled, { css } from 'styled-components';
 import { ESize } from '../../utils/enum';
-import { getSpacingFromESize } from '../../utils/functions';
+import { addMarginStyles, addPaddingStyles, getSpacingFromESize } from '../../utils/functions';
 import { IBMSkeleton } from './BMSkeleton.type';
 
 export const StyledBMSkeleton = styled.div<IBMSkeleton>`
+	${(p) => css`
+		${addPaddingStyles(p)}
+		${addMarginStyles(p)}
+	`}
+
 	${({ width, height, circle, theme }) => {
 		const isHeightESize = typeof height === 'string' && !height.includes('%') && !height.includes('px');
 		const isWidthESize = typeof width === 'string' && !width.includes('%') && !width.includes('px');
 
 		return css`
 			position: relative;
+			display: inline-block;
+
 			border-radius: 6px;
+
 			overflow: hidden;
+
 			background-color: ${theme.colors.deepBlue + '10'};
 
 			width: ${typeof width === 'number'

@@ -1,6 +1,7 @@
+import { IMargin, IPadding } from '../../../../types/layouts';
 import { ESize } from '../../utils/enum';
 
-interface IBMSkeleton {
+interface IBMSkeleton extends IPadding, IMargin {
 	width?: string | number | ESize;
 	height?: string | number | ESize;
 	circle?: boolean;

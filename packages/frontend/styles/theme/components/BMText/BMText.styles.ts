@@ -1,4 +1,4 @@
-import { addMarginStyles, addTransition, getTextColor, setFontSize } from '../../utils/functions';
+import { addMarginStyles, addPaddingStyles, addTransition, getTextColor, setFontSize } from '../../utils/functions';
 import styled, { css } from 'styled-components';
 import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
 import { IBMText } from './BMText.type';
@@ -10,6 +10,7 @@ const generateTextStyle = (p: any) => {
 		${setFontSize(p.size)}
 		${addTransition()}
 		${addMarginStyles(p)}
+		${addPaddingStyles(p)}
 
 		font-weight: normal;
 		text-align: ${p.textAlign};

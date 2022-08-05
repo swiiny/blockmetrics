@@ -21,6 +21,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 		return {
 			props: {
 				chainId: id,
+				name: blockchain.name,
 				chainLogo: getEIconTypeFromValue(id),
 				blockchainChannel: getESubscribeTypeFromValue(id)
 			},

@@ -26,7 +26,7 @@ const BMText: React.FC<IBMText> = ({
 	...otherProps
 }) => {
 	if (loading) {
-		return <BMSkeleton width={skWidth} height={skHeight} />;
+		return <BMSkeleton width={skWidth} height={skHeight} {...otherProps} />;
 	}
 
 	switch (type) {
