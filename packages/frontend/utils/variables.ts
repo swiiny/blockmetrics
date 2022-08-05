@@ -78,6 +78,7 @@ export const BLOCKCHAINS = {
 };
 
 export const BLOCKCHAINS_ARRAY = Object.values(BLOCKCHAINS);
+export const BLOCKCHAINS_IDS_ARRAY = BLOCKCHAINS_ARRAY.map(({ id }) => id);
 
 // Object with blockchain id as key and icon as value
 export const BLOCKCHAINS_ICONS = BLOCKCHAINS_ARRAY.reduce((acc, blockchain) => {

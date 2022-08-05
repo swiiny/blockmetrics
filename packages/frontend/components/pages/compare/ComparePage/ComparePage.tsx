@@ -8,7 +8,7 @@ import useWebsocket from '../../../../hooks/useWebsocket';
 import { ESize, ESubscribeType } from '../../../../styles/theme/utils/enum';
 import Spacing from '../../../../styles/layout/Spacing';
 import { CompareBlockchains } from '../CompareBlockchains/CompareBlockchains';
-import { BLOCKCHAINS_ARRAY, BLOCKCHAINS_ICONS } from '../../../../utils/variables';
+import { BLOCKCHAINS_ARRAY, BLOCKCHAINS_ICONS, BLOCKCHAINS_IDS_ARRAY } from '../../../../utils/variables';
 import { TBlockchain } from '../../../../types/blockchain';
 
 const HeaderData = {
@@ -40,6 +40,11 @@ const ComparePage: NextPage = () => {
 		(id: string | null) => {
 			if (!id) {
 				setSelectedBlockchainIds([]);
+				return;
+			}
+
+			if (id === 'all') {
+				setSelectedBlockchainIds(BLOCKCHAINS_IDS_ARRAY);
 				return;
 			}
 
