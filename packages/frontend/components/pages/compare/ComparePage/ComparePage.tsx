@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useReducer, useState } from 'react';
 import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Header from '../../../Header';
@@ -10,6 +10,7 @@ import Spacing from '../../../../styles/layout/Spacing';
 import { CompareBlockchains } from '../CompareBlockchains/CompareBlockchains';
 import { BLOCKCHAINS_ARRAY, BLOCKCHAINS_ICONS } from '../../../../utils/variables';
 import { TBlockchain } from '../../../../types/blockchain';
+import { IComparePageDefaultBlockchain } from './ComparePage.type';
 
 const HeaderData = {
 	title: 'Compare',
@@ -20,7 +21,17 @@ const HeaderData = {
 
 const ComparePage: NextPage = () => {
 	const { subscribeTo, message } = useWebsocket();
-	const [blockchains, setBlockchains] = useState<TBlockchain[]>([]);
+	const [loading, stopLoading] = useReducer(() => false, true);
+
+	const [blockchains, setBlockchains] = useState<TBlockchain[] | IComparePageDefaultBlockchain[]>(
+		BLOCKCHAINS_ARRAY.map((bc) => ({
+			id: bc.id,
+			name: bc.name,
+			icon: bc.icon,
+			isSelected: true,
+			loading: true
+		}))
+	);
 	const [selectedBlockchainIds, setSelectedBlockchainIds] = useState<string[]>(
 		BLOCKCHAINS_ARRAY.map((blockchain) => blockchain.id)
 	);
@@ -45,15 +56,18 @@ const ComparePage: NextPage = () => {
 
 	useEffect(() => {
 		if (message?.channel === ESubscribeType.blockchains) {
+			loading && stopLoading();
+
 			setBlockchains(
 				message.data.map((data: TBlockchain) => ({
 					...data,
 					isSelected: selectedBlockchainIds.includes(data.id),
+					loading: false,
 					icon: BLOCKCHAINS_ICONS[data.id as keyof typeof BLOCKCHAINS_ICONS]
 				}))
 			);
 		}
-	}, [message, selectedBlockchainIds]);
+	}, [loading, message, selectedBlockchainIds]);
 
 	useEffect(() => {
 		subscribeTo(ESubscribeType.blockchains);
@@ -70,6 +84,7 @@ const ComparePage: NextPage = () => {
 					blockchains={blockchains}
 					onSelectBlockchain={(id) => onSelectBlockchain(id)}
 					selectedBlockchainIds={selectedBlockchainIds}
+					loading={loading}
 				/>
 
 				<Spacing size={ESize.l} />

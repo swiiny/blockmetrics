@@ -173,7 +173,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
-					<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold}>
+					<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold} loading={!formattedInitialValue}>
 						<CountUp
 							preserveValue={true}
 							start={formattedInitialValue}

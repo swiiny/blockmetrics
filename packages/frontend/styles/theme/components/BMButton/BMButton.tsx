@@ -1,5 +1,6 @@
 import React, { FC } from 'react';
 import { ESize, ETextType, ETextWeight } from '../../utils/enum';
+import BMSkeleton from '../BMSkeleton';
 import BMText from '../BMText';
 import { StyledButton } from './BMButton.styles';
 import { IBMButton } from './BMButton.type';
@@ -12,8 +13,15 @@ const BMButton: FC<IBMButton> = ({
 	ariaLabel,
 	secondary = false,
 	fullWidth = false,
+	loading = false,
+	skWidth = '80%',
+	skHeight = ESize.s,
 	...otherProps
 }) => {
+	if (loading) {
+		return <BMSkeleton width={skWidth} height={skHeight} />;
+	}
+
 	return (
 		<StyledButton
 			onClick={!disabled ? onClick : () => {}}

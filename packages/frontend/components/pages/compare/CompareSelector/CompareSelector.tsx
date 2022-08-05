@@ -3,29 +3,34 @@ import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
 import BMIcon from '../../../../styles/theme/components/BMIcon';
+import BMSkeleton from '../../../../styles/theme/components/BMSkeleton';
 import BMText from '../../../../styles/theme/components/BMText';
 import { EFlex, EIcon, ESize } from '../../../../styles/theme/utils/enum';
 import ItemButton from '../../../utils/ItemButton';
 import { StyledListItem, StyledSelectedCircle, StyledSelectSquare } from './CompareSelector.styles';
 import { ICompareSelector } from './CompareSelector.type';
 
-const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain }) => {
+const CompareSelector: FC<ICompareSelector> = ({ blockchains, onSelectBlockchain, loading = false }) => {
 	return (
 		<>
 			<Flex fullWidth vertical={EFlex.center} horizontal={EFlex.between}>
 				<BMText size={ESize.xl}>Select the blockchains you want to compare</BMText>
 
-				<BMCardContainer paddingX={ESize.s} paddingY={ESize['2xs']} borderRadius={ESize['3xs']} clickable>
-					<Flex vertical={EFlex.center}>
-						<StyledSelectSquare />
+				{loading ? (
+					<BMSkeleton width={ESize['8xl']} height={ESize.xl} />
+				) : (
+					<BMCardContainer paddingX={ESize.s} paddingY={ESize['2xs']} borderRadius={ESize['3xs']} clickable>
+						<Flex vertical={EFlex.center}>
+							<StyledSelectSquare />
 
-						<Spacing size={ESize.xs} />
+							<Spacing size={ESize.xs} />
 
-						<BMText size={ESize.m}>Unselect all</BMText>
-					</Flex>
+							<BMText size={ESize.m}>Unselect all</BMText>
+						</Flex>
 
-					<ItemButton onClick={() => onSelectBlockchain(null)} ariaLabel='select or unselect all' />
-				</BMCardContainer>
+						<ItemButton onClick={() => onSelectBlockchain(null)} ariaLabel='select or unselect all' />
+					</BMCardContainer>
+				)}
 			</Flex>
 
 			<Spacing size={ESize.xs} />

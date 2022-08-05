@@ -15,7 +15,7 @@ const CompareBlockchains: FC<ICompareBlockchains> = ({ blockchains }) => {
 
 				<Spacing size={ESize['4xs']} />
 
-				<BMIcon size={ESize.xs} type={EIcon.sortBottom} />
+				{/*<BMIcon size={ESize.xs} type={EIcon.sortBottom} />*/}
 			</Flex>
 
 			<Flex as='ul' direction={EFlex.column}>

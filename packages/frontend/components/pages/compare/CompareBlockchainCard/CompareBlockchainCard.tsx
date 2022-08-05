@@ -11,9 +11,10 @@ import { TBlockchain } from '../../../../types/blockchain';
 import { getEngNotation } from '../../../../utils/convert';
 import CompareBlockchainData from '../CompareBlockchainData';
 import { ICompareData } from '../CompareBlockchains/CompareBlockchains.type';
+import { IComparePageDefaultBlockchain } from '../ComparePage/ComparePage.type';
 import { BMGradientSeparatorEx, StyledListItem } from './CompareBlockchainsCard.styles';
 
-const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
+const CompareBlockchainCard: FC<TBlockchain | IComparePageDefaultBlockchain> = (blockchain) => {
 	const {
 		id,
 		name,
@@ -23,7 +24,8 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		gas_price,
 		blockchain_power_consumption,
 		today_transaction_count,
-		total_value_locked
+		total_value_locked,
+		loading = false
 	} = blockchain;
 
 	const { isSmallerThanSm, isSmallerThanMd } = useResponsive();
@@ -138,7 +140,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 					<Column columns={8} md={12}>
 						<Flex horizontal={EFlex.between} vertical={EFlex.center}>
 							{compareData.map((data: ICompareData) => (
-								<CompareBlockchainData key={data.label} {...data} />
+								<CompareBlockchainData key={data.label} {...data} loading={loading} />
 							))}
 						</Flex>
 					</Column>

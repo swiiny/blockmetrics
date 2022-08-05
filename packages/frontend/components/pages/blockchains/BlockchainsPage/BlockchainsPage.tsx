@@ -36,13 +36,19 @@ const BlockchainsPage: NextPage = () => {
 
 			<Main>
 				<StyledBlockchainList>
-					{blockchains.map((blockchain: TBlockchain) => (
-						<BlockchainCard key={blockchain.id} data={blockchain} />
-					))}
+					{blockchains.length ? (
+						<>
+							{blockchains.map((blockchain: TBlockchain) => (
+								<BlockchainCard key={blockchain.id} data={blockchain} />
+							))}
 
-					{Array.from({ length: 4 }).map((_, i) => (
-						<BlockchainCard key={'empty-bc-card-' + i} emptyItem />
-					))}
+							{Array.from({ length: 4 }).map((_, i) => (
+								<BlockchainCard key={'empty-bc-card-' + i} emptyItem />
+							))}
+						</>
+					) : (
+						Array.from({ length: 3 }).map((_, i) => <BlockchainCard key={'skeleton-bc-card-' + i} loading />)
+					)}
 				</StyledBlockchainList>
 			</Main>
 		</>

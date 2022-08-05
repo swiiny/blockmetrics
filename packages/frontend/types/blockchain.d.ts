@@ -21,6 +21,7 @@ type TBlockchain = {
 	address_count: number;
 	today_address_count: number;
 	isSelected?: boolean;
+	loading?: boolean;
 	icon?: EIcon;
 };
 

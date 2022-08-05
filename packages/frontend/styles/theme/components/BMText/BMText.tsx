@@ -1,5 +1,6 @@
 import React from 'react';
 import { ESize, ETextAlign, ETextColor, ETextTransform, ETextType } from '../../utils/enum';
+import BMSkeleton from '../BMSkeleton';
 import { StyledTextLink, StyledTextParagraph, StyledTextSpan } from './BMText.styles';
 import { IBMText } from './BMText.type';
 
@@ -19,8 +20,15 @@ const BMText: React.FC<IBMText> = ({
 	className = '',
 	inheritStyle = true,
 	opacityReduced = false,
+	loading = false,
+	skWidth = '80%',
+	skHeight = ESize.s,
 	...otherProps
 }) => {
+	if (loading) {
+		return <BMSkeleton width={skWidth} height={skHeight} />;
+	}
+
 	switch (type) {
 		case ETextType.p:
 			return (
