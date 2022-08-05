@@ -7,8 +7,9 @@ import { axiosRest } from '../../../utils/variables';
 import { ETextColor } from '../../../styles/theme/utils/enum';
 import { getEngNotation } from '../../../utils/convert';
 import { DefaultTheme, useTheme } from 'styled-components';
+import { ITooltipChart } from '../BarChart/BarChart.type';
 
-export const getOrCreateTooltip = (chart) => {
+export const getOrCreateTooltip = (chart: ITooltipChart) => {
 	let tooltipEl = chart.canvas.parentNode.querySelector('div');
 
 	if (!tooltipEl) {
