@@ -11,7 +11,7 @@ import { TBlockchain } from '../../../../types/blockchain';
 
 const HeaderData = {
 	title: 'Blockchains',
-	subtitle: 'Here you can find the 10 most importants blockchains and a preview of their data'
+	subtitle: 'Here you can find the 6 of the most importants blockchains and a preview of their data'
 };
 
 const BlockchainsPage: NextPage = () => {
