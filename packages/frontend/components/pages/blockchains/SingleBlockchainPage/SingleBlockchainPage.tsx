@@ -39,7 +39,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 		}
 
 		if (blockchain_power_consumption) {
-			const { value, unit } = getEngNotation(blockchain_power_consumption, 'Wh');
+			const { value, unit, fullToString } = getEngNotation(blockchain_power_consumption, 'Wh');
 
 			result.push({
 				value: value,
@@ -49,7 +49,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				icon: EIcon.energy,
 				colorAnimationOnUpdate: true,
 				reverseColor: true,
-				helpText: 'The last 24 hours power consumption of the blockchain'
+				helpText: 'The last 24 hours power consumption of the blockchain',
+				fullValue: unit !== ' Wh' ? fullToString : undefined
 			});
 		}
 
@@ -61,7 +62,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				icon: EIcon.gas,
 				colorAnimationOnUpdate: true,
 				helpText:
-					'The current gas price of the blockchain, the gas price is used to calculate the fee paid to the miners/validators to execute a transaction.'
+					'The current gas price of the blockchain, the gas price is used to calculate the fee paid to the miners/validators to execute a transaction.',
+				fullValue: gas_price.toString() + ' wei'
 			});
 		}
 
@@ -79,7 +81,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 		}
 
 		if (hashrate) {
-			const { value, unit, hasDecimals } = getEngNotation(hashrate * 10 ** 12, 'H/s');
+			const { value, unit, hasDecimals, fullToString } = getEngNotation(hashrate * 10 ** 12, 'H/s');
 
 			result.push({
 				value: value,
@@ -90,7 +92,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				icon: EIcon.chart,
 				colorAnimationOnUpdate: true,
 				helpText:
-					'The hashrate of the blockchain, a speed of 1 hash per second means that each second a new attempt to validate a block is made'
+					'The hashrate of the blockchain, a speed of 1 hash per second means that each second a new attempt to validate a block is made',
+				fullValue: unit !== 'H/s' ? fullToString : undefined
 			});
 		}
 

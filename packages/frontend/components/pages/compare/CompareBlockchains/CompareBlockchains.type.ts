@@ -9,6 +9,7 @@ interface ICompareData {
 	label: string;
 	icon: EIcon;
 	value: number;
+	fullValue?: string;
 	unit?: string;
 	colorAnimationOnUpdate?: boolean;
 	reverseColor?: boolean;

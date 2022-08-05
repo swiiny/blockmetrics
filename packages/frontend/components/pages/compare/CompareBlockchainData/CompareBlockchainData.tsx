@@ -7,6 +7,7 @@ import { EFlex, ESize, ETextColor, ETextWeight } from '../../../../styles/theme/
 import { ICompareData } from '../CompareBlockchains/CompareBlockchains.type';
 import CountUp from 'react-countup';
 import { StyledCompareBlockchainData } from './CompareBlockchainData.styles';
+import ElementTooltip from '../../../utils/ElementTooltip';
 
 const CompareBlockchainData: FC<ICompareData> = ({
 	label,
@@ -16,7 +17,8 @@ const CompareBlockchainData: FC<ICompareData> = ({
 	colorAnimationOnUpdate = false,
 	reverseColor = false,
 	isAnimated = false,
-	loading = false
+	loading = false,
+	fullValue
 }) => {
 	const [valueColor, setValueColor] = useState<ETextColor>(ETextColor.default);
 
@@ -64,23 +66,25 @@ const CompareBlockchainData: FC<ICompareData> = ({
 
 			<Spacing size={ESize['2xs']} smSize={ESize['7xs']} mdSize={ESize['3xs']} />
 
-			<BMText
-				textColor={valueColor}
-				weight={ETextWeight.semiBold}
-				size={ESize.l}
-				marginLeft={ESize.m}
-				loading={loading}
-			>
-				{isAnimated ? (
-					<CountUp preserveValue end={value} duration={1} separator=',' style={{ color: 'inherit' }} />
-				) : isEmpty ? (
-					'-'
-				) : (
-					value
-				)}
+			<ElementTooltip content={fullValue} disabled={!fullValue}>
+				<BMText
+					textColor={valueColor}
+					weight={ETextWeight.semiBold}
+					size={ESize.l}
+					marginLeft={ESize.m}
+					loading={loading}
+				>
+					{isAnimated ? (
+						<CountUp preserveValue end={value} duration={1} separator=',' style={{ color: 'inherit' }} />
+					) : isEmpty ? (
+						'-'
+					) : (
+						value
+					)}
 
-				{unit ? ` ${unit}` : <></>}
-			</BMText>
+					{unit ? ` ${unit}` : <></>}
+				</BMText>
+			</ElementTooltip>
 		</StyledCompareBlockchainData>
 	);
 };

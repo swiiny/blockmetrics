@@ -38,13 +38,13 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [x] BMSquaredIcon component
 -   [ ] Chart tooltip
 -   [ ] Switch component (secondary)
--   [ ] Integrate second comparison page variant (MVP)
+-   [ ] Integrate second comparison page variant (secondary)
 -   [x] Unselect all button
 -   [x] Integrate Comparison page (MVP)
 -   [x] Add help tooltip where it's necessary
 -   [x] Add skeleton and alert pop when api not available
 -   [ ] Add accessibility
--   [ ] Tooltip full value
+-   [x] Tooltip full value
 
 
 ### Integrated Blockchains

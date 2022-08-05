@@ -17,6 +17,7 @@ import { getEngNotation } from '../../../../utils/convert';
 import { IEngineeringNotation } from '../../../../types/maths';
 import BMIcon from '../../../../styles/theme/components/BMIcon';
 import HelpTooltip from '../../../utils/HelpTooltip';
+import ElementTooltip from '../../../utils/ElementTooltip';
 
 const HomeCard: FC<IHomeCardData> = ({
 	title,
@@ -173,18 +174,20 @@ const HomeCard: FC<IHomeCardData> = ({
 
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
-					<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold} loading={!formattedInitialValue}>
-						<CountUp
-							preserveValue={true}
-							start={formattedInitialValue}
-							end={formattedValue.value}
-							duration={refreshTime}
-							decimals={formattedValue.hasDecimals ? 2 : 0}
-							suffix={formattedValue.unit}
-							separator=','
-							style={{ color: 'inherit' }}
-						/>
-					</BMHeading>
+					<ElementTooltip content={formattedValue.fullToString}>
+						<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold} loading={!formattedInitialValue}>
+							<CountUp
+								preserveValue={true}
+								start={formattedInitialValue}
+								end={formattedValue.value}
+								duration={refreshTime}
+								decimals={formattedValue.hasDecimals ? 2 : 0}
+								suffix={formattedValue.unit}
+								separator=','
+								style={{ color: 'inherit' }}
+							/>
+						</BMHeading>
+					</ElementTooltip>
 
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 

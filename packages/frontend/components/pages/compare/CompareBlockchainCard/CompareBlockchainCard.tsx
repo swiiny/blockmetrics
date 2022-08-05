@@ -49,7 +49,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		}
 
 		if (blockchain_power_consumption) {
-			const { value, unit } = getEngNotation(blockchain_power_consumption, 'Wh');
+			const { value, unit, fullToString } = getEngNotation(blockchain_power_consumption, 'Wh');
 
 			result.push({
 				value: value,
@@ -57,7 +57,8 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				isAnimated: true,
 				label: '24H Power Consumption',
 				icon: EIcon.energy,
-				colorAnimationOnUpdate: true
+				colorAnimationOnUpdate: true,
+				fullValue: unit !== ' Wh' ? fullToString : undefined
 			});
 		} else {
 			result.push({
@@ -73,7 +74,8 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				unit: 'Gwei',
 				label: 'Gas Price',
 				icon: EIcon.gas,
-				colorAnimationOnUpdate: true
+				colorAnimationOnUpdate: true,
+				fullValue: gas_price.toString() + ' wei'
 			});
 		} else {
 			result.push({
@@ -84,7 +86,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		}
 
 		if (total_value_locked) {
-			const { value, unit } = getEngNotation(total_value_locked, '$');
+			const { value, unit, fullToString } = getEngNotation(total_value_locked, '$');
 
 			result.push({
 				value: value,
@@ -92,7 +94,8 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				label: 'Total Value Locked',
 				icon: EIcon.chart,
 				colorAnimationOnUpdate: true,
-				reverseColor: true
+				reverseColor: true,
+				fullValue: unit !== ' $' ? fullToString : undefined
 			});
 		} else {
 			result.push({
