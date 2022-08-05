@@ -14,7 +14,7 @@ export const getOrCreateTooltip = (chart) => {
 	if (!tooltipEl) {
 		tooltipEl = document.createElement('div');
 		tooltipEl.style.background = 'transparent';
-		tooltipEl.style.opacity = 1;
+		tooltipEl.style.opacity = '1';
 		tooltipEl.style.pointerEvents = 'none';
 		tooltipEl.style.position = 'absolute';
 		tooltipEl.style.transform = 'translate(-50%, 0)';
@@ -31,16 +31,16 @@ export const getOrCreateTooltip = (chart) => {
 		dataContainer.style.left = '0px';
 		dataContainer.style.width = 'auto';
 		dataContainer.style.height = 'auto';
-		dataContainer.style.padding = '4px 8px';
+		dataContainer.style.padding = '7px 12px';
 		dataContainer.style.borderRadius = '10px';
 		dataContainer.style.border = '1px solid #31393E';
 		dataContainer.style.boxShadow = 'box-shadow: 0px 12px 24px 0px #0000004D inset;';
 		dataContainer.style.backgroundColor = '#31393E';
-		dataContainer.style.zIndex = 2;
+		dataContainer.style.zIndex = '2';
 
 		dataContainer.style.transition = 'all 100ms ease-out';
 		dataContainer.style.pointerEvents = 'none';
-		dataContainer.style.opacity = 1;
+		dataContainer.style.opacity = '1';
 
 		tooltipEl.appendChild(parentContainer);
 		chart.canvas.parentNode.appendChild(tooltipEl);
@@ -53,14 +53,12 @@ export const getOrCreateTooltip = (chart) => {
 const externalTooltipHandler =
 	(chartId: string, colors: DefaultTheme['colors'], chartColor: string | number) =>
 	(context: { chart: any; tooltip: any }) => {
-		console.log('externalTooltipHandler called');
-
 		// Tooltip Element
 		const { chart, tooltip } = context;
 
 		const tooltipEl = getOrCreateTooltip(chart);
 		const viewContainer = document.querySelector('#' + chartId);
-		const dataContainer = viewContainer?.querySelector('#data-container');
+		const dataContainer = viewContainer?.querySelector('#data-container') as HTMLElement;
 
 		if (!dataContainer) {
 			return;
@@ -68,12 +66,12 @@ const externalTooltipHandler =
 
 		if (tooltip.opacity === 0) {
 			// Hide if no tooltip
-			tooltipEl.style.opacity = 0;
-			dataContainer.style.opacity = 0;
+			tooltipEl.style.opacity = '0';
+			dataContainer.style.opacity = '0';
 			return;
 		}
 
-		dataContainer.style.opacity = 1;
+		dataContainer.style.opacity = '1';
 
 		// Set Text
 		if (tooltip.body) {
@@ -106,11 +104,10 @@ const externalTooltipHandler =
 
 			dataContainer.style.marginLeft = `${tooltip.x}px`;
 
-			const { value, unit } = getEngNotation(tooltip?.dataPoints[0]?.raw);
-			const valueString = `${value} ${unit}`;
+			const { toString } = getEngNotation(tooltip?.dataPoints[0]?.raw) ?? { toString: '-' };
 
 			const amountTitle = document.createElement('p');
-			const a = document.createTextNode(valueString);
+			const a = document.createTextNode(toString);
 			amountTitle.style.color = colors.text.light;
 			amountTitle.style.width = '100%';
 			amountTitle.style.textAlign = 'center';
