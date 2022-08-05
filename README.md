@@ -42,7 +42,7 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [x] Unselect all button
 -   [x] Integrate Comparison page (MVP)
 -   [x] Add help tooltip where it's necessary
--   [ ] Add skeleton and alert pop when api not available
+-   [x] Add skeleton and alert pop when api not available
 -   [ ] Add accessibility
 -   [ ] Tooltip full value
 

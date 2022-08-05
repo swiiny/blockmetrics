@@ -11,10 +11,9 @@ import { TBlockchain } from '../../../../types/blockchain';
 import { getEngNotation } from '../../../../utils/convert';
 import CompareBlockchainData from '../CompareBlockchainData';
 import { ICompareData } from '../CompareBlockchains/CompareBlockchains.type';
-import { IComparePageDefaultBlockchain } from '../ComparePage/ComparePage.type';
 import { BMGradientSeparatorEx, StyledListItem } from './CompareBlockchainsCard.styles';
 
-const CompareBlockchainCard: FC<TBlockchain | IComparePageDefaultBlockchain> = (blockchain) => {
+const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 	const {
 		id,
 		name,

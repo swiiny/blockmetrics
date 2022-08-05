@@ -10,7 +10,6 @@ import Spacing from '../../../../styles/layout/Spacing';
 import { CompareBlockchains } from '../CompareBlockchains/CompareBlockchains';
 import { BLOCKCHAINS_ARRAY, BLOCKCHAINS_ICONS } from '../../../../utils/variables';
 import { TBlockchain } from '../../../../types/blockchain';
-import { IComparePageDefaultBlockchain } from './ComparePage.type';
 
 const HeaderData = {
 	title: 'Compare',
@@ -23,15 +22,16 @@ const ComparePage: NextPage = () => {
 	const { subscribeTo, message } = useWebsocket();
 	const [loading, stopLoading] = useReducer(() => false, true);
 
-	const [blockchains, setBlockchains] = useState<TBlockchain[] | IComparePageDefaultBlockchain[]>(
+	const [blockchains, setBlockchains] = useState<TBlockchain[]>(
 		BLOCKCHAINS_ARRAY.map((bc) => ({
 			id: bc.id,
 			name: bc.name,
 			icon: bc.icon,
 			isSelected: true,
 			loading: true
-		}))
+		})) as TBlockchain[]
 	);
+
 	const [selectedBlockchainIds, setSelectedBlockchainIds] = useState<string[]>(
 		BLOCKCHAINS_ARRAY.map((blockchain) => blockchain.id)
 	);
@@ -89,7 +89,7 @@ const ComparePage: NextPage = () => {
 
 				<Spacing size={ESize.l} />
 
-				<CompareBlockchains blockchains={blockchains.filter(({ isSelected }) => isSelected)} />
+				<CompareBlockchains blockchains={blockchains.filter(({ isSelected }: TBlockchain) => isSelected)} />
 			</Main>
 		</>
 	);

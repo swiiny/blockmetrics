@@ -1,9 +1,8 @@
 import { EIcon } from '../../../../styles/theme/utils/enum';
 import { TBlockchain } from '../../../../types/blockchain';
-import { IComparePageDefaultBlockchain } from '../ComparePage/ComparePage.type';
 
 interface ICompareBlockchains {
-	blockchains: TBlockchain[] | IComparePageDefaultBlockchain[];
+	blockchains: TBlockchain[];
 }
 
 interface ICompareData {
