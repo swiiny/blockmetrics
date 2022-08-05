@@ -104,7 +104,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 		return items.map((item) => (
 			<BMListItem key={item.label} dotHidden>
-				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} loading={!item?.value} />
+				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} loading={!(item?.value >= 0)} />
 			</BMListItem>
 		));
 	}, [score, isSmallerThanMd]);
