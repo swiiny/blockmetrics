@@ -65,7 +65,7 @@ const cards = [
 				subitems: [
 					{
 						value:
-							'This index is used to know how a blockchain works well and can be used safely. We calculate this score using maturity and TVL. The older a blockcahin is and its total value locked is high, the higher this score will be'
+							'This index is used to know how a blockchain works well and can be used safely. We calculate this score using maturity and the TVL. The older a blockcahin is and its total value locked is high, the higher this score will be'
 					}
 				]
 			},

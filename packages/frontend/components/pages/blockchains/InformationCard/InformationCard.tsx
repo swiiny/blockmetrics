@@ -86,7 +86,8 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		items.push({
 			label: 'Proof of trust',
 			value: score.proof_of_trust,
-			helpText: 'The older a blockcahin is and its total value locked is high then the higher this score will be'
+			helpText:
+				'We calculate this score using maturity and the TVL. The older a blockcahin is and its total value locked is high, the higher this score will be'
 		});
 
 		items.push({

@@ -11,7 +11,7 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Complete readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
--   [ ] Create text content
+-   [ ] Create text content :construction: 
 
 -   [ ] setup linters
 -   [ ] setup github actions to run tests before merge to production
@@ -38,7 +38,7 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Compare blockchains with a similar amount of transaction/day, etc (secondary)
 -   [ ] Add accessibility
 -   [ ] Add comparison data with real life data
--   [ ] Doc page
+-   [x] Doc page
 -   [ ] Story page
 -   [ ] Add individual score for each ranking data
 
