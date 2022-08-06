@@ -13,6 +13,7 @@ import BMButton from '../../../../styles/theme/components/BMButton';
 import router from 'next/router';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import { TBlockchain } from '../../../../types/blockchain';
+import { IStoryBlockchainsData } from './StoryPage.type';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -44,11 +45,10 @@ const Animated = ({ children }: { children: React.ReactNode }) => (
 const StoryPage: NextPage = () => {
 	const { subscribeTo, message } = useWebsocket();
 
-	const [blockchainsData, setBlockchainsData] = useState<any>({});
+	const [blockchainsData, setBlockchainsData] = useState<IStoryBlockchainsData>({});
 
 	useEffect(() => {
 		if (message?.channel === ESubscribeType.blockchains) {
-			console.log('messsages', message);
 			let newBlockchainsData = {
 				powerConsumption: 0,
 				todayTransactionCount: 0,
@@ -58,8 +58,6 @@ const StoryPage: NextPage = () => {
 			};
 
 			message.data.forEach((blockchain: TBlockchain) => {
-				console.log('blockchain', blockchain);
-
 				newBlockchainsData.powerConsumption += blockchain?.blockchain_power_consumption || 0;
 				newBlockchainsData.todayTransactionCount += blockchain?.today_transaction_count || 0;
 				newBlockchainsData.transactionCount += blockchain?.transaction_count || 0;
@@ -67,7 +65,6 @@ const StoryPage: NextPage = () => {
 				newBlockchainsData.totalValueLocked += blockchain?.total_value_locked || 0;
 			});
 
-			console.log('newBlockchainsData', newBlockchainsData);
 			setBlockchainsData(newBlockchainsData);
 		}
 	}, [message]);
