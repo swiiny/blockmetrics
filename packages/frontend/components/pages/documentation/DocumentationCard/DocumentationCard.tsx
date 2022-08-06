@@ -6,7 +6,7 @@ import BMCardContainer from '../../../../styles/theme/components/BMCardContainer
 import BMExternalLink from '../../../../styles/theme/components/BMExternalLink';
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMText from '../../../../styles/theme/components/BMText';
-import { EDirection, EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
+import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
 import { StyledList, StyledSubitemsList } from './DocumentationCard.styles';
 import { IDocumentationCard } from './DocumentationCard.type';
 
