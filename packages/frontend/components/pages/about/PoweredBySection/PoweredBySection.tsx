@@ -1,10 +1,8 @@
 import Image from 'next/image';
 import React from 'react';
 import Spacing from '../../../../styles/layout/Spacing';
-import BMHeading from '../../../../styles/theme/components/BMHeading';
-import { ESize, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
+import { ESize, ETextAlign } from '../../../../styles/theme/utils/enum';
 import { StyledImageContainer, StyledList, StyledPoweredBySection } from './PoweredBySection.styles';
-import { motion, Variants } from 'framer-motion';
 import BMText from '../../../../styles/theme/components/BMText';
 import useResponsive from '../../../../hooks/useResponsive';
 
