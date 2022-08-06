@@ -1,11 +1,8 @@
-import React, { FC, useCallback, useMemo, useState } from 'react';
+import React, { FC } from 'react';
 import Spacing from '../../../styles/layout/Spacing';
 import BMIcon from '../../../styles/theme/components/BMIcon';
-import BMText from '../../../styles/theme/components/BMText';
 import { EIcon, ESize } from '../../../styles/theme/utils/enum';
-import { StyledHelpTooltipContainer, StyledTooltip } from './HelpTooltip.styles';
-import Portal from '../Portal';
-import { v4 as uuidV4 } from 'uuid';
+import { StyledTooltip } from './HelpTooltip.styles';
 import ElementTooltip from '../ElementTooltip';
 
 const HelpTooltip: FC<{ content: string }> = ({ content }) => {
