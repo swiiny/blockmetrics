@@ -182,8 +182,30 @@ async function updateBlockchainsRanking(con) {
 		// calc score for total_value_locked
 		blockchainsRows = calculateScoreForChains(blockchainsRows, 'total_value_locked');
 
+		// assuming that 5 years old blockchains are mature
+		const maxScoreDay = 5 * 365;
+
 		// calc average of all scores
 		blockchainsRows.forEach((chain) => {
+			// get days count from chain.genesis_block
+			const daysCount = Math.floor((Date.now() - chain.genesis_block) / (1000 * 60 * 60 * 24));
+
+			let maturityScore = daysCount / maxScoreDay;
+
+			if (maturityScore > 1) {
+				maturityScore = 1;
+			}
+
+			maturityScore *= 100;
+
+			// bitcoin has no total_value_locked but has a score of 100 because this blockchain is considered as mature
+			let tvlRes = chain.id === CHAINS.bitcoin.id ? 100 : chain.total_value_locked_res;
+
+			const proofOfTrustScore = (maturityScore + tvlRes) / 2;
+
+			// floor to 0 decimal places
+			chain.proof_of_trust_res = Math.floor(proofOfTrustScore);
+
 			const score = getWeightedAverageOf([
 				{
 					weight: 10,
@@ -191,15 +213,15 @@ async function updateBlockchainsRanking(con) {
 				},
 				{
 					weight: 6,
+					value: chain.proof_of_trust_res
+				},
+				{
+					weight: 5,
 					value: chain.reliability
 				},
 				{
 					weight: 3,
 					value: chain.token_count_res
-				},
-				{
-					weight: 2,
-					value: chain.total_value_locked_res
 				},
 				{
 					weight: 1,
@@ -221,6 +243,7 @@ async function updateBlockchainsRanking(con) {
 				token_count_res,
 				blockchain_power_consumption_res,
 				total_value_locked_res,
+				proof_of_trust_res,
 				average_transaction_count_res
 			}) => {
 				con.query(updateBlockchainsRankingInBlockchainScore, [
@@ -230,6 +253,7 @@ async function updateBlockchainsRanking(con) {
 					token_count_res,
 					blockchain_power_consumption_res,
 					total_value_locked_res,
+					proof_of_trust_res,
 					average_transaction_count_res,
 					id
 				]);
@@ -267,7 +291,8 @@ async function fetchDailyData(factor = 1) {
 
 	const nodesCount = await getNodeCountForAllBlockchains();
 
-	const chainsWithReliability = calculateScoreForChains(nodesCount, 'count', 5000);
+	// assuming that with 2000 nodes the blockchain is considered as reliable
+	const chainsWithReliability = calculateScoreForChains(nodesCount, 'count', 2000);
 
 	const nodesCountPromises = chainsWithReliability?.map(({ id, count, count_res }) => {
 		updateDbDailyNodeCountAndReliability(con, id, count, count_res);
@@ -626,7 +651,8 @@ async function startFetchData() {
 			// dev stuff
 
 			console.log('start dev');
-
+			updateBlockchainsRanking(con);
+			/*
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
 
@@ -663,6 +689,7 @@ async function startFetchData() {
 					}
 				});
 			});
+			*/
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
@@ -710,8 +737,7 @@ async function init() {
 		console.log('Memory usage: ' + mem + ' MB');
 
 		if (mem >= 512) {
-			//if(global.gc) global.gc();
-			console.log('Kill process ========>');
+			console.log('Restart server ========>');
 
 			if (process.env.NODE_ENV === 'production') {
 				const now = new Date();

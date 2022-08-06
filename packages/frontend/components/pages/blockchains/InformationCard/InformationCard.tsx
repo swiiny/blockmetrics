@@ -41,8 +41,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		reliability: number;
 		token_count: number;
 		power_consumption: number;
-		total_value_locked: number;
-		speed: number;
+		proof_of_trust: number;
 	}>({
 		id: '',
 		rank: '',
@@ -50,8 +49,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		reliability: -1,
 		token_count: -1,
 		power_consumption: -1,
-		total_value_locked: -1,
-		speed: -1
+		proof_of_trust: -1
 	});
 
 	const genesisBlockDate = useMemo(() => {
@@ -77,10 +75,18 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 	const rankingDetails = useMemo(() => {
 		const items: IRankingDetails[] = [];
 
+		console.log('score', score);
+
 		items.push({
-			label: 'Tokens count',
-			value: score.token_count,
-			helpText: 'We assume that the more token there is, the more likely the blockchain will be used by users'
+			label: 'Power Consumption',
+			value: score.power_consumption,
+			helpText: 'We consider the power consumption of a blockchain really important and has an high impact on the score'
+		});
+
+		items.push({
+			label: 'Proof of trust',
+			value: score.proof_of_trust,
+			helpText: 'The older a blockcahin is and its total value locked is high then the higher this score will be'
 		});
 
 		items.push({
@@ -91,15 +97,9 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		});
 
 		items.push({
-			label: 'Power Consumption',
-			value: score.power_consumption,
-			helpText: 'We consider the power consumption of a blockchain really important and has an high impact on the score'
-		});
-
-		items.push({
-			//label: 'Speed', // @todo(change value saved in speed column in the database)
-			label: 'Community index',
-			value: score.speed
+			label: 'Tokens count',
+			value: score.token_count,
+			helpText: 'We assume that the more token there is, the more likely the blockchain will be used by users'
 		});
 
 		return items.map((item) => (
