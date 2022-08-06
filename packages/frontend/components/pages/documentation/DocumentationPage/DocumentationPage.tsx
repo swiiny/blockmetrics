@@ -7,8 +7,7 @@ import Meta from '../../../utils/Meta';
 import DocumentationCard from '../DocumentationCard';
 
 const HeaderData = {
-	title: 'Documentation',
-	subtitle: 'How the platform works and lexicon of terms'
+	title: 'Documentation'
 };
 
 const totalWeight = 25;
@@ -117,7 +116,7 @@ const DocumentationPage: NextPage = () => {
 		<>
 			<Meta title={HeaderData.title} />
 
-			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
+			<Header title={HeaderData.title} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
 				{cards.map((card) => (

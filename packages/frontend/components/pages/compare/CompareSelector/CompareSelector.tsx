@@ -44,7 +44,7 @@ const CompareSelector: FC<ICompareSelector> = ({
 
 			<Spacing size={ESize.xs} />
 
-			<BMCardContainer fullWidth paddingX={ESize.xl} paddingY={ESize.m}>
+			<BMCardContainer fullWidth paddingX={ESize.xl} paddingY={ESize.m} animateApparition>
 				<Flex as='ul' vertical={EFlex.center} horizontal={EFlex.start} fullWidth>
 					{blockchains.map(({ id, icon, name, isSelected }) => (
 						<StyledListItem key={id}>

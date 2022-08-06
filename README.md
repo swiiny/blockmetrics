@@ -11,8 +11,6 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Complete readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
--   [ ] Create text content :construction: 
-
 -   [ ] setup linters
 -   [ ] setup github actions to run tests before merge to production
 -   [ ] Presentation
@@ -25,7 +23,6 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 ### API - REST
 
 -   [ ] separate endpoints in multiple files
--   [ ] Deploy doc swagger at doc.api-rest.block-metrics.io
 
 ### API - WS
 
@@ -38,10 +35,6 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Compare blockchains with a similar amount of transaction/day, etc (secondary)
 -   [ ] Add accessibility
 -   [ ] Add comparison data with real life data
--   [x] Doc page
--   [x] Story page
--   [x] Add individual score for each ranking data :construction:
-
 
 
 ### Integrated Blockchains

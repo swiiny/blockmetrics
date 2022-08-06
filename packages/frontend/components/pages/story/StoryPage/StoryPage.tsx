@@ -13,6 +13,7 @@ import BMButton from '../../../../styles/theme/components/BMButton';
 import router from 'next/router';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import { TBlockchain } from '../../../../types/blockchain';
+import { IStoryBlockchainsData } from './StoryPage.type';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -44,11 +45,10 @@ const Animated = ({ children }: { children: React.ReactNode }) => (
 const StoryPage: NextPage = () => {
 	const { subscribeTo, message } = useWebsocket();
 
-	const [blockchainsData, setBlockchainsData] = useState<any>({});
+	const [blockchainsData, setBlockchainsData] = useState<IStoryBlockchainsData>({});
 
 	useEffect(() => {
 		if (message?.channel === ESubscribeType.blockchains) {
-			console.log('messsages', message);
 			let newBlockchainsData = {
 				powerConsumption: 0,
 				todayTransactionCount: 0,
@@ -58,8 +58,6 @@ const StoryPage: NextPage = () => {
 			};
 
 			message.data.forEach((blockchain: TBlockchain) => {
-				console.log('blockchain', blockchain);
-
 				newBlockchainsData.powerConsumption += blockchain?.blockchain_power_consumption || 0;
 				newBlockchainsData.todayTransactionCount += blockchain?.today_transaction_count || 0;
 				newBlockchainsData.transactionCount += blockchain?.transaction_count || 0;
@@ -67,7 +65,6 @@ const StoryPage: NextPage = () => {
 				newBlockchainsData.totalValueLocked += blockchain?.total_value_locked || 0;
 			});
 
-			console.log('newBlockchainsData', newBlockchainsData);
 			setBlockchainsData(newBlockchainsData);
 		}
 	}, [message]);
@@ -90,7 +87,7 @@ const StoryPage: NextPage = () => {
 						</StyledFullHeightContainer>
 
 						<Animated>
-							<TitleAndValue title='Last 24H' value={blockchainsData.powerConsumption} unit='Wh' />
+							<TitleAndValue title='Last 24H' value={blockchainsData?.powerConsumption || 0} unit='Wh' />
 						</Animated>
 
 						<StyledHalfHeightContainer />
@@ -105,7 +102,7 @@ const StoryPage: NextPage = () => {
 							<Spacing size={ESize['8xl']} />
 
 							<Animated>
-								<TitleAndValue title='Today transactions count' value={blockchainsData.todayTransactionCount} />
+								<TitleAndValue title='Today transactions count' value={blockchainsData?.todayTransactionCount || 0} />
 							</Animated>
 
 							<Spacing size={ESize['2xl']} />
@@ -113,7 +110,7 @@ const StoryPage: NextPage = () => {
 							<Animated>
 								<TitleAndValue
 									title='Total transactions count'
-									value={blockchainsData.transactionCount + blockchainsData.todayTransactionCount}
+									value={(blockchainsData?.transactionCount || 0) + (blockchainsData?.todayTransactionCount || 0)}
 								/>
 							</Animated>
 						</section>
@@ -130,7 +127,7 @@ const StoryPage: NextPage = () => {
 							<Spacing size={ESize['8xl']} />
 
 							<Animated>
-								<TitleAndValue title='Total Value Locked' value={blockchainsData.totalValueLocked} unit='$' />
+								<TitleAndValue title='Total Value Locked' value={blockchainsData?.totalValueLocked || 0} unit='$' />
 							</Animated>
 
 							<Spacing size={ESize['2xl']} />
@@ -138,7 +135,7 @@ const StoryPage: NextPage = () => {
 							<Animated>
 								<TitleAndValue
 									title='Today Addresses used'
-									value={blockchainsData.todayAddressUsed}
+									value={blockchainsData?.todayAddressUsed || 0}
 									customDuration={180}
 								/>
 							</Animated>

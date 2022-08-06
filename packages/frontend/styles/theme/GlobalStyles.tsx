@@ -1,6 +1,6 @@
 import { createGlobalStyle, DefaultTheme } from 'styled-components';
-import { EMediaQuery } from './utils/enum';
-import { mq } from './utils/functions';
+import { EMediaQuery, ESize } from './utils/enum';
+import { mq, setFontSize } from './utils/functions';
 
 const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
 //========================================================================================================
@@ -99,9 +99,65 @@ textarea {
 }
 
 //========================================================================================================
-// FONTS
+// SWAGGER UI
 //========================================================================================================
+.swagger-ui {
 
+  .arrow,
+  .model-toggle:after,
+  section.models h4 svg {
+    background-color: ${(p) => p.theme.colors.deepBlue};
+    padding: 3px;
+
+    border-radius: 50%;
+  }
+
+  .info h2 + a,
+  .information-container.wrapper,
+  .scheme-container {
+    display: none;
+  }
+
+  .info h2.title,
+  .renderedMarkdown p,
+  table thead tr th,
+  .parameter__name.required,
+  .parameter__type,
+  .col_header.response-col_status,
+  .col_header.response-col_links,
+  .col_header.response-col_description,
+  .response .response-col_status,
+  .response .response-col_links,
+  .tab li button.tablinks,
+  .btn,
+  .opblock .opblock-section-header h4,
+  table.model tr.property-row.required,
+  .parameter__name
+   {
+    color: ${(p) => p.theme.colors.text.default};
+  }
+
+  .btn {
+    border-color: ${(p) => p.theme.colors.deepBlue};
+  }
+
+  .opblock .opblock-summary-description,
+  .prop-format,
+  .model .property.primitive,
+  .model-title {
+    color: ${(p) => p.theme.colors.text.light};
+  }
+
+  .response-control-media-type__accept-message {
+    color: ${(p) => p.theme.colors.text.positive};
+  }
+
+
+  .scheme-container,
+  .opblock .opblock-section-header {
+    background-color: transparent;
+  }
+}
 
 `;
 

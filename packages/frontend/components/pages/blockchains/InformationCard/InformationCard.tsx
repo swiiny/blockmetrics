@@ -76,8 +76,6 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 	const rankingDetails = useMemo(() => {
 		const items: IRankingDetails[] = [];
 
-		console.log('score', score);
-
 		items.push({
 			label: 'Power Consumption',
 			value: score.power_consumption,

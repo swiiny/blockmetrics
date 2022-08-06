@@ -13,23 +13,18 @@ export const StyledTooltip = styled.div`
 
 export const StyledElementTooltipContainer = styled.div<{ isVisible: boolean }>`
 	position: fixed;
-	//top: 120%;
-	//left: calc(50%);
-
 	z-index: 100;
 
-	padding: 8px;
-
 	background-color: ${(p) => p.theme.colors.bg};
-
-	border-radius: 5px;
 
 	max-width: 30vw;
 	max-height: 50vh;
 
-	border: 1px solid ${(p) => p.theme.colors.deepBlue};
-
-	filter: drop-shadow(0px 0px 25px ${(p) => p.theme.colors.bg + '50'});
+	padding: 7px 12px;
+	border-radius: 10px;
+	border: 1px solid #474747;
+	box-shadow: 0px 12px 24px 0px #0000004d inset;
+	background-color: #31393e;
 
 	${addTransition()}
 

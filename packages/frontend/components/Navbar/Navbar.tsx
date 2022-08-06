@@ -30,13 +30,13 @@ export const NAVBAR_LINKS = {
 		label: 'Compare',
 		href: '/compare'
 	},
-	about: {
-		label: 'About Blockmetrics',
-		href: '/about'
-	},
 	documentation: {
 		label: 'Documentation',
 		href: '/documentation'
+	},
+	about: {
+		label: 'About Blockmetrics',
+		href: '/about'
 	}
 };
 
@@ -99,6 +99,30 @@ const Navbar = () => {
 		return false;
 	}, [pathname]);
 
+	const activeLabel = useMemo<string>(() => {
+		try {
+			if (pathname === '/') {
+				return NAVBAR_LINKS.home.label;
+			}
+
+			const result = Object.values(NAVBAR_LINKS).find(({ href }): boolean => {
+				if (pathname === href) {
+					return true;
+				}
+
+				if (href !== '/' && pathname.includes(href)) {
+					return true;
+				}
+
+				return false;
+			});
+
+			return result?.label || '';
+		} catch {
+			return '';
+		}
+	}, [pathname]);
+
 	const navbarLinks = useMemo(() => {
 		return (
 			<StyledList>
@@ -111,8 +135,8 @@ const Navbar = () => {
 									inheritStyle={false}
 									weight={ETextWeight.light}
 									size={ESize.m}
-									className={pathname === href ? 'navbar-active' : ''}
-									textColor={pathname === href ? ETextColor.light : ETextColor.default}
+									className={activeLabel === label ? 'navbar-active' : ''}
+									textColor={activeLabel === label ? ETextColor.light : ETextColor.default}
 								>
 									{label}
 								</BMText>
@@ -122,7 +146,7 @@ const Navbar = () => {
 				))}
 			</StyledList>
 		);
-	}, [closeNavbar, isSmallerThanMd, pathname]);
+	}, [activeLabel, closeNavbar, isSmallerThanMd]);
 
 	const burgerButton = useMemo(() => {
 		return (
