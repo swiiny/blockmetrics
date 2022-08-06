@@ -10,9 +10,15 @@ export const StyledBMListItem = styled.li`
 
 	${(p) => addPaddingStyles(p)}
 
-	& + li {
-		margin-top: ${(p) => p.theme.spacing.s};
+	margin-bottom: ${(p) => p.theme.spacing.s};
+
+	&:nth-last-child(1) {
+		margin-bottom: 0;
 	}
+`;
+
+export const StyledChildrenContainer = styled.span`
+	width: 100%;
 `;
 
 export const StyledDot = styled.div`

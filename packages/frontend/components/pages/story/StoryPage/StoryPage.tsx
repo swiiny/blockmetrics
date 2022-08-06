@@ -1,9 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Main from '../../../../styles/layout/Main';
 import Flex from '../../../../styles/layout/Flex';
-import { EFlex, ESize, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
+import { EFlex, ESize, ESubscribeType, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
 import { motion, Variants } from 'framer-motion';
 import BMHeading from '../../../../styles/theme/components/BMHeading';
 import { StyledFullHeightContainer, StyledHalfHeightContainer, StyledScreenHeightContainer } from '../story.styles';
@@ -11,6 +11,8 @@ import Spacing from '../../../../styles/layout/Spacing';
 import { TitleAndValue } from '../TitleAndValue';
 import BMButton from '../../../../styles/theme/components/BMButton';
 import router from 'next/router';
+import useWebsocket from '../../../../hooks/useWebsocket';
+import { TBlockchain } from '../../../../types/blockchain';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -40,11 +42,45 @@ const Animated = ({ children }: { children: React.ReactNode }) => (
 );
 
 const StoryPage: NextPage = () => {
+	const { subscribeTo, message } = useWebsocket();
+
+	const [blockchainsData, setBlockchainsData] = useState<any>({});
+
+	useEffect(() => {
+		if (message?.channel === ESubscribeType.blockchains) {
+			console.log('messsages', message);
+			let newBlockchainsData = {
+				powerConsumption: 0,
+				todayTransactionCount: 0,
+				transactionCount: 0,
+				todayAddressUsed: 0,
+				totalValueLocked: 0
+			};
+
+			message.data.forEach((blockchain: TBlockchain) => {
+				console.log('blockchain', blockchain);
+
+				newBlockchainsData.powerConsumption += blockchain?.blockchain_power_consumption || 0;
+				newBlockchainsData.todayTransactionCount += blockchain?.today_transaction_count || 0;
+				newBlockchainsData.transactionCount += blockchain?.transaction_count || 0;
+				newBlockchainsData.todayAddressUsed += blockchain?.today_address_count || 0;
+				newBlockchainsData.totalValueLocked += blockchain?.total_value_locked || 0;
+			});
+
+			console.log('newBlockchainsData', newBlockchainsData);
+			setBlockchainsData(newBlockchainsData);
+		}
+	}, [message]);
+
+	useEffect(() => {
+		subscribeTo(ESubscribeType.blockchains);
+	}, [subscribeTo]);
+
 	return (
 		<>
 			<Meta title='Blockmetrics' />
 
-			<Main noNavbar noMarginTop>
+			<Main noNavbar noMarginTop noPaddingBottom>
 				<Flex direction={EFlex.column} vertical={EFlex.center}>
 					<StyledScreenHeightContainer>
 						<StyledFullHeightContainer>
@@ -54,7 +90,7 @@ const StoryPage: NextPage = () => {
 						</StyledFullHeightContainer>
 
 						<Animated>
-							<TitleAndValue title='Last 24H' value={123456789} unit='W' />
+							<TitleAndValue title='Last 24H' value={blockchainsData.powerConsumption} unit='Wh' />
 						</Animated>
 
 						<StyledHalfHeightContainer />
@@ -69,25 +105,16 @@ const StoryPage: NextPage = () => {
 							<Spacing size={ESize['8xl']} />
 
 							<Animated>
-								<TitleAndValue title='Last 24H transactions' value={9626344875} />
+								<TitleAndValue title='Today transactions count' value={blockchainsData.todayTransactionCount} />
 							</Animated>
 
 							<Spacing size={ESize['2xl']} />
 
 							<Animated>
-								<TitleAndValue title='Total transactions count' value={2109626344875} />
-							</Animated>
-
-							<Spacing size={ESize['8xl']} />
-
-							<Animated>
-								<TitleAndValue title='Last 24H new smart contracts' value={26344875} />
-							</Animated>
-
-							<Spacing size={ESize['2xl']} />
-
-							<Animated>
-								<TitleAndValue title='Total smart contracts count' value={26344875001} />
+								<TitleAndValue
+									title='Total transactions count'
+									value={blockchainsData.transactionCount + blockchainsData.todayTransactionCount}
+								/>
 							</Animated>
 						</section>
 
@@ -103,19 +130,17 @@ const StoryPage: NextPage = () => {
 							<Spacing size={ESize['8xl']} />
 
 							<Animated>
-								<TitleAndValue title='Last 24H new users' value={137004} />
+								<TitleAndValue title='Total Value Locked' value={blockchainsData.totalValueLocked} unit='$' />
 							</Animated>
 
 							<Spacing size={ESize['2xl']} />
 
 							<Animated>
-								<TitleAndValue title='Last 24H active users' value={54137982} />
-							</Animated>
-
-							<Spacing size={ESize['2xl']} />
-
-							<Animated>
-								<TitleAndValue title='Total users count' value={1054637889} />
+								<TitleAndValue
+									title='Today Addresses used'
+									value={blockchainsData.todayAddressUsed}
+									customDuration={180}
+								/>
 							</Animated>
 						</section>
 

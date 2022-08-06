@@ -4,6 +4,7 @@ interface IHeader {
 	title: string;
 	titleSemiBold?: string;
 	subtitle: string;
+	subtitleLoading?: boolean;
 	icon?: EIcon;
 }
 

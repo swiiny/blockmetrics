@@ -23,6 +23,7 @@ type TBlockchain = {
 	isSelected?: boolean;
 	loading?: boolean;
 	icon?: EIcon;
+	genesis_block?: string;
 };
 
 type TBlockchainMetadata = {
@@ -41,8 +42,7 @@ type TBlockchainScore = {
 	reliability: number;
 	token_count: number;
 	power_consumption: number;
-	total_value_locked: number;
-	speed: number;
+	proof_of_trust: number;
 };
 
 export type { TBlockchain, TBlockchainMetadata, TBlockchainScore };

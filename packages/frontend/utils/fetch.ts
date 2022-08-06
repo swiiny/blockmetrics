@@ -61,8 +61,7 @@ export const getBlockchainMetadataAndScoreById = async (
 				reliability: data.reliability,
 				token_count: data.token_count,
 				power_consumption: data.power_consumption,
-				total_value_locked: data.total_value_locked,
-				speed: data.speed
+				proof_of_trust: data.proof_of_trust
 			}
 		};
 	} catch (error) {

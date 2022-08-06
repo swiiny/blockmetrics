@@ -6,6 +6,8 @@ interface IBMProgressBar {
 	size?: ESize;
 	value?: number;
 	loading?: boolean;
+	endValueVisible?: boolean;
+	endValue?: string;
 }
 
 export type { IBMProgressBar };

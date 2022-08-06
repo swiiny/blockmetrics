@@ -20,6 +20,13 @@ export enum ESize {
 	'8xl' = '8xl'
 }
 
+export enum ERequestState {
+	unset = 'unset',
+	loading = 'loading',
+	success = 'success',
+	error = 'error'
+}
+
 export enum EPosition {
 	top = 'top',
 	topRight = 'topRight',

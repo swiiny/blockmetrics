@@ -33,6 +33,10 @@ export const NAVBAR_LINKS = {
 	about: {
 		label: 'About Blockmetrics',
 		href: '/about'
+	},
+	documentation: {
+		label: 'Documentation',
+		href: '/documentation'
 	}
 };
 
@@ -178,9 +182,13 @@ const Navbar = () => {
 				{isSmallerThanMd ? <>{burgerButton}</> : <>{navbarLinks}</>}
 			</Flex>
 			{!isSmallerThanMd ? (
-				<BMButton size={ESize.m} secondary onClick={() => alert('Work in progress')}>
-					What is a blockchain ?
-				</BMButton>
+				<Link href={NAVBAR_LINKS.documentation.href}>
+					<a>
+						<BMButton size={ESize.m} secondary onClick={() => {}}>
+							What is a blockchain ?
+						</BMButton>
+					</a>
+				</Link>
 			) : (
 				<Collapse isOpen={isNavbarOpen}>{navbarLinks}</Collapse>
 			)}

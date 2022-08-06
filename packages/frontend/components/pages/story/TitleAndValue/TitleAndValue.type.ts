@@ -4,6 +4,7 @@ interface ITitleAndValue {
 	title: string;
 	titleSize?: ESize;
 	value: number;
+	customDuration?: number;
 	unit?: string;
 }
 

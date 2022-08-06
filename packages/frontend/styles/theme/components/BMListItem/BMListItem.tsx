@@ -2,7 +2,7 @@ import React, { FC, useMemo } from 'react';
 import Spacing from '../../../layout/Spacing';
 import { ESize, ETextWeight } from '../../utils/enum';
 import BMText from '../BMText';
-import { StyledBMListItem, StyledDot } from './BMListItem.styles';
+import { StyledBMListItem, StyledChildrenContainer, StyledDot } from './BMListItem.styles';
 import { IBMListItem } from './BMListItem.type';
 
 const BMListItem: FC<IBMListItem> = ({ children, dotHidden = false, ...otherProps }) => {
@@ -28,8 +28,7 @@ const BMListItem: FC<IBMListItem> = ({ children, dotHidden = false, ...otherProp
 			) : (
 				<></>
 			)}
-
-			{memoizedChildren}
+			<StyledChildrenContainer>{memoizedChildren}</StyledChildrenContainer>
 		</StyledBMListItem>
 	);
 };

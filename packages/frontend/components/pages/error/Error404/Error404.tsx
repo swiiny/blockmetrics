@@ -27,7 +27,7 @@ const Error404: FC = () => {
 					<Spacing size={ESize.m} />
 
 					<BMButton onClick={() => router.push('/story')} secondary>
-						Discover a fun story
+						A new way to discover global data
 					</BMButton>
 				</Flex>
 			</Main>

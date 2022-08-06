@@ -5,6 +5,7 @@ interface IBMSkeleton extends IPadding, IMargin {
 	width?: string | number | ESize;
 	height?: string | number | ESize;
 	circle?: boolean;
+	className?: string;
 }
 
 interface ISkeleton {
