@@ -539,8 +539,8 @@ components:
         - reliability
         - token_count
         - power_consumption
-        - total_value_locked
-        - speed
+        - proof_of_trust
+        - community
 
       properties:
         score:
@@ -558,10 +558,10 @@ components:
         power_consumption:
           type: number
           example: 21
-        total_value_locked:
+        proof_of_trust:
           type: number
           example: 89
-        speed:
+        community:
           type: number
           example: 43
 

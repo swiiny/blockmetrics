@@ -793,9 +793,9 @@
           "rank",
           "reliability",
           "score",
-          "speed",
+          "community",
           "token_count",
-          "total_value_locked"
+          "proof_of_trust"
         ],
         "type": "object",
         "properties": {
@@ -819,11 +819,11 @@
             "type": "number",
             "example": 21
           },
-          "total_value_locked": {
+          "proof_of_trust": {
             "type": "number",
             "example": 89
           },
-          "speed": {
+          "community": {
             "type": "number",
             "example": 43
           }
