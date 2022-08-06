@@ -116,7 +116,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 		<>
 			<Meta title={name || ''} />
 
-			<Header title={name || ''} subtitle={tagline} icon={chainLogo} />
+			<Header title={name || ''} subtitle={tagline} icon={chainLogo} subtitleLoading={!tagline} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
 				<StyledList>

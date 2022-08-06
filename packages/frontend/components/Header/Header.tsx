@@ -20,7 +20,7 @@ import Eclipse from '../utils/Eclipse';
 import { StyledHeader } from './Header.styles';
 import { IHeader } from './Header.type';
 
-const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon }) => {
+const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon, subtitleLoading = false }) => {
 	const { isSmallerThanSm } = useResponsive();
 
 	return (
@@ -59,9 +59,27 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon }) => 
 					size={ESize.m}
 					textColor={ETextColor.default}
 					textAlign={isSmallerThanSm ? ETextAlign.left : ETextAlign.center}
+					loading={subtitleLoading}
+					skHeight={ESize.s}
 				>
 					{subtitle}
 				</BMText>
+
+				{subtitleLoading && (
+					<>
+						<Spacing size={ESize['4xs']} />
+						<BMText
+							as='h2'
+							weight={ETextWeight.light}
+							size={ESize.m}
+							textColor={ETextColor.default}
+							textAlign={isSmallerThanSm ? ETextAlign.left : ETextAlign.center}
+							loading={subtitleLoading}
+							skHeight={ESize.s}
+							skWidth={'40%'}
+						>{``}</BMText>
+					</>
+				)}
 			</Flex>
 		</StyledHeader>
 	);
