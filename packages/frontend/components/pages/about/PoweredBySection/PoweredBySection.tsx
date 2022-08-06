@@ -11,23 +11,27 @@ import useResponsive from '../../../../hooks/useResponsive';
 const SERVICES = [
 	{
 		logoSrc: '/assets/images/services/ankr.svg',
-		href: ''
+		href: 'https://www.ankr.com/'
 	},
 	{
 		logoSrc: '/assets/images/services/etherscan.svg',
-		href: ''
+		href: 'https://etherscan.io'
 	},
 	{
 		logoSrc: '/assets/images/services/polygonscan.svg',
-		href: ''
+		href: 'https://polygonscan.com'
 	},
 	{
 		logoSrc: '/assets/images/services/bscscan.svg',
-		href: ''
+		href: 'https://bscscan.com'
 	},
 	{
-		logoSrc: '/assets/images/services/avascan.svg',
-		href: ''
+		logoSrc: '/assets/images/services/snowtrace.svg',
+		href: 'https://snowtrace.io'
+	},
+	{
+		logoSrc: '/assets/images/services/digiconomist.svg',
+		href: 'https://digiconomist.net/'
 	}
 ];
 

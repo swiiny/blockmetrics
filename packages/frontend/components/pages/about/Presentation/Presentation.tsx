@@ -56,9 +56,9 @@ const Presentation: React.FC = () => {
 
 					<Spacing size={ESize.xs} />
 
-					<BMText size={ESize.xl} weight={ETextWeight.light}>
-						Lorem ispum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et
-						dolore magna aliqua.
+					<BMText size={ESize.l} weight={ETextWeight.light}>
+						Blockchains data may be difficult to find and even more difficult to understand. That is exactly why
+						Blockmetrics is being built.
 					</BMText>
 				</StyledTextContainer>
 			</Flex>

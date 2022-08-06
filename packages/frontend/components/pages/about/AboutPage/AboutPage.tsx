@@ -22,9 +22,7 @@ import AboutCard from '../AboutCard';
 
 const HeaderData = {
 	title: 'About',
-	titleSemiBold: 'Blockmetrics',
-	subtitle:
-		'Blockchains data may be difficult to find and even more difficult to understand. That is exactly why Blockmetrics is being built.'
+	titleSemiBold: 'Blockmetrics'
 };
 
 const AboutPage: NextPage = () => {
