@@ -45,7 +45,7 @@ const cards = [
 		]
 	},
 	{
-		title: 'How the ranking is defined?',
+		title: 'How is the ranking assigned?',
 		subtitle:
 			'The Blockmetrics ranking is calculated according to our own criteria that define what makes a good blockchain. If you do not agree with us, do not hesitate to create a github issue with your arguments so that we can improve our ranking quality. Some metrics are not used to calculate the score because we have to use metrics that we have in common for each blockchain.',
 		items: [
