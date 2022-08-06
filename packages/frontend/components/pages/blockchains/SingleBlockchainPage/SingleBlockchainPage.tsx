@@ -127,7 +127,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 
 				<Spacing size={ESize.xl} />
 
-				<InformationCard chainId={chainId} onGetTagline={(tagline) => setTagline(tagline)} />
+				{selectedData.length > 0 && (
+					<InformationCard chainId={chainId} onGetTagline={(tagline) => setTagline(tagline)} />
+				)}
 
 				<Spacing size={ESize.xl} />
 
