@@ -16,6 +16,7 @@ const totalWeight = 25;
 const cards = [
 	{
 		title: 'What is a blockchain?',
+		maxHeight: '400px',
 		items: [
 			{
 				label: 'A distributed database shared between all nodes of a computer network'

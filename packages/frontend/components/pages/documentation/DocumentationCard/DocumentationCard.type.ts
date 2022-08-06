@@ -1,5 +1,6 @@
 interface IDocumentationCard {
 	title: string;
+	maxHeight?: string;
 	subtitle?: string;
 	items: IDocumentationCardItem[];
 }

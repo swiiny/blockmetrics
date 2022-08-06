@@ -10,7 +10,7 @@ import { EDirection, EFlex, ESize, ETextColor, ETextType, ETextWeight } from '..
 import { StyledList, StyledSubitemsList } from './DocumentationCard.styles';
 import { IDocumentationCard } from './DocumentationCard.type';
 
-const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, ...otherProps }) => {
+const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, maxHeight, ...otherProps }) => {
 	return (
 		<BMCardContainer isHighlighted animateApparition {...otherProps} marginTop={ESize['4xl']}>
 			<Flex fullWidth direction={EFlex.column} padding={ESize['2xl']} mdPadding={ESize.l} smPaddingX={ESize.s}>
@@ -22,7 +22,7 @@ const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, ...
 					<>
 						<Spacing size={ESize.s} />
 
-						<Column columns={8}>
+						<Column columns={8} md={12}>
 							<BMText as='h4' size={ESize.m} weight={ETextWeight.light}>
 								{subtitle}
 							</BMText>
@@ -30,7 +30,7 @@ const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, ...
 					</>
 				)}
 
-				<StyledList marginTop={ESize.xl}>
+				<StyledList marginTop={ESize.xl} maxHeight={maxHeight}>
 					{items.map(({ label, highlightedValue, subitems }) => (
 						<BMListItem key={label}>
 							<BMText size={ESize.m} weight={ETextWeight.light}>
@@ -38,14 +38,13 @@ const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, ...
 
 								{highlightedValue && (
 									<>
-										<Spacing size={ESize.s} xsDirection={EDirection.horizontal} />
 										<BMText
 											type={ETextType.span}
 											//size={ESize.m}
 											weight={ETextWeight.semiBold}
 											textColor={ETextColor.light}
 										>
-											{highlightedValue}
+											{' - ' + highlightedValue}
 										</BMText>
 									</>
 								)}
