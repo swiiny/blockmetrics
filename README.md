@@ -39,8 +39,8 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Add accessibility
 -   [ ] Add comparison data with real life data
 -   [x] Doc page
--   [ ] Story page
--   [ ] Add individual score for each ranking data
+-   [x] Story page
+-   [ ] Add individual score for each ranking data :construction:
 
 
 
