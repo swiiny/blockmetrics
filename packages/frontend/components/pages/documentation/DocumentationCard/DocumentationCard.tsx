@@ -12,7 +12,7 @@ import { IDocumentationCard } from './DocumentationCard.type';
 
 const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, maxHeight, ...otherProps }) => {
 	return (
-		<BMCardContainer isHighlighted animateApparition {...otherProps} marginTop={ESize['4xl']}>
+		<BMCardContainer isHighlighted animateApparition {...otherProps} marginTop={ESize['4xl']} smMarginTop={ESize.xl}>
 			<Flex fullWidth direction={EFlex.column} padding={ESize['2xl']} mdPadding={ESize.l} smPaddingX={ESize.s}>
 				<BMText as='h3' weight={ETextWeight.semiBold} size={ESize['2xl']}>
 					{title}

@@ -30,13 +30,13 @@ export const NAVBAR_LINKS = {
 		label: 'Compare',
 		href: '/compare'
 	},
-	about: {
-		label: 'About Blockmetrics',
-		href: '/about'
-	},
 	documentation: {
 		label: 'Documentation',
 		href: '/documentation'
+	},
+	about: {
+		label: 'About Blockmetrics',
+		href: '/about'
 	}
 };
 

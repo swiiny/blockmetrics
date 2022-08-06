@@ -51,19 +51,23 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon, subti
 					)}
 				</Flex>
 
-				<Spacing size={ESize.l} />
+				{subtitle && (
+					<>
+						<Spacing size={ESize.l} smSize={ESize['2xs']} />
 
-				<BMText
-					as='h2'
-					weight={ETextWeight.light}
-					size={ESize.m}
-					textColor={ETextColor.default}
-					textAlign={isSmallerThanSm ? ETextAlign.left : ETextAlign.center}
-					loading={subtitleLoading}
-					skHeight={ESize.s}
-				>
-					{subtitle}
-				</BMText>
+						<BMText
+							as='h2'
+							weight={ETextWeight.light}
+							size={ESize.m}
+							textColor={ETextColor.default}
+							textAlign={isSmallerThanSm ? ETextAlign.left : ETextAlign.center}
+							loading={subtitleLoading}
+							skHeight={ESize.s}
+						>
+							{subtitle}
+						</BMText>
+					</>
+				)}
 
 				{subtitleLoading && (
 					<>

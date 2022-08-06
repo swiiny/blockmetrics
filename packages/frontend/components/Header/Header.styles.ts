@@ -14,6 +14,13 @@ export const StyledHeader = styled.header`
 	padding-bottom: 75px;
 	`
 	)}
+	${mq(
+		EMediaQuery.sm,
+		`
+	margin-top: 100px;
+	padding-bottom: 50px;
+	`
+	)}
 
 	${(p) => css`
 		&:before {
