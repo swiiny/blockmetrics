@@ -30,13 +30,13 @@ const DocumentationRestApiPage: FC = () => {
 					<BMCardContainer padding={ESize.s} smPadding={ESize['4xs']} mdPadding={ESize['xs']}>
 						<Suspense fallback={<BMText>Loading...</BMText>}>
 							{/* @ts-ignore */}
-							<SwaggerUI url='/rest-swagger.json' />
+							<SwaggerUI url='/rest-swagger.yaml' />
 						</Suspense>
 					</BMCardContainer>
 				) : (
 					<Suspense fallback={<BMText>Loading...</BMText>}>
 						{/* @ts-ignore */}
-						<SwaggerUI url='/rest-swagger.json' />
+						<SwaggerUI url='/rest-swagger.yaml' />
 					</Suspense>
 				)}
 			</Main>
