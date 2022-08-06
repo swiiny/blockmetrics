@@ -87,7 +87,7 @@ const StoryPage: NextPage = () => {
 						</StyledFullHeightContainer>
 
 						<Animated>
-							<TitleAndValue title='Last 24H' value={blockchainsData.powerConsumption} unit='Wh' />
+							<TitleAndValue title='Last 24H' value={blockchainsData?.powerConsumption || 0} unit='Wh' />
 						</Animated>
 
 						<StyledHalfHeightContainer />
@@ -102,7 +102,7 @@ const StoryPage: NextPage = () => {
 							<Spacing size={ESize['8xl']} />
 
 							<Animated>
-								<TitleAndValue title='Today transactions count' value={blockchainsData.todayTransactionCount} />
+								<TitleAndValue title='Today transactions count' value={blockchainsData?.todayTransactionCount || 0} />
 							</Animated>
 
 							<Spacing size={ESize['2xl']} />
@@ -110,7 +110,7 @@ const StoryPage: NextPage = () => {
 							<Animated>
 								<TitleAndValue
 									title='Total transactions count'
-									value={blockchainsData.transactionCount + blockchainsData.todayTransactionCount}
+									value={(blockchainsData?.transactionCount || 0) + (blockchainsData?.todayTransactionCount || 0)}
 								/>
 							</Animated>
 						</section>
@@ -127,7 +127,7 @@ const StoryPage: NextPage = () => {
 							<Spacing size={ESize['8xl']} />
 
 							<Animated>
-								<TitleAndValue title='Total Value Locked' value={blockchainsData.totalValueLocked} unit='$' />
+								<TitleAndValue title='Total Value Locked' value={blockchainsData?.totalValueLocked || 0} unit='$' />
 							</Animated>
 
 							<Spacing size={ESize['2xl']} />
@@ -135,7 +135,7 @@ const StoryPage: NextPage = () => {
 							<Animated>
 								<TitleAndValue
 									title='Today Addresses used'
-									value={blockchainsData.todayAddressUsed}
+									value={blockchainsData?.todayAddressUsed || 0}
 									customDuration={180}
 								/>
 							</Animated>

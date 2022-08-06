@@ -1,0 +1,871 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Blockmetrics REST API",
+    "description": "Blockmetrics REST API",
+    "contact": {
+      "email": "jeremy@block-metrics.io"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api-rest.block-metrics.io",
+      "description": "REST API"
+    }
+  ],
+  "tags": [
+    {
+      "name": "Blockchains",
+      "description": "Fetch all listed blockchains data. For the moment the listed blockchains are ethereum, binance-smart-chain, polygon, fantom, avalanche and bitcoin"
+    },
+    {
+      "name": "Blockchain",
+      "description": "Fetch single blockchain data"
+    }
+  ],
+  "paths": {
+    "/blockchains": {
+      "get": {
+        "tags": [
+          "Blockchains"
+        ],
+        "summary": "search blockchains",
+        "description": "Return an array blockchains objects.\n",
+        "operationId": "searchBlockchains",
+        "parameters": [
+          {
+            "name": "desc",
+            "in": "query",
+            "description": "Sort result",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "boolean"
+            }
+          },
+          {
+            "name": "sortBy",
+            "in": "query",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "name node_count",
+                "testnet_node_count",
+                "single_node_power_consumption",
+                "blockchain_power_consumption",
+                "hashrate",
+                "difficulty",
+                "last_block_timestamp",
+                "token_count",
+                "transaction_count",
+                "gas_price",
+                "consensus",
+                "today_transaction_count",
+                "address_count",
+                "today_address_count"
+              ]
+            }
+          },
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "maximum number of records to return",
+            "required": false,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "maximum": 50,
+              "minimum": 1,
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Blockchain"
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching blockchains data"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blockchains/total": {
+      "get": {
+        "tags": [
+          "Blockchains"
+        ],
+        "summary": "search blockchains total",
+        "description": "Return a sum of a property from blockchains objects.\n",
+        "operationId": "searchBlockchainsTotal",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "The property to sum",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "powerConsumption",
+                "tokenCount",
+                "nodeCount",
+                "transactionCount",
+                "todayTransactionCount",
+                "addressCount",
+                "todayAddressCount"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "number",
+                  "example": 100
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Missing parameter"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching blockchain chart data where type is ${type}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blockchains/chart": {
+      "get": {
+        "tags": [
+          "Blockchains"
+        ],
+        "summary": "blockchains monthly chart",
+        "description": "Return monthly chart data for the blockchains\n",
+        "operationId": "blockchainsMonthlyChart",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "the property corresponding to the desired chart",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "activeUsers",
+                "transactionsCount",
+                "powerConsumption",
+                "totalValueLocked"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChartPoint"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Missing parameter"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching blockchain chart data where type is ${type}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blockchain": {
+      "get": {
+        "tags": [
+          "Blockchain"
+        ],
+        "summary": "search blockchain",
+        "description": "Return an array blockchains objects.\n",
+        "operationId": "searchBlockchain",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "id of the blockchain to fetch",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ethereum",
+                "binance-smart-chain",
+                "polygon",
+                "fantom",
+                "avalanche",
+                "bitcoin"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Blockchain"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Missing id"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching blockchain data where id is ${id}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blockchain/all": {
+      "get": {
+        "tags": [
+          "Blockchain"
+        ],
+        "summary": "blockchain and metadata",
+        "description": "Return the blockchain and the metadata\n",
+        "operationId": "searchBlockchainMetadataAndScore",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of the blockchain to fetch",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ethereum",
+                "binance-smart-chain",
+                "polygon",
+                "fantom",
+                "avalanche",
+                "bitcoin"
+              ]
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Choose the language of the metadata",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Missing id"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching blockchain and metadata data where id is ${id}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blockchain/metadata": {
+      "get": {
+        "tags": [
+          "Blockchain"
+        ],
+        "summary": "metadata of the blockchain",
+        "description": "Return the metadata of a blockchain\n",
+        "operationId": "searchBlockchainMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of the blockchain to fetch",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ethereum",
+                "binance-smart-chain",
+                "polygon",
+                "fantom",
+                "avalanche",
+                "bitcoin"
+              ]
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Choose the language of the metadata",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Metadata"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Missing id"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching blockchain data where id is ${id}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blockchain/metadataAndScore": {
+      "get": {
+        "tags": [
+          "Blockchain"
+        ],
+        "summary": "metadata and score of the blockchain",
+        "description": "Return the metadata and the score of a blockchain\n",
+        "operationId": "searchBlockchainAndMetadata",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of the blockchain to fetch",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ethereum",
+                "binance-smart-chain",
+                "polygon",
+                "fantom",
+                "avalanche",
+                "bitcoin"
+              ]
+            }
+          },
+          {
+            "name": "language",
+            "in": "query",
+            "description": "Choose the language of the metadata",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "default": "en"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/inline_response_200_1"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Missing id"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching metadata and score data where id is ${id}"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/blockchain/chart": {
+      "get": {
+        "tags": [
+          "Blockchain"
+        ],
+        "summary": "blockchain monthly chart",
+        "description": "Return monthly chart data for the blockchain\n",
+        "operationId": "blockchainMonthlyChart",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "description": "Id of the blockchain to fetch",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "ethereum",
+                "binance-smart-chain",
+                "polygon",
+                "fantom",
+                "avalanche",
+                "bitcoin"
+              ]
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "description": "the property corresponding to the desired chart",
+            "required": true,
+            "style": "form",
+            "explode": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "activeUsers",
+                "averageBlocktime",
+                "averageGasPrice",
+                "difficulty",
+                "hashrate",
+                "newAddress",
+                "newContract",
+                "newTokens",
+                "tokenCount",
+                "nodeCount",
+                "powerConsumption",
+                "transactionCount",
+                "totalValueLocked"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChartPoint"
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "bad input parameter",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Missing or wrong parameter"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "The server can't successfuly execute the request",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "string",
+                  "example": "Error fetching blockchain chart data where id is ${id}"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Blockchain": {
+        "required": [
+          "address_count",
+          "blockchain_power_consumption",
+          "consensus",
+          "difficulty",
+          "gas_price",
+          "hashrate",
+          "id",
+          "last_block_timestamp",
+          "name",
+          "node_count",
+          "single_node_power_consumption",
+          "testnet_node_count",
+          "today_address_count",
+          "today_transaction_count",
+          "token_count",
+          "total_value_locked",
+          "transaction_count"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string",
+            "example": "Ethereum"
+          },
+          "node_count": {
+            "type": "integer",
+            "example": 5000
+          },
+          "testnet_node_count": {
+            "type": "integer",
+            "example": 0
+          },
+          "single_node_power_consumption": {
+            "type": "number",
+            "example": 50
+          },
+          "blockchain_power_consumption": {
+            "type": "number",
+            "example": 100000
+          },
+          "hashrate": {
+            "type": "number",
+            "example": 169.145948
+          },
+          "difficulty": {
+            "type": "number",
+            "example": 1359284933
+          },
+          "last_block_timestamp": {
+            "type": "number",
+            "example": 1564984100
+          },
+          "token_count": {
+            "type": "integer",
+            "example": 4890
+          },
+          "transaction_count": {
+            "type": "integer",
+            "example": 178039483
+          },
+          "gas_price": {
+            "type": "number",
+            "example": 250000000
+          },
+          "consensus": {
+            "type": "string",
+            "example": "PoW"
+          },
+          "today_transaction_count": {
+            "type": "integer",
+            "example": 1928493
+          },
+          "address_count": {
+            "type": "integer",
+            "example": 192849345
+          },
+          "today_address_count": {
+            "type": "integer",
+            "example": 1928493
+          },
+          "total_value_locked": {
+            "type": "integer",
+            "example": 192849308903
+          }
+        }
+      },
+      "Metadata": {
+        "required": [
+          "blockchain_id",
+          "description",
+          "genesis_block",
+          "id",
+          "links",
+          "source",
+          "tagline"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "blockchain_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "description": {
+            "type": "string",
+            "example": "Ethereum is a decentralized platform that runs on the Ethereum blockchain."
+          },
+          "tagline": {
+            "type": "string",
+            "example": "Decentralized, open source, community-driven platform for financial transactions."
+          },
+          "genesis_block": {
+            "type": "number",
+            "example": 10000000
+          },
+          "source": {
+            "type": "string",
+            "example": "https://ethereum.org/"
+          },
+          "links": {
+            "type": "array",
+            "items": {
+              "type": "string",
+              "example": "https://ethereum.org/"
+            }
+          }
+        }
+      },
+      "Score": {
+        "required": [
+          "power_consumption",
+          "rank",
+          "reliability",
+          "score",
+          "speed",
+          "token_count",
+          "total_value_locked"
+        ],
+        "type": "object",
+        "properties": {
+          "score": {
+            "type": "number",
+            "example": 46
+          },
+          "rank": {
+            "type": "string",
+            "example": "B-"
+          },
+          "reliability": {
+            "type": "number",
+            "example": 100
+          },
+          "token_count": {
+            "type": "integer",
+            "example": 100
+          },
+          "power_consumption": {
+            "type": "number",
+            "example": 21
+          },
+          "total_value_locked": {
+            "type": "number",
+            "example": 89
+          },
+          "speed": {
+            "type": "number",
+            "example": 43
+          }
+        }
+      },
+      "ChartPoint": {
+        "required": [
+          "date",
+          "value"
+        ],
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "number",
+            "example": 1847394837
+          },
+          "value": {
+            "type": "number",
+            "example": 1888000000
+          }
+        }
+      },
+      "inline_response_200": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Blockchain"
+          },
+          {
+            "$ref": "#/components/schemas/Metadata"
+          }
+        ]
+      },
+      "inline_response_200_1": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/Metadata"
+          },
+          {
+            "$ref": "#/components/schemas/Score"
+          }
+        ]
+      }
+    }
+  }
+}

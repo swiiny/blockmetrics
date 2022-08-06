@@ -30,7 +30,7 @@ const AboutPage: NextPage = () => {
 		<>
 			<Meta title='About' />
 
-			<Header title={HeaderData.title} titleSemiBold={HeaderData.titleSemiBold} subtitle={HeaderData.subtitle} />
+			<Header title={HeaderData.title} titleSemiBold={HeaderData.titleSemiBold} />
 
 			<Main>
 				<FlexEx direction={EFlex.column} vertical={EFlex.center} horizontal={EFlex.center}>
