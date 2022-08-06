@@ -40,7 +40,7 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Add comparison data with real life data
 -   [x] Doc page
 -   [x] Story page
--   [ ] Add individual score for each ranking data :construction:
+-   [x] Add individual score for each ranking data :construction:
 
 
 

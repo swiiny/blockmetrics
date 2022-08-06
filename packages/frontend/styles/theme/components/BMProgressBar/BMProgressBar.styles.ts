@@ -57,7 +57,7 @@ export const StyledBMProgressBar = styled.div<IBMProgressBar>`
 	`}
 `;
 
-export const StyledEndValue = styled.div<IBMProgressBar & { isLowValue?: boolean }>`
+export const StyledEndValue = styled.div<IBMProgressBar & { isLowValue?: boolean; size?: ESize }>`
 	${(p) => css`
 		position: absolute;
 
@@ -127,7 +127,7 @@ export const StyledEndValue = styled.div<IBMProgressBar & { isLowValue?: boolean
 	`}
 `;
 
-export const StyledArrow = styled.div<{ isLowValue?: boolean }>`
+export const StyledArrow = styled.div<{ isLowValue?: boolean; size?: ESize }>`
 	position: absolute;
 	bottom: -6px;
 
