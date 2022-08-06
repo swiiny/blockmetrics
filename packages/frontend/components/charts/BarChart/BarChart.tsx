@@ -38,7 +38,7 @@ const getOrCreateTooltip = (chart: ITooltipChart) => {
 		dataContainer.style.padding = '7px 12px';
 		dataContainer.style.borderRadius = '10px';
 		dataContainer.style.border = '1px solid #474747';
-		dataContainer.style.boxShadow = '0px 12px 24px 0px #0000004D inset;';
+		dataContainer.style.boxShadow = '0px 12px 24px 0px #0000004D inset';
 		dataContainer.style.backgroundColor = '#31393E';
 		dataContainer.style.zIndex = '2';
 
