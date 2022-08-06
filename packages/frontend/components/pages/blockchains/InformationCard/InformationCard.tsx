@@ -46,12 +46,12 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 	}>({
 		id: '',
 		rank: '',
-		score: 0,
-		reliability: 0,
-		token_count: 0,
-		power_consumption: 0,
-		total_value_locked: 0,
-		speed: 0
+		score: -1,
+		reliability: -1,
+		token_count: -1,
+		power_consumption: -1,
+		total_value_locked: -1,
+		speed: -1
 	});
 
 	const genesisBlockDate = useMemo(() => {
@@ -179,7 +179,15 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 		return (
 			<StyledRank>
-				<BMText size={isSmallerThanMd ? ESize['2xl'] : ESize['4xl']} textColor={color} weight={ETextWeight.bold}>
+				<BMText
+					size={isSmallerThanMd ? ESize['2xl'] : ESize['4xl']}
+					textColor={color}
+					weight={ETextWeight.bold}
+					loading={!rank}
+					skHeight={'60%'}
+					skWidth={'60%'}
+					circle={isSmallerThanMd}
+				>
 					{rank}
 				</BMText>
 			</StyledRank>

@@ -4,10 +4,13 @@ import { Bar } from 'react-chartjs-2';
 import { StyledChartContainer } from './BarChart.styles';
 import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
 import { axiosRest } from '../../../utils/variables';
-import { ETextColor } from '../../../styles/theme/utils/enum';
+import { EFlex, ERequestState, ESize, ETextColor } from '../../../styles/theme/utils/enum';
 import { getEngNotation } from '../../../utils/convert';
 import { DefaultTheme, useTheme } from 'styled-components';
 import { ITooltipChart } from './BarChart.type';
+import BMSkeleton from '../../../styles/theme/components/BMSkeleton';
+import Flex from '../../../styles/layout/Flex';
+import BMText from '../../../styles/theme/components/BMText';
 
 const getOrCreateTooltip = (chart: ITooltipChart) => {
 	let tooltipEl = chart.canvas.parentNode.querySelector('div');
@@ -177,7 +180,7 @@ const BarChart: FC<IBarLineChart> = ({
 
 	const [chartData, setChartData] = useState<IBarLineChartData[]>([]);
 
-	const [loading, updateLoading] = useReducer((_: boolean, value: boolean) => value, false);
+	const [requestState, setRequestState] = useState(ERequestState.unset);
 
 	const chartId = useMemo(() => `chart-container-${dailyType}-${chainId}`, [dailyType, chainId]);
 
@@ -327,7 +330,7 @@ const BarChart: FC<IBarLineChart> = ({
 						//stepSize: 1,
 						callback(value: number) {
 							const ingValue = getEngNotation(value, unit, decimals);
-							return ingValue.toString;
+							return ingValue?.toString || '';
 						}
 					},
 					min: minValue,
@@ -357,7 +360,7 @@ const BarChart: FC<IBarLineChart> = ({
 
 	const fetchChartData = useCallback(async () => {
 		if (dailyType) {
-			updateLoading(true);
+			setRequestState(ERequestState.loading);
 			try {
 				let result;
 
@@ -377,9 +380,9 @@ const BarChart: FC<IBarLineChart> = ({
 
 				setChartData(formattedData);
 
-				updateLoading(false);
+				setRequestState(ERequestState.success);
 			} catch (err) {
-				updateLoading(false);
+				setRequestState(ERequestState.error);
 				console.error('Error fetchChartData', err);
 			}
 		}
@@ -389,15 +392,27 @@ const BarChart: FC<IBarLineChart> = ({
 		fetchChartData();
 	}, [fetchChartData]);
 
-	return loading ? (
+	return requestState === ERequestState.loading ? (
 		<StyledChartContainer chartHeight={chartHeight}>
-			<div id={chartId} className='relative overflow-hidden' />
+			<div id={chartId} className='relative overflow-hidden'>
+				<BMSkeleton width={'100%'} height={'100%'} />
+			</div>
 		</StyledChartContainer>
-	) : (
+	) : requestState === ERequestState.success ? (
 		<StyledChartContainer chartHeight={chartHeight}>
 			<div id={chartId}>
 				{/* @ts-ignore */}
 				<Bar options={chartOptions} data={chartReady ? datas() : null} />
+			</div>
+		</StyledChartContainer>
+	) : (
+		<StyledChartContainer chartHeight={chartHeight}>
+			<div id={chartId} className='relative overflow-hidden'>
+				<Flex fullWidth fullHeight vertical={EFlex.center} horizontal={EFlex.center}>
+					<BMText size={ESize.m} textColor={ETextColor.negative}>
+						{`Can't fetch chart data`}
+					</BMText>
+				</Flex>
 			</div>
 		</StyledChartContainer>
 	);
