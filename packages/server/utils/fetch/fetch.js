@@ -1,7 +1,11 @@
 import axios from 'axios';
 import CSVToJSON from 'csvtojson';
 import { CHAINS, CHAINS_ARRAY } from '../../variables.js';
-import { getDailyTokenCount, getScoreCalculationData } from '../sql.js';
+import {
+	getActiveUsersCountForAllBlockchainsFromTodayActiveAddresses,
+	getDailyTokenCount,
+	getScoreCalculationData
+} from '../sql.js';
 
 export async function getAvalancheStats() {
 	try {
@@ -450,6 +454,17 @@ export async function fetchScoreCalculationData(con) {
 		return blockchainRows;
 	} catch (err) {
 		console.error('fetchScoreCalculationData', err);
+		return null;
+	}
+}
+
+export async function getActiveUsersCountForAllBlockchains(con) {
+	try {
+		const [blockchainRows] = await con.query(getActiveUsersCountForAllBlockchainsFromTodayActiveAddresses);
+
+		return blockchainRows;
+	} catch (err) {
+		console.error('getActiveUsersCountForAllBlockchains', err);
 		return null;
 	}
 }

@@ -6,6 +6,10 @@ export const getPowerConsumptionDataForPoS = `SELECT id, single_node_power_consu
 export const getDailyTokenCount = `SELECT token_count, date FROM daily_token_count_history WHERE blockchain_id = ? AND date BETWEEN DATE_SUB(NOW(), INTERVAL ? DAY) AND NOW() ORDER BY date ASC`;
 // return the count of active address for the current day for the given blockchain
 export const getTodayActiveAddressCount = `SELECT COUNT(*) AS count FROM today_active_address WHERE blockchain_id = ? AND day = CURDATE()`;
+// return the count of active contract addresses for the current day for the given blockchain
+export const getTodayActiveContractCount = `SELECT COUNT(*) AS count FROM today_active_address WHERE blockchain_id = ? AND is_contract = 1 AND day = CURDATE()`;
+// return the count of active user addresses for the current day for the given blockchain
+export const getTodayActiveUsersCount = `SELECT COUNT(*) AS count FROM today_active_address WHERE blockchain_id = ? AND is_contract = 0 AND day = CURDATE()`;
 // fetch data used to calculate the score
 export const getScoreCalculationData = `
 SELECT b.id, b.token_count, b.reliability, b.blockchain_power_consumption, b.transaction_count, b.total_value_locked, b.genesis_block, CAST(AVG(t.transaction_count) AS DECIMAL(10,0)) AS average_transaction_count
@@ -15,6 +19,18 @@ ON t.blockchain_id = b.id
 WHERE t.date BETWEEN DATE_SUB(NOW(), INTERVAL 30 DAY) AND NOW() 
 GROUP BY b.id
 `;
+// get sum for each blockchains of all unique active address by blockchain id from today_active_address table for yesterday
+export const getActiveUsersCountForAllBlockchainsFromTodayActiveAddresses = `
+SELECT blockchain_id as id, COUNT(*) AS count 
+FROM today_active_address 
+WHERE day = DATE_SUB(CURDATE(), INTERVAL 1 DAY) AND is_contract = 0
+GROUP BY blockchain_id
+`;
+
+// get Today Active Address when is_contract is null
+export const getTodayActiveAddressesWhenIsContractIsNull =
+	'SELECT address, blockchain_id, is_contract FROM today_active_address WHERE is_contract IS NULL AND blockchain_id = ? LIMIT ?';
+
 // ==============================================================================================
 // ======= INSERT ===============================================================================
 // ==============================================================================================
@@ -52,6 +68,8 @@ export const increaseTodayTxCountInBlockchain = `UPDATE blockchain SET today_tra
 export const updateTxCountInBlockchain = `UPDATE blockchain SET transaction_count = ? WHERE id = ?`;
 // update address count by blockchain id
 export const updateAddressCountInBlockchain = `UPDATE blockchain SET address_count = ? WHERE id = ?`;
+// update total address, total contract and total users count by blockchain id
+export const updateTodayAddressUsersAndContractCountInBlockchain = `UPDATE blockchain SET today_address_count = ?, today_contract_count = ?, today_user_count = ? WHERE id = ?`;
 // update address count by blockchain id
 export const updateTodayAddressCountInBlockchain = `UPDATE blockchain SET today_address_count = ? WHERE id = ?`;
 // update hashrate by blockchain id
@@ -74,6 +92,8 @@ export const updateBlockchainsRankingInBlockchainScore = `UPDATE blockchain_scor
 export const resetTodayTransactionCount = `UPDATE blockchain SET today_transaction_count = 0 WHERE id = ?`;
 // update address count with value equal to 0
 export const resetTodayAddressCount = `UPDATE blockchain SET today_address_count = 0 WHERE id = ?`;
+
+export const updateTodayActiveAddressIsContract = `UPDATE today_active_address SET is_contract = ? WHERE blockchain_id = ? AND address = ?`;
 
 // ==============================================================================================
 // ======= DELETE ===============================================================================
