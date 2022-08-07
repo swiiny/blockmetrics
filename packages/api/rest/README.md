@@ -2,9 +2,10 @@
 ## Table of Contents
 - [Introduction](#introduction)
 - [Technologies](#technologies)
+- [Endpoints](#endpoints)
 
 ## Introduction
-The API can be tested at [doc.api-rest.block-metrics.io](https://doc.api-rest.block-metrics.io)
+The API can be tested at [block-metrics.io/documentation/api-rest](https://block-metrics.io/documentation/api-rest).
 
 ## Technologies
 The service work with:
@@ -15,16 +16,7 @@ The service work with:
 ## Generate documentation from swagger.yaml file
 `npx swagger-markdown -i ./swagger.yaml`
 
-
-# Blockmetrics REST API
-Blockmetrics REST API
-
-## Version: 1.0.0
-
-**Contact information:**  
-jeremy@block-metrics.io  
-
-**License:** [Apache 2.0](http://www.apache.org/licenses/LICENSE-2.0.html)
+## Endpoints
 
 ### /blockchains
 
