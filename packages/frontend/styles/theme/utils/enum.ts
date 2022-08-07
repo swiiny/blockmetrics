@@ -152,6 +152,8 @@ export enum EGlobalData {
 	transactionCount = 'transactionCount',
 	todayTransactionsCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
+	userCount = 'userCount',
+	contractCount = 'contractCount',
 	todayAddressCount = 'todayAddressCount'
 }
 
@@ -164,6 +166,8 @@ export enum ESubscribeType {
 	todayTransactionCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
 	todayAddressCount = 'todayAddressCount',
+	todayUserCount = 'todayUserCount',
+	todayContractCount = 'todayContractCount',
 	ethereum = 'ethereum',
 	bitcoin = 'bitcoin',
 	polygon = 'polygon',
