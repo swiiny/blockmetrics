@@ -1,0 +1,38 @@
+version: 2
+
+updates:
+  - package-ecosystem: 'npm'
+    directory: '.packages/server'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'develop'
+    labels:
+      - 'npm dependencies'
+      - 'data-server'
+
+  - package-ecosystem: 'npm'
+    directory: '.packages/frontend'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'develop'
+    labels:
+      - 'npm dependencies'
+      - 'frontend'
+
+  - package-ecosystem: 'npm'
+    directory: '.packages/api/rest'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'develop'
+    labels:
+      - 'npm dependencies'
+      - 'api-rest'
+
+  - package-ecosystem: 'npm'
+    directory: '.packages/api/ws'
+    schedule:
+      interval: 'weekly'
+    target-branch: 'develop'
+    labels:
+      - 'npm dependencies'
+      - 'ws-rest'
