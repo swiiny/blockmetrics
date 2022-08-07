@@ -607,7 +607,7 @@ async function startFetchData() {
 
 				try {
 					initWebsocketProvider(chain, con);
-				} catch {
+				} catch (err) {
 					console.error('error connecting to ws provider for', chain.name, err);
 				}
 			});
@@ -658,7 +658,7 @@ async function startFetchData() {
 
 				try {
 					initWebsocketProvider(chain, con);
-				} catch {
+				} catch (err) {
 					console.error('error connecting to ws provider for', chain.name, err);
 				}
 			});

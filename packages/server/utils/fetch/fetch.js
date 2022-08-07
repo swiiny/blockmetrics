@@ -85,7 +85,6 @@ export async function fetchDailyUniqueAddressesFor(chain) {
 		console.error('fetchDailyUniqueAddressesFor', err);
 		return null;
 	}
-	return null;
 }
 
 // { timestamp: number; count: number}[]
@@ -438,7 +437,7 @@ export async function fetchTotalValueLockedForAllChains() {
 				tvl: parseFloat(tvl)
 			};
 		});
-	} catch {
+	} catch (err) {
 		console.error('fetchTotalValueLockedFor', err);
 		return null;
 	}

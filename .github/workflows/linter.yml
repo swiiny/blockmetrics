@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  lint:
+  frontend-lint:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -19,4 +19,16 @@ jobs:
 
       - name: JS Linter
         working-directory: ./packages/frontend
+        run: npm run lint
+
+  data-server-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: prepare job
+        working-directory: ./packages/server
+        run: npm install
+
+      - name: JS Linter
+        working-directory: ./packages/server
         run: npm run lint
