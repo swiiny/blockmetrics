@@ -24,10 +24,6 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 
 -   [ ] separate endpoints in multiple files
 
-### API - WS
-
--   [ ] Create doc swagger 
-
 ### Frontend
 
 -   [ ] Switch component (secondary)
