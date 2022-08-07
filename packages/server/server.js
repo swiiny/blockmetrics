@@ -5,7 +5,6 @@ import { calculatePowerConsumptionPoS, getRankFromScore, getRpcByChainId } from 
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
-	getTodayActiveAddressCount,
 	getTodayActiveAddressesWhenIsContractIsNull,
 	getTodayActiveContractCount,
 	getTodayActiveUsersCount,
@@ -16,7 +15,6 @@ import {
 	updateAddressCountInBlockchain,
 	updateBlockchainsRankingInBlockchainScore,
 	updateTodayActiveAddressIsContract,
-	updateTodayAddressCountInBlockchain,
 	updateTodayAddressUsersAndContractCountInBlockchain,
 	updateTotalValueLockedInBlockchain,
 	updateTxCountInBlockchain
@@ -726,26 +724,20 @@ async function startFetchData() {
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
-					if (chain.id !== CHAINS.bitcoin.id) {
-						const [todayActiveContract] = await con.query(getTodayActiveContractCount, [chain.id]);
-						const [todayActiveUsers] = await con.query(getTodayActiveUsersCount, [chain.id]);
+					const [todayActiveContract] = await con.query(getTodayActiveContractCount, [chain.id]);
+					const [todayActiveUsers] = await con.query(getTodayActiveUsersCount, [chain.id]);
 
-						const contractCount = todayActiveContract[0]?.count || 0;
-						const usersCount = todayActiveUsers[0]?.count || 0;
+					const contractCount = todayActiveContract[0]?.count || 0;
+					const usersCount = todayActiveUsers[0]?.count || 0;
 
-						const newAddressCount = contractCount + usersCount;
-						con.query(updateTodayAddressUsersAndContractCountInBlockchain, [
-							newAddressCount,
-							contractCount,
-							usersCount,
-							chain.id
-						]);
-					} else {
-						const [todayActiveAddressCount] = await con.query(getTodayActiveAddressCount, [chain.id]);
-						if (todayActiveAddressCount[0].count > 0) {
-							con.query(updateTodayAddressCountInBlockchain, [todayActiveAddressCount[0].count, chain.id]);
-						}
-					}
+					const newAddressCount = contractCount + usersCount;
+
+					con.query(updateTodayAddressUsersAndContractCountInBlockchain, [
+						newAddressCount,
+						contractCount,
+						usersCount,
+						chain.id
+					]);
 				});
 			});
 		} else {
@@ -782,26 +774,19 @@ async function startFetchData() {
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
-					if (chain.id !== CHAINS.bitcoin.id) {
-						const [todayActiveContract] = await con.query(getTodayActiveContractCount, [chain.id]);
-						const [todayActiveUsers] = await con.query(getTodayActiveUsersCount, [chain.id]);
+					const [todayActiveContract] = await con.query(getTodayActiveContractCount, [chain.id]);
+					const [todayActiveUsers] = await con.query(getTodayActiveUsersCount, [chain.id]);
 
-						const contractCount = todayActiveContract[0]?.count || 0;
-						const usersCount = todayActiveUsers[0]?.count || 0;
+					const contractCount = todayActiveContract[0]?.count || 0;
+					const usersCount = todayActiveUsers[0]?.count || 0;
 
-						const newAddressCount = contractCount + usersCount;
-						con.query(updateTodayAddressUsersAndContractCountInBlockchain, [
-							newAddressCount,
-							contractCount,
-							usersCount,
-							chain.id
-						]);
-					} else {
-						const [todayActiveAddressCount] = await con.query(getTodayActiveAddressCount, [chain.id]);
-						if (todayActiveAddressCount[0].count > 0) {
-							con.query(updateTodayAddressCountInBlockchain, [todayActiveAddressCount[0].count, chain.id]);
-						}
-					}
+					const newAddressCount = contractCount + usersCount;
+					con.query(updateTodayAddressUsersAndContractCountInBlockchain, [
+						newAddressCount,
+						contractCount,
+						usersCount,
+						chain.id
+					]);
 				});
 			});
 

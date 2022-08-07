@@ -52,6 +52,7 @@ export const insertDailyNodeCount = `INSERT INTO daily_node_count_history (id, b
 export const insertDailyTxPowerConsumption = `INSERT INTO daily_transaction_power_consumption_history (id, blockchain_id, power_consumption, date) VALUES (?, ?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE id = id`;
 
 export const insertNewTodayActiveAddress = `INSERT INTO today_active_address (address, blockchain_id, day) VALUES (?, ?, FROM_UNIXTIME(?)) ON DUPLICATE KEY UPDATE address = address`;
+export const insertNewTodayBitcoinActiveAddress = `INSERT INTO today_active_address (address, blockchain_id, day, is_contract) VALUES (?, ?, FROM_UNIXTIME(?), 0) ON DUPLICATE KEY UPDATE address = address`;
 
 // ==============================================================================================
 // ======= UPDATE ===============================================================================
