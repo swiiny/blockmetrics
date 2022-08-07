@@ -2,7 +2,7 @@
 	"type": "module",
 	"name": "block-metrics-server",
 	"version": "1.0.0",
-	"description": "The server used to collect block metrics",
+	"description": "The server used to collect blockmetrics",
 	"main": "server.js",
 	"dependencies": {
 		"async": "^3.2.2",

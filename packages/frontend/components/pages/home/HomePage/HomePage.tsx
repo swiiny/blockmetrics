@@ -10,7 +10,7 @@ import { ESize } from '../../../../styles/theme/utils/enum';
 const HomePage: NextPage = () => {
 	return (
 		<>
-			<Meta title='Block metrics' />
+			<Meta title='Blockmetrics' />
 
 			<Main>
 				<HomeHeader />

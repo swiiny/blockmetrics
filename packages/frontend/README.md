@@ -1,4 +1,4 @@
-# Block metrics frontend
+# Blockmetrics frontend
 
 ## Table of Contents
 - [Introduction](#introduction)

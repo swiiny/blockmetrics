@@ -1,4 +1,4 @@
-# Block metrics mono repo
+# Blockmetrics mono repo
 
 Blockmetrics is a blockchain metrics platform that provides data about the blockchain ecosystem.
 
@@ -37,7 +37,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 -   [ ] Integrate second comparison page variant (secondary)
 -   [ ] Compare blockchains with a similar amount of transaction/day, etc (secondary)
 -   [ ] Add accessibility
--   [ ] Add comparison data with real life data
+-   [ ] Add comparison with real life data
 
 ### Integrated Blockchains
 
