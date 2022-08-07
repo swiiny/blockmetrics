@@ -1,11 +1,13 @@
 import React from 'react';
-import { ETextType, ETextAlign, ETextColor } from '../../utils/enum';
+import { ETextType, ETextAlign, ETextColor, ESize } from '../../utils/enum';
+import BMSkeleton from '../BMSkeleton';
 import { IBMText } from '../BMText/BMText.type';
 import { StyledHeadingFour, StyledHeadingOne, StyledHeadingThree, StyledHeadingTwo } from './BMHeading.styles';
 
 const BMHeading: React.FC<IBMText> = ({
 	className = '',
 	singleLine = true,
+	loading = false,
 	style,
 	children,
 	weight,
@@ -16,6 +18,21 @@ const BMHeading: React.FC<IBMText> = ({
 	as,
 	...otherProps
 }) => {
+	if (loading) {
+		switch (type) {
+			case ETextType.h1:
+				return <BMSkeleton width='80%' height={ESize['3xl']} />;
+			case ETextType.h2:
+				return <BMSkeleton width='100%' height={ESize.l} />;
+			case ETextType.h3:
+				return <BMSkeleton width='100%' height={ESize.l} />;
+			case ETextType.h4:
+				return <BMSkeleton width='100%' height={ESize.l} />;
+			default:
+				break;
+		}
+	}
+
 	switch (type) {
 		case ETextType.h1:
 			return (

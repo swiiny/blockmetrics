@@ -1,41 +1,45 @@
-# Block metrics
+# Block metrics mono repo
 
-The best place to get data about blockchain and a tool to compare them according to several parameters such as reliability, energy consumption, number of tokens and much more.
+Blockmetrics is a blockchain metrics platform that provides data about the blockchain ecosystem.
 
-The main objective is to offer everyone an easy way to understand what a blockchain is, what the implications of its use are and to be able to make a conscious choice before using one blockcahin than another.
+A tool to compare blockchains according to several parameters such as reliability, energy consumption, number of tokens and much more.
+
+The main objective is to offer to everyone an easy way to understand what a blockchain is, what the implications of its use are and to be able to make a conscious choice before using one blockcahin than another.
+
+Visit [Blockmetrics](https://block-metrics.io/) to get more information about blockchains
+
+## Services
+- [Frontend](./packages/frontend/README.md)
+- [REST API](./packages/api/rest/README.md)
+- [Websocket API](./packages/api/ws/README.md)
+- [Data server](./packages/server/README.md)
 
 ## TODO
 
-### Global :white_check_mark:
+### Global
 
--   [x] Buy block-metrics domain name
--   [x] Buy blockmetrics.eth
--   [ ] Create readme for each service
+-   [ ] Complete readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
--   [ ] remove "note" from blockchain table, remove note column fetching from APIs
-
-### Database :white_check_mark:
-
--   [ ] add TVL in blockchain table
+-   [ ] setup github actions to run tests before merge to production
+-   [ ] Presentation
 
 ### Server
 
 -   [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
 -   [ ] prevent bitcoin webscoket from disconnecting
 
-### API - REST :white_check_mark:
+### API - REST
 
 -   [ ] separate endpoints in multiple files
 
 ### Frontend
 
--   [ ] BMCard component
--   [ ] BMSquaredIcon component
--   [ ] BMListItem with blue dot component
--   [ ] Chart tooltip
--   [ ] Switch component
--   [ ] Add skeleton and alert pop when api not available
+-   [ ] Switch component (secondary)
+-   [ ] Integrate second comparison page variant (secondary)
+-   [ ] Compare blockchains with a similar amount of transaction/day, etc (secondary)
+-   [ ] Add accessibility
+-   [ ] Add comparison data with real life data
 
 
 ### Integrated Blockchains

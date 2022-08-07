@@ -7,10 +7,11 @@ import BlockchainCard from '../../../cards/BlockchainCard';
 import { StyledBlockchainList } from './BlockchainsPage.styles';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import { ESubscribeType } from '../../../../styles/theme/utils/enum';
+import { TBlockchain } from '../../../../types/blockchain';
 
 const HeaderData = {
 	title: 'Blockchains',
-	subtitle: 'Here you can find the 10 most importants blockchains and a preview of their data'
+	subtitle: 'Here you can find the 6 of the most importants blockchains and a preview of their data'
 };
 
 const BlockchainsPage: NextPage = () => {
@@ -35,13 +36,19 @@ const BlockchainsPage: NextPage = () => {
 
 			<Main>
 				<StyledBlockchainList>
-					{blockchains.map((blockchain: TBlockchain) => (
-						<BlockchainCard key={blockchain.id} data={blockchain} />
-					))}
+					{blockchains.length ? (
+						<>
+							{blockchains.map((blockchain: TBlockchain) => (
+								<BlockchainCard key={blockchain.id} data={blockchain} />
+							))}
 
-					{Array.from({ length: 4 }).map((_, i) => (
-						<BlockchainCard key={'empty-bc-card-' + i} emptyItem />
-					))}
+							{Array.from({ length: 4 }).map((_, i) => (
+								<BlockchainCard key={'empty-bc-card-' + i} emptyItem />
+							))}
+						</>
+					) : (
+						Array.from({ length: 3 }).map((_, i) => <BlockchainCard key={'skeleton-bc-card-' + i} loading />)
+					)}
 				</StyledBlockchainList>
 			</Main>
 		</>

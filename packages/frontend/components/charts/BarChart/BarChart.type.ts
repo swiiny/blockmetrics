@@ -1,4 +1,5 @@
 import { EDailyData } from '../../../styles/theme/utils/enum';
+import { TBlockchain } from '../../../types/blockchain';
 
 interface IBarChart {
 	dailyType: EDailyData;
@@ -14,4 +15,8 @@ interface IChartContainer {
 	heightFactor: number;
 }
 
-export type { IChartContainer, IBarChart };
+interface ITooltipChart {
+	canvas: { parentNode: { querySelector: (arg0: string) => any; appendChild: (arg0: HTMLDivElement) => void } };
+}
+
+export type { IChartContainer, IBarChart, ITooltipChart };

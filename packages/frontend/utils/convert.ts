@@ -46,6 +46,7 @@ export const getEngNotation = (value: number, unit?: string, decimals = 2): IEng
 		numberValue: newValue,
 		unit: newUnit,
 		hasDecimals: hasDecimals,
-		toString: `${newValue}${newUnit || ''}`
+		toString: `${newValue}${newUnit || ''}`,
+		fullToString: `${value}${!unit ? '' : unit === '%' ? '%' : ` ${unit}`}`
 	};
 };

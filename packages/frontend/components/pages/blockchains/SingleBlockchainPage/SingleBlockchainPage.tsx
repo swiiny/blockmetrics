@@ -13,8 +13,9 @@ import { StyledList } from './SingleBlockchainPage.styles';
 import { getEngNotation } from '../../../../utils/convert';
 import InformationCard from '../InformationCard';
 import BlockchainData from '../BlockchainData';
+import { TBlockchain } from '../../../../types/blockchain';
 
-const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainLogo, blockchainChannel }) => {
+const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainLogo, name, blockchainChannel }) => {
 	const [blockchain, setBlockchain] = useState<TBlockchain>();
 	const [tagline, setTagline] = useState<string>('');
 
@@ -32,12 +33,13 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				label: token_count <= 1 ? 'Token' : 'Tokens',
 				icon: EIcon.token,
 				colorAnimationOnUpdate: true,
-				reverseColor: true
+				reverseColor: true,
+				helpText: 'The number of tokens available in the blockchain, a token is a crypto currency'
 			});
 		}
 
 		if (blockchain_power_consumption) {
-			const { value, unit } = getEngNotation(blockchain_power_consumption, 'Wh');
+			const { value, unit, fullToString } = getEngNotation(blockchain_power_consumption, 'Wh');
 
 			result.push({
 				value: value,
@@ -46,7 +48,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				label: '24H Power Consumption',
 				icon: EIcon.energy,
 				colorAnimationOnUpdate: true,
-				reverseColor: true
+				reverseColor: true,
+				helpText: 'The last 24 hours power consumption of the blockchain',
+				fullValue: unit !== ' Wh' ? fullToString : undefined
 			});
 		}
 
@@ -56,7 +60,10 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				unit: 'Gwei',
 				label: 'Gas Price',
 				icon: EIcon.gas,
-				colorAnimationOnUpdate: true
+				colorAnimationOnUpdate: true,
+				helpText:
+					'The current gas price of the blockchain, the gas price is used to calculate the fee paid to the miners/validators to execute a transaction.',
+				fullValue: gas_price.toString() + ' wei'
 			});
 		}
 
@@ -68,12 +75,13 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				label: 'Time from last block',
 				icon: EIcon.timer,
 				colorAnimationOnUpdate: true,
-				reverseColor: true
+				reverseColor: true,
+				helpText: 'The time since the last block was mined'
 			});
 		}
 
 		if (hashrate) {
-			const { value, unit, hasDecimals } = getEngNotation(hashrate * 10 ** 12, 'H/s');
+			const { value, unit, hasDecimals, fullToString } = getEngNotation(hashrate * 10 ** 12, 'H/s');
 
 			result.push({
 				value: value,
@@ -82,7 +90,10 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 				valueHasDecimals: hasDecimals,
 				label: 'Hashrate',
 				icon: EIcon.chart,
-				colorAnimationOnUpdate: true
+				colorAnimationOnUpdate: true,
+				helpText:
+					'The hashrate of the blockchain, a speed of 1 hash per second means that each second a new attempt to validate a block is made',
+				fullValue: unit !== 'H/s' ? fullToString : undefined
 			});
 		}
 
@@ -103,9 +114,9 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 
 	return (
 		<>
-			<Meta title={blockchain?.name || ''} />
+			<Meta title={name || ''} />
 
-			<Header title={blockchain?.name || ''} subtitle={tagline} icon={chainLogo} />
+			<Header title={name || ''} subtitle={tagline} icon={chainLogo} subtitleLoading={!tagline} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
 				<StyledList>
@@ -116,10 +127,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 
 				<Spacing size={ESize.xl} />
 
-				{selectedData.length > 0 ? (
+				{selectedData.length > 0 && (
 					<InformationCard chainId={chainId} onGetTagline={(tagline) => setTagline(tagline)} />
-				) : (
-					<></>
 				)}
 
 				<Spacing size={ESize.xl} />

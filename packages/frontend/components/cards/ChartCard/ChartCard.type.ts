@@ -9,6 +9,7 @@ interface IChartCard extends IPadding {
 	unit?: string;
 	decimals?: number;
 	chainId?: string;
+	helpText?: string;
 }
 
 export type { IChartCard };

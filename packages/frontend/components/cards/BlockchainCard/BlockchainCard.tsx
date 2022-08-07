@@ -17,7 +17,7 @@ import ItemLink from '../../utils/ItemLink';
 import useResponsive from '../../../hooks/useResponsive';
 import { getEngNotation } from '../../../utils/convert';
 
-const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
+const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false, loading = false }) => {
 	const { isSmallerThanSm } = useResponsive();
 
 	const cardRef = useRef<number>(0);
@@ -91,31 +91,31 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 	}
 
 	return (
-		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm} animateApparition>
+		<BMCardContainer as='li' clickable isHighlighted={isSmallerThanSm}>
 			<Flex direction={EFlex.column} horizontal={EFlex.center} paddingX={ESize.s} paddingY={ESize.s}>
 				<Flex fullWidth wrapItems horizontal={EFlex.between} vertical={EFlex.center}>
 					<Flex vertical={EFlex.center}>
-						<BMIcon
-							type={blockchain.icon}
-							size={isSmallerThanSm ? ESize.s : ESize.s}
-							//backgroundVisible={!isSmallerThanSm}
-							//backgroundRadius={ESize.s}
-							//backgroundSize={ESize.xs}
-						/>
+						<BMIcon type={blockchain.icon} size={isSmallerThanSm ? ESize.s : ESize.s} loading={loading} />
 
 						<Spacing size={ESize['2xs']} />
 
-						<BMText size={ESize.l} weight={ETextWeight.semiBold}>
+						<BMText size={ESize.l} weight={ETextWeight.semiBold} loading={loading} skWidth={100} skHeight={ESize.m}>
 							{name}
 						</BMText>
 					</Flex>
 
 					<BMCardContainer secondary>
-						<FlexEx horizontal={EFlex.between} paddingY={ESize['5xs']} paddingX={ESize['s']}>
+						<FlexEx horizontal={EFlex.between} vertical={EFlex.center} paddingY={ESize['5xs']} paddingX={ESize['s']}>
 							<BMText size={ESize.m} weight={ETextWeight.medium}>
 								Token{token_count > 1 ? 's' : ''}:
 							</BMText>
-							<BMText size={ESize.m} weight={ETextWeight.medium}>
+							<BMText
+								size={ESize.m}
+								weight={ETextWeight.medium}
+								loading={loading}
+								skWidth={ESize.l}
+								skHeight={ESize.xs}
+							>
 								{token_count}
 							</BMText>
 						</FlexEx>
@@ -136,7 +136,14 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 							</BMText>
 						</Flex>
 
-						<BMText size={ESize.l} weight={ETextWeight.medium} textColor={gasPriceColor}>
+						<BMText
+							size={ESize.l}
+							weight={ETextWeight.medium}
+							textColor={gasPriceColor}
+							loading={loading}
+							skWidth={ESize.xl}
+							skHeight={ESize.s}
+						>
 							{gweiGasPrice ? `${gweiGasPrice} Gwei` : '-'}
 						</BMText>
 					</Flex>
@@ -172,7 +179,13 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 					<Column columns={3} fullHeight>
 						<BMCardContainer tertiary paddingX={ESize['2xs']} paddingY={ESize['3xs']} fullHeight>
 							<Flex fullHeight direction={EFlex.column} horizontal={EFlex.center} vertical={EFlex.center}>
-								<BMText size={ESize['2xl']} weight={ETextWeight.semiBold}>
+								<BMText
+									size={ESize['2xl']}
+									weight={ETextWeight.semiBold}
+									loading={loading}
+									skWidth={ESize.xl}
+									skHeight={ESize['2xl']}
+								>
 									{rank}
 								</BMText>
 
@@ -190,18 +203,18 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false }) => {
 
 				<Flex fullWidth smDirection={EFlex.column} horizontal={EFlex.between} vertical={EFlex.center}>
 					<Column columns={7} sm={12}>
-						<BMProgressBar label='Reliability' value={reliability} />
+						<BMProgressBar label='Reliability' value={reliability} loading={loading} />
 					</Column>
 
 					<Spacing size={ESize.unset} smSize={ESize.m} />
 
-					<BMButton fullWidth={isSmallerThanSm} secondary size={ESize.s}>
+					<BMButton fullWidth={isSmallerThanSm} secondary size={ESize.s} loading={loading} skWidth={120} skHeight={50}>
 						Show More
 					</BMButton>
 				</Flex>
 			</Flex>
 
-			<ItemLink href={linkTo} internal />
+			{!loading && !emptyItem && <ItemLink href={linkTo} internal />}
 		</BMCardContainer>
 	);
 };

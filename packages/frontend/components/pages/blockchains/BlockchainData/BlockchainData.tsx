@@ -18,33 +18,40 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 			label: 'Node count',
 			chartType: EChartType.bar,
 			dailyType: EDailyData.nodeCount,
-			chainId: chainId
+			chainId: chainId,
+			helpText:
+				'Number of nodes in the network, a node is a computer that contains a copy of the blockchain and can process transactions.'
 		});
 
 		result.push({
 			label: 'Transaction count',
 			chartType: EChartType.bar,
 			dailyType: EDailyData.transactionCount,
-			chainId: chainId
+			chainId: chainId,
+			helpText: 'A transaction is an action that changes the state of the blockchain.'
 		});
 
 		if (chainId !== BLOCKCHAINS.bitcoin.id) {
 			result.push({
-				label: 'Gas price',
+				label: 'Average gas price',
 				chartType: EChartType.bar,
 				unit: 'wei',
 				dailyType: EDailyData.averageGasPrice,
-				chainId: chainId
+				chainId: chainId,
+				helpText:
+					'The average gas price, the gas price is used to calculate the fee paid to the miners/validators to execute a transaction.'
 			});
 		}
 
 		if (chainId === BLOCKCHAINS.ethereum.id || chainId === BLOCKCHAINS.bitcoin.id) {
 			result.push({
-				label: 'Hashrate',
+				label: 'Average hashrate',
 				chartType: EChartType.bar,
 				unit: 'TH/s',
 				dailyType: EDailyData.hashrate,
-				chainId: chainId
+				chainId: chainId,
+				helpText:
+					'The hashrate is the number of hashes per second. It is the average number of hashes per second that the nodes have processed.'
 			});
 		}
 
@@ -53,7 +60,9 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 				label: 'New smart Contracts',
 				chartType: EChartType.bar,
 				dailyType: EDailyData.newContract,
-				chainId: chainId
+				chainId: chainId,
+				helpText:
+					'The number of new smart contracts created. A smart contract is a program that runs on the blockchain.'
 			});
 		}
 
@@ -62,7 +71,9 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 				label: 'Active users',
 				chartType: EChartType.bar,
 				dailyType: EDailyData.activeUsers,
-				chainId: chainId
+				chainId: chainId,
+				helpText:
+					'The number of active users on the blockchain. An active user is a user that has made at least 1 transactions.'
 			});
 		}
 
@@ -70,7 +81,8 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 			label: 'New addresses',
 			chartType: EChartType.bar,
 			dailyType: EDailyData.newAddress,
-			chainId: chainId
+			chainId: chainId,
+			helpText: 'The number of new addresses created. An address is a unique identifier for a user or a smart contract.'
 		});
 
 		result.push({
@@ -79,7 +91,8 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 			decimals: 2,
 			unit: 's',
 			dailyType: EDailyData.averageBlocktime,
-			chainId: chainId
+			chainId: chainId,
+			helpText: 'The average block time is the average time it takes to mine a new block.'
 		});
 
 		result.push({
@@ -87,7 +100,8 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 			chartType: EChartType.line,
 			dailyType: EDailyData.powerConsumption,
 			unit: 'W/h',
-			chainId: chainId
+			chainId: chainId,
+			helpText: 'The power consumption is the amount of energy consumed by the nodes to run the blockchain.'
 		});
 
 		if (chainId === BLOCKCHAINS.ethereum.id || chainId === BLOCKCHAINS.bitcoin.id) {
@@ -95,7 +109,8 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 				label: 'Difficulty',
 				chartType: EChartType.line,
 				dailyType: EDailyData.difficulty,
-				chainId: chainId
+				chainId: chainId,
+				helpText: 'The difficulty is the mesure of how hard it is to find a new block.'
 			});
 		}
 
@@ -105,7 +120,8 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 				chartType: EChartType.line,
 				unit: ' $',
 				dailyType: EDailyData.totalValueLocked,
-				chainId: chainId
+				chainId: chainId,
+				helpText: 'The total value locked is the total amount of money locked in the blockchain.'
 			});
 		}
 
@@ -114,7 +130,7 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 
 	return (
 		<StyledChartList marginY={ESize['3xl']}>
-			{chartsToDisplay.map(({ label, chartType, dailyType, unit, decimals, chainId }) => (
+			{chartsToDisplay.map(({ label, chartType, dailyType, unit, decimals, chainId, helpText }) => (
 				<ChartCard
 					key={dailyType}
 					label={label}
@@ -123,6 +139,7 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 					decimals={decimals}
 					dailyType={dailyType}
 					chainId={chainId}
+					helpText={helpText}
 					padding={ESize.xs}
 				/>
 			))}

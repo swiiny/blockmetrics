@@ -2,15 +2,15 @@ import axios from 'axios';
 import { EIcon } from '../styles/theme/utils/enum';
 
 export const BLOCKCHAINS = {
-	ethereum: {
-		id: 'ethereum',
-		name: 'Ethereum',
-		estimatedTimeBetweenBlocks: 20,
-		icon: EIcon.ethereum,
+	fantom: {
+		id: 'fantom',
+		name: 'Fantom',
+		estimatedTimeBetweenBlocks: 3,
+		icon: EIcon.fantom,
 		colors: {
 			gradient: {
-				start: '#454A7580',
-				end: '#8A92B220'
+				start: '#13B5EC80',
+				end: '#13B5EC20'
 			}
 		}
 	},
@@ -26,30 +26,6 @@ export const BLOCKCHAINS = {
 			}
 		}
 	},
-	polygon: {
-		id: 'polygon',
-		name: 'Polygon',
-		estimatedTimeBetweenBlocks: 3,
-		icon: EIcon.polygon,
-		colors: {
-			gradient: {
-				start: '#8247E580',
-				end: '#8247E520'
-			}
-		}
-	},
-	bitcoin: {
-		id: 'bitcoin',
-		name: 'Bitcoin',
-		estimatedTimeBetweenBlocks: 600,
-		icon: EIcon.bitcoin,
-		colors: {
-			gradient: {
-				start: '#F7931A80',
-				end: '#F7931A20'
-			}
-		}
-	},
 	avalanche: {
 		id: 'avalanche',
 		name: 'Avalanche',
@@ -62,21 +38,54 @@ export const BLOCKCHAINS = {
 			}
 		}
 	},
-	fantom: {
-		id: 'fantom',
-		name: 'Fantom',
+	polygon: {
+		id: 'polygon',
+		name: 'Polygon',
 		estimatedTimeBetweenBlocks: 3,
-		icon: EIcon.fantom,
+		icon: EIcon.polygon,
 		colors: {
 			gradient: {
-				start: '#13B5EC80',
-				end: '#13B5EC20'
+				start: '#8247E580',
+				end: '#8247E520'
+			}
+		}
+	},
+	ethereum: {
+		id: 'ethereum',
+		name: 'Ethereum',
+		estimatedTimeBetweenBlocks: 20,
+		icon: EIcon.ethereum,
+		colors: {
+			gradient: {
+				start: '#454A7580',
+				end: '#8A92B220'
+			}
+		}
+	},
+
+	bitcoin: {
+		id: 'bitcoin',
+		name: 'Bitcoin',
+		estimatedTimeBetweenBlocks: 600,
+		icon: EIcon.bitcoin,
+		colors: {
+			gradient: {
+				start: '#F7931A80',
+				end: '#F7931A20'
 			}
 		}
 	}
 };
 
 export const BLOCKCHAINS_ARRAY = Object.values(BLOCKCHAINS);
+export const BLOCKCHAINS_IDS_ARRAY = BLOCKCHAINS_ARRAY.map(({ id }) => id);
+
+// Object with blockchain id as key and icon as value
+export const BLOCKCHAINS_ICONS = BLOCKCHAINS_ARRAY.reduce((acc, blockchain) => {
+	// @ts-ignore
+	acc[blockchain.id] = blockchain.icon;
+	return acc;
+}, {});
 
 export const axiosServer = axios.create({
 	baseURL: process.env.SERVER_URL

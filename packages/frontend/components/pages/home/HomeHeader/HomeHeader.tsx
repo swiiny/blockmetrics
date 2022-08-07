@@ -28,18 +28,16 @@ const HomeHeader: FC = () => {
 			<Column columns={5} sm={12} md={8} xl={6}>
 				<Flex direction={EFlex.column} fullWidth>
 					<BMHeading type={ETextType.h1} weight={ETextWeight.light}>
-						Blockchain
+						Block
 						<BMText type={ETextType.span} inheritStyle weight={ETextWeight.semiBold}>
-							{` Data`}
+							{`metrics`}
 						</BMText>
 					</BMHeading>
 
 					<Spacing size={ESize.m} />
 
 					<BMText size={ESize.m} weight={ETextWeight.light}>
-						{`Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the
-						industry\'s standard dummy text ever since the 1500s, when an unknown printer took a galley of type and
-						scrambled it to make a type specimen book.`}
+						{`All the metrics you need to know about blockchain to help you make informed decisions before using any of it. Already an experienced user? Let’s see if you can get new information to complete your knowledge`}
 					</BMText>
 
 					<Spacing size={ESize.xl} />

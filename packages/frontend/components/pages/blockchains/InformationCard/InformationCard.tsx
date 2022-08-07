@@ -17,10 +17,12 @@ import {
 	ETextType,
 	ETextWeight
 } from '../../../../styles/theme/utils/enum';
+import { TBlockchainMetadata } from '../../../../types/blockchain';
 import { getBlockchainMetadataAndScoreById } from '../../../../utils/fetch';
+import { getRankFromScore } from '../../../../utils/functions';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList, StyledRank, StyledUsefulLinkList } from './InformationCard.styles';
-import { IInformationCard } from './InformationCard.type';
+import { IInformationCard, IRankingDetails } from './InformationCard.type';
 
 const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = () => {}, ...otherProps }) => {
 	const { isSmallerThanMd, isSmallerThanLg } = useResponsive();
@@ -40,17 +42,15 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		reliability: number;
 		token_count: number;
 		power_consumption: number;
-		total_value_locked: number;
-		speed: number;
+		proof_of_trust: number;
 	}>({
 		id: '',
 		rank: '',
-		score: 0,
-		reliability: 0,
-		token_count: 0,
-		power_consumption: 0,
-		total_value_locked: 0,
-		speed: 0
+		score: -1,
+		reliability: -1,
+		token_count: -1,
+		power_consumption: -1,
+		proof_of_trust: -1
 	});
 
 	const genesisBlockDate = useMemo(() => {
@@ -74,32 +74,47 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 	}, [metadata]);
 
 	const rankingDetails = useMemo(() => {
-		const items: { label: string; value: number }[] = [];
+		const items: IRankingDetails[] = [];
 
 		items.push({
-			label: 'Tokens count',
-			value: score.token_count
+			label: 'Power Consumption',
+			value: score.power_consumption,
+			rank: getRankFromScore(score.power_consumption),
+			helpText: 'We consider the power consumption of a blockchain really important and has an high impact on the score'
+		});
+
+		items.push({
+			label: 'Proof of trust',
+			value: score.proof_of_trust,
+			rank: getRankFromScore(score.proof_of_trust),
+			helpText:
+				'We calculate this score using maturity and the TVL. The older a blockcahin is and its total value locked is high, the higher this score will be'
 		});
 
 		items.push({
 			label: 'Reliability',
-			value: score.reliability
+			value: score.reliability,
+			rank: getRankFromScore(score.reliability),
+			helpText:
+				'The more nodes a blockchain has, the more reliable it is considered because the more decentralized it is. Decentralization is important to ensure that a group of people cannot agree to take fraudulent actions'
 		});
 
 		items.push({
-			label: 'Power Consumption',
-			value: score.power_consumption
-		});
-
-		items.push({
-			//label: 'Speed', // @todo(change value saved in speed column in the database)
-			label: 'Community index',
-			value: score.speed
+			label: 'Tokens count',
+			value: score.token_count,
+			rank: getRankFromScore(score.token_count),
+			helpText: 'We assume that the more token there is, the more likely the blockchain will be used by users'
 		});
 
 		return items.map((item) => (
 			<BMListItem key={item.label} dotHidden>
-				<BMProgressBar size={isSmallerThanMd ? ESize.s : ESize.m} {...item} />
+				<BMProgressBar
+					size={isSmallerThanMd ? ESize.s : ESize.m}
+					{...item}
+					loading={!(item?.value >= 0)}
+					endValueVisible
+					endValue={item.rank}
+				/>
 			</BMListItem>
 		));
 	}, [score, isSmallerThanMd]);
@@ -108,7 +123,22 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 		try {
 			const { links } = metadata;
 			if (!links) {
-				return <></>;
+				return (
+					<StyledUsefulLinkList>
+						{Array.from({ length: 3 }).map((value, index) => (
+							<li key={'skeleton-link-' + value}>
+								<BMExternalLink
+									href={''}
+									size={ESize.m}
+									weight={ETextWeight.thin}
+									loading
+									skHeight={20}
+									skWidth={120}
+								/>
+							</li>
+						))}
+					</StyledUsefulLinkList>
+				);
 			}
 
 			const results = links.split(',');
@@ -159,7 +189,15 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 		return (
 			<StyledRank>
-				<BMText size={isSmallerThanMd ? ESize['2xl'] : ESize['4xl']} textColor={color} weight={ETextWeight.bold}>
+				<BMText
+					size={isSmallerThanMd ? ESize['2xl'] : ESize['4xl']}
+					textColor={color}
+					weight={ETextWeight.bold}
+					loading={!rank}
+					skHeight={'60%'}
+					skWidth={'60%'}
+					circle={isSmallerThanMd}
+				>
 					{rank}
 				</BMText>
 			</StyledRank>
@@ -184,14 +222,22 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 						<BMListItem>
 							<BMText size={ESize.m} weight={ETextWeight.light}>
 								Genesis block date:
-								<BMText type={ETextType.span} weight={ETextWeight.normal} textColor={ETextColor.positive}>
+								<BMText
+									type={ETextType.span}
+									weight={ETextWeight.normal}
+									textColor={ETextColor.positive}
+									loading={!genesisBlockDate}
+									skWidth={100}
+									skHeight={15}
+									marginLeft={ESize.xs}
+								>
 									{` ${genesisBlockDate}`}
 								</BMText>
 							</BMText>
 						</BMListItem>
 
 						<BMListItem>
-							<BMText size={ESize.m} weight={ETextWeight.light}>
+							<BMText size={ESize.m} weight={ETextWeight.light} loading={!metadata?.description}>
 								{metadata.description}
 								<br />
 								<br />

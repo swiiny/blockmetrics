@@ -11,6 +11,8 @@ interface IDataCard {
 	isTimer?: boolean;
 	as?: string;
 	index?: number;
+	helpText?: string;
+	fullValue?: string;
 }
 
 export type { IDataCard };

@@ -42,7 +42,6 @@ services:
             - /app/node_modules
         ports:
             - $SERVER_PORT:$SERVER_PORT
-        restart: always
 
     api:
         container_name: api

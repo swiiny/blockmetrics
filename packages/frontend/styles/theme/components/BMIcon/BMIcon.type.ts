@@ -1,12 +1,14 @@
-import { EIcon, ESize, ETextColor } from '../../utils/enum';
+import { EIcon, ESize } from '../../utils/enum';
+import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
 
-interface IBMIcon {
+interface IBMIcon extends ISkeleton {
 	backgroundVisible?: boolean;
 	type?: EIcon;
-	size?: ESize.xs | ESize.s | ESize.m | ESize.l | ESize.xl;
+	size?: ESize;
 	backgroundRadius?: ESize;
 	backgroundSize?: ESize;
-	color?: ETextColor;
+	isVisible?: boolean;
+	id?: string;
 }
 
 export type { IBMIcon };

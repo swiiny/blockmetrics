@@ -32,6 +32,15 @@ export const StyledNavbar = styled.nav<{ isHidden?: boolean; isBlurred: boolean 
 		`
 	)}
 
+	${mq(
+		EMediaQuery.sm,
+		css`
+			& > div:nth-child(1) {
+				height: 100px;
+			}
+		`
+	)}
+
 	${mq(EMediaQuery.sm, `padding: 0 15px;`)}
 
 	${addTransition()}

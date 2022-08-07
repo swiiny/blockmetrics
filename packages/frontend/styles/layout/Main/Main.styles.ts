@@ -4,6 +4,7 @@ import { mq } from '../../theme/utils/functions';
 
 const Main = styled.main<{
 	noMarginTop?: boolean;
+	noPaddingBottom?: boolean;
 	paddingTop?: ESize.s | ESize.m | ESize.l | ESize.xl | ESize.unset;
 	noNavbar?: boolean;
 }>`
@@ -12,12 +13,17 @@ const Main = styled.main<{
 
 	${({ noMarginTop }) => (!noMarginTop ? 'margin-top: 120px;' : 'margin-top: 0;')}
 
-	${mq(
-		EMediaQuery.sm,
-		`
+	${(p) =>
+		mq(
+			EMediaQuery.sm,
+			`
 		padding-bottom: 80px;
+
+		${p.noPaddingBottom ? 'padding-bottom: 0px;' : ''}
 	`
-	)}
+		)}
+
+	${({ noPaddingBottom }) => (noPaddingBottom ? 'padding-bottom: 0px;' : '')}
 
 	${(p) => {
 		switch (p.paddingTop) {

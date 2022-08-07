@@ -20,6 +20,13 @@ export enum ESize {
 	'8xl' = '8xl'
 }
 
+export enum ERequestState {
+	unset = 'unset',
+	loading = 'loading',
+	success = 'success',
+	error = 'error'
+}
+
 export enum EPosition {
 	top = 'top',
 	topRight = 'topRight',
@@ -89,6 +96,7 @@ export enum ETextColor {
 	positive = 'positive',
 	negative = 'negative',
 	warning = 'warning',
+	transparent = 'transparent',
 	disabled = 'disabled'
 }
 
@@ -152,7 +160,6 @@ export enum ESubscribeType {
 	blockchains = 'blockchains',
 	blockchainCards = 'blockchainCards',
 	blockchain = 'blockchain',
-	usersCount = 'usersCount',
 	transactionCount = 'transactionCount',
 	todayTransactionCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
@@ -189,8 +196,22 @@ export enum EIcon {
 	gas = 'gas',
 	token = 'token',
 	chart = 'chart',
+	check = 'check',
+	sortBottom = 'sort-bottom',
+	sortTop = 'sort-top',
+	arrowBottom = 'arrow-bottom',
+	arrowTop = 'arrow-top',
+	arrowLeft = 'arrow-left',
+	arrowRight = 'arrow-right',
 	timer = 'timer',
 	issue = 'issue',
 	help = 'help',
 	none = 'none'
+}
+
+export enum ETextTransform {
+	none = 'none',
+	uppercase = 'uppercase',
+	lowercase = 'lowercase',
+	capitalize = 'capitalize'
 }

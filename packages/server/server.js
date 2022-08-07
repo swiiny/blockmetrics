@@ -1,6 +1,6 @@
 'use strict';
 
-import { getEthNodeCount, getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
+import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
 import { calculatePowerConsumptionPoS, getRankFromScore } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
@@ -52,6 +52,7 @@ import { fetchEVMBlockFor } from './utils/fetch/blocks.js';
 import { fetchBitcoinData } from './utils/fetch/bitcoin.js';
 import { getTxPowerConsumptionForPoWChains } from './utils/fetch/powTxPowerConsumption.js';
 import { calculateScoreForChains, getWeightedAverageOf } from './utils/maths.js';
+import axios from 'axios';
 
 // schudeled job that fetch data every day at 00:00
 let dailyRoutine;
@@ -181,8 +182,30 @@ async function updateBlockchainsRanking(con) {
 		// calc score for total_value_locked
 		blockchainsRows = calculateScoreForChains(blockchainsRows, 'total_value_locked');
 
+		// assuming that 5 years old blockchains are mature
+		const maxScoreDay = 5 * 365;
+
 		// calc average of all scores
 		blockchainsRows.forEach((chain) => {
+			// get days count from chain.genesis_block
+			const daysCount = Math.floor((Date.now() - chain.genesis_block) / (1000 * 60 * 60 * 24));
+
+			let maturityScore = daysCount / maxScoreDay;
+
+			if (maturityScore > 1) {
+				maturityScore = 1;
+			}
+
+			maturityScore *= 100;
+
+			// bitcoin has no total_value_locked but has a score of 100 because this blockchain is considered as mature
+			let tvlRes = chain.id === CHAINS.bitcoin.id ? 100 : chain.total_value_locked_res;
+
+			const proofOfTrustScore = (maturityScore + tvlRes) / 2;
+
+			// floor to 0 decimal places
+			chain.proof_of_trust_res = Math.floor(proofOfTrustScore);
+
 			const score = getWeightedAverageOf([
 				{
 					weight: 10,
@@ -190,15 +213,15 @@ async function updateBlockchainsRanking(con) {
 				},
 				{
 					weight: 6,
+					value: chain.proof_of_trust_res
+				},
+				{
+					weight: 5,
 					value: chain.reliability
 				},
 				{
 					weight: 3,
 					value: chain.token_count_res
-				},
-				{
-					weight: 2,
-					value: chain.total_value_locked_res
 				},
 				{
 					weight: 1,
@@ -220,6 +243,7 @@ async function updateBlockchainsRanking(con) {
 				token_count_res,
 				blockchain_power_consumption_res,
 				total_value_locked_res,
+				proof_of_trust_res,
 				average_transaction_count_res
 			}) => {
 				con.query(updateBlockchainsRankingInBlockchainScore, [
@@ -229,6 +253,7 @@ async function updateBlockchainsRanking(con) {
 					token_count_res,
 					blockchain_power_consumption_res,
 					total_value_locked_res,
+					proof_of_trust_res,
 					average_transaction_count_res,
 					id
 				]);
@@ -266,7 +291,8 @@ async function fetchDailyData(factor = 1) {
 
 	const nodesCount = await getNodeCountForAllBlockchains();
 
-	const chainsWithReliability = calculateScoreForChains(nodesCount, 'count', 5000);
+	// assuming that with 2000 nodes the blockchain is considered as reliable
+	const chainsWithReliability = calculateScoreForChains(nodesCount, 'count', 2000);
 
 	const nodesCountPromises = chainsWithReliability?.map(({ id, count, count_res }) => {
 		updateDbDailyNodeCountAndReliability(con, id, count, count_res);
@@ -519,7 +545,7 @@ async function initWebsocketProvider(chain, con) {
 		}, 7500);
 	});
 
-	wsProvider._websocket.on('close', (err) => {
+	wsProvider._websocket.on('close', async (err) => {
 		if (keepAliveInterval) {
 			clearInterval(keepAliveInterval);
 		}
@@ -541,6 +567,9 @@ async function initWebsocketProvider(chain, con) {
 		wsProvider.removeAllListeners();
 		wsProvider._websocket?.removeAllListeners();
 
+		await wsProvider?._websocket?.terminate();
+		await wsProvider?.destroy();
+
 		keepAliveInterval = null;
 		pingTimeout = null;
 
@@ -548,10 +577,12 @@ async function initWebsocketProvider(chain, con) {
 		wsProviders = wsProviders.filter((ws) => ws.connection.url !== wsProvider.connection.url.ws);
 
 		// try to reconnect every 30 seconds
-		setTimeout(() => {
-			wsProvider = null;
-			initWebsocketProvider(chain, con);
-		}, 30 * 1000);
+		wsProvider = null;
+
+		// wait 30 seconds
+		await new Promise((resolve) => setTimeout(resolve, 30000));
+
+		initWebsocketProvider(chain, con);
 	});
 
 	wsProvider._websocket.on('pong', () => {
@@ -576,7 +607,7 @@ async function startFetchData() {
 
 				try {
 					initWebsocketProvider(chain, con);
-				} catch {
+				} catch (err) {
 					console.error('error connecting to ws provider for', chain.name, err);
 				}
 			});
@@ -620,13 +651,14 @@ async function startFetchData() {
 			// dev stuff
 
 			console.log('start dev');
+			//updateBlockchainsRanking(con);
 
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
 
 				try {
 					initWebsocketProvider(chain, con);
-				} catch {
+				} catch (err) {
 					console.error('error connecting to ws provider for', chain.name, err);
 				}
 			});
@@ -660,27 +692,33 @@ async function startFetchData() {
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
-		timeoutFetchData = setTimeout(async () => {
-			console.log('restart fetching data');
+		// wait 10 seconds before go to next things
 
-			// remove all items from wsProviders
-			wsProviders.forEach((wsProvider) => {
-				wsProvider.removeAllListeners();
-				wsProvider._websocket?.removeAllListeners();
-			});
+		// remove all items from wsProviders
+		wsProviders.forEach((wsProvider) => {
+			wsProvider.removeAllListeners();
+			wsProvider._websocket?.removeAllListeners();
+		});
 
-			wsProviders = null;
+		await new Promise((resolve) => setTimeout(resolve, 1 * 60 * 1000));
 
-			const promises = [
-				dailyRoutine.gracefulShutdown(),
-				fiveMinutesRoutine.gracefulShutdown(),
-				middayRoutine.gracefulShutdown()
-			];
+		console.log('restart fetching data');
 
-			await Promise.all(promises);
+		wsProviders = null;
+		dailyRoutine = null;
+		fiveMinutesRoutine = null;
+		middayRoutine = null;
 
-			startFetchData();
-		}, 1 * 60 * 1000);
+		/*
+		const promises = [
+			dailyRoutine.gracefulShutdown(),
+			fiveMinutesRoutine.gracefulShutdown(),
+			middayRoutine.gracefulShutdown()
+		];
+
+		await Promise.all(promises);
+*/
+		startFetchData();
 	}
 }
 
@@ -690,6 +728,29 @@ async function init() {
 	pool = await createDbPool();
 
 	startFetchData();
+
+	setInterval(async () => {
+		const used = process.memoryUsage().heapUsed / 1024 / 1024;
+		const mem = Math.round(used * 100) / 100;
+
+		console.log('Memory usage: ' + mem + ' MB');
+
+		if (mem >= 512) {
+			console.log('Restart server ========>');
+
+			if (process.env.NODE_ENV === 'production') {
+				const now = new Date();
+				const hour = now.getHours();
+				const minutes = now.getMinutes();
+
+				// prevent restarting the server near a scheduled task
+				if ((hour !== 2 && hour !== 12) || (minutes > 30 && minutes < 50)) {
+					// restart node on jelastic
+					await axios.get(process.env.RESTART_SERVER_URL);
+				}
+			}
+		}
+	}, 5 * 60 * 1000);
 }
 
 init();

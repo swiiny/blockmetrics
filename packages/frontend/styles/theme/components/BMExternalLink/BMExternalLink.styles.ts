@@ -14,6 +14,11 @@ export const StyledBMExternalLink = styled.a<IBMExternalLink>`
 			opacity: 0.5;
 		}
 
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		overflow: hidden;
+		max-width: 100px;
+
 		${p.inheritStyles
 			? css`
 					font-size: inherit !important;

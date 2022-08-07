@@ -14,6 +14,13 @@ export const StyledHeader = styled.header`
 	padding-bottom: 75px;
 	`
 	)}
+	${mq(
+		EMediaQuery.sm,
+		`
+	margin-top: 100px;
+	padding-bottom: 50px;
+	`
+	)}
 
 	${(p) => css`
 		&:before {
@@ -47,6 +54,9 @@ export const StyledHeader = styled.header`
 
 	& > div > h2 {
 		max-width: 650px;
-		min-height: 48px;
+
+		&:not(.skeleton) {
+			min-height: 48px;
+		}
 	}
 `;

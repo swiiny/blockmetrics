@@ -1,6 +1,6 @@
 {
   "name": "blockmetrics",
-  "version": "0.1.0",
+  "version": "0.9.0",
   "private": true,
   "scripts": {
     "dev": "next dev -p 8080",
@@ -21,15 +21,16 @@
     "react-dom": "18.0.0",
     "sharp": "^0.30.6",
     "styled-components": "^5.3.3",
+    "swagger-ui-react": "^4.13.2",
     "uuid": "^8.3.2",
     "websocket": "^1.0.34"
   },
   "devDependencies": {
-    "@types/axios": "^0.14.0",
     "@types/chart.js": "^2.9.37",
     "@types/node": "^17.0.15",
     "@types/react": "^18.0.9",
     "@types/react-dom": "^18.0.5",
+    "@types/swagger-ui-react": "^4.11.0",
     "@types/uuid": "^8.3.4",
     "@types/websocket": "^1.0.5",
     "@typescript-eslint/eslint-plugin": "^5.25.0",

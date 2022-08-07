@@ -1,23 +1,28 @@
-import { ESize, ETextAlign, ETextColor, ETextType, ETextWeight } from '../../utils/enum';
+import { CSSProperties } from 'react';
+import { IMargin, IPadding } from '../../../../types/layouts';
+import { ESize, ETextAlign, ETextColor, ETextTransform, ETextType, ETextWeight } from '../../utils/enum';
+import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
 
-interface IBMText {
+interface IBMText extends IPadding, IMargin, ISkeleton {
 	children: React.ReactNode | string;
 	type?: ETextType;
 	textColor?: ETextColor;
 	size?: ESize;
 	textAlign?: ETextAlign;
+	textTransform?: ETextTransform;
 	href?: string;
 	disabled?: boolean;
 	underline?: boolean;
 	isExternal?: boolean;
 	weight?: ETextWeight;
-	style?: string;
 	singleLine?: boolean;
 	className?: string;
 	inheritStyle?: boolean;
 	decoration?: boolean;
 	opacityReduced?: boolean;
 	as?: any;
+	id?: string;
+	style?: CSSProperties | string;
 }
 
 export type { IBMText };

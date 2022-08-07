@@ -16,6 +16,8 @@ import BMCardContainer from '../../../../styles/theme/components/BMCardContainer
 import { getEngNotation } from '../../../../utils/convert';
 import { IEngineeringNotation } from '../../../../types/maths';
 import BMIcon from '../../../../styles/theme/components/BMIcon';
+import HelpTooltip from '../../../utils/HelpTooltip';
+import ElementTooltip from '../../../utils/ElementTooltip';
 
 const HomeCard: FC<IHomeCardData> = ({
 	title,
@@ -32,6 +34,7 @@ const HomeCard: FC<IHomeCardData> = ({
 	chartTitle,
 	chartType,
 	chartDataType,
+	helpText,
 	...otherProps
 }) => {
 	const [value, setValue] = useState<number>(0);
@@ -108,7 +111,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 	const fetchValue = useCallback(async () => {
 		try {
-			const { data } = await axiosRest('/get/blockchains/total?type=' + valueType);
+			const { data } = await axiosRest('/blockchains/total?type=' + valueType);
 			setValue(data.value || 0);
 			setUpdatedValue(data.value || 0);
 		} catch (err) {
@@ -118,7 +121,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 	const fetchDailyChange = useCallback(async () => {
 		try {
-			const { data } = await axiosRest('/get/blockchains/total?type=' + dailyChangeType);
+			const { data } = await axiosRest('/blockchains/total?type=' + dailyChangeType);
 
 			setDailyChange(data.value || 0);
 			setUpdatedDailyChange(data.value || 0);
@@ -161,24 +164,30 @@ const HomeCard: FC<IHomeCardData> = ({
 				<Spacing size={ESize.s} />
 
 				<Flex direction={EFlex.column}>
-					<BMText size={ESize.m} weight={ETextWeight.light}>
-						{title}
-					</BMText>
+					<Flex horizontal={EFlex.between} vertical={EFlex.center}>
+						<BMText size={ESize.m} weight={ETextWeight.light}>
+							{title}
+						</BMText>
+
+						{helpText && <HelpTooltip content={helpText} />}
+					</Flex>
 
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 
-					<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold}>
-						<CountUp
-							preserveValue={true}
-							start={formattedInitialValue}
-							end={formattedValue.value}
-							duration={refreshTime}
-							decimals={formattedValue.hasDecimals ? 2 : 0}
-							suffix={formattedValue.unit}
-							separator=','
-							style={{ color: 'inherit' }}
-						/>
-					</BMHeading>
+					<ElementTooltip content={formattedValue.fullToString}>
+						<BMHeading type={ETextType.h3} weight={ETextWeight.semiBold} loading={!formattedInitialValue}>
+							<CountUp
+								preserveValue={true}
+								start={formattedInitialValue}
+								end={formattedValue.value}
+								duration={refreshTime}
+								decimals={formattedValue.hasDecimals ? 2 : 0}
+								suffix={formattedValue.unit}
+								separator=','
+								style={{ color: 'inherit' }}
+							/>
+						</BMHeading>
+					</ElementTooltip>
 
 					<Spacing size={ESize.xs} mdSize={ESize['3xs']} />
 

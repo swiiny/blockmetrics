@@ -1,10 +1,11 @@
 import axios from 'axios';
 import { ELanguage } from '../styles/theme/utils/enum';
+import { TBlockchain, TBlockchainMetadata, TBlockchainScore } from '../types/blockchain';
 import { axiosRest } from './variables';
 
 export const getBlockchainById = async (id: string): Promise<TBlockchain | null> => {
 	try {
-		const { data } = await axiosRest.get(`/get/blockchain?id=${id}`);
+		const { data } = await axiosRest.get(`/blockchain?id=${id}`);
 
 		return data as TBlockchain;
 	} catch (error) {
@@ -23,7 +24,7 @@ export const getBlockchainMetadataById = async (
 	language: ELanguage
 ): Promise<TBlockchainMetadata | null> => {
 	try {
-		const { data } = await axiosRest.get(`/get/blockchain/metadata?id=${id}&language=${language || 'en'}`);
+		const { data } = await axiosRest.get(`/blockchain/metadata?id=${id}&language=${language || 'en'}`);
 
 		return data as TBlockchainMetadata;
 	} catch (error) {
@@ -42,7 +43,7 @@ export const getBlockchainMetadataAndScoreById = async (
 	language: ELanguage
 ): Promise<{ metadata: TBlockchainMetadata; score: TBlockchainScore } | null> => {
 	try {
-		const { data } = await axiosRest.get(`/get/blockchain/metadataAndScore?id=${id}&language=${language || 'en'}`);
+		const { data } = await axiosRest.get(`/blockchain/metadataAndScore?id=${id}&language=${language || 'en'}`);
 
 		return {
 			metadata: {
@@ -60,8 +61,7 @@ export const getBlockchainMetadataAndScoreById = async (
 				reliability: data.reliability,
 				token_count: data.token_count,
 				power_consumption: data.power_consumption,
-				total_value_locked: data.total_value_locked,
-				speed: data.speed
+				proof_of_trust: data.proof_of_trust
 			}
 		};
 	} catch (error) {
@@ -80,7 +80,7 @@ export const getBlockchainAndMetadataById = async (
 	language?: ELanguage
 ): Promise<{ blockchain: TBlockchain; metadata: TBlockchainMetadata } | null> => {
 	try {
-		const { data } = await axiosRest.get(`/get/blockchain/all?id=${id}&language=${language || 'en'}`);
+		const { data } = await axiosRest.get(`/blockchain/all?id=${id}&language=${language || 'en'}`);
 
 		return data;
 	} catch (error) {

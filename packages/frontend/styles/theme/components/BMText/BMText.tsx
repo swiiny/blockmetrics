@@ -1,5 +1,6 @@
 import React from 'react';
-import { ESize, ETextAlign, ETextColor, ETextType } from '../../utils/enum';
+import { ESize, ETextAlign, ETextColor, ETextTransform, ETextType } from '../../utils/enum';
+import BMSkeleton from '../BMSkeleton';
 import { StyledTextLink, StyledTextParagraph, StyledTextSpan } from './BMText.styles';
 import { IBMText } from './BMText.type';
 
@@ -9,6 +10,7 @@ const BMText: React.FC<IBMText> = ({
 	textColor = ETextColor.default,
 	size = ESize.l,
 	textAlign = ETextAlign.left,
+	textTransform = ETextTransform.none,
 	href,
 	disabled = false,
 	weight,
@@ -18,8 +20,15 @@ const BMText: React.FC<IBMText> = ({
 	className = '',
 	inheritStyle = true,
 	opacityReduced = false,
+	loading = false,
+	skWidth = '80%',
+	skHeight = ESize.s,
 	...otherProps
 }) => {
+	if (loading) {
+		return <BMSkeleton width={skWidth} height={skHeight} className='skeleton' {...otherProps} />;
+	}
+
 	switch (type) {
 		case ETextType.p:
 			return (
@@ -30,6 +39,7 @@ const BMText: React.FC<IBMText> = ({
 					weight={weight}
 					underline={underline}
 					textAlign={textAlign}
+					textTransform={textTransform}
 					textColor={textColor}
 					opacityReduced={opacityReduced}
 					size={size}
@@ -49,6 +59,7 @@ const BMText: React.FC<IBMText> = ({
 					href={href}
 					rel='noopener noreferrer'
 					textAlign={textAlign}
+					textTransform={textTransform}
 					textColor={textColor}
 					size={size}
 					disabled={disabled}
@@ -69,6 +80,7 @@ const BMText: React.FC<IBMText> = ({
 					href={href}
 					rel='noopener noreferrer'
 					textAlign={textAlign}
+					textTransform={textTransform}
 					textColor={textColor}
 					size={size}
 					disabled={disabled}
@@ -88,6 +100,7 @@ const BMText: React.FC<IBMText> = ({
 					weight={weight}
 					underline
 					textAlign={textAlign}
+					textTransform={textTransform}
 					textColor={textColor}
 					size={size}
 					inheritStyle={inheritStyle}

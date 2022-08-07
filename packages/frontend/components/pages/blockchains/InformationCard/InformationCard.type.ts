@@ -3,4 +3,11 @@ interface IInformationCard {
 	onGetTagline?: (tagline: string) => void;
 }
 
-export type { IInformationCard };
+interface IRankingDetails {
+	label: string;
+	value: number;
+	rank: string;
+	helpText?: string;
+}
+
+export type { IInformationCard, IRankingDetails };
