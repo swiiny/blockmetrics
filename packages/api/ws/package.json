@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "block-metrics-api-ws",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "The websocket api used to stream datas to the block-metrics frontend",
 	"main": "server.js",
 	"dependencies": {

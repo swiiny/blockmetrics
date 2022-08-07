@@ -1,7 +1,7 @@
 {
 	"type": "module",
 	"name": "block-metrics-api-rest",
-	"version": "0.1.0",
+	"version": "1.0.0",
 	"description": "The REST api used to send metrics to the block-metrics frontend",
 	"main": "server.js",
 	"dependencies": {

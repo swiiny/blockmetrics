@@ -14,8 +14,6 @@ Project is created with:
 - TypeScript version: 4.6.4
 - Styled Components: 5.3.3
 
-Running on node version 16.13.1
-
 
 ## Style
 ### Theme
@@ -36,6 +34,7 @@ Running on node version 16.13.1
 - [BMListItem](#bmlistitem)
 - [BMProgressBar](#bmprogressbar)
 - [BMText](#bmtext)
+- [BMSkeleton](#bmskeleton)
 
 #### BMButton
 

@@ -5,7 +5,7 @@
 - [Endpoints](#endpoints)
 
 ## Introduction
-The API can be tested at [block-metrics.io/documentation/api-rest](https://block-metrics.io/documentation/api-rest).
+The API can be tested at [here](https://block-metrics.io/documentation/api-rest).
 
 ## Technologies
 The service work with:
