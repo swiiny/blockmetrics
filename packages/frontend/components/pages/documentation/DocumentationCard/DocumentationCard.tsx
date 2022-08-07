@@ -3,7 +3,7 @@ import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
-import BMExternalLink from '../../../../styles/theme/components/BMExternalLink';
+import BMLink from '../../../../styles/theme/components/BMLink';
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMText from '../../../../styles/theme/components/BMText';
 import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../../../styles/theme/utils/enum';
@@ -12,7 +12,7 @@ import { IDocumentationCard } from './DocumentationCard.type';
 
 const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, maxHeight, ...otherProps }) => {
 	return (
-		<BMCardContainer isHighlighted animateApparition {...otherProps} marginTop={ESize['4xl']} smMarginTop={ESize.xl}>
+		<BMCardContainer isHighlighted animateApparition marginTop={ESize['4xl']} smMarginTop={ESize.xl} {...otherProps}>
 			<Flex fullWidth direction={EFlex.column} padding={ESize['2xl']} mdPadding={ESize.l} smPaddingX={ESize.s}>
 				<BMText as='h3' weight={ETextWeight.semiBold} size={ESize['2xl']}>
 					{title}
@@ -53,10 +53,12 @@ const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, max
 							{subitems && (
 								<>
 									<StyledSubitemsList>
-										{subitems.map(({ value, isLink }) => (
+										{subitems.map(({ value, linkLabel, isLink }) => (
 											<li key={value}>
 												{isLink ? (
-													<BMExternalLink href={value} size={ESize.m} weight={ETextWeight.thin} />
+													<BMLink href={value} size={ESize.m} weight={ETextWeight.thin}>
+														{linkLabel}
+													</BMLink>
 												) : (
 													<BMText size={ESize.m} weight={ETextWeight.thin} style={{ display: 'inline' }}>
 														{value}

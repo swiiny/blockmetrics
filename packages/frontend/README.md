@@ -26,7 +26,7 @@ Project is created with:
 - [BMButton](#bmbutton)
 - [BMBlockPattern](#bmblockpattern)
 - [BMCardContainer](#bmcardcontainer)
-- [BMExternalLink](#bmexternallink)
+- [BMLink](#BMLink)
 - [BMGradientSeparator](#bmgradientseparator)
 - [BMHeading](#bmheading)
 - [BMHivePattern](#bmhivepattern)

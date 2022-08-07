@@ -6,7 +6,7 @@ import Flex from '../../styles/layout/Flex';
 import Spacing from '../../styles/layout/Spacing';
 import BMButton from '../../styles/theme/components/BMButton';
 import BMText from '../../styles/theme/components/BMText';
-import { EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../styles/theme/utils/enum';
+import { EDocumentationId, EFlex, ESize, ETextColor, ETextType, ETextWeight } from '../../styles/theme/utils/enum';
 import Collapse from '../utils/Collapse';
 import {
 	StyledNavbar,
@@ -206,7 +206,7 @@ const Navbar = () => {
 				{isSmallerThanMd ? <>{burgerButton}</> : <>{navbarLinks}</>}
 			</Flex>
 			{!isSmallerThanMd ? (
-				<Link href={NAVBAR_LINKS.documentation.href}>
+				<Link href={NAVBAR_LINKS.documentation.href + '#' + EDocumentationId.whatIsABlockchain}>
 					<a>
 						<BMButton size={ESize.m} secondary onClick={() => {}}>
 							What is a blockchain ?

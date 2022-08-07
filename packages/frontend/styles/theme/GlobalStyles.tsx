@@ -16,6 +16,12 @@ const GlobalStyle = createGlobalStyle<{ theme: DefaultTheme }>`
 	box-sizing: border-box;
 }
 
+@media screen and (prefers-reduced-motion: no-preference) {
+  html {
+		scroll-behavior: auto;
+  }
+}
+
 body {
   margin: 0 auto;
 	max-width: 1600px;

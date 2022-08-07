@@ -215,3 +215,10 @@ export enum ETextTransform {
 	lowercase = 'lowercase',
 	capitalize = 'capitalize'
 }
+
+export enum EDocumentationId {
+	whatIsABlockchain = 'what-is-a-blockchain',
+	howIsTheRankingAssigned = 'how-is-the-ranking-assigned',
+	howIsThePowerConsumptionCalculated = 'how-is-the-power-consumption-calculated',
+	sources = 'sources'
+}

@@ -1,9 +1,9 @@
 import styled, { css } from 'styled-components';
 import { ESize } from '../../utils/enum';
 import { addTransition, getTextColor, setFontSize } from '../../utils/functions';
-import { IBMExternalLink } from './BMExternalLink.type';
+import { IBMLink } from './BMLink.type';
 
-export const StyledBMExternalLink = styled.a<IBMExternalLink>`
+export const StyledBMLink = styled.a<IBMLink>`
 	${(p) => css`
 		${setFontSize(p.size || ESize.l)}
 		${addTransition()}
