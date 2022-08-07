@@ -38,8 +38,6 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 -   [ ] Compare blockchains with a similar amount of transaction/day, etc (secondary)
 -   [ ] Add accessibility
 -   [ ] Add comparison data with real life data
--   [ ] Add DeFi Lama logo in the powered by section
-
 
 ### Integrated Blockchains
 
