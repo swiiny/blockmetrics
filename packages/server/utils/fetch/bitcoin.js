@@ -130,15 +130,15 @@ export async function fetchBitcoinData(pool) {
 			restart(pool);
 		};
 	} catch (err) {
-		restart(pool);
+		restart(pool, err);
 	}
 }
 
-function restart(pool) {
+function restart(pool, err) {
 	console.error('fetchBitcoinBlocks', err);
 
 	updatableCon?.destroy();
-	bitcoinTimeout = setTimeout(() => {
+	setTimeout(() => {
 		console.log('restart fetchBitcoinData after error');
 
 		ws = null;

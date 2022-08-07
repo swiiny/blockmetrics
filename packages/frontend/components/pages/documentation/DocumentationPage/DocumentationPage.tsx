@@ -108,6 +108,34 @@ const cards = [
 				]
 			}
 		]
+	},
+	{
+		title: 'How is the power consumption calculated?',
+		items: [
+			{
+				label: 'Proof of Stake blockchains',
+				highlightedValue: `PoS`,
+				subitems: [
+					{
+						value:
+							'The power consumption is calculated using the estimated power consumption of one node of the blockchain and the number of nodes'
+					}
+				]
+			},
+			{
+				label: 'Proof of Work blockchains',
+				highlightedValue: `PoW`,
+				subitems: [
+					{
+						value: 'The power consumption is fetch from an API provided by Digiconomist'
+					},
+					{
+						value: 'https://digiconomist.net',
+						isLink: true
+					}
+				]
+			}
+		]
 	}
 ];
 

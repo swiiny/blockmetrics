@@ -13,6 +13,8 @@ interface IBarLineChart {
 	deactivateLegend?: boolean;
 	heightFactor?: number;
 	chartHeight?: number;
+	noLoading?: boolean;
+	noError?: boolean;
 }
 
 interface IBarLineChartData {
