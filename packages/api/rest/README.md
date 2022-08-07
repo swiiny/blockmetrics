@@ -18,13 +18,13 @@ The service work with:
 
 ## Endpoints
 - [/blockchains](#blockchains)
-- [/blockchains/total](#blockchains/total)
-- [/blockchains/chart](#/blockchains/chart)
-- [/blockchain](#/blockchain)
-- [/blockchain/all](#/blockchain/all)
-- [/blockchain/metadata](#/blockchain/metadata)
-- [/blockchain/metadataAndScore](#/blockchain/metadataAndScore)
-- [/blockchain/chart](#/blockchain/chart)
+- [/blockchains/total](#blockchainstotal)
+- [/blockchains/chart](#blockchainschart)
+- [/blockchain](#blockchain)
+- [/blockchain/all](#blockchainall)
+- [/blockchain/metadata](#blockchainmetadata)
+- [/blockchain/metadataAndScore](#blockchainmetadataAndScore)
+- [/blockchain/chart](#blockchainchart)
 
 
 ### /blockchains
