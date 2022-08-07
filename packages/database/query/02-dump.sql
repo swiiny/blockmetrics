@@ -38,6 +38,8 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain` (
   `token_count` INT UNSIGNED NULL DEFAULT NULL,
   `transaction_count` BIGINT NOT NULL DEFAULT 0,
   `today_transaction_count` INT UNSIGNED NOT NULL DEFAULT '0',
+  `today_users_count` INT UNSIGNED NOT NULL DEFAULT '0',
+  `today_contract_count` INT UNSIGNED NOT NULL DEFAULT '0',
   `address_count` BIGINT NOT NULL DEFAULT 0,
   `today_address_count` INT NOT NULL DEFAULT 0,
   `gas_price` BIGINT NULL DEFAULT NULL,
