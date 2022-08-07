@@ -32,3 +32,27 @@ jobs:
       - name: JS Linter
         working-directory: ./packages/server
         run: npm run lint
+
+  api-rest-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: prepare job
+        working-directory: ./packages/api/rest
+        run: npm install
+
+      - name: JS Linter
+        working-directory: ./packages/api/rest
+        run: npm run lint
+
+  api-ws-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: prepare job
+        working-directory: ./packages/api/ws
+        run: npm install
+
+      - name: JS Linter
+        working-directory: ./packages/api/ws
+        run: npm run lint

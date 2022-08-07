@@ -5,7 +5,7 @@ async function createDBPoolPromise(params) {
 
 	const pool = mysql.createPool(params);
 
-	pool.getConnection((err, con) => {
+	pool.getConnection((err) => {
 		if (err) {
 			console.log(err);
 			throw err;
