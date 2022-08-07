@@ -3,8 +3,8 @@ import useResponsive from '../../../../hooks/useResponsive';
 import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
-import BMLink from '../../../../styles/theme/components/BMLink';
 import BMGradientSeparator from '../../../../styles/theme/components/BMGradientSeparator';
+import BMLink from '../../../../styles/theme/components/BMLink';
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMProgressBar from '../../../../styles/theme/components/BMProgressBar';
 import BMText from '../../../../styles/theme/components/BMText';
@@ -281,6 +281,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 									href={NAVBAR_LINKS.documentation.href + '#how-is-the-ranking-assigned'}
 									inheritStyles
 									isInternal
+									ariaLabel='See more about the ranking calculation'
 								>
 									here
 								</BMLink>

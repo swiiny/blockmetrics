@@ -150,7 +150,7 @@ const Navbar = () => {
 
 	const burgerButton = useMemo(() => {
 		return (
-			<StyledBurgerButton onClick={() => handleBurgerClick()}>
+			<StyledBurgerButton onClick={() => handleBurgerClick()} aria-label='Open or close navbar'>
 				<StyledCube value={burgerClickCount}>
 					{Array.from({ length: 6 }, (value, i) => (
 						<StyledFace key={'face-' + value + '-' + i} faceIndex={i + 1} faceVisible={burgerClickCount === i}>

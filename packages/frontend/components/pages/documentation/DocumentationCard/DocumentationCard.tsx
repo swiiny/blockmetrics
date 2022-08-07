@@ -23,7 +23,7 @@ const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, max
 						<Spacing size={ESize.s} />
 
 						<Column columns={8} md={12}>
-							<BMText as='h4' size={ESize.m} weight={ETextWeight.light}>
+							<BMText size={ESize.m} weight={ETextWeight.light}>
 								{subtitle}
 							</BMText>
 						</Column>

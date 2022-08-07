@@ -40,6 +40,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 ### Frontend
 
+- [ ] Fix responsvive Story
 - [ ] Add accessibility
 
 ### Integrated Blockchains

@@ -16,6 +16,7 @@ const BMLink: FC<IBMLink> = ({
 	skHeight,
 	isInternal = false,
 	children,
+	ariaLabel,
 	...otherProps
 }) => {
 	const formattedLabel = useMemo(() => {
@@ -40,7 +41,14 @@ const BMLink: FC<IBMLink> = ({
 	{
 		return isInternal ? (
 			<Link href={href || '#'} passHref>
-				<StyledBMLink size={size} inheritStyles={inheritStyles} weight={weight} textColor={textColor} {...otherProps}>
+				<StyledBMLink
+					size={size}
+					inheritStyles={inheritStyles}
+					weight={weight}
+					textColor={textColor}
+					aria-label={ariaLabel}
+					{...otherProps}
+				>
 					{formattedLabel}
 				</StyledBMLink>
 			</Link>
@@ -53,6 +61,7 @@ const BMLink: FC<IBMLink> = ({
 				textColor={textColor}
 				target='_blank'
 				rel='noopener noreferrer'
+				aria-label={ariaLabel}
 				{...otherProps}
 			>
 				{formattedLabel}

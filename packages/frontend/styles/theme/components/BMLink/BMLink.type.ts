@@ -4,6 +4,7 @@ import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
 interface IBMLink extends ISkeleton {
 	href?: string;
 	children?: string;
+	ariaLabel?: string;
 	inheritStyles?: boolean;
 	isInternal?: boolean;
 	size?: ESize;
