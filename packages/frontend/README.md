@@ -1,4 +1,4 @@
-# Block metrics frontend
+# Blockmetrics frontend
 
 ## Table of Contents
 - [Introduction](#introduction)
@@ -26,7 +26,7 @@ Project is created with:
 - [BMButton](#bmbutton)
 - [BMBlockPattern](#bmblockpattern)
 - [BMCardContainer](#bmcardcontainer)
-- [BMExternalLink](#bmexternallink)
+- [BMLink](#BMLink)
 - [BMGradientSeparator](#bmgradientseparator)
 - [BMHeading](#bmheading)
 - [BMHivePattern](#bmhivepattern)

@@ -1,5 +1,6 @@
 interface IItemLink {
 	href: string;
+	ariaLabel?: string;
 	internal?: boolean;
 }
 

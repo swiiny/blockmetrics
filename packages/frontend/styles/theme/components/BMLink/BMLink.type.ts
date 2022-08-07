@@ -1,12 +1,15 @@
 import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
 import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
 
-interface IBMExternalLink extends ISkeleton {
-	href: string;
+interface IBMLink extends ISkeleton {
+	href?: string;
+	children?: string;
+	ariaLabel?: string;
 	inheritStyles?: boolean;
+	isInternal?: boolean;
 	size?: ESize;
 	weight?: ETextWeight;
 	textColor?: ETextColor;
 }
 
-export type { IBMExternalLink };
+export type { IBMLink };

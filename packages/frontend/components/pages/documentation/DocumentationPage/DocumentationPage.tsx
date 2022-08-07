@@ -1,10 +1,12 @@
 import { NextPage } from 'next';
 import React, { FC } from 'react';
 import Main from '../../../../styles/layout/Main';
-import { ESize } from '../../../../styles/theme/utils/enum';
+import { EDocumentationId, ESize } from '../../../../styles/theme/utils/enum';
 import Header from '../../../Header';
 import Meta from '../../../utils/Meta';
 import DocumentationCard from '../DocumentationCard';
+import { IDocumentationCard } from '../DocumentationCard/DocumentationCard.type';
+import { StyledAnchorItem, StyledList } from './DocumentationPage.styles';
 
 const HeaderData = {
 	title: 'Documentation'
@@ -12,9 +14,10 @@ const HeaderData = {
 
 const totalWeight = 25;
 
-const cards = [
+const cards: IDocumentationCard[] = [
 	{
 		title: 'What is a blockchain?',
+		id: EDocumentationId.whatIsABlockchain,
 		maxHeight: '400px',
 		items: [
 			{
@@ -37,6 +40,7 @@ const cards = [
 				subitems: [
 					{
 						value: 'https://www.investopedia.com/terms/b/blockchain.asp',
+						linkLabel: 'investopedia.com',
 						isLink: true
 					}
 				]
@@ -45,6 +49,7 @@ const cards = [
 	},
 	{
 		title: 'How is the ranking assigned?',
+		id: EDocumentationId.howIsTheRankingAssigned,
 		subtitle:
 			'The Blockmetrics ranking is calculated according to our own criteria that define what makes a good blockchain. If you do not agree with us, do not hesitate to create a github issue with your arguments so that we can improve our ranking quality. Some metrics are not used to calculate the score because we have to use metrics that we have in common for each blockchain.',
 		items: [
@@ -111,6 +116,7 @@ const cards = [
 	},
 	{
 		title: 'How is the power consumption calculated?',
+		id: EDocumentationId.howIsThePowerConsumptionCalculated,
 		items: [
 			{
 				label: 'Proof of Stake blockchains',
@@ -142,14 +148,21 @@ const cards = [
 const DocumentationPage: NextPage = () => {
 	return (
 		<>
-			<Meta title={HeaderData.title} />
+			<Meta
+				title={HeaderData.title}
+				description='What is a blockchain? How is the Blockmetrics ranking assigned? How blockchains power consumption are calculated? All these questions are answered on this page'
+			/>
 
 			<Header title={HeaderData.title} />
 
 			<Main paddingTop={ESize.unset} noMarginTop>
-				{cards.map((card) => (
-					<DocumentationCard key={card.title} {...card} />
-				))}
+				<StyledList>
+					{cards.map((card) => (
+						<StyledAnchorItem key={card.id} id={card.id}>
+							<DocumentationCard {...card} />
+						</StyledAnchorItem>
+					))}
+				</StyledList>
 			</Main>
 		</>
 	);

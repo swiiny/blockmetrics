@@ -3,8 +3,8 @@ import useResponsive from '../../../../hooks/useResponsive';
 import Column from '../../../../styles/layout/Column';
 import Flex from '../../../../styles/layout/Flex';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
-import BMExternalLink from '../../../../styles/theme/components/BMExternalLink';
 import BMGradientSeparator from '../../../../styles/theme/components/BMGradientSeparator';
+import BMLink from '../../../../styles/theme/components/BMLink';
 import BMListItem from '../../../../styles/theme/components/BMListItem';
 import BMProgressBar from '../../../../styles/theme/components/BMProgressBar';
 import BMText from '../../../../styles/theme/components/BMText';
@@ -20,6 +20,7 @@ import {
 import { TBlockchainMetadata } from '../../../../types/blockchain';
 import { getBlockchainMetadataAndScoreById } from '../../../../utils/fetch';
 import { getRankFromScore } from '../../../../utils/functions';
+import { NAVBAR_LINKS } from '../../../Navbar/Navbar';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList, StyledRank, StyledUsefulLinkList } from './InformationCard.styles';
 import { IInformationCard, IRankingDetails } from './InformationCard.type';
@@ -127,14 +128,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 					<StyledUsefulLinkList>
 						{Array.from({ length: 3 }).map((value, index) => (
 							<li key={'skeleton-link-' + value}>
-								<BMExternalLink
-									href={''}
-									size={ESize.m}
-									weight={ETextWeight.thin}
-									loading
-									skHeight={20}
-									skWidth={120}
-								/>
+								<BMLink href={''} size={ESize.m} weight={ETextWeight.thin} loading skHeight={20} skWidth={120} />
 							</li>
 						))}
 					</StyledUsefulLinkList>
@@ -147,7 +141,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 				<StyledUsefulLinkList>
 					{results.map((link) => (
 						<li key={link}>
-							<BMExternalLink href={link} size={ESize.m} weight={ETextWeight.thin} />
+							<BMLink href={link} size={ESize.m} weight={ETextWeight.thin} />
 						</li>
 					))}
 				</StyledUsefulLinkList>
@@ -241,7 +235,7 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 								{metadata.description}
 								<br />
 								<br />
-								<BMExternalLink href={metadata.source} size={ESize.m} weight={ETextWeight.thin} />
+								<BMLink href={metadata.source} size={ESize.m} weight={ETextWeight.thin} />
 							</BMText>
 						</BMListItem>
 
@@ -282,7 +276,15 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 								some caracteristics. Mainly the four below.
 								<br />
 								{/* @todo(add link ti the calculation details page) */}
-								See more about the ranking calculation here
+								See more about the ranking calculation{' '}
+								<BMLink
+									href={NAVBAR_LINKS.documentation.href + '#how-is-the-ranking-assigned'}
+									inheritStyles
+									isInternal
+									ariaLabel='See more about the ranking calculation'
+								>
+									here
+								</BMLink>
 							</BMText>
 						</BMListItem>
 

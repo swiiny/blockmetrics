@@ -12,6 +12,7 @@ interface IBMCardContainer extends IPadding, IAnimation, IMargin {
 	fullWidth?: boolean;
 	fullHeight?: boolean;
 	as?: string;
+	id?: string;
 	borderRadius?: ESize;
 }
 

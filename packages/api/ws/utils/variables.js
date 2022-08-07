@@ -12,13 +12,17 @@ export const blockchainTotal = {
 	addressCount: 'addressCount',
 	transactionCount: 'transactionCount',
 	todayTransactionCount: 'todayTransactionCount',
-	todayAddressCount: 'todayAddressCount'
+	todayAddressCount: 'todayAddressCount',
+	todayUserCount: 'todayUserCount',
+	todayContractCount: 'todayContractCount'
 };
 
 export const blockchainTotalToColumnName = {
 	transactionCount: 'transaction_count',
 	addressCount: 'address_count',
 	todayAddressCount: 'today_address_count',
+	todayUserCount: 'today_user_count',
+	todayContractCount: 'today_contract_count',
 	todayTransactionCount: 'today_transaction_count'
 };
 

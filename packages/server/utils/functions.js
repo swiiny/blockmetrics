@@ -1,4 +1,4 @@
-import { CHAINS } from '../variables.js';
+import { CHAINS, CHAINS_ARRAY } from '../variables.js';
 
 /**
  * calculate power comsumption for PoS chains
@@ -20,8 +20,17 @@ export function calculatePowerConsumptionPoS(singleNodePowerConsumption, nodeCou
 
 export const getRpcByChainId = (chainId) => {
 	try {
-		const chain = Object.values(CHAINS).find((chain) => chain.id === chainId);
-		return chain.rpc;
+		const chain = CHAINS_ARRAY.find((chain) => chain.id === chainId);
+		return chain.rpcWs;
+	} catch {
+		return null;
+	}
+};
+
+export const getWsRpcByChainId = (chainId) => {
+	try {
+		const chain = CHAINS_ARRAY.find((chain) => chain.id === chainId);
+		return chain.rpcWs;
 	} catch {
 		return null;
 	}

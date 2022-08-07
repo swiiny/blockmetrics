@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactNode, useEffect, useState } from 'react';
 import type { NextPage } from 'next';
 import Meta from '../../../utils/Meta';
 import Main from '../../../../styles/layout/Main';
 import Flex from '../../../../styles/layout/Flex';
 import { EFlex, ESize, ESubscribeType, ETextAlign, ETextType } from '../../../../styles/theme/utils/enum';
-import { motion, Variants } from 'framer-motion';
 import BMHeading from '../../../../styles/theme/components/BMHeading';
 import { StyledFullHeightContainer, StyledHalfHeightContainer, StyledScreenHeightContainer } from '../story.styles';
 import Spacing from '../../../../styles/layout/Spacing';
@@ -14,6 +13,8 @@ import router from 'next/router';
 import useWebsocket from '../../../../hooks/useWebsocket';
 import { TBlockchain } from '../../../../types/blockchain';
 import { IStoryBlockchainsData } from './StoryPage.type';
+
+import { motion, Variants } from 'framer-motion';
 
 const sectionVariants: Variants = {
 	offscreen: {
@@ -31,7 +32,7 @@ const sectionVariants: Variants = {
 	}
 };
 
-const Animated = ({ children }: { children: React.ReactNode }) => (
+const Animated = ({ children }: { children: ReactNode }) => (
 	<motion.div
 		initial='offscreen'
 		whileInView='onscreen'
@@ -52,6 +53,7 @@ const StoryPage: NextPage = () => {
 			let newBlockchainsData = {
 				powerConsumption: 0,
 				todayTransactionCount: 0,
+				todayUserCount: 0,
 				transactionCount: 0,
 				todayAddressUsed: 0,
 				totalValueLocked: 0
@@ -60,6 +62,7 @@ const StoryPage: NextPage = () => {
 			message.data.forEach((blockchain: TBlockchain) => {
 				newBlockchainsData.powerConsumption += blockchain?.blockchain_power_consumption || 0;
 				newBlockchainsData.todayTransactionCount += blockchain?.today_transaction_count || 0;
+				newBlockchainsData.todayUserCount += blockchain?.today_user_count || 0;
 				newBlockchainsData.transactionCount += blockchain?.transaction_count || 0;
 				newBlockchainsData.todayAddressUsed += blockchain?.today_address_count || 0;
 				newBlockchainsData.totalValueLocked += blockchain?.total_value_locked || 0;
@@ -75,7 +78,10 @@ const StoryPage: NextPage = () => {
 
 	return (
 		<>
-			<Meta title='Blockmetrics' />
+			<Meta
+				title='Blockmetrics'
+				description='Awesome experience through global data about blockchains and their users'
+			/>
 
 			<Main noNavbar noMarginTop noPaddingBottom>
 				<Flex direction={EFlex.column} vertical={EFlex.center}>
@@ -127,7 +133,11 @@ const StoryPage: NextPage = () => {
 							<Spacing size={ESize['8xl']} />
 
 							<Animated>
-								<TitleAndValue title='Total Value Locked' value={blockchainsData?.totalValueLocked || 0} unit='$' />
+								<TitleAndValue
+									title='Today Users Count'
+									value={blockchainsData?.todayUserCount || 0}
+									customDuration={5 * 60}
+								/>
 							</Animated>
 
 							<Spacing size={ESize['2xl']} />
@@ -138,6 +148,12 @@ const StoryPage: NextPage = () => {
 									value={blockchainsData?.todayAddressUsed || 0}
 									customDuration={180}
 								/>
+							</Animated>
+
+							<Spacing size={ESize['2xl']} />
+
+							<Animated>
+								<TitleAndValue title='Total Value Locked' value={blockchainsData?.totalValueLocked || 0} unit='$' />
 							</Animated>
 						</section>
 

@@ -66,16 +66,14 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 			});
 		}
 
-		if (chainId !== BLOCKCHAINS.avalanche.id && chainId !== BLOCKCHAINS.fantom.id) {
-			result.push({
-				label: 'Active users',
-				chartType: EChartType.bar,
-				dailyType: EDailyData.activeUsers,
-				chainId: chainId,
-				helpText:
-					'The number of active users on the blockchain. An active user is a user that has made at least 1 transactions.'
-			});
-		}
+		result.push({
+			label: 'Active users',
+			chartType: EChartType.bar,
+			dailyType: EDailyData.activeUsers,
+			chainId: chainId,
+			helpText:
+				'The number of active users on the blockchain. An active user is a user that has made at least 1 transactions.'
+		});
 
 		result.push({
 			label: 'New addresses',

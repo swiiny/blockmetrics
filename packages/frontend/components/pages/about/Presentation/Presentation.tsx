@@ -57,8 +57,8 @@ const Presentation: React.FC = () => {
 					<Spacing size={ESize.xs} />
 
 					<BMText size={ESize.l} weight={ETextWeight.light}>
-						Blockchains data may be difficult to find and even more difficult to understand. That is exactly why
-						Blockmetrics is being built.
+						Blockchains data may be difficult to find and even more difficult to understand. Blockmetrics exists to
+						solve this problem.
 					</BMText>
 				</StyledTextContainer>
 			</Flex>
