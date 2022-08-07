@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  frontend-lint:
+  frontend-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -21,7 +21,7 @@ jobs:
         working-directory: ./packages/frontend
         run: npm run lint
 
-  data-server-lint:
+  data-server-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -33,7 +33,7 @@ jobs:
         working-directory: ./packages/server
         run: npm run lint
 
-  api-rest-lint:
+  api-rest-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -45,7 +45,7 @@ jobs:
         working-directory: ./packages/api/rest
         run: npm run lint
 
-  api-ws-lint:
+  api-ws-linter:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2

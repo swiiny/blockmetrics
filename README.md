@@ -11,7 +11,6 @@ The main objective is to offer to everyone an easy way to understand what a bloc
 -   [ ] Complete readme for each service
 -   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
--   [ ] setup linters
 -   [ ] setup github actions to run tests before merge to production
 -   [ ] Presentation
 
