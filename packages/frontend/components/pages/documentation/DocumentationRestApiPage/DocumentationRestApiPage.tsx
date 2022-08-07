@@ -21,7 +21,7 @@ const DocumentationRestApiPage: FC = () => {
 
 	return (
 		<>
-			<Meta title={HeaderData.title} />
+			<Meta title={HeaderData.title} description='Blockmetrics REST API documentation' />
 
 			<Header title={HeaderData.title} />
 

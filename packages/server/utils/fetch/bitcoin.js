@@ -3,6 +3,7 @@ import { CHAINS } from '../../variables.js';
 import {
 	increaseTodayTxCountInBlockchain,
 	insertNewTodayActiveAddress,
+	insertNewTodayBitcoinActiveAddress,
 	updateDifficultyInBlockchain,
 	updateHashrateInBlockchain,
 	updateLastBlockTimestamp
@@ -117,7 +118,7 @@ export async function fetchBitcoinData(pool) {
 					const day = new Date(new Date().setHours(0, 0, 0, 0)).getTime() / 1000;
 
 					// save addresses in database
-					senderAddresses.map((address) => updatableCon.query(insertNewTodayActiveAddress, [address, id, day]));
+					senderAddresses.map((address) => updatableCon.query(insertNewTodayBitcoinActiveAddress, [address, id, day]));
 				}
 			} catch (err) {
 				console.error('fetchBitcoinData message', res.op, err);

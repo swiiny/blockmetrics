@@ -114,7 +114,7 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 
 	return (
 		<>
-			<Meta title={name || ''} />
+			<Meta title={name} description={tagline} />
 
 			<Header title={name || ''} subtitle={tagline} icon={chainLogo} subtitleLoading={!tagline} />
 

@@ -80,7 +80,7 @@ const ComparePage: NextPage = () => {
 
 	return (
 		<>
-			<Meta title={HeaderData.title} />
+			<Meta title={HeaderData.title + ' ' + HeaderData.titleSemiBold} description={HeaderData.subtitle} />
 
 			<Header {...HeaderData} />
 

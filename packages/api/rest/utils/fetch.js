@@ -233,6 +233,12 @@ export const getGlobalDataByType = async (pool, type) => {
 			case EGlobalData.todayAddressCount:
 				valueLabel = 'today_address_count';
 				break;
+			case EGlobalData.todayUserCount:
+				valueLabel = 'today_user_count';
+				break;
+			case EGlobalData.todayContractCount:
+				valueLabel = 'today_contract_count';
+				break;
 			default:
 				return [];
 		}

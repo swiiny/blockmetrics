@@ -25,7 +25,7 @@ const AboutCard: FC<IAboutCard> = ({ icon = EIcon.none, label, bottomContent, li
 				{bottomContent}
 			</Flex>
 
-			{link && <ItemLink href={link} />}
+			{link && <ItemLink href={link} ariaLabel={label + ' - ' + bottomContent} />}
 		</BMCardContainer>
 	);
 };

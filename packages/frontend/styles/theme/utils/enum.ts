@@ -152,7 +152,11 @@ export enum EGlobalData {
 	transactionCount = 'transactionCount',
 	todayTransactionsCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
-	todayAddressCount = 'todayAddressCount'
+	userCount = 'userCount',
+	contractCount = 'contractCount',
+	todayAddressCount = 'todayAddressCount',
+	todayUserCount = 'todayUserCount',
+	todayContractCount = 'todayContractCount'
 }
 
 export enum ESubscribeType {
@@ -164,6 +168,8 @@ export enum ESubscribeType {
 	todayTransactionCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
 	todayAddressCount = 'todayAddressCount',
+	todayUserCount = 'todayUserCount',
+	todayContractCount = 'todayContractCount',
 	ethereum = 'ethereum',
 	bitcoin = 'bitcoin',
 	polygon = 'polygon',
@@ -214,4 +220,11 @@ export enum ETextTransform {
 	uppercase = 'uppercase',
 	lowercase = 'lowercase',
 	capitalize = 'capitalize'
+}
+
+export enum EDocumentationId {
+	whatIsABlockchain = 'what-is-a-blockchain',
+	howIsTheRankingAssigned = 'how-is-the-ranking-assigned',
+	howIsThePowerConsumptionCalculated = 'how-is-the-power-consumption-calculated',
+	sources = 'sources'
 }

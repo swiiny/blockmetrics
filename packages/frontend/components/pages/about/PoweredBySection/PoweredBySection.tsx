@@ -30,6 +30,10 @@ const SERVICES = [
 	{
 		logoSrc: '/assets/images/services/digiconomist.svg',
 		href: 'https://digiconomist.net/'
+	},
+	{
+		logoSrc: '/assets/images/services/defilama.svg',
+		href: 'https://defillama.com/'
 	}
 ];
 

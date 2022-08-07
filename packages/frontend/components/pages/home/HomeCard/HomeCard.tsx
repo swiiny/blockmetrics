@@ -165,7 +165,7 @@ const HomeCard: FC<IHomeCardData> = ({
 
 				<Flex direction={EFlex.column}>
 					<Flex horizontal={EFlex.between} vertical={EFlex.center}>
-						<BMText size={ESize.m} weight={ETextWeight.light}>
+						<BMText as='h2' size={ESize.m} weight={ETextWeight.light}>
 							{title}
 						</BMText>
 

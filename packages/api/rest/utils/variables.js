@@ -18,6 +18,7 @@ export const EDailyData = {
 // fetch chart data for all blockchains
 export const EDailyGlobalData = {
 	activeUsers: 'activeUsers',
+	activeContracts: 'activeContracts',
 	transactionsCount: 'transactionsCount',
 	powerConsumption: 'powerConsumption',
 	totalValueLocked: 'totalValueLocked'
@@ -31,5 +32,7 @@ export const EGlobalData = {
 	transactionCount: 'transactionCount',
 	todayTransactionsCount: 'todayTransactionCount',
 	addressCount: 'addressCount',
-	todayAddressCount: 'todayAddressCount'
+	todayAddressCount: 'todayAddressCount',
+	todayUserCount: 'todayUserCount',
+	todayContractCount: 'todayContractCount'
 };

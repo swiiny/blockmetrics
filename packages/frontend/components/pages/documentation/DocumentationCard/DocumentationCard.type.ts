@@ -1,5 +1,8 @@
+import { EDocumentationId } from '../../../../styles/theme/utils/enum';
+
 interface IDocumentationCard {
 	title: string;
+	id: EDocumentationId;
 	maxHeight?: string;
 	subtitle?: string;
 	items: IDocumentationCardItem[];
@@ -13,6 +16,7 @@ interface IDocumentationCardItem {
 
 interface IDocumentationCardSubitem {
 	value: string;
+	linkLabel?: string;
 	isLink?: boolean;
 }
 

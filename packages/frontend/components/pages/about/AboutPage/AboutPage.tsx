@@ -28,7 +28,10 @@ const HeaderData = {
 const AboutPage: NextPage = () => {
 	return (
 		<>
-			<Meta title='About' />
+			<Meta
+				title='About Blockmetrics'
+				description='What is Blockmetrics and why this platform was born? Let us explain all this here. You will find the way to contact us if you want to send us feedback or suggest a new blockchain integration'
+			/>
 
 			<Header title={HeaderData.title} titleSemiBold={HeaderData.titleSemiBold} />
 

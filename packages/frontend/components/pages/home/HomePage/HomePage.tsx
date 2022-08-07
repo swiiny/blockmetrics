@@ -10,7 +10,10 @@ import { ESize } from '../../../../styles/theme/utils/enum';
 const HomePage: NextPage = () => {
 	return (
 		<>
-			<Meta title='Block metrics' />
+			<Meta
+				title='Blockmetrics'
+				description='All the metrics you need to know about blockchain to help you make informed decisions before using any of it. Already an experienced user? Let’s see if you can get new information to complete your knowledge'
+			/>
 
 			<Main>
 				<HomeHeader />
