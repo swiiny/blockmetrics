@@ -30,7 +30,10 @@ const BlockchainsPage: NextPage = () => {
 
 	return (
 		<>
-			<Meta title='Blockchains' />
+			<Meta
+				title='Blockchains'
+				description='Overview of all listed blockchains. For each blockchain you can get the Blockmetrics rank, the power consumption, the gas price, the token count and the reliability index. Select one of them to get more informations.'
+			/>
 
 			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 

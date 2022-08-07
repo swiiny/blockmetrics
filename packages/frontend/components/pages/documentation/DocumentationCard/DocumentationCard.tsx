@@ -14,7 +14,7 @@ const DocumentationCard: FC<IDocumentationCard> = ({ title, subtitle, items, max
 	return (
 		<BMCardContainer isHighlighted animateApparition marginTop={ESize['4xl']} smMarginTop={ESize.xl} {...otherProps}>
 			<Flex fullWidth direction={EFlex.column} padding={ESize['2xl']} mdPadding={ESize.l} smPaddingX={ESize.s}>
-				<BMText as='h3' weight={ETextWeight.semiBold} size={ESize['2xl']}>
+				<BMText as='h2' weight={ETextWeight.semiBold} size={ESize['2xl']}>
 					{title}
 				</BMText>
 

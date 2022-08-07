@@ -216,7 +216,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false, loading 
 				</Flex>
 			</Flex>
 
-			{!loading && !emptyItem && <ItemLink href={linkTo} internal />}
+			{!loading && !emptyItem && <ItemLink href={linkTo} internal ariaLabel={`Go to ${name} page`} />}
 		</BMCardContainer>
 	);
 };

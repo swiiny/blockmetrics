@@ -18,6 +18,8 @@ type TBlockchain = {
 	gas_price?: number;
 	consensus?: string;
 	today_transaction_count?: number;
+	today_user_count?: number;
+	today_contract_count?: number;
 	address_count?: number;
 	today_address_count?: number;
 	isSelected?: boolean;

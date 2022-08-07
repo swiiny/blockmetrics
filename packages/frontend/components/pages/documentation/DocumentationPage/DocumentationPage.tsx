@@ -148,7 +148,10 @@ const cards: IDocumentationCard[] = [
 const DocumentationPage: NextPage = () => {
 	return (
 		<>
-			<Meta title={HeaderData.title} />
+			<Meta
+				title={HeaderData.title}
+				description='What is a blockchain? How is the Blockmetrics ranking assigned? How blockchains power consumption are calculated? All these questions are answered on this page'
+			/>
 
 			<Header title={HeaderData.title} />
 
