@@ -191,7 +191,9 @@ const LineChart: FC<IBarLineChart> = ({
 	dynamicColor = false,
 	reverseColor = false,
 	deactivateLegend = false,
-	chartHeight = 150
+	chartHeight = 150,
+	noLoading = false,
+	noError = false
 }) => {
 	const theme = useTheme();
 
@@ -432,7 +434,7 @@ const LineChart: FC<IBarLineChart> = ({
 		fetchChartData();
 	}, [fetchChartData]);
 
-	return requestState === ERequestState.loading ? (
+	return requestState === ERequestState.loading && !noLoading ? (
 		<StyledChartContainer chartHeight={chartHeight}>
 			<div id={chartId} className='relative overflow-hidden'>
 				<BMSkeleton width={'100%'} height={'100%'} />
@@ -445,7 +447,7 @@ const LineChart: FC<IBarLineChart> = ({
 				<Line options={chartOptions} data={chartReady ? datas() : null} />
 			</div>
 		</StyledChartContainer>
-	) : (
+	) : !noError ? (
 		<StyledChartContainer chartHeight={chartHeight}>
 			<div id={chartId} className='relative overflow-hidden'>
 				<Flex fullWidth fullHeight vertical={EFlex.center} horizontal={EFlex.center}>
@@ -455,6 +457,8 @@ const LineChart: FC<IBarLineChart> = ({
 				</Flex>
 			</div>
 		</StyledChartContainer>
+	) : (
+		<StyledChartContainer chartHeight={chartHeight} />
 	);
 };
 

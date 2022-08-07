@@ -172,6 +172,8 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false, loading 
 								chainId={id}
 								deactivateLegend
 								chartHeight={54}
+								noError
+								noLoading
 							/>
 						</BMCardContainer>
 					</Column>

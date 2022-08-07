@@ -18,8 +18,6 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 ### Global
 
--   [ ] Complete readme for each service
--   [ ] Update this readme with link to others
 -   [ ] Add Cypress E2E tests
 -   [ ] setup github actions to run tests before merge to production
 -   [ ] Presentation
@@ -40,6 +38,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 -   [ ] Compare blockchains with a similar amount of transaction/day, etc (secondary)
 -   [ ] Add accessibility
 -   [ ] Add comparison data with real life data
+-   [ ] Add DeFi Lama logo in the powered by section
 
 
 ### Integrated Blockchains
@@ -50,15 +49,15 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 -   [x] Avalanche
 -   [x] Bitcoin
 -   [x] Fantom
--   [ ] Solana
--   [ ] Celo
--   [ ] Harmony
--   [ ] Gnosis
 -   [ ] Moonbeam :pushpin: (https://moonscan.io/charts)
 -   [ ] Arbitrum :pushpin: (https://arbiscan.io/charts)
 -   [ ] Optimism :pushpin: (https://optimistic.etherscan.io/charts)
 -   [ ] Nervos :pushpin: (https://explorer.nervos.org/charts)
 -   [ ] Near :pushpin: :triangular_flag_on_post: (https://nearblocks.io/charts/txns)
+-   [ ] Celo
+-   [ ] Gnosis
+-   [ ] Solana
+-   [ ] Harmony
 
 #### Webhook to deploy an updated image from dockerhub to jelastic cloud
 
