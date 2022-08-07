@@ -19,6 +19,9 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 - [ ] Integrate blockchains comparison with same transactions count per day
 - [ ] Add comparison with real life data
+- [ ] Add Moonbeam blockchain
+- [ ] Add Arbitrum blockchain
+- [ ] Add Optimism blockchain
 
 ---
 
