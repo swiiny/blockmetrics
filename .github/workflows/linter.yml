@@ -14,7 +14,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: prepare job
-        working-directory: ./
+        working-directory: ./packages/frontend
         run: npm install
 
       - name: JS Linter
