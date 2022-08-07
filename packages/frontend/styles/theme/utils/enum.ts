@@ -160,7 +160,6 @@ export enum ESubscribeType {
 	blockchains = 'blockchains',
 	blockchainCards = 'blockchainCards',
 	blockchain = 'blockchain',
-	usersCount = 'usersCount',
 	transactionCount = 'transactionCount',
 	todayTransactionCount = 'todayTransactionCount',
 	addressCount = 'addressCount',
