@@ -1,7 +1,7 @@
 'use strict';
 
 import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
-import { calculatePowerConsumptionPoS, getRankFromScore, getRpcByChainId } from './utils/functions.js';
+import { calculatePowerConsumptionPoS, getRankFromScore, getWsRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
@@ -635,7 +635,7 @@ async function checkIfAddressesAreContracts(con) {
 		const resolvedAccountRows = (await Promise.all(accountRowsPromises)).flat(1).filter((row) => row !== null);
 
 		const txPromises = resolvedAccountRows.map(async ({ blockchain_id, address }) => {
-			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
+			const provider = new ethers.providers.WebSocketProvider(getWsRpcByChainId(blockchain_id));
 
 			return provider.getCode(address).then((res) => {
 				if (res === '0x') {

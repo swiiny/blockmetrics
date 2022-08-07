@@ -1,0 +1,9 @@
+# *
+User-agent: *
+Allow: /
+
+# Host
+Host: https://block-metrics.io
+
+# Sitemaps
+Sitemap: https://block-metrics.io/sitemap.xml

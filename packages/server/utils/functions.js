@@ -21,7 +21,16 @@ export function calculatePowerConsumptionPoS(singleNodePowerConsumption, nodeCou
 export const getRpcByChainId = (chainId) => {
 	try {
 		const chain = CHAINS_ARRAY.find((chain) => chain.id === chainId);
-		return chain.rpc;
+		return chain.rpcWs;
+	} catch {
+		return null;
+	}
+};
+
+export const getWsRpcByChainId = (chainId) => {
+	try {
+		const chain = CHAINS_ARRAY.find((chain) => chain.id === chainId);
+		return chain.rpcWs;
 	} catch {
 		return null;
 	}
