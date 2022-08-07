@@ -17,6 +17,15 @@ The service work with:
 `npx swagger-markdown -i ./swagger.yaml`
 
 ## Endpoints
+- [/blockchains](#blockchains)
+- [/blockchains/total](#blockchains/total)
+- [/blockchains/chart](#/blockchains/chart)
+- [/blockchain](#/blockchain)
+- [/blockchain/all](#/blockchain/all)
+- [/blockchain/metadata](#/blockchain/metadata)
+- [/blockchain/metadataAndScore](#/blockchain/metadataAndScore)
+- [/blockchain/chart](#/blockchain/chart)
+
 
 ### /blockchains
 
