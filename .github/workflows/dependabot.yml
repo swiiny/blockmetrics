@@ -5,7 +5,7 @@
 
 version: 2
 updates:
- - package-ecosystem: 'npm'
+  - package-ecosystem: 'npm'
     directory: './packages/server'
     schedule:
       interval: 'weekly'
@@ -39,4 +39,4 @@ updates:
     target-branch: 'develop'
     labels:
       - 'npm dependencies'
-      - 'ws-rest'
+      - 'api-ws'
