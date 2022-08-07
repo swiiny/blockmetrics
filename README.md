@@ -6,7 +6,7 @@ A tool to compare blockchains according to several parameters such as reliabilit
 
 The main objective is to offer to everyone an easy way to understand what a blockchain is, what the implications of its use are and to be able to make a conscious choice before using one blockcahin than another.
 
-Visit [Blockmetrics](https://blockmetrics.io/) to get more information about blockchains
+Visit [Blockmetrics](https://block-metrics.io/) to get more information about blockchains
 
 ## Services
 - [Frontend](./packages/frontend/README.md)
