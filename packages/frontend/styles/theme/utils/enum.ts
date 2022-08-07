@@ -154,7 +154,9 @@ export enum EGlobalData {
 	addressCount = 'addressCount',
 	userCount = 'userCount',
 	contractCount = 'contractCount',
-	todayAddressCount = 'todayAddressCount'
+	todayAddressCount = 'todayAddressCount',
+	todayUserCount = 'todayUserCount',
+	todayContractCount = 'todayContractCount'
 }
 
 export enum ESubscribeType {
