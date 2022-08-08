@@ -19,7 +19,7 @@ const HOMECARD_DATA: IHomeCardData[] = [
 		valueType: EGlobalData.addressCount,
 		subscribeChannel: ESubscribeType.todayUserCount,
 		dailyChangeType: EGlobalData.todayUserCount,
-		dailyCustomLabel: 'today new users',
+		dailyCustomLabel: 'today unique users',
 		refreshTime: 60,
 		icon: EIcon.user,
 		chartTitle: 'Daily Active Addresses',
