@@ -1,7 +1,7 @@
 'use strict';
 
 import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
-import { calculatePowerConsumptionPoS, getRankFromScore, getWsRpcByChainId } from './utils/functions.js';
+import { calculatePowerConsumptionPoS, getRankFromScore, getRpcByChainId } from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
@@ -634,8 +634,11 @@ async function checkIfAddressesAreContracts(con) {
 
 		const resolvedAccountRows = (await Promise.all(accountRowsPromises)).flat(1).filter((row) => row !== null);
 
+		console.log('resolvedAccountRows', resolvedAccountRows.length);
+
 		const txPromises = resolvedAccountRows.map(async ({ blockchain_id, address }) => {
-			const provider = new ethers.providers.WebSocketProvider(getWsRpcByChainId(blockchain_id));
+			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
+			//const provider = new ethers.providers.WebSocketProvider(getWsRpcByChainId(blockchain_id));
 
 			return provider.getCode(address).then((res) => {
 				if (res === '0x') {
@@ -654,15 +657,24 @@ async function checkIfAddressesAreContracts(con) {
 			});
 		});
 
+		console.log('txPromises', txPromises.length);
+
 		const txResults = await Promise.all(txPromises);
+
+		console.log('txResults', txResults.length);
 
 		const updateDbPromises = txResults.map((txResult) =>
 			con.query(updateTodayActiveAddressIsContract, [txResult.is_contract, txResult.blockchain_id, txResult.address])
 		);
 
+		console.log('start update db');
+
 		await Promise.all(updateDbPromises);
 
+		console.log('end update db');
+
 		setTimeout(() => {
+			console.log('restart checkIfAddressesAreContracts');
 			checkIfAddressesAreContracts(con);
 		}, 750);
 	} catch (err) {
@@ -695,6 +707,7 @@ async function startFetchData() {
 			// INIT BITCOIN WEBSOCKET PROVIDER
 			fetchBitcoinData(pool);
 
+			console.log('start checkIfAddressesAreContracts');
 			// fetch new used addresses and check if they are contracts or not
 			checkIfAddressesAreContracts(con);
 
@@ -720,7 +733,8 @@ async function startFetchData() {
 			});
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
-			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+			//ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+			ruleFiveMinutes.second = 30;
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
