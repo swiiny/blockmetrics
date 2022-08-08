@@ -656,15 +656,24 @@ async function checkIfAddressesAreContracts(con) {
 			});
 		});
 
+		console.log('txPromises', txPromises.length);
+
 		const txResults = await Promise.all(txPromises);
+
+		console.log('txResults', txResults.length);
 
 		const updateDbPromises = txResults.map((txResult) =>
 			con.query(updateTodayActiveAddressIsContract, [txResult.is_contract, txResult.blockchain_id, txResult.address])
 		);
 
+		console.log('start update db');
+
 		await Promise.all(updateDbPromises);
 
+		console.log('end update db');
+
 		setTimeout(() => {
+			console.log('restart checkIfAddressesAreContracts');
 			checkIfAddressesAreContracts(con);
 		}, 750);
 	} catch (err) {
