@@ -634,6 +634,8 @@ async function checkIfAddressesAreContracts(con) {
 
 		const resolvedAccountRows = (await Promise.all(accountRowsPromises)).flat(1).filter((row) => row !== null);
 
+		console.log('resolvedAccountRows', resolvedAccountRows.length);
+
 		const txPromises = resolvedAccountRows.map(async ({ blockchain_id, address }) => {
 			const provider = new ethers.providers.WebSocketProvider(getWsRpcByChainId(blockchain_id));
 
@@ -695,6 +697,7 @@ async function startFetchData() {
 			// INIT BITCOIN WEBSOCKET PROVIDER
 			fetchBitcoinData(pool);
 
+			console.log('start checkIfAddressesAreContracts');
 			// fetch new used addresses and check if they are contracts or not
 			checkIfAddressesAreContracts(con);
 
@@ -720,7 +723,8 @@ async function startFetchData() {
 			});
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
-			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+			//ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
+			ruleFiveMinutes.second = 30;
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
