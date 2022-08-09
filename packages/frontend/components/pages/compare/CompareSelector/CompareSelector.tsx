@@ -21,18 +21,23 @@ const CompareSelector: FC<ICompareSelector> = ({
 
 		return (
 			<BMCardContainer paddingX={ESize.s} paddingY={ESize['2xs']} borderRadius={ESize['3xs']} clickable>
-				<Flex vertical={EFlex.center}>
-					<StyledSelectSquare />
+				<BMText size={ESize.m}>{isListEmpty ? 'S' : 'Uns'}elect all</BMText>
 
-					<Spacing size={ESize.xs} />
-
-					<BMText size={ESize.m}>{isListEmpty ? '' : 'Un'}select all</BMText>
-				</Flex>
-
-				<ItemButton onClick={() => onSelectBlockchain(isListEmpty ? 'all' : null)} ariaLabel='select or unselect all' />
+				<ItemButton
+					onClick={() => onSelectBlockchain(isListEmpty ? 'all' : null)}
+					ariaLabel='select or unselect all blockchains'
+				/>
 			</BMCardContainer>
 		);
 	}, [onSelectBlockchain, selectedBlockchainIds.length]);
+
+	const emptyItems = useMemo(() => {
+		return Array.from({ length: 2 }).map((value) => (
+			<StyledListItem key={'empty-bc-item-' + value} isEmpty>
+				<BMIcon type={EIcon.ethereum} size={ESize.s} backgroundVisible backgroundSize={ESize.xs} />
+			</StyledListItem>
+		));
+	}, []);
 
 	return (
 		<>
@@ -44,15 +49,31 @@ const CompareSelector: FC<ICompareSelector> = ({
 
 			<Spacing size={ESize.xs} />
 
-			<BMCardContainer fullWidth paddingX={ESize.xl} paddingY={ESize.m} animateApparition>
-				<Flex as='ul' vertical={EFlex.center} horizontal={EFlex.start} fullWidth>
+			<BMCardContainer
+				fullWidth
+				paddingX={ESize.xl}
+				paddingY={ESize.m}
+				mdPadding={ESize.unset}
+				mdPaddingBottom={ESize.s}
+				smPaddingX={ESize['4xs']}
+				animateApparition
+			>
+				<Flex
+					as='ul'
+					vertical={EFlex.center}
+					horizontal={EFlex.start}
+					//smHorizontal={EFlex.around}
+					mdHorizontal={EFlex.between}
+					fullWidth
+					wrapItems
+				>
 					{blockchains.map(({ id, icon, name, isSelected }) => (
 						<StyledListItem key={id}>
-							<StyledSelectedCircle isSelected={isSelected}>
-								<BMIcon type={EIcon.check} size={ESize['2xs']} isVisible={isSelected} />
-							</StyledSelectedCircle>
-
 							<Flex direction={EFlex.column} vertical={EFlex.center} horizontal={EFlex.center}>
+								<StyledSelectedCircle isSelected={isSelected}>
+									<BMIcon type={EIcon.check} size={ESize['2xs']} isVisible={isSelected} />
+								</StyledSelectedCircle>
+
 								<BMIcon
 									type={icon}
 									size={ESize.s}
@@ -72,6 +93,8 @@ const CompareSelector: FC<ICompareSelector> = ({
 							/>
 						</StyledListItem>
 					))}
+
+					{emptyItems}
 				</Flex>
 			</BMCardContainer>
 		</>

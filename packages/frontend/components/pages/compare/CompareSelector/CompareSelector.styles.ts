@@ -1,5 +1,6 @@
 import styled, { css } from 'styled-components';
-import { addTransition } from '../../../../styles/theme/utils/functions';
+import { EMediaQuery } from '../../../../styles/theme/utils/enum';
+import { addTransition, mq } from '../../../../styles/theme/utils/functions';
 
 export const StyledSelectSquare = styled.div`
 	width: 20px;
@@ -57,13 +58,40 @@ export const StyledSelectedCircle = styled.div<{ isSelected?: boolean }>`
 	`}
 `;
 
-export const StyledListItem = styled.li`
-	position: relative;
+export const StyledListItem = styled.li<{ isEmpty?: boolean }>`
+	${(p) => css`
+		position: relative;
 
-	width: auto;
-	height: auto;
+		width: auto;
+		height: auto;
 
-	& + li {
-		margin-left: 30px;
-	}
+		& + li {
+			margin-left: 30px;
+		}
+
+		${p.isEmpty ? `height: 0; overflow: hidden;` : ''}
+
+		${mq(
+			EMediaQuery.md,
+			`
+				margin-left: 20px;
+				margin-right: 20px;
+
+				margin-top: ${p.theme.spacing.s};
+
+				${p.isEmpty ? `height: 0; margin-top: 0; overflow: hidden;` : ''}
+			`
+		)}
+		${mq(
+			EMediaQuery.sm,
+			`
+				margin-left: 10px;
+				margin-right: 10px;
+
+				& + li {
+					margin-left: 10px;
+				}
+			`
+		)}
+	`}
 `;

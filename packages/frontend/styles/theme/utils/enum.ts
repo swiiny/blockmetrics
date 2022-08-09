@@ -1,5 +1,5 @@
 export enum ESize {
-	unset = 'unset§',
+	unset = 'unset',
 	'7xs' = '7xs',
 	'6xs' = '6xs',
 	'5xs' = '5xs',
