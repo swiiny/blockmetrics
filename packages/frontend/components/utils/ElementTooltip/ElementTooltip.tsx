@@ -1,4 +1,14 @@
-import React, { Children, cloneElement, FC, isValidElement, ReactNode, useCallback, useMemo, useState } from 'react';
+import React, {
+	Children,
+	cloneElement,
+	FC,
+	isValidElement,
+	ReactNode,
+	useCallback,
+	useEffect,
+	useMemo,
+	useState
+} from 'react';
 import BMText from '../../../styles/theme/components/BMText';
 import { ESize } from '../../../styles/theme/utils/enum';
 import { StyledElementTooltipContainer } from './ElementTooltip.styles';
@@ -58,6 +68,19 @@ const ElementTooltip: FC<IElementTooltip> = ({ children, content, disabled = fal
 			return child;
 		});
 	}, [children, onMouseEnter, onMouseLeave]);
+
+	// add event listener on scroll to hide tooltip
+	useEffect(() => {
+		const handleScroll = () => {
+			onMouseLeave();
+		};
+
+		window.addEventListener('scroll', handleScroll);
+
+		return () => {
+			window.removeEventListener('scroll', handleScroll);
+		};
+	}, [isVisible, onMouseLeave]);
 
 	return (
 		<>

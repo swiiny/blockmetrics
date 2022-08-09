@@ -14,6 +14,7 @@ import {
 	resetTodayTransactionCount,
 	updateAddressCountInBlockchain,
 	updateBlockchainsRankingInBlockchainScore,
+	updateScoreInBlockchain,
 	updateTodayActiveAddressIsContract,
 	updateTodayAddressUsersAndContractCountInBlockchain,
 	updateTotalValueLockedInBlockchain,
@@ -238,7 +239,7 @@ async function updateBlockchainsRanking(con) {
 		});
 
 		// update blockchains ranking
-		const promises = blockchainsRows.map(
+		blockchainsRows.map(
 			async ({
 				id,
 				rank,
@@ -261,10 +262,9 @@ async function updateBlockchainsRanking(con) {
 					average_transaction_count_res,
 					id
 				]);
+				con.query(updateScoreInBlockchain, [score, id]);
 			}
 		);
-
-		await Promise.all(promises);
 	} catch (err) {
 		console.error('updateBlockchainsRanking', err);
 	}
@@ -634,8 +634,6 @@ async function checkIfAddressesAreContracts(con) {
 
 		const resolvedAccountRows = (await Promise.all(accountRowsPromises)).flat(1).filter((row) => row !== null);
 
-		console.log('resolvedAccountRows', resolvedAccountRows.length);
-
 		const txPromises = resolvedAccountRows.map(async ({ blockchain_id, address }) => {
 			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
 			//const provider = new ethers.providers.WebSocketProvider(getWsRpcByChainId(blockchain_id));
@@ -657,26 +655,17 @@ async function checkIfAddressesAreContracts(con) {
 			});
 		});
 
-		console.log('txPromises', txPromises.length);
-
 		const txResults = await Promise.all(txPromises);
-
-		console.log('txResults', txResults.length);
 
 		const updateDbPromises = txResults.map((txResult) =>
 			con.query(updateTodayActiveAddressIsContract, [txResult.is_contract, txResult.blockchain_id, txResult.address])
 		);
 
-		console.log('start update db');
-
 		await Promise.all(updateDbPromises);
 
-		console.log('end update db');
-
 		setTimeout(() => {
-			console.log('restart checkIfAddressesAreContracts');
 			checkIfAddressesAreContracts(con);
-		}, 750);
+		}, 1000);
 	} catch (err) {
 		console.error('checkIfAddressesAreContracts', err);
 
@@ -774,7 +763,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			//rule.hour = 2;
-			rule.minute = [0, 30];
+			rule.minute = [0, 30, 3];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {

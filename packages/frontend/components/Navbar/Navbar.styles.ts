@@ -159,11 +159,14 @@ export const StyledFace = styled.div<{ faceIndex: number; faceVisible: boolean }
 
 	& > span {
 		position: absolute;
-
-		height: 2px;
-		width: 100%;
-		background-color: ${(p) => p.theme.colors.deepBlue};
 		display: block;
+
+		height: 3px;
+		width: 100%;
+
+		border-radius: 2px;
+
+		background-color: ${(p) => p.theme.colors.deepBlue};
 
 		${addTransition()}
 		${({ faceVisible }) => (faceVisible ? 'opacity: 1;' : 'opacity: 0;')}

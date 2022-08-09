@@ -58,7 +58,7 @@ app.use(limiter);
 // - offset: unsigned number less than limit
 // - limit: unsigned number greater than offset
 app.get(`/blockchains`, async (req, res) => {
-	const { sortBy = 'blockchain_power_consumption', desc = false, offset = 0, limit = 30 } = req.query;
+	const { sortBy = 'score', desc = true, offset = 0, limit = 30 } = req.query;
 
 	try {
 		const params = {

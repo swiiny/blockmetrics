@@ -9,9 +9,15 @@ import BMText from '../../../../styles/theme/components/BMText';
 import { EDirection, EFlex, EIcon, ESize, ETextWeight } from '../../../../styles/theme/utils/enum';
 import { TBlockchain } from '../../../../types/blockchain';
 import { getEngNotation } from '../../../../utils/convert';
+import { formatBlockchainNameToNameUrl, getRankColor, getRankFromScore } from '../../../../utils/functions';
+import { NAVBAR_LINKS } from '../../../Navbar/Navbar';
+import ItemButton from '../../../utils/ItemButton';
 import CompareBlockchainData from '../CompareBlockchainData';
 import { ICompareData } from '../CompareBlockchains/CompareBlockchains.type';
 import { BMGradientSeparatorEx, StyledListItem } from './CompareBlockchainsCard.styles';
+import router from 'next/router';
+import ItemLink from '../../../utils/ItemLink';
+import { StyledRank } from './CompareBlockchainCard.styles';
 
 const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 	const {
@@ -23,6 +29,7 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		gas_price,
 		blockchain_power_consumption,
 		today_transaction_count,
+		score,
 		total_value_locked,
 		loading = false
 	} = blockchain;
@@ -110,6 +117,37 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 		return result.slice(0, maxItemCount);
 	}, [token_count, blockchain_power_consumption, gas_price, total_value_locked, isSmallerThanSm, isSmallerThanMd]);
 
+	const formattedNameUrl = useMemo(() => {
+		if (!name) {
+			return;
+		}
+
+		return formatBlockchainNameToNameUrl(name);
+	}, [name]);
+
+	const rankContainer = useMemo(() => {
+		if (typeof score === 'undefined') {
+			return <></>;
+		}
+
+		const rank = getRankFromScore(score);
+
+		return (
+			<StyledRank>
+				<BMText
+					size={ESize['xl']}
+					textColor={getRankColor(rank)}
+					weight={ETextWeight.bold}
+					loading={!rank}
+					skHeight={'60%'}
+					skWidth={'60%'}
+				>
+					{rank}
+				</BMText>
+			</StyledRank>
+		);
+	}, [score]);
+
 	return (
 		<StyledListItem key={id} isVisible={isSelected}>
 			<BMCardContainer
@@ -117,10 +155,15 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 				marginTop={ESize.l}
 				padding={ESize.l}
 				lgPadding={ESize.m}
+				lgPaddingY={ESize.xl}
+				mdPaddingY={ESize.m}
 				smPadding={ESize.s}
 				animateApparition
 				isHighlighted
+				clickable
 			>
+				{rankContainer}
+
 				<Flex mdDirection={EFlex.column} horizontal={EFlex.between} vertical={EFlex.center}>
 					<Column columns={3} md={12}>
 						<Flex horizontal={EFlex.start} vertical={EFlex.center}>
@@ -147,6 +190,12 @@ const CompareBlockchainCard: FC<TBlockchain> = (blockchain) => {
 						</Flex>
 					</Column>
 				</Flex>
+
+				<ItemLink
+					isInternal
+					href={NAVBAR_LINKS.blockchains.href + '/' + formattedNameUrl}
+					ariaLabel={`Buttton to go to ${name} page`}
+				/>
 			</BMCardContainer>
 		</StyledListItem>
 	);

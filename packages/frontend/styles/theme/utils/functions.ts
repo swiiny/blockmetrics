@@ -299,30 +299,22 @@ export const getTextColor = (p: any) => {
 	}
 };
 
-export function getESubscribeTypeFromValue(value: string): ESubscribeType {
+// get an enum type from a string value
+export function getEnumFromValue<T>(value: string | undefined, enumType: T): T[keyof T] {
 	try {
-		const indexOfValue = Object.values(ESubscribeType).indexOf(value as unknown as ESubscribeType);
+		if (!value) {
+			throw new Error('Value is undefined');
+		}
 
-		const key = Object.keys(ESubscribeType)[indexOfValue] as keyof typeof ESubscribeType;
+		const indexOfValue = Object.values(enumType).indexOf(value.toLowerCase() as unknown as T[keyof T]);
 
-		return ESubscribeType[key];
+		const key = Object.keys(enumType)[indexOfValue] as keyof typeof enumType;
+
+		return enumType[key];
 	} catch (err) {
-		console.error('getESubscribeTypeFromValue', err);
+		console.error('getEnumFromValue', err);
 
-		return ESubscribeType.unset;
-	}
-}
-
-export function getEIconTypeFromValue(value: string): EIcon {
-	try {
-		const indexOfValue = Object.values(EIcon).indexOf(value as unknown as EIcon);
-
-		const key = Object.keys(EIcon)[indexOfValue] as keyof typeof EIcon;
-
-		return EIcon[key];
-	} catch (err) {
-		console.error('getESubscribeTypeFromValue', err);
-
-		return EIcon.none;
+		// @ts-ignore
+		return enumType.unset || enumType.none || null;
 	}
 }

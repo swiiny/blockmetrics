@@ -17,11 +17,11 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 ## Roadmap
 
-- [ ] Integrate blockchains comparison with same transactions count per day
-- [ ] Add comparison with real life data
-- [ ] Add Moonbeam blockchain
-- [ ] Add Arbitrum blockchain
-- [ ] Add Optimism blockchain
+- [ ] :sparkles: Integrate blockchains comparison with same transactions count per day
+- [ ] :sparkles: Add comparison with real life data
+- [ ] :heavy_plus_sign: Add Moonbeam blockchain
+- [ ] :heavy_plus_sign: Add Arbitrum blockchain
+- [ ] :heavy_plus_sign: Add Optimism blockchain
 
 ---
 
@@ -29,19 +29,30 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 ### Global
 
-- [ ] Add Cypress E2E tests
-- [ ] setup github actions to run tests before merge to production
-- [ ] Presentation
+- [ ] :white_check_mark: Add Cypress E2E tests
+- [ ] :construction_worker: setup github actions to run tests before merge to production
+- [ ] :art: Presentation
 
 ### Server
 
-- [ ] Fetch and put in blockchain table the testnet node count for PoS blockchains
-- [ ] prevent bitcoin webscoket from disconnecting
+- [ ] :monocle_face: Fetch and put in blockchain table the testnet node count for PoS blockchains
+- [ ] :adhesive_bandage: prevent bitcoin webscoket from disconnecting
 
 ### Frontend
 
-- [ ] Fix responsvive Story
-- [ ] Add accessibility
+- [ ] :bug: Fix Invalid date error on the chart tooltip
+- [ ] :bug: Fix bug page not loading when go to a page then come back quickly
+- [x] :iphone: Comparison page responsive
+- [x] :iphone: Story page responsvive
+- [ ] :wheelchair: Add accessibility
+- [x] :lipstick: Fix unselect/select capitalize issue and UI
+- [ ] :children_crossing: Explain engineering notation
+- [x] :children_crossing: Add story page on the 404 page
+- [x] :children_crossing: Comparison page display ranking
+- [ ] :children_crossing: Show each monday on the abscissa the date of the week
+- [x] :children_crossing: Check to restructure blockchain cards to highlight more the ranking
+- [ ] :children_crossing: Explain why the weight of each property from ranking system
+- [ ] :children_crossing: check if trendline can be displayed on bar chart
 
 ### Integrated Blockchains
 
