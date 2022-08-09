@@ -19,7 +19,7 @@ import {
 } from '../../../../styles/theme/utils/enum';
 import { TBlockchainMetadata } from '../../../../types/blockchain';
 import { getBlockchainMetadataAndScoreById } from '../../../../utils/fetch';
-import { getRankFromScore } from '../../../../utils/functions';
+import { getRankColor, getRankFromScore } from '../../../../utils/functions';
 import { NAVBAR_LINKS } from '../../../Navbar/Navbar';
 import Eclipse from '../../../utils/Eclipse';
 import { StyledList, StyledRank, StyledUsefulLinkList } from './InformationCard.styles';
@@ -170,22 +170,12 @@ const InformationCard: FC<IInformationCard> = ({ chainId = '', onGetTagline = ()
 
 	const rankContainer = useMemo(() => {
 		const { rank } = score;
-		const positive = ['A+', 'A', 'A-', 'B+', 'B', 'B-'];
-		const negative = ['C+', 'C', 'C-', 'D+', 'D', 'D-', 'E+', 'E', 'E-', 'F+', 'F', 'F-'];
-
-		// set rank color
-		let color = ETextColor.default;
-		if (positive.includes(rank)) {
-			color = ETextColor.positive;
-		} else if (negative.includes(rank)) {
-			color = ETextColor.negative;
-		}
 
 		return (
 			<StyledRank>
 				<BMText
 					size={isSmallerThanMd ? ESize['2xl'] : ESize['4xl']}
-					textColor={color}
+					textColor={getRankColor(rank)}
 					weight={ETextWeight.bold}
 					loading={!rank}
 					skHeight={'60%'}

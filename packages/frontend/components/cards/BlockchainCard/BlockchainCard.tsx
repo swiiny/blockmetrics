@@ -16,6 +16,7 @@ import BMProgressBar from '../../../styles/theme/components/BMProgressBar';
 import ItemLink from '../../utils/ItemLink';
 import useResponsive from '../../../hooks/useResponsive';
 import { getEngNotation } from '../../../utils/convert';
+import { getRankColor } from '../../../utils/functions';
 
 const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false, loading = false }) => {
 	const { isSmallerThanSm } = useResponsive();
@@ -43,6 +44,10 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false, loading 
 
 		return newBlockchain || defaultBlockchain;
 	}, [id]);
+
+	const rankColor = useMemo(() => {
+		return getRankColor(rank);
+	}, [rank]);
 
 	const linkTo = useMemo(() => {
 		try {
@@ -185,6 +190,7 @@ const BlockchainCard: FC<IBlockchainCard> = ({ data, emptyItem = false, loading 
 									size={ESize['2xl']}
 									weight={ETextWeight.semiBold}
 									loading={loading}
+									textColor={rankColor}
 									skWidth={ESize.xl}
 									skHeight={ESize['2xl']}
 								>
