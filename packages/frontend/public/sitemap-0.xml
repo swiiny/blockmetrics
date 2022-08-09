@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:news="http://www.google.com/schemas/sitemap-news/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:mobile="http://www.google.com/schemas/sitemap-mobile/1.0" xmlns:image="http://www.google.com/schemas/sitemap-image/1.1" xmlns:video="http://www.google.com/schemas/sitemap-video/1.1">
-<url><loc>https://block-metrics.io</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/about</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/blockchains</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/compare</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/documentation</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/story</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/blockchains/fantom</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/blockchains/binance-sc</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/blockchains/avalanche</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/blockchains/polygon</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/blockchains/ethereum</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
-<url><loc>https://block-metrics.io/blockchains/bitcoin</loc><lastmod>2022-08-07T22:53:33.689Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io</loc><lastmod>2022-08-09T22:00:11.727Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/about</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/blockchains</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/compare</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/documentation</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/blockchains/fantom</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/blockchains/binance-sc</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/blockchains/avalanche</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/blockchains/polygon</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/blockchains/ethereum</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
+<url><loc>https://block-metrics.io/blockchains/bitcoin</loc><lastmod>2022-08-09T22:00:11.728Z</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>
 </urlset>

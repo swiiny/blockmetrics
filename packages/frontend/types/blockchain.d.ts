@@ -4,6 +4,7 @@ type TBlockchain = {
 	id: string;
 	name?: string;
 	rank?: string;
+	score?: number;
 	node_count?: number;
 	testnet_node_count?: number;
 	reliability?: number;
