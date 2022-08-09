@@ -665,7 +665,7 @@ async function checkIfAddressesAreContracts(con) {
 
 		setTimeout(() => {
 			checkIfAddressesAreContracts(con);
-		}, 750);
+		}, 1000);
 	} catch (err) {
 		console.error('checkIfAddressesAreContracts', err);
 
