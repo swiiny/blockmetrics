@@ -1,6 +1,7 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { EIcon, ESubscribeType } from '../../styles/theme/utils/enum';
 import { getEnumFromValue } from '../../styles/theme/utils/functions';
+import { formatBlockchainNameToNameUrl } from '../../utils/functions';
 import { BLOCKCHAINS_ARRAY } from '../../utils/variables';
 
 export { SingleBlockchainPage as default } from '../../components/pages/blockchains/SingleBlockchainPage/SingleBlockchainPage';
@@ -9,7 +10,7 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 	const { name } = ctx.params || { name: '' };
 
 	try {
-		const blockchain = BLOCKCHAINS_ARRAY.find((bc) => bc.name.toLowerCase().replace(/\s/g, '-') === name);
+		const blockchain = BLOCKCHAINS_ARRAY.find((bc) => formatBlockchainNameToNameUrl(bc.name) === name);
 
 		if (!blockchain) {
 			return {

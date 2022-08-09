@@ -35,3 +35,7 @@ export const getRankColor = (rank: string | undefined) => {
 
 	return color;
 };
+
+export const formatBlockchainNameToNameUrl = (name: string) => {
+	return name.replace(/ /g, '-').toLowerCase();
+};

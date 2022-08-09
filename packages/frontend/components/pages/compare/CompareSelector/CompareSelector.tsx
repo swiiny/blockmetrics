@@ -61,15 +61,7 @@ const CompareSelector: FC<ICompareSelector> = ({
 				smPaddingX={ESize['4xs']}
 				animateApparition
 			>
-				<Flex
-					as='ul'
-					vertical={EFlex.center}
-					horizontal={EFlex.start}
-					//smHorizontal={EFlex.around}
-					mdHorizontal={EFlex.between}
-					fullWidth
-					wrapItems
-				>
+				<Flex as='ul' vertical={EFlex.center} horizontal={EFlex.start} mdHorizontal={EFlex.between} fullWidth wrapItems>
 					{blockchains.map(({ id, icon, name, isSelected }) => (
 						<StyledListItem key={id}>
 							<Flex direction={EFlex.column} vertical={EFlex.center} horizontal={EFlex.center}>

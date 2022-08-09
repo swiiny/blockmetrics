@@ -31,7 +31,6 @@ const wss = new WebSocketServer({
 	port: process.env.WS_PORT,
 	perMessageDeflate: {
 		zlibDeflateOptions: {
-			// See zlib defaults.
 			chunkSize: 1024,
 			memLevel: 7,
 			level: 3
@@ -46,7 +45,6 @@ const wss = new WebSocketServer({
 		// Below options specified as default values.
 		concurrencyLimit: 10, // Limits zlib concurrency for perf.
 		threshold: 1024 // Size (in bytes) below which messages
-		// should not be compressed if context takeover is disabled.
 	}
 });
 

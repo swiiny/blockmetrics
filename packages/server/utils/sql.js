@@ -57,6 +57,8 @@ export const insertNewTodayBitcoinActiveAddress = `INSERT INTO today_active_addr
 // ==============================================================================================
 // ======= UPDATE ===============================================================================
 // ==============================================================================================
+// update score in blockchain
+export const updateScoreInBlockchain = `UPDATE blockchain SET score = ? WHERE id = ?`;
 // update token count in blockchain table by blockchain id
 export const updateTokenCountInBlockchain = `UPDATE blockchain SET token_count = ? WHERE id = ?`;
 // update total value blocked in blockchain table by blockchain id

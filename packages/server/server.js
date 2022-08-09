@@ -14,6 +14,7 @@ import {
 	resetTodayTransactionCount,
 	updateAddressCountInBlockchain,
 	updateBlockchainsRankingInBlockchainScore,
+	updateScoreInBlockchain,
 	updateTodayActiveAddressIsContract,
 	updateTodayAddressUsersAndContractCountInBlockchain,
 	updateTotalValueLockedInBlockchain,
@@ -238,7 +239,7 @@ async function updateBlockchainsRanking(con) {
 		});
 
 		// update blockchains ranking
-		const promises = blockchainsRows.map(
+		blockchainsRows.map(
 			async ({
 				id,
 				rank,
@@ -261,10 +262,9 @@ async function updateBlockchainsRanking(con) {
 					average_transaction_count_res,
 					id
 				]);
+				con.query(updateScoreInBlockchain, [score, id]);
 			}
 		);
-
-		await Promise.all(promises);
 	} catch (err) {
 		console.error('updateBlockchainsRanking', err);
 	}
@@ -763,7 +763,7 @@ async function startFetchData() {
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			//rule.hour = 2;
-			rule.minute = [0, 30];
+			rule.minute = [0, 30, 3];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {

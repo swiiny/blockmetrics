@@ -1,7 +1,7 @@
 interface IItemLink {
 	href: string;
 	ariaLabel?: string;
-	internal?: boolean;
+	isInternal?: boolean;
 }
 
 export type { IItemLink };
