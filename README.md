@@ -42,7 +42,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 - [ ] :bug: Fix Invalid date error on the chart tooltip
 - [ ] :bug: Fix bug page not loading when go to a page then come back quickly
-- [ ] :iphone: Comparison page responsive
+- [x] :iphone: Comparison page responsive
 - [ ] :iphone: Story page responsvive
 - [ ] :wheelchair: Add accessibility
 - [ ] :lipstick: Fix unselect/select capitalize issue and UI
