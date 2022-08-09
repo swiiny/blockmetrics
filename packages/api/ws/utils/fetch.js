@@ -5,7 +5,7 @@ export const getBlockchains = async (con, params) => {
 	try {
 		const { desc, sortBy, limit, offset } = params;
 
-		let query = `SELECT id, name, node_count, testnet_node_count, reliability, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count, today_user_count, today_contract_count, total_value_locked FROM blockchain`;
+		let query = `SELECT id, name, score, node_count, testnet_node_count, reliability, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count, today_user_count, today_contract_count, total_value_locked FROM blockchain`;
 
 		if (sortBy) {
 			query += ` ORDER BY ${sortBy} ${desc ? 'DESC' : 'ASC'}`;
@@ -29,7 +29,7 @@ export const getBlockchainCards = async (con, params) => {
 		const { desc, sortBy, limit, offset } = params;
 
 		let query = `
-		SELECT b.id, b.name, b.reliability, b.token_count, b.gas_price, b.blockchain_power_consumption, s.rank 
+		SELECT b.id, b.name, b.reliability, b.token_count, b.gas_price, b.blockchain_power_consumption, b.score, s.rank
 		FROM blockchain b 
 		INNER JOIN blockchain_score s
 		ON b.id = s.blockchain_id
@@ -47,7 +47,7 @@ export const getBlockchainCards = async (con, params) => {
 
 		return res;
 	} catch (err) {
-		console.error('getBlockchains', err);
+		console.error('getBlockchainCards', err);
 		return [];
 	}
 };

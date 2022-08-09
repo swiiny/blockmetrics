@@ -15,8 +15,8 @@ export async function fetchAndSendBlockchains(pool) {
 		channelClient = [...clients.keys()].filter((client) => client?.subscriptions?.includes(channel));
 
 		const res = await getBlockchains(con, {
-			sortBy: 'blockchain_power_consumption',
-			desc: false,
+			sortBy: 'score',
+			desc: true,
 			limit: 30
 		});
 
@@ -49,8 +49,8 @@ export async function fetchAndSendBlockchainsToClient(con, client) {
 	const channel = subscribeType.blockchains;
 
 	const res = await getBlockchains(con, {
-		sortBy: 'blockchain_power_consumption',
-		desc: false,
+		sortBy: 'score',
+		desc: true,
 		limit: 30
 	});
 

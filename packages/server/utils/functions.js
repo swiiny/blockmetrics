@@ -21,7 +21,7 @@ export function calculatePowerConsumptionPoS(singleNodePowerConsumption, nodeCou
 export const getRpcByChainId = (chainId) => {
 	try {
 		const chain = CHAINS_ARRAY.find((chain) => chain.id === chainId);
-		return chain.rpcWs;
+		return chain.rpc;
 	} catch {
 		return null;
 	}

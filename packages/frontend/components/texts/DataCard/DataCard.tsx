@@ -29,7 +29,7 @@ const DataCard: FC<IDataCard> = ({
 	fullValue,
 	...otherProps
 }) => {
-	const { isSmallerThanSm, isSmallerThanLg } = useResponsive();
+	const { isSmallerThanSm, isSmallerThanMd, isSmallerThanLg } = useResponsive();
 
 	const [timerValue, updateValue] = useReducer(() => {
 		const newVal = (Date.now() - value * 1000) / 1000;
@@ -80,6 +80,7 @@ const DataCard: FC<IDataCard> = ({
 			smPaddingLeft={ESize.s}
 			lgPaddingRight={ESize.xl}
 			smPaddingY={ESize.xs}
+			borderRadius={isSmallerThanMd ? ESize.s : ESize.m}
 			{...otherProps}
 		>
 			{helpText && (
