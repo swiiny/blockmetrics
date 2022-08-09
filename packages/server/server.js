@@ -634,8 +634,6 @@ async function checkIfAddressesAreContracts(con) {
 
 		const resolvedAccountRows = (await Promise.all(accountRowsPromises)).flat(1).filter((row) => row !== null);
 
-		console.log('resolvedAccountRows', resolvedAccountRows.length);
-
 		const txPromises = resolvedAccountRows.map(async ({ blockchain_id, address }) => {
 			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
 			//const provider = new ethers.providers.WebSocketProvider(getWsRpcByChainId(blockchain_id));
@@ -657,24 +655,15 @@ async function checkIfAddressesAreContracts(con) {
 			});
 		});
 
-		console.log('txPromises', txPromises.length);
-
 		const txResults = await Promise.all(txPromises);
-
-		console.log('txResults', txResults.length);
 
 		const updateDbPromises = txResults.map((txResult) =>
 			con.query(updateTodayActiveAddressIsContract, [txResult.is_contract, txResult.blockchain_id, txResult.address])
 		);
 
-		console.log('start update db');
-
 		await Promise.all(updateDbPromises);
 
-		console.log('end update db');
-
 		setTimeout(() => {
-			console.log('restart checkIfAddressesAreContracts');
 			checkIfAddressesAreContracts(con);
 		}, 750);
 	} catch (err) {

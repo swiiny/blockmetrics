@@ -1,5 +1,6 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { getEIconTypeFromValue, getESubscribeTypeFromValue } from '../../styles/theme/utils/functions';
+import { EIcon, ESubscribeType } from '../../styles/theme/utils/enum';
+import { getEnumFromValue } from '../../styles/theme/utils/functions';
 import { BLOCKCHAINS_ARRAY } from '../../utils/variables';
 
 export { SingleBlockchainPage as default } from '../../components/pages/blockchains/SingleBlockchainPage/SingleBlockchainPage';
@@ -22,8 +23,8 @@ export const getStaticProps: GetStaticProps = async (ctx) => {
 			props: {
 				chainId: id,
 				name: blockchain.name,
-				chainLogo: getEIconTypeFromValue(id),
-				blockchainChannel: getESubscribeTypeFromValue(id)
+				chainLogo: getEnumFromValue(id, EIcon),
+				blockchainChannel: getEnumFromValue(id, ESubscribeType)
 			},
 			revalidate: process.env.NODE_ENV === 'production' ? 30 * 60 : 10 // 1800
 		};
