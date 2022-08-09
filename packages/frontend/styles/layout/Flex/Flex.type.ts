@@ -1,8 +1,8 @@
 import React from 'react';
-import { IPadding } from '../../../types/layouts';
+import { IMargin, IPadding } from '../../../types/layouts';
 import { EFlex } from '../../theme/utils/enum';
 
-interface IFlex extends IPadding {
+interface IFlex extends IPadding, IMargin {
 	children: React.ReactNode | React.ReactNode[];
 	fullWidth?: boolean;
 	fullHeight?: boolean;

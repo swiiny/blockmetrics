@@ -43,14 +43,14 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 - [ ] :bug: Fix Invalid date error on the chart tooltip
 - [ ] :bug: Fix bug page not loading when go to a page then come back quickly
 - [x] :iphone: Comparison page responsive
-- [ ] :iphone: Story page responsvive
+- [x] :iphone: Story page responsvive
 - [ ] :wheelchair: Add accessibility
 - [ ] :lipstick: Fix unselect/select capitalize issue and UI
 - [ ] :children_crossing: Explain engineering notation
-- [ ] :children_crossing: Add story page on the 404 page
+- [x] :children_crossing: Add story page on the 404 page
 - [ ] :children_crossing: Comparison page display ranking
 - [ ] :children_crossing: Show each monday on the abscissa the date of the week
-- [ ] :children_crossing: Check to restructure blockchain cards to highlight more the ranking
+- [x] :children_crossing: Check to restructure blockchain cards to highlight more the ranking
 - [ ] :children_crossing: Explain why the weight of each property from ranking system
 - [ ] :children_crossing: check if trendline can be displayed on bar chart
 

@@ -1,4 +1,5 @@
 import React, { FC, useMemo } from 'react';
+import useResponsive from '../../../../hooks/useResponsive';
 import Flex from '../../../../styles/layout/Flex';
 import Spacing from '../../../../styles/layout/Spacing';
 import BMCardContainer from '../../../../styles/theme/components/BMCardContainer';
@@ -7,7 +8,7 @@ import BMSkeleton from '../../../../styles/theme/components/BMSkeleton';
 import BMText from '../../../../styles/theme/components/BMText';
 import { EFlex, EIcon, ESize } from '../../../../styles/theme/utils/enum';
 import ItemButton from '../../../utils/ItemButton';
-import { StyledListItem, StyledSelectedCircle, StyledSelectSquare } from './CompareSelector.styles';
+import { StyledListItem, StyledSelectedCircle } from './CompareSelector.styles';
 import { ICompareSelector } from './CompareSelector.type';
 
 const CompareSelector: FC<ICompareSelector> = ({
@@ -16,6 +17,8 @@ const CompareSelector: FC<ICompareSelector> = ({
 	selectedBlockchainIds,
 	loading = false
 }) => {
+	const { isSmallerThanMd } = useResponsive();
+
 	const SelectorButton = useMemo(() => {
 		const isListEmpty = selectedBlockchainIds.length === 0;
 
@@ -44,7 +47,7 @@ const CompareSelector: FC<ICompareSelector> = ({
 			<Flex fullWidth vertical={EFlex.center} horizontal={EFlex.between}>
 				<BMText size={ESize.xl}>Select the blockchains you want to compare</BMText>
 
-				{loading ? <BMSkeleton width={ESize['8xl']} height={ESize.xl} /> : SelectorButton}
+				{!isSmallerThanMd ? loading ? <BMSkeleton width={ESize['8xl']} height={ESize.xl} /> : SelectorButton : <></>}
 			</Flex>
 
 			<Spacing size={ESize.xs} />
@@ -97,6 +100,10 @@ const CompareSelector: FC<ICompareSelector> = ({
 					{emptyItems}
 				</Flex>
 			</BMCardContainer>
+
+			<Flex fullWidth vertical={EFlex.center} horizontal={EFlex.center} marginTop={ESize.s}>
+				{isSmallerThanMd ? loading ? <BMSkeleton width={ESize['8xl']} height={ESize.xl} /> : SelectorButton : <></>}
+			</Flex>
 		</>
 	);
 };

@@ -2,16 +2,6 @@ import styled, { css } from 'styled-components';
 import { EMediaQuery } from '../../../../styles/theme/utils/enum';
 import { addTransition, mq } from '../../../../styles/theme/utils/functions';
 
-export const StyledSelectSquare = styled.div`
-	width: 20px;
-	height: 20px;
-
-	background-color: ${(p) => p.theme.colors.darkGrey};
-
-	border-radius: 5px;
-	border: solid 1px ${(p) => p.theme.colors.primary};
-`;
-
 export const StyledSelectedCircle = styled.div<{ isSelected?: boolean }>`
 	${(p) => css`
 		position: absolute;

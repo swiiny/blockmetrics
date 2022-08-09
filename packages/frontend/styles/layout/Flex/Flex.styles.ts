@@ -1,18 +1,18 @@
 import styled, { css } from 'styled-components';
 import { EMediaQuery } from '../../theme/utils/enum';
-import { addPaddingStyles, mq } from '../../theme/utils/functions';
+import { addMarginStyles, addPaddingStyles, mq } from '../../theme/utils/functions';
 import { IFlex } from './Flex.type';
 
 export const StyledFlex = styled.div<IFlex>`
-	position: relative;
-	display: flex;
-
-	${(p) => (p.wrapItems ? 'flex-wrap: wrap;' : 'flex-wrap: nowrap;')}
-
-	${(p) => addPaddingStyles(p)}
-
 	${(p) => {
 		return css`
+			position: relative;
+			display: flex;
+			${p.wrapItems ? 'flex-wrap: wrap;' : 'flex-wrap: nowrap;'}
+
+			${addPaddingStyles(p)}
+			${addMarginStyles(p)}
+
 			${p.direction ? `flex-direction: ${p.direction};` : ''}
 			${p.horizontal ? `justify-content: ${p.horizontal};` : ''}
 			${p.vertical ? `align-items: ${p.vertical};` : ''}
