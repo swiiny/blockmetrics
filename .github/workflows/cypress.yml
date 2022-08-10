@@ -1,0 +1,41 @@
+name: Run Tests
+
+on:
+  push:
+    branches: [develop]
+
+jobs:
+  cypress-run:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Create .env file
+        working-directory: ./packages/frontend
+        run: |
+          touch .env
+          echo RPC_ETHEREUM=${{ secrets.RPC_ETHEREUM }} >> .env
+          echo RPC_POLYGON=${{ secrets.RPC_POLYGON }} >> .env
+          echo RPC_AVALANCHE=${{ secrets.RPC_AVALANCHE }} >> .env
+          echo RPC_BSC=${{ secrets.RPC_BSC }} >> .env
+          echo RPC_FANTOM=${{ secrets.RPC_FANTOM }} >> .env
+          echo RPC_ETHEREUM_WS=${{ secrets.RPC_ETHEREUM_WS }} >> .env
+          echo RPC_POLYGON_WS=${{ secrets.RPC_POLYGON_WS }} >> .env
+          echo RPC_AVALANCHE_WS=${{ secrets.RPC_AVALANCHE_WS }} >> .env
+          echo RPC_BSC_WS=${{ secrets.RPC_BSC_WS }} >> .env
+          echo RPC_FANTOM_WS=${{ secrets.RPC_FANTOM_WS }} >> .env
+          echo DB_HOST=${{ secrets.DB_HOST }} >> .env
+          echo DB_USER=${{ secrets.DB_USER }} >> .env
+          echo DB_PASSWORD=${{ secrets.DB_PASSWORD }} >> .env
+          echo DB_NAME=${{ secrets.DB_NAME }} >> .env
+          echo DB_PORT=${{ secrets.DB_PORT }} >> .env
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Cypress run
+        uses: cypress-io/github-action@v4
+        with:
+          build: npm run build
+          start: npm start
