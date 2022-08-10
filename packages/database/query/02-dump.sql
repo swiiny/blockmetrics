@@ -43,6 +43,8 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`blockchain` (
   `today_contract_count` INT UNSIGNED NOT NULL DEFAULT 0,
   `address_count` BIGINT NOT NULL DEFAULT 0,
   `today_address_count` INT NOT NULL DEFAULT 0,
+  `today_user_count` INT NOT NULL DEFAULT 0,
+  `today_contract_count` INT NOT NULL DEFAULT 0,
   `gas_price` BIGINT NULL DEFAULT NULL,
   `genesis_block` DATETIME NULL DEFAULT NULL,
   `created_at` DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
