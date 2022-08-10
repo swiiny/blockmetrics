@@ -41,7 +41,6 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 - [ ] :wheelchair: Add accessibility
 - [ ] :children_crossing: Explain engineering notation
-- [ ] :children_crossing: Show each monday on the abscissa the date of the week
 - [ ] :children_crossing: Explain why the weight of each property from ranking system
 - [ ] :children_crossing: check if trendline can be displayed on bar chart
 
