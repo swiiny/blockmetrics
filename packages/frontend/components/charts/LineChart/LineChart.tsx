@@ -358,7 +358,27 @@ const LineChart: FC<IBarLineChart> = ({
 			scales: {
 				// @ts-ignore
 				x: {
-					display: false
+					display: !deactivateLegend, // check if we need to display the y axis
+					grid: {
+						display: false
+					},
+					ticks: {
+						autoSkip: true,
+						maxRotation: 0,
+						maxTicksLimit: 4,
+
+						callback(value: any) {
+							const dateString = xData[value];
+
+							const splitDateAndHour = dateString.split(' ');
+							const splitDate = splitDateAndHour[0].split('/');
+
+							const day = splitDate[0];
+							const month = splitDate[1];
+
+							return `${day}.${month}`;
+						}
+					}
 				},
 				y: {
 					display: !deactivateLegend, // check if we need to display the y axis
