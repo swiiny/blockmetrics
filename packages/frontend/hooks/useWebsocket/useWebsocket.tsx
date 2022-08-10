@@ -62,7 +62,11 @@ const useWebsocket = (): IUseWebsocket => {
 
 			if (res?.data === 'ping') {
 				// used to check if user is connected
-				ws?.send('pong');
+				try {
+					ws?.send('pong');
+				} catch {
+					// do nothing
+				}
 			} else {
 				setMessage(res);
 			}
