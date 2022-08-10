@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useCallback, useEffect, useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { ESubscribeType } from '../../styles/theme/utils/enum';
@@ -24,7 +25,8 @@ const useWebsocket = (): IUseWebsocket => {
 			subscribeTo: () => {},
 			unsubscribeFrom: () => {},
 			wsConnected: false,
-			loading: false
+			loading: false,
+			initWebsocket: () => {}
 		};
 	}
 
@@ -61,7 +63,11 @@ const useWebsocket = (): IUseWebsocket => {
 
 			if (res?.data === 'ping') {
 				// used to check if user is connected
-				ws?.send('pong');
+				try {
+					ws?.send('pong');
+				} catch {
+					// do nothing
+				}
 			} else {
 				setMessage(res);
 			}
@@ -105,8 +111,11 @@ const useWebsocket = (): IUseWebsocket => {
 	}, []);
 
 	useEffect(() => {
-		initWebsocket();
-	}, [initWebsocket]);
+		// init websocket connection and prevent ws from disconnecting
+		if (!wsConnected) {
+			initWebsocket();
+		}
+	}, [initWebsocket, wsConnected]);
 
 	useEffect(() => {
 		return () => {
@@ -121,7 +130,8 @@ const useWebsocket = (): IUseWebsocket => {
 		unsubscribeFrom,
 		message,
 		wsConnected,
-		loading
+		loading,
+		initWebsocket
 	};
 };
 
