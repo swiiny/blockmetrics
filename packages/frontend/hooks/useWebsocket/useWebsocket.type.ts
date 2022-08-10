@@ -8,6 +8,7 @@ interface IMessage {
 interface IUseWebsocket {
 	subscribeTo: (channel: ESubscribeType) => void;
 	unsubscribeFrom: (channel: ESubscribeType) => void;
+	initWebsocket: () => void;
 	message?: IMessage;
 	loading: boolean;
 	wsConnected: boolean;

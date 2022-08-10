@@ -410,7 +410,7 @@ const LineChart: FC<IBarLineChart> = ({
 		};
 
 		return data;
-	}, [deactivateLegend, maxValue, minValue, chartId, theme.colors, chartColor, unit, decimals]);
+	}, [deactivateLegend, maxValue, minValue, chartId, theme.colors, chartColor, xData, unit, decimals]);
 
 	const chartReady = useMemo(() => {
 		if (minValue && maxValue && chartOptions) {

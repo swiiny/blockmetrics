@@ -25,7 +25,8 @@ const useWebsocket = (): IUseWebsocket => {
 			subscribeTo: () => {},
 			unsubscribeFrom: () => {},
 			wsConnected: false,
-			loading: false
+			loading: false,
+			initWebsocket: () => {}
 		};
 	}
 
@@ -110,8 +111,11 @@ const useWebsocket = (): IUseWebsocket => {
 	}, []);
 
 	useEffect(() => {
-		initWebsocket();
-	}, [initWebsocket]);
+		// init websocket connection and prevent ws from disconnecting
+		if (!wsConnected) {
+			initWebsocket();
+		}
+	}, [initWebsocket, wsConnected]);
 
 	useEffect(() => {
 		return () => {
@@ -126,7 +130,8 @@ const useWebsocket = (): IUseWebsocket => {
 		unsubscribeFrom,
 		message,
 		wsConnected,
-		loading
+		loading,
+		initWebsocket
 	};
 };
 

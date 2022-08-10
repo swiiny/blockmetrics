@@ -367,7 +367,7 @@ const BarChart: FC<IBarLineChart> = ({
 		};
 
 		return data;
-	}, [deactivateLegend, maxValue, minValue, chartId, theme.colors, unit, decimals, chartColor]);
+	}, [deactivateLegend, maxValue, minValue, chartId, theme.colors, chartColor, xData, unit, decimals]);
 
 	const chartReady = useMemo(() => {
 		if (minValue && maxValue && chartOptions) {
