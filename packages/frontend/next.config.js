@@ -12,8 +12,7 @@ const nextConfig = {
 	compiler: {
 		// remove .babelrc to test these changes
 		styledComponents: true, // ssr and displayName are configured by default
-		removeConsole: process.env.NODE_ENV === 'production', // remove all console.*
-		swcMinify: true // minify swc (fastest)
+		removeConsole: process.env.NODE_ENV === 'production' // remove all console.*
 	},
 	eslint: {
 		// Warning: Dangerously allow production builds to successfully complete even if

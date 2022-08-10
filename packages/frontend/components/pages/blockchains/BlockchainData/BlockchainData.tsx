@@ -83,15 +83,17 @@ const BlockchainData: FC<IBlockchainData> = ({ chainId }) => {
 			helpText: 'The number of new addresses created. An address is a unique identifier for a user or a smart contract.'
 		});
 
-		result.push({
-			label: 'Average block time',
-			chartType: EChartType.line,
-			decimals: 2,
-			unit: 's',
-			dailyType: EDailyData.averageBlocktime,
-			chainId: chainId,
-			helpText: 'The average block time is the average time it takes to mine a new block.'
-		});
+		if (chainId !== BLOCKCHAINS.bitcoin.id) {
+			result.push({
+				label: 'Average block time',
+				chartType: EChartType.line,
+				decimals: 2,
+				unit: 's',
+				dailyType: EDailyData.averageBlocktime,
+				chainId: chainId,
+				helpText: 'The average block time is the average time it takes to mine a new block.'
+			});
+		}
 
 		result.push({
 			label: 'Power consumption',
