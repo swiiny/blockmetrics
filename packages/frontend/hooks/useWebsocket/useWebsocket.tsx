@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import { useCallback, useEffect, useState } from 'react';
 import { w3cwebsocket as W3CWebSocket } from 'websocket';
 import { ESubscribeType } from '../../styles/theme/utils/enum';
