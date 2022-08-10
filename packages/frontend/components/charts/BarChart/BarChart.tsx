@@ -119,7 +119,7 @@ const externalTooltipHandler =
 				const minute = splitHour[1];
 				const second = splitHour[2];
  */
-				const newDate = new Date(day, month, year);
+				const newDate = new Date(year, month, day);
 
 				date = newDate.toLocaleString('en', {
 					month: 'short',
