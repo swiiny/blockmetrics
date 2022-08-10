@@ -286,7 +286,7 @@ const BarChart: FC<IBarLineChart> = ({
 
 		return {
 			// type: 'bar',
-			labels: xData,
+			labels: xData || [],
 			datasets: [
 				{
 					data: yData,
