@@ -121,7 +121,7 @@ const externalTooltipHandler =
 
 				const newDate = new Date(year, month, day, hour, minute, second);
 
-				date = newDate.toLocaleDateString('en-US', {
+				date = newDate.toLocaleDateString('en', {
 					month: 'long',
 					day: 'numeric',
 					year: 'numeric'
