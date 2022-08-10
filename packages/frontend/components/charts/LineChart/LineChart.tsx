@@ -123,26 +123,26 @@ const externalTooltipHandler =
 			try {
 				const splitDateAndHour = date.split(' ');
 				const splitDate = splitDateAndHour[0].split('/');
-
-				const splitHour = splitDateAndHour[1].split(':');
+				//const splitHour = splitDateAndHour[1].split(':');
 
 				const day = splitDate[0];
 				const month = splitDate[1] - 1;
 				const year = splitDate[2];
-
+				/* 
 				const hour = splitHour[0];
 				const minute = splitHour[1];
 				const second = splitHour[2];
+ */
+				const newDate = new Date(year, month, day);
 
-				const newDate = new Date(year, month, day, hour, minute, second);
-
-				date = newDate.toLocaleDateString('en', {
-					month: 'long',
+				date = newDate.toLocaleString('en', {
+					month: 'short',
 					day: 'numeric',
 					year: 'numeric'
 				});
 			} catch (err) {
 				// fallback
+				console.error('error date ==>', err);
 			}
 
 			const dateText = document.createElement('p');
