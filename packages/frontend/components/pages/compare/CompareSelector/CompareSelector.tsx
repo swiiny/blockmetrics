@@ -35,7 +35,7 @@ const CompareSelector: FC<ICompareSelector> = ({
 	}, [onSelectBlockchain, selectedBlockchainIds.length]);
 
 	const emptyItems = useMemo(() => {
-		return Array.from({ length: 2 }).map((value) => (
+		return [0, 1].map((value) => (
 			<StyledListItem key={'empty-bc-item-' + value} isEmpty>
 				<BMIcon type={EIcon.ethereum} size={ESize.s} backgroundVisible backgroundSize={ESize.xs} />
 			</StyledListItem>

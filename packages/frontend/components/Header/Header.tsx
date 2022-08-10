@@ -54,14 +54,12 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon, subti
 				{subtitle && (
 					<>
 						<Spacing size={ESize.l} smSize={ESize['2xs']} />
-
 						<BMText
 							as='h2'
 							weight={ETextWeight.light}
 							size={ESize.m}
 							textColor={ETextColor.default}
 							textAlign={isSmallerThanSm ? ETextAlign.left : ETextAlign.center}
-							loading={subtitleLoading}
 							skHeight={ESize.s}
 						>
 							{subtitle}
@@ -70,19 +68,12 @@ const Header: React.FC<IHeader> = ({ title, titleSemiBold, subtitle, icon, subti
 				)}
 
 				{subtitleLoading && (
-					<>
+					<Flex direction={EFlex.column} fullWidth horizontal={EFlex.center} vertical={EFlex.center}>
+						<Spacing size={ESize.m} />
+						<BMText as='h2' loading={true} skHeight={ESize.s} skWidth={'40%'}>{``}</BMText>
 						<Spacing size={ESize['4xs']} />
-						<BMText
-							as='h2'
-							weight={ETextWeight.light}
-							size={ESize.m}
-							textColor={ETextColor.default}
-							textAlign={isSmallerThanSm ? ETextAlign.left : ETextAlign.center}
-							loading={subtitleLoading}
-							skHeight={ESize.s}
-							skWidth={'40%'}
-						>{``}</BMText>
-					</>
+						<BMText as='h2' loading={true} skHeight={ESize.s} skWidth={'30%'}>{``}</BMText>
+					</Flex>
 				)}
 			</Flex>
 		</StyledHeader>
