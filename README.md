@@ -36,15 +36,11 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 ### Server
 
 - [ ] :monocle_face: Fetch and put in blockchain table the testnet node count for PoS blockchains
-- [ ] :adhesive_bandage: prevent bitcoin webscoket from disconnecting
 
 ### Frontend
 
-- [ ] :bug: Fix Invalid date error on the chart tooltip
-- [ ] :bug: Fix bug page not loading when go to a page then come back quickly
 - [ ] :wheelchair: Add accessibility
 - [ ] :children_crossing: Explain engineering notation
-- [ ] :children_crossing: Show each monday on the abscissa the date of the week
 - [ ] :children_crossing: Explain why the weight of each property from ranking system
 - [ ] :children_crossing: check if trendline can be displayed on bar chart
 
