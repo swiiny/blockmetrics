@@ -14,7 +14,7 @@ FROM node:16.13.1-alpine as builder
 WORKDIR /app
 # Copying source files
 COPY --from=deps /app/node_modules ./node_modules
-COPY . .
+COPY ./packages/frontend .
 
 ENV NODE_ENV production
 
