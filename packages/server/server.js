@@ -704,7 +704,7 @@ async function startFetchData() {
 
 			console.log('start checkIfAddressesAreContracts');
 			// fetch new used addresses and check if they are contracts or not
-			checkIfAddressesAreContracts(con);
+			// checkIfAddressesAreContracts(con);
 
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
