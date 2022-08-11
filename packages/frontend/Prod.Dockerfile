@@ -6,7 +6,7 @@ RUN apk add --update npm git
 WORKDIR /app
 
 # Installing dependencies
-COPY ./package.json /app
+COPY ./packages/frontend/package.json /app
 
 RUN npm install
 
