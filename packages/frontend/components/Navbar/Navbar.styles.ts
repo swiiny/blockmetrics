@@ -86,6 +86,12 @@ export const StyledNavbarItem = styled.li`
 	)}
 `;
 
+export const StyledLogoContainer = styled.div`
+	position: relative;
+	width: 50px;
+	height: 50px;
+`;
+
 export const StyledBurgerButton = styled.button`
 	position: relative;
 
