@@ -36,21 +36,11 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 ### Server
 
 - [ ] :monocle_face: Fetch and put in blockchain table the testnet node count for PoS blockchains
-- [ ] :adhesive_bandage: prevent bitcoin webscoket from disconnecting
 
 ### Frontend
 
-- [ ] :bug: Fix Invalid date error on the chart tooltip
-- [ ] :bug: Fix bug page not loading when go to a page then come back quickly
-- [x] :iphone: Comparison page responsive
-- [x] :iphone: Story page responsvive
 - [ ] :wheelchair: Add accessibility
-- [x] :lipstick: Fix unselect/select capitalize issue and UI
 - [ ] :children_crossing: Explain engineering notation
-- [x] :children_crossing: Add story page on the 404 page
-- [x] :children_crossing: Comparison page display ranking
-- [ ] :children_crossing: Show each monday on the abscissa the date of the week
-- [x] :children_crossing: Check to restructure blockchain cards to highlight more the ranking
 - [ ] :children_crossing: Explain why the weight of each property from ranking system
 - [ ] :children_crossing: check if trendline can be displayed on bar chart
 

@@ -1,79 +1,63 @@
 version: '3.0'
 
 services:
-    frontend:
-        container_name: frontend
-        ports:
-            - $FRONTEND_PORT:$FRONTEND_PORT
-        build:
-            context: ./frontend
-            dockerfile: Dockerfile
-        env_file:
-            - .env
-        volumes:
-            - ./frontend:/app
-            - /app/node_modules
-            - /app/.next
-        command: npm run dev
-        restart: unless-stopped
+  db:
+    container_name: db
+    platform: linux/x86_64
+    image: mysql:8.0
+    command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --binlog-expire-logs-seconds=14400
+    environment:
+      MYSQL_ROOT_PASSWORD: $DB_PASSWORD
+    ports:
+      - $DB_PORT:$DB_PORT
+    volumes:
+      - blockmetrics-db:/var/lib/mysql
+      - ./database/query:/docker-entrypoint-initdb.d
 
-    db:
-        container_name: db
-        platform: linux/x86_64
-        image: mysql:8.0
-        command: --default-authentication-plugin=mysql_native_password --character-set-server=utf8mb4 --collation-server=utf8mb4_unicode_ci --binlog-expire-logs-seconds=14400
-        environment:
-            MYSQL_ROOT_PASSWORD: $DB_PASSWORD
-        ports:
-            - $DB_PORT:$DB_PORT
-        volumes:
-            - blockmetrics-db:/var/lib/mysql
-            - ./database/query:/docker-entrypoint-initdb.d
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    volumes:
+      - ./server:/app
+      - /app/node_modules
+    ports:
+      - $SERVER_PORT:$SERVER_PORT
 
-    server:
-        container_name: server
-        build:
-            context: ./server
-            dockerfile: Dockerfile
-        env_file:
-            - .env
-        volumes:
-            - ./server:/app
-            - /app/node_modules
-        ports:
-            - $SERVER_PORT:$SERVER_PORT
+  api:
+    container_name: api
+    build:
+      context: ./api/rest
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      PORT: $API_PORT
+    ports:
+      - $API_PORT:$API_PORT
+    restart: on-failure:10
+    volumes:
+      - ./api/rest:/app
+      - /app/node_modules
 
-    api:
-        container_name: api
-        build:
-            context: ./api/rest
-            dockerfile: Dockerfile
-        env_file:
-            - .env
-        environment:
-            PORT: $API_PORT
-        ports:
-            - $API_PORT:$API_PORT
-        restart: on-failure:10
-        volumes:
-            - ./api/rest:/app
-            - /app/node_modules
-
-    wsapi:
-        container_name: wsapi
-        build:
-            context: ./api/ws
-            dockerfile: Dockerfile
-        env_file:
-            - .env
-        environment:
-            PORT: $WS_PORT
-        ports:
-            - $WS_PORT:$WS_PORT
-        restart: on-failure:10
-        volumes:
-            - ./api/ws:/app
-            - /app/node_modules
+  wsapi:
+    container_name: wsapi
+    build:
+      context: ./api/ws
+      dockerfile: Dockerfile
+    env_file:
+      - .env
+    environment:
+      PORT: $WS_PORT
+    ports:
+      - $WS_PORT:$WS_PORT
+    restart: on-failure:10
+    volumes:
+      - ./api/ws:/app
+      - /app/node_modules
 
 volumes:
-    blockmetrics-db:
+  blockmetrics-db:

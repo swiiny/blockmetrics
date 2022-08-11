@@ -1,5 +1,5 @@
-import React, { FC, useCallback, useEffect, useMemo, useReducer, useState } from 'react';
-import { Chart, Filler, CategoryScale, LinearScale, BarElement, Tooltip } from 'chart.js';
+import React, { FC, useCallback, useEffect, useMemo, useState } from 'react';
+import { Chart, Filler, CategoryScale, LinearScale, BarElement, Tooltip, TimeScale } from 'chart.js';
 import { Bar } from 'react-chartjs-2';
 import { StyledChartContainer } from './BarChart.styles';
 import { IBarLineChart, IBarLineChartData } from '../../../types/charts';
@@ -109,25 +109,26 @@ const externalTooltipHandler =
 			try {
 				const splitDateAndHour = date.split(' ');
 				const splitDate = splitDateAndHour[0].split('/');
-				const splitHour = splitDateAndHour[1].split(':');
+				//const splitHour = splitDateAndHour[1].split(':');
 
 				const day = splitDate[0];
 				const month = splitDate[1] - 1;
 				const year = splitDate[2];
-
+				/* 
 				const hour = splitHour[0];
 				const minute = splitHour[1];
 				const second = splitHour[2];
+ */
+				const newDate = new Date(year, month, day);
 
-				const newDate = new Date(year, month, day, hour, minute, second);
-
-				date = newDate.toLocaleDateString('en-US', {
-					month: 'long',
+				date = newDate.toLocaleString('en', {
+					month: 'short',
 					day: 'numeric',
 					year: 'numeric'
 				});
 			} catch (err) {
 				// fallback
+				console.error('error date ==>', err);
 			}
 
 			const dateText = document.createElement('p');
@@ -163,7 +164,7 @@ const externalTooltipHandler =
 	};
 
 // required to get the gradient in the charts
-Chart.register(Filler, CategoryScale, LinearScale, BarElement, Tooltip);
+Chart.register(Filler, CategoryScale, LinearScale, BarElement, Tooltip, TimeScale);
 
 const BarChart: FC<IBarLineChart> = ({
 	dailyType,
@@ -286,7 +287,7 @@ const BarChart: FC<IBarLineChart> = ({
 
 		return {
 			// type: 'bar',
-			labels: xData,
+			labels: xData || [],
 			datasets: [
 				{
 					data: yData,
@@ -316,7 +317,26 @@ const BarChart: FC<IBarLineChart> = ({
 			scales: {
 				// @ts-ignore
 				x: {
-					display: false
+					display: !deactivateLegend, // check if we need to display the y axis
+					grid: {
+						display: false
+					},
+					ticks: {
+						autoSkip: true,
+						maxRotation: 0,
+						maxTicksLimit: 4,
+						callback(value: any) {
+							const dateString = xData[value];
+
+							const splitDateAndHour = dateString.split(' ');
+							const splitDate = splitDateAndHour[0].split('/');
+
+							const day = splitDate[0];
+							const month = splitDate[1];
+
+							return `${day}.${month}`;
+						}
+					}
 				},
 				y: {
 					display: !deactivateLegend, // check if we need to display the y axis
@@ -327,7 +347,6 @@ const BarChart: FC<IBarLineChart> = ({
 					},
 					ticks: {
 						stepSize: (maxValue - minValue) / 2,
-						//stepSize: 1,
 						callback(value: number) {
 							const ingValue = getEngNotation(value, unit, decimals);
 							return ingValue?.toString || '';
@@ -348,7 +367,7 @@ const BarChart: FC<IBarLineChart> = ({
 		};
 
 		return data;
-	}, [deactivateLegend, maxValue, minValue, chartId, theme.colors, unit, decimals, chartColor]);
+	}, [deactivateLegend, maxValue, minValue, chartId, theme.colors, chartColor, xData, unit, decimals]);
 
 	const chartReady = useMemo(() => {
 		if (minValue && maxValue && chartOptions) {

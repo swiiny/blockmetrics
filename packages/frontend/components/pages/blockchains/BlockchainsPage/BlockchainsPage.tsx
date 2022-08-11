@@ -15,7 +15,7 @@ const HeaderData = {
 };
 
 const BlockchainsPage: NextPage = () => {
-	const { subscribeTo, message } = useWebsocket();
+	const { subscribeTo, message, wsConnected } = useWebsocket();
 	const [blockchains, setBlockchains] = useState([]);
 
 	useEffect(() => {
@@ -25,8 +25,10 @@ const BlockchainsPage: NextPage = () => {
 	}, [message]);
 
 	useEffect(() => {
-		subscribeTo(ESubscribeType.blockchainCards);
-	}, [subscribeTo]);
+		if (wsConnected) {
+			subscribeTo(ESubscribeType.blockchainCards);
+		}
+	}, [wsConnected, subscribeTo]);
 
 	return (
 		<>

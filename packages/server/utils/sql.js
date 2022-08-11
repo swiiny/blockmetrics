@@ -29,7 +29,7 @@ GROUP BY blockchain_id
 
 // get Today Active Address when is_contract is null
 export const getTodayActiveAddressesWhenIsContractIsNull =
-	'SELECT address, blockchain_id, is_contract FROM today_active_address WHERE is_contract IS NULL AND blockchain_id = ? LIMIT ?';
+	'SELECT address, blockchain_id FROM today_active_address WHERE is_contract IS NULL AND blockchain_id = ? AND day = CURDATE() LIMIT ?';
 
 // ==============================================================================================
 // ======= INSERT ===============================================================================

@@ -1,7 +1,12 @@
 'use strict';
 
 import { getNodeCountForAllBlockchains } from './utils/fetch/posNodeCount.js';
-import { calculatePowerConsumptionPoS, getRankFromScore, getRpcByChainId } from './utils/functions.js';
+import {
+	calculatePowerConsumptionPoS,
+	getRankFromScore,
+	getRpcByChainId,
+	getWsRpcByChainId
+} from './utils/functions.js';
 import { createDbPool } from './utils/pool/pool.js';
 import {
 	getPowerConsumptionDataForPoS,
@@ -21,7 +26,7 @@ import {
 	updateTxCountInBlockchain
 } from './utils/sql.js';
 import { updatePowerConsumptionInDb } from './utils/update/powerConsumption.js';
-import { CHAINS, CHAINS_ARRAY } from './variables.js';
+import { CHAINS, CHAINS_ARRAY, CHAINS_RPC } from './variables.js';
 import schedule from 'node-schedule';
 import {
 	updateDbDailyActiveUsers,
@@ -620,11 +625,16 @@ async function initWebsocketProvider(chain, con) {
 // fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
 async function checkIfAddressesAreContracts(con) {
 	try {
+		const addressesToFetchByBlockchain = 10;
+
 		const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
 
 		const accountRowsPromises = chainsId.map(async (chainId) => {
 			if (chainId !== CHAINS.bitcoin.id) {
-				const [accountRows] = await con.query(getTodayActiveAddressesWhenIsContractIsNull, [chainId, 10]);
+				const [accountRows] = await con.query(getTodayActiveAddressesWhenIsContractIsNull, [
+					chainId,
+					addressesToFetchByBlockchain
+				]);
 
 				return accountRows;
 			} else {
@@ -634,34 +644,30 @@ async function checkIfAddressesAreContracts(con) {
 
 		const resolvedAccountRows = (await Promise.all(accountRowsPromises)).flat(1).filter((row) => row !== null);
 
-		const txPromises = resolvedAccountRows.map(async ({ blockchain_id, address }) => {
-			const provider = new ethers.providers.JsonRpcProvider(getRpcByChainId(blockchain_id));
-			//const provider = new ethers.providers.WebSocketProvider(getWsRpcByChainId(blockchain_id));
+		// separate addresses by chain
+		const addressesByChain = {};
+		resolvedAccountRows.forEach((row) => {
+			if (!addressesByChain[row.blockchain_id]) {
+				addressesByChain[row.blockchain_id] = [];
+			}
 
-			return provider.getCode(address).then((res) => {
-				if (res === '0x') {
-					return {
-						blockchain_id: blockchain_id,
-						address: address,
-						is_contract: 0
-					};
-				} else {
-					return {
-						blockchain_id: blockchain_id,
-						address: address,
-						is_contract: 1
-					};
-				}
-			});
+			addressesByChain[row.blockchain_id].push(row.address);
 		});
 
-		const txResults = await Promise.all(txPromises);
+		Object.keys(addressesByChain).forEach(async (chainId) => {
+			// const provider = new ethers.providers.JsonRpcProvider(CHAINS_RPC[chainId].rpc);
+			const provider = new ethers.providers.WebSocketProvider(CHAINS_RPC[chainId].rpcWs);
 
-		const updateDbPromises = txResults.map((txResult) =>
-			con.query(updateTodayActiveAddressIsContract, [txResult.is_contract, txResult.blockchain_id, txResult.address])
-		);
+			addressesByChain[chainId].map(async (address, i) => {
+				const res = await provider.getCode(address);
+				const isContract = res === '0x' ? 0 : 1;
 
-		await Promise.all(updateDbPromises);
+				await new Promise((resolve) => setTimeout(resolve, i * (1000 / addressesToFetchByBlockchain)));
+
+				//console.log('add new contract info for address', address, isContract, chainId);
+				con.query(updateTodayActiveAddressIsContract, [isContract, chainId, address]);
+			});
+		});
 
 		setTimeout(() => {
 			checkIfAddressesAreContracts(con);

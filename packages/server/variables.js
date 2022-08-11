@@ -61,3 +61,12 @@ export const CHAINS = {
 };
 
 export const CHAINS_ARRAY = Object.values(CHAINS);
+
+// create an object with the chain id as the key and the rpc as the value
+export const CHAINS_RPC = CHAINS_ARRAY.reduce((acc, chain) => {
+	acc[chain.id] = {
+		rpc: chain.rpc,
+		rpcWs: chain.rpcWs
+	};
+	return acc;
+}, {});
