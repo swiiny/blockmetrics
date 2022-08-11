@@ -646,7 +646,7 @@ async function checkIfAddressesAreContracts(con) {
 
 		// separate addresses by chain
 		const addressesByChain = {};
-		resolvedAccountRows.forEach((row) => {
+		resolvedAccountRows?.forEach((row) => {
 			if (!addressesByChain[row.blockchain_id]) {
 				addressesByChain[row.blockchain_id] = [];
 			}
@@ -654,30 +654,27 @@ async function checkIfAddressesAreContracts(con) {
 			addressesByChain[row.blockchain_id].push(row.address);
 		});
 
-		Object.keys(addressesByChain).forEach(async (chainId) => {
+		const promises = Object.keys(addressesByChain)?.map(async (chainId) => {
 			// const provider = new ethers.providers.JsonRpcProvider(CHAINS_RPC[chainId].rpc);
 			const provider = new ethers.providers.WebSocketProvider(CHAINS_RPC[chainId].rpcWs);
 
-			addressesByChain[chainId].map(async (address, i) => {
+			return addressesByChain[chainId]?.map(async (address, i) => {
 				const res = await provider.getCode(address);
 				const isContract = res === '0x' ? 0 : 1;
 
 				await new Promise((resolve) => setTimeout(resolve, i * (1000 / addressesToFetchByBlockchain)));
 
 				//console.log('add new contract info for address', address, isContract, chainId);
-				con.query(updateTodayActiveAddressIsContract, [isContract, chainId, address]);
+				return con.query(updateTodayActiveAddressIsContract, [isContract, chainId, address]);
 			});
 		});
 
-		setTimeout(() => {
-			checkIfAddressesAreContracts(con);
-		}, 1000);
+		//await Promise.all(promises);
+
+		return 0;
 	} catch (err) {
 		console.error('checkIfAddressesAreContracts', err);
-
-		setTimeout(() => {
-			checkIfAddressesAreContracts(con);
-		}, 10 * 1000);
+		return 1;
 	}
 }
 
@@ -704,7 +701,9 @@ async function startFetchData() {
 
 			console.log('start checkIfAddressesAreContracts');
 			// fetch new used addresses and check if they are contracts or not
-			// checkIfAddressesAreContracts(con);
+			setInterval(() => {
+				checkIfAddressesAreContracts(con);
+			}, 1010);
 
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
@@ -799,7 +798,9 @@ async function startFetchData() {
 				});
 			});
 
-			checkIfAddressesAreContracts(con);
+			setInterval(() => {
+				checkIfAddressesAreContracts(con);
+			}, 1010);
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
