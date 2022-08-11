@@ -242,7 +242,7 @@ const BarChart: FC<IBarLineChart> = ({
 		return newColor;
 	}, [color, dynamicColor, reverseColor, yData]);
 
-	const datas = useCallback(() => {
+	const datas = useMemo(() => {
 		let ctx: CanvasRenderingContext2D | null = null;
 		let gradientFill: CanvasGradient | undefined;
 
@@ -286,7 +286,6 @@ const BarChart: FC<IBarLineChart> = ({
 		}
 
 		return {
-			// type: 'bar',
 			labels: xData || [],
 			datasets: [
 				{
@@ -421,7 +420,7 @@ const BarChart: FC<IBarLineChart> = ({
 		<StyledChartContainer chartHeight={chartHeight}>
 			<div id={chartId}>
 				{/* @ts-ignore */}
-				<Bar options={chartOptions} data={chartReady ? datas() : null} />
+				<Bar options={chartOptions} data={chartReady ? datas : null} />
 			</div>
 		</StyledChartContainer>
 	) : (

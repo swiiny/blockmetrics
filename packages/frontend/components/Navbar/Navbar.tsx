@@ -20,10 +20,6 @@ import {
 } from './Navbar.styles';
 
 export const NAVBAR_LINKS = {
-	home: {
-		label: 'Home',
-		href: '/'
-	},
 	blockchains: {
 		label: 'Blockchains',
 		href: '/blockchains'
@@ -104,7 +100,7 @@ const Navbar = () => {
 	const activeLabel = useMemo<string>(() => {
 		try {
 			if (pathname === '/') {
-				return NAVBAR_LINKS.home.label;
+				return 'Home';
 			}
 
 			const result = Object.values(NAVBAR_LINKS).find(({ href }): boolean => {
