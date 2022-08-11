@@ -664,7 +664,7 @@ async function checkIfAddressesAreContracts(con) {
 
 				await new Promise((resolve) => setTimeout(resolve, i * (1000 / addressesToFetchByBlockchain)));
 
-				console.log('add new contract info for address', address, isContract, chainId);
+				//console.log('add new contract info for address', address, isContract, chainId);
 				con.query(updateTodayActiveAddressIsContract, [isContract, chainId, address]);
 			});
 		});
