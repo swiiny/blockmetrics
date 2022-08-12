@@ -601,9 +601,21 @@ async function initWebsocketProvider(chain, con) {
 		keepAliveInterval = null;
 		pingTimeout = null;
 
+		wsProviders.forEach(async (wsP) => {
+			if (wsP.id === chain.id) {
+				wsP.removeAllListeners();
+				wsP._websocket?.removeAllListeners();
+
+				await wsP?._websocket?.terminate();
+				await wsP?.destroy();
+				wsP.wsProvider = null;
+			}
+		});
+
 		// remove this wsProvider from wsProviders
 		wsProviders = wsProviders.filter((ws) => ws.id !== chain.id);
 
+		console.log('WS provider removed from wsProviders', chain.id);
 		// try to reconnect every 30 seconds
 		wsProvider = null;
 
@@ -759,7 +771,7 @@ async function startFetchData() {
 			// dev stuff
 
 			console.log('start dev');
-
+			/*
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
 
@@ -805,9 +817,10 @@ async function startFetchData() {
 				});
 			});
 
-			setInterval(() => {
+			 setInterval(() => {
 				checkIfAddressesAreContracts(con);
-			}, 1010);
+			 }, 1010);
+			 */
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
