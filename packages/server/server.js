@@ -603,11 +603,11 @@ async function initWebsocketProvider(chain, con) {
 
 		wsProviders.forEach(async (wsP) => {
 			if (wsP.id === chain.id) {
-				wsP.removeAllListeners();
-				wsP._websocket?.removeAllListeners();
+				wsP.wsProvider.removeAllListeners();
+				wsP.wsProvider._websocket?.removeAllListeners();
 
-				await wsP?._websocket?.terminate();
-				await wsP?.destroy();
+				await wsP.wsProvider?._websocket?.terminate();
+				await wsP.wsProvider?.destroy();
 				wsP.wsProvider = null;
 			}
 		});
