@@ -602,7 +602,7 @@ async function initWebsocketProvider(chain, con) {
 		pingTimeout = null;
 
 		// remove this wsProvider from wsProviders
-		wsProviders = wsProviders.filter((ws) => ws.connection.url !== wsProvider.connection.url.ws);
+		wsProviders = wsProviders.filter((ws) => ws.id !== chain.id);
 
 		// try to reconnect every 30 seconds
 		wsProvider = null;
@@ -619,7 +619,10 @@ async function initWebsocketProvider(chain, con) {
 		}
 	});
 
-	wsProviders.push(wsProvider);
+	wsProviders.push({
+		id: chain.id,
+		wsProvider: wsProvider
+	});
 }
 
 // fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
@@ -627,8 +630,8 @@ async function checkIfAddressesAreContracts(con) {
 	try {
 		const addressesToFetchByBlockchain = 20;
 
-		//const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
-		const chainsId = [CHAINS.avalanche.id];
+		const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
+		//const chainsId = [CHAINS.avalanche.id];
 
 		const accountRowsPromises = chainsId.map(async (chainId) => {
 			if (chainId !== CHAINS.bitcoin.id) {
@@ -655,11 +658,16 @@ async function checkIfAddressesAreContracts(con) {
 			addressesByChain[row.blockchain_id].push(row.address);
 		});
 
-		const promises = Object.keys(addressesByChain)?.map(async (chainId) => {
+		Object.keys(addressesByChain)?.forEach(async (chainId) => {
 			// const provider = new ethers.providers.JsonRpcProvider(CHAINS_RPC[chainId].rpc);
-			const provider = new ethers.providers.WebSocketProvider(CHAINS_RPC[chainId].rpcWs);
+			//const provider = new ethers.providers.WebSocketProvider(CHAINS_RPC[chainId].rpcWs);
+			const provider = wsProviders?.find((ws) => ws.id === chainId)?.wsProvider;
 
-			return addressesByChain[chainId]?.map(async (address, i) => {
+			if (!provider) {
+				return;
+			}
+
+			addressesByChain[chainId]?.map(async (address, i) => {
 				const res = await provider.getCode(address);
 				const isContract = res === '0x' ? 0 : 1;
 
@@ -669,8 +677,6 @@ async function checkIfAddressesAreContracts(con) {
 				return con.query(updateTodayActiveAddressIsContract, [isContract, chainId, address]);
 			});
 		});
-
-		//await Promise.all(promises);
 
 		return 0;
 	} catch (err) {
