@@ -625,9 +625,10 @@ async function initWebsocketProvider(chain, con) {
 // fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
 async function checkIfAddressesAreContracts(con) {
 	try {
-		const addressesToFetchByBlockchain = 10;
+		const addressesToFetchByBlockchain = 20;
 
-		const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
+		//const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
+		const chainsId = [CHAINS.avalanche.id];
 
 		const accountRowsPromises = chainsId.map(async (chainId) => {
 			if (chainId !== CHAINS.bitcoin.id) {
@@ -699,13 +700,12 @@ async function startFetchData() {
 			// INIT BITCOIN WEBSOCKET PROVIDER
 			fetchBitcoinData(pool);
 
-			/*
 			console.log('start checkIfAddressesAreContracts');
 			// fetch new used addresses and check if they are contracts or not
 			setInterval(() => {
 				checkIfAddressesAreContracts(con);
 			}, 1010);
-*/
+
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 2;
