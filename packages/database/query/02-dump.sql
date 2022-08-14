@@ -366,13 +366,13 @@ CREATE TABLE IF NOT EXISTS `blockmetrics-db`.`today_active_address` (
 ENGINE = InnoDB;
 
 
-INSERT INTO `blockchain` (`id`, `name`, `consensus`, `node_count`, `testnet_node_count`, `single_node_power_consumption`, `blockchain_power_consumption`, `hashrate`, `difficulty`, `last_block_timestamp`, `token_count`, `transaction_count`, `today_transaction_count`, `address_count`, `today_address_count`, `gas_price`, `created_at`, `updated_at`, `reliability`, `score`, `genesis_block`) VALUES
-('avalanche', 'Avalanche', 'pos', 1243, 0, 51.33, 63803, NULL, NULL, 1658531664, 465, 184828351, 182446, 116068439, 34580, 85125434972, '2022-04-19 11:50:53', '2022-07-22 23:14:28', 0, 74, '2020-09-23 09:02:06'),
-('binance-smart-chain', 'Binance SC', 'pos', 21, 0, 50, 1050, NULL, NULL, 1658531669, 5311, 3227128724, 2207506, 6540513136, 546489, 6158083206, '2022-04-19 11:47:09', '2022-07-22 23:14:31', 32, 75, '2020-08-29 03:24:08'),
-('bitcoin', 'Bitcoin', 'pow', 14736, 0, 0, 15347690500, 181.71186263872156, 27692567959233, 1658531472, 1, 7170053, 238633, 502525760, 504264, NULL, '2022-04-19 11:48:19', '2022-07-22 23:11:56', 100, 47, '2009-01-03 18:15:00'),
-('ethereum', 'Ethereum', 'pow', 257, 0, 0, 9040438416, 929.182437, 11817, 1658531624, 4867, 1647090268, 1121149, 7597540585, 377110, 13751746924, '2022-04-19 11:46:20', '2022-07-22 23:14:06', 59, 60, '2015-07-30 15:26:13'),
-('fantom', 'Fantom', 'pos', 72, 0, 0.25, 18, NULL, NULL, 1658519552, 367, 329515256, 716702, 128384240, 34439, 24399729781, '2022-05-14 09:47:40', '2022-07-22 19:55:12', 45, 80, '2019-12-27 03:56:40'),
-('polygon', 'Polygon', 'pos', 100, 0, 1000, 100000, NULL, NULL, 1658531316, 873, 1866132033, 2252713, 5679390877, 190020, 173586736400, '2022-04-19 11:47:32', '2022-07-22 23:10:15', 49, 69, '2020-05-30 07:47:16');
+INSERT INTO `blockchain` (`id`, `name`, `consensus`, `node_count`, `testnet_node_count`, `single_node_power_consumption`, `blockchain_power_consumption`, `hashrate`, `difficulty`, `last_block_timestamp`, `token_count`, `transaction_count`, `today_transaction_count`, `address_count`, `today_address_count`, `gas_price`, `created_at`, `updated_at`, `reliability`, `score`, `genesis_block`, `total_value_locked`) VALUES
+('avalanche', 'Avalanche', 'pos', 1243, 0, 51.33, 63803, NULL, NULL, 1658531664, 465, 184828351, 182446, 116068439, 34580, 85125434972, '2022-04-19 11:50:53', '2022-07-22 23:14:28', 0, 74, '2020-09-23 09:02:06', 2751306576.875329),
+('binance-smart-chain', 'Binance SC', 'pos', 21, 0, 50, 1050, NULL, NULL, 1658531669, 5311, 3227128724, 2207506, 6540513136, 546489, 6158083206, '2022-04-19 11:47:09', '2022-07-22 23:14:31', 32, 75, '2020-08-29 03:24:08', 7132336434.072004),
+('bitcoin', 'Bitcoin', 'pow', 14736, 0, 0, 15347690500, 181.71186263872156, 27692567959233, 1658531472, 1, 7170053, 238633, 502525760, 504264, NULL, '2022-04-19 11:48:19', '2022-07-22 23:11:56', 100, 47, '2009-01-03 18:15:00', 0),
+('ethereum', 'Ethereum', 'pow', 257, 0, 0, 9040438416, 929.182437, 11817, 1658531624, 4867, 1647090268, 1121149, 7597540585, 377110, 13751746924, '2022-04-19 11:46:20', '2022-07-22 23:14:06', 59, 60, '2015-07-30 15:26:13', 62274124173.02777),
+('fantom', 'Fantom', 'pos', 72, 0, 0.25, 18, NULL, NULL, 1658519552, 367, 329515256, 716702, 128384240, 34439, 24399729781, '2022-05-14 09:47:40', '2022-07-22 19:55:12', 45, 80, '2019-12-27 03:56:40', 860877903.406063),
+('polygon', 'Polygon', 'pos', 100, 0, 1000, 100000, NULL, NULL, 1658531316, 873, 1866132033, 2252713, 5679390877, 190020, 173586736400, '2022-04-19 11:47:32', '2022-07-22 23:10:15', 49, 69, '2020-05-30 07:47:16', 2158668910.2707376);
 
 
 INSERT INTO `blockchain_metadata` (`id`, `blockchain_id`, `language`, `description`, `genesis_block`, `source`, `links`, `tagline`, `created_at`, `updated_at`) VALUES
