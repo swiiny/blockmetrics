@@ -19,6 +19,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 - [ ] :sparkles: Integrate blockchains comparison with same transactions count per day
 - [ ] :sparkles: Add comparison with real life data
+- [ ] :sparkles: Add button to add blockchain to MetaMask
 - [ ] :heavy_plus_sign: Add Moonbeam blockchain
 - [ ] :heavy_plus_sign: Add Arbitrum blockchain
 - [ ] :heavy_plus_sign: Add Optimism blockchain
@@ -30,6 +31,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 ### Global
 
 - [ ] :white_check_mark: Add Cypress E2E tests
+- [ ] Add wraning when data looks not updated
 - [ ] :construction_worker: setup github actions to run tests before merge to production
 - [ ] :art: Presentation
 

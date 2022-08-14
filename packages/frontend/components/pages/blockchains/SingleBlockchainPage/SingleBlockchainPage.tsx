@@ -68,6 +68,8 @@ const SingleBlockchainPage: NextPage<ISingleBlockchainPage> = ({ chainId, chainL
 		}
 
 		if (last_block_timestamp) {
+			console.log('last_block_timestamp', last_block_timestamp);
+
 			result.push({
 				value: last_block_timestamp,
 				unit: 's',
