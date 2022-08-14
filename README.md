@@ -31,6 +31,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 ### Global
 
 - [ ] :white_check_mark: Add Cypress E2E tests
+- [ ] Add wraning when data looks not updated
 - [ ] :construction_worker: setup github actions to run tests before merge to production
 - [ ] :art: Presentation
 

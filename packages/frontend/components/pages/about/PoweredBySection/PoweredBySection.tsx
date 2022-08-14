@@ -24,6 +24,10 @@ const SERVICES = [
 		href: 'https://bscscan.com'
 	},
 	{
+		logoSrc: '/assets/images/services/ftmscan.svg',
+		href: 'https://ftmscan.com/'
+	},
+	{
 		logoSrc: '/assets/images/services/snowtrace.svg',
 		href: 'https://snowtrace.io'
 	},
@@ -34,6 +38,18 @@ const SERVICES = [
 	{
 		logoSrc: '/assets/images/services/defilama.svg',
 		href: 'https://defillama.com/'
+	},
+	{
+		logoSrc: '/assets/images/services/blockchaincom.svg',
+		href: 'https://www.blockchain.com/'
+	},
+	{
+		logoSrc: '/assets/images/services/bitnodes.svg',
+		href: 'https://bitnodes.io/'
+	},
+	{
+		logoSrc: '/assets/images/services/coingecko.svg',
+		href: 'https://www.coingecko.com/'
 	}
 ];
 
