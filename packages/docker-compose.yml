@@ -1,4 +1,4 @@
-version: '3.0'
+version: '3.1'
 
 services:
   db:
@@ -21,6 +21,9 @@ services:
       dockerfile: Dockerfile
     env_file:
       - .env
+    ports:
+      - 3000:3000
+    restart: on-failure:10
     volumes:
       - ./server:/app
       - /app/node_modules

@@ -18,14 +18,42 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 ## Working configuration :white_check_mark:
 - Docker engine v20.10.17
 - Docker compose v2.6.1
+- Node v16.13.1
+- Npm v8.13.2
 
 ## Setup : hammer:
 
-### 1. Clone the repo
+### 1. Clone the repo 
 ```
 git clone https://github.com/JeremyTheintz/block-metrics.git
-cd block-metrics
+cd block-metrics/packages
 ```
+
+### 2. Environnement variables
+```
+cp .env.example .env
+```
+> Fill the new .env file with your local variables
+
+### 3. Build and run the database, the server and the APIs using `docker-compose`
+```
+docker-compose up --build -V
+```
+> The routine running at 02:00 CEST in production will run according to the following config in development environnement `rule.minute = [0, 10, 20, 30, 40, 50];`
+
+> The routine running at 12:00 CEST in production will run according to rhw following config in development environnement `rule.minute = [5, 15, 25, 35, 45, 55];`
+
+### 4. Install frontend dependencies
+```
+cd frontend
+npm install 
+```
+
+### 5. Start frontend
+```
+npm run dev
+```
+
 
 ## Roadmap
 
@@ -43,7 +71,6 @@ cd block-metrics
 ### Global
 
 - [ ] :white_check_mark: Add Cypress E2E tests
-- [ ] Add wraning when data looks not updated
 - [ ] :construction_worker: setup github actions to run tests before merge to production
 
 ### Server
@@ -52,6 +79,7 @@ cd block-metrics
 
 ### Frontend
 
+- [ ] Add warning icon when data looks not up to date
 - [ ] :wheelchair: Add accessibility
 - [ ] :children_crossing: Explain engineering notation
 - [ ] :children_crossing: Explain why the weight of each property from ranking system

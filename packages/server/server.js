@@ -781,13 +781,13 @@ async function startFetchData() {
 					console.error('error connecting to ws provider for', chain.name, err);
 				}
 			});
+
 			// INIT BITCOIN WEBSOCKET PROVIDER
 			fetchBitcoinData(pool);
 
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
-			//rule.hour = 2;
-			rule.minute = [0, 30, 3];
+			rule.minute = [0, 10, 20, 30, 40, 50];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
@@ -795,9 +795,17 @@ async function startFetchData() {
 				fetchDailyData(1 / 10);
 			});
 
+			const ruleMidday = new schedule.RecurrenceRule();
+			ruleMidday.minute = [5, 15, 25, 35, 45, 55];
+			ruleMidday.tz = 'Europe/Amsterdam';
+
+			middayRoutine = schedule.scheduleJob(ruleMidday, async () => {
+				console.log('run schedule');
+				updatePowerConsumption();
+			});
+
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
 			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-			// ruleFiveMinutes.minute = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56,58];
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
@@ -816,11 +824,10 @@ async function startFetchData() {
 					]);
 				});
 			});
-			/*
-			 setInterval(() => {
+
+			setInterval(() => {
 				checkIfAddressesAreContracts(con);
-			 }, 1010);
-			 */
+			}, 10 * 1000); // 100 seconds in dev to prevent high api calls
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
@@ -861,6 +868,7 @@ async function init() {
 
 	startFetchData();
 
+	// check memory usage every 5 minutes, used to prevent high cost on jelastic cloud instance
 	setInterval(async () => {
 		const used = process.memoryUsage().heapUsed / 1024 / 1024;
 		const mem = Math.round(used * 100) / 100;
