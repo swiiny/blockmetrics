@@ -1,4 +1,4 @@
-# Blockmetrics mono repo
+# Blockmetrics mono repo :package:
 
 Blockmetrics is a blockchain metrics platform that provides data about the blockchain ecosystem.
 
@@ -14,6 +14,24 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 - [REST API](./packages/api/rest/README.md)
 - [Websocket API](./packages/api/ws/README.md)
 - [Data server](./packages/server/README.md)
+
+## Working configuration :white_check_mark:
+- Docker engine v20.10.17
+- Docker compose v2.6.1
+
+## Setup : hammer:
+
+### 1. Clone the repo
+```
+git clone https://github.com/JeremyTheintz/block-metrics.git
+cd block-metrics
+```
+
+### 2. Start n instances connected to your RPC
+`sh start.sh n your_rpc_url`
+> Not on mac ? then replace `sh` by `bash` from the shebang line of the script
+
+#### Example of command to run 100 instances simultaneously 
 
 ## Roadmap
 
@@ -33,7 +51,6 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 - [ ] :white_check_mark: Add Cypress E2E tests
 - [ ] Add wraning when data looks not updated
 - [ ] :construction_worker: setup github actions to run tests before merge to production
-- [ ] :art: Presentation
 
 ### Server
 

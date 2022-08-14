@@ -4,10 +4,6 @@ import { getAvalancheStats } from './fetch.js';
 
 export async function getEthNodeCount() {
 	try {
-		// const url = `${process.env.ETHERSCAN_API_URL}?module=stats&action=nodecount&apikey=${process.env.ETHERSCAN_API_KEY}`;
-		// const res = await axios.get(url);
-		// return parseInt(res.data.result.TotalNodeCount, 10);
-
 		const { data } = await axios.get('https://ethernodes.org/history');
 
 		// keep only first line of data

@@ -87,10 +87,6 @@ export const BLOCKCHAINS_ICONS = BLOCKCHAINS_ARRAY.reduce((acc, blockchain) => {
 	return acc;
 }, {});
 
-export const axiosServer = axios.create({
-	baseURL: process.env.SERVER_URL
-});
-
 export const axiosRest = axios.create({
 	baseURL: process.env.API_URL || 'https://api-rest.block-metrics.io',
 	headers: {

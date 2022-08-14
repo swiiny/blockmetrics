@@ -855,7 +855,7 @@ async function startFetchData() {
 }
 
 async function init() {
-	console.log(`Server running on port ${process.env.SERVER_PORT}`);
+	console.log(`Server running`);
 
 	pool = await createDbPool();
 
