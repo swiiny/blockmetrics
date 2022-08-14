@@ -12,7 +12,7 @@ services:
       - $DB_PORT:$DB_PORT
     volumes:
       - blockmetrics-db:/var/lib/mysql
-      - ./database/query:/docker-entrypoint-initdb.d
+      - ./database:/docker-entrypoint-initdb.d
 
   server:
     container_name: server
