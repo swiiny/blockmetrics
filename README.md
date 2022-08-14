@@ -56,7 +56,7 @@ npm run dev
 ```
 
 
-## Roadmap
+## Roadmap :sparkles:
 
 - [ ] :sparkles: Integrate blockchains comparison with same transactions count per day
 - [ ] :sparkles: Add comparison with real life data
@@ -103,7 +103,3 @@ npm run dev
 - [ ] Gnosis
 - [ ] Solana
 - [ ] Harmony
-
-#### Webhook to deploy an updated image from dockerhub to jelastic cloud
-
-`https://app.jpc.infomaniak.com/1.0/environment/control/rest/redeploycontainerbyid?envName=block-metrics&session=[ACCESS_TOKEN]&tag=latest&nodeId=[NODE_ID]&useExistingVolumes=true`
