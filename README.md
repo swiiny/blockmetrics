@@ -1,11 +1,11 @@
 ![blockmetrics](/assets/bm_logo_grand_bleu.png#gh-dark-mode-only)![blockmetrics](/assets/bm_logo_grand_bleu_light.png#gh-light-mode-only)
 # Blockmetrics mono repo :package:
 
-Blockmetrics is a blockchain metrics platform that provides data about the blockchain ecosystem.
+Blockmetrics is a blockchain metrics platform that provides data on the blockchain ecosystem.
 
 A tool to compare blockchains according to several parameters such as reliability, energy consumption, number of tokens and much more.
 
-The main objective is to offer to everyone an easy way to understand what a blockchain is, what the implications of its use are and to be able to make a conscious choice before using one blockcahin than another.
+The main objective is to offer to everyone an easy way to understand what a blockchain is, what the implications of its use are and to be able to make a informed choice before using one blockcahin than another.
 
 Visit [Blockmetrics](https://block-metrics.io/) to get more information about blockchains
 
