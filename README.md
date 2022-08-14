@@ -21,7 +21,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 - Node v16.13.1
 - Npm v8.13.2
 
-## Setup : hammer:
+## Setup :hammer:
 
 ### 1. Clone the repo 
 ```
@@ -42,6 +42,7 @@ docker-compose up --build -V
 > The routine running at 02:00 CEST in production will run according to the following config in development environnement `rule.minute = [0, 10, 20, 30, 40, 50];`
 
 > The routine running at 12:00 CEST in production will run according to rhw following config in development environnement `rule.minute = [5, 15, 25, 35, 45, 55];`
+
 
 ### 4. Install frontend dependencies
 ```
