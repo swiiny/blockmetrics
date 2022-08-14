@@ -27,12 +27,6 @@ git clone https://github.com/JeremyTheintz/block-metrics.git
 cd block-metrics
 ```
 
-### 2. Start n instances connected to your RPC
-`sh start.sh n your_rpc_url`
-> Not on mac ? then replace `sh` by `bash` from the shebang line of the script
-
-#### Example of command to run 100 instances simultaneously 
-
 ## Roadmap
 
 - [ ] :sparkles: Integrate blockchains comparison with same transactions count per day
