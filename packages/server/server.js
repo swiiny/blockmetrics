@@ -867,7 +867,7 @@ async function init() {
 
 		console.log('Memory usage: ' + mem + ' MB');
 
-		if (mem >= 512) {
+		if (mem >= 1024) {
 			console.log('Restart server ========>');
 
 			if (process.env.NODE_ENV === 'production') {
