@@ -601,7 +601,7 @@ async function initWebsocketProvider(chain, con) {
 		keepAliveInterval = null;
 		pingTimeout = null;
 
-		wsProviders.forEach(async (wsP) => {
+		wsProviders?.forEach(async (wsP) => {
 			if (wsP.id === chain.id) {
 				wsP.wsProvider.removeAllListeners();
 				wsP.wsProvider._websocket?.removeAllListeners();
@@ -613,7 +613,7 @@ async function initWebsocketProvider(chain, con) {
 		});
 
 		// remove this wsProvider from wsProviders
-		wsProviders = wsProviders.filter((ws) => ws.id !== chain.id);
+		wsProviders = wsProviders?.filter((ws) => ws.id !== chain.id) || [];
 
 		console.log('WS provider removed from wsProviders', chain.id);
 		// try to reconnect every 30 seconds
@@ -631,7 +631,7 @@ async function initWebsocketProvider(chain, con) {
 		}
 	});
 
-	wsProviders.push({
+	wsProviders?.push({
 		id: chain.id,
 		wsProvider: wsProvider
 	});
@@ -642,8 +642,12 @@ async function checkIfAddressesAreContracts(con) {
 	try {
 		const addressesToFetchByBlockchain = 20;
 
-		const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
-		//const chainsId = [CHAINS.avalanche.id];
+		let chainsId = CHAINS_ARRAY.map((chain) => chain.id);
+
+		if (process.env.NODE_ENV === 'development') {
+			// avalanche is not fetched in local because of the ankr api not working without delay
+			chainsId.filter((id) => id !== CHAINS.avalanche.id);
+		}
 
 		const accountRowsPromises = chainsId.map(async (chainId) => {
 			if (chainId !== CHAINS.bitcoin.id) {
@@ -663,6 +667,10 @@ async function checkIfAddressesAreContracts(con) {
 		// separate addresses by chain
 		const addressesByChain = {};
 		resolvedAccountRows?.forEach((row) => {
+			if (!row.blockchain_id) {
+				return;
+			}
+
 			if (!addressesByChain[row.blockchain_id]) {
 				addressesByChain[row.blockchain_id] = [];
 			}
