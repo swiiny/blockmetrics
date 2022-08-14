@@ -771,7 +771,7 @@ async function startFetchData() {
 			// dev stuff
 
 			console.log('start dev');
-			/*
+
 			CHAINS_ARRAY.filter((chain) => chain.type === 'EVM').forEach(async (chain) => {
 				console.log('start ws provider for', chain.name);
 
@@ -816,7 +816,7 @@ async function startFetchData() {
 					]);
 				});
 			});
-
+			/*
 			 setInterval(() => {
 				checkIfAddressesAreContracts(con);
 			 }, 1010);
