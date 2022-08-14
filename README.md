@@ -1,6 +1,6 @@
 # Blockmetrics mono repo :package:
 
-![blockmetrics](/assets/bm_logo_grand_bleu.png)
+![blockmetrics](/assets/bm_logo_grand_bleu.png#gh-dark-mode-only)![blockmetrics](/assets/bm_logo_grand_bleu_light.png#gh-light-mode-only)
 
 Blockmetrics is a blockchain metrics platform that provides data about the blockchain ecosystem.
 
