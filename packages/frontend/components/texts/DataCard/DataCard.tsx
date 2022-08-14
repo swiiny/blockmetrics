@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useReducer, useRef, useState } from 'react';
+import React, { FC, Reducer, useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Spacing from '../../../styles/layout/Spacing';
 import BMText from '../../../styles/theme/components/BMText';
 import { EFlex, EIcon, ESize, ETextAlign, ETextColor, ETextWeight } from '../../../styles/theme/utils/enum';
@@ -11,9 +11,6 @@ import useResponsive from '../../../hooks/useResponsive';
 import HelpTooltip from '../../utils/HelpTooltip';
 import { StyledTooltip } from './DataCard.styles';
 import ElementTooltip from '../../utils/ElementTooltip';
-
-// hte ping with the api
-const ping = 1.5;
 
 const DataCard: FC<IDataCard> = ({
 	value,
@@ -31,11 +28,15 @@ const DataCard: FC<IDataCard> = ({
 }) => {
 	const { isSmallerThanSm, isSmallerThanMd, isSmallerThanLg } = useResponsive();
 
-	const [timerValue, updateValue] = useReducer(() => {
-		const newVal = (Date.now() - value * 1000) / 1000;
+	const [timerValue, updateValue] = useReducer<Reducer<number, string>>((state, action) => {
+		if (action === 'reset') {
+			return 0;
+		}
 
-		return newVal - ping > 0 ? newVal - ping : 0;
-	}, 0);
+		return state + 0.1;
+	}, (Date.now() - value * 1000) / 1000);
+
+	const [initialValue, _] = useState<number>(value);
 
 	const cardRef = useRef<number>(0);
 
@@ -43,11 +44,22 @@ const DataCard: FC<IDataCard> = ({
 
 	useEffect(() => {
 		if (isTimer) {
-			setInterval(() => {
-				updateValue();
+			// @ts-ignore
+			window['data-card-timer-value-interval'] && clearInterval(window['data-card-timer-value-interval']);
+			// @ts-ignore
+			window['data-card-timer-value-interval'] = setInterval(() => {
+				updateValue('');
 			}, 100);
 		}
 	}, [isTimer]);
+
+	useEffect(() => {
+		if (isTimer) {
+			if (value > initialValue) {
+				updateValue('reset');
+			}
+		}
+	}, [value, isTimer, initialValue]);
 
 	useEffect(() => {
 		if (!colorAnimationOnUpdate) {

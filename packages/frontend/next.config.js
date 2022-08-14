@@ -1,8 +1,9 @@
+const withPWA = require('next-pwa');
+
 /** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig = withPWA({
 	reactStrictMode: true, // process.env.NODE_ENV === 'production',
 	env: {
-		SERVER_URL: process.env.SERVER_URL,
 		API_URL: process.env.API_URL || 'https://api-rest.block-metrics.io',
 		WS_URL: process.env.WS_URL || 'https://api-ws.block-metrics.io'
 	},
@@ -18,7 +19,14 @@ const nextConfig = {
 		// Warning: Dangerously allow production builds to successfully complete even if
 		// your project has ESLint errors.
 		// ignoreDuringBuilds: true
+	},
+	pwa: {
+		dest: 'public',
+		disable: process.env.NODE_ENV === 'development',
+		swSrc: 'service-worker.js',
+		register: true,
+		skipWaiting: true
 	}
-};
+});
 
 module.exports = nextConfig;

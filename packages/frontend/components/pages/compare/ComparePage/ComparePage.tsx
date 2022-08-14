@@ -19,7 +19,7 @@ const HeaderData = {
 };
 
 const ComparePage: NextPage = () => {
-	const { subscribeTo, message } = useWebsocket();
+	const { subscribeTo, message, wsConnected } = useWebsocket();
 	const [loading, stopLoading] = useReducer(() => false, true);
 
 	const [blockchains, setBlockchains] = useState<TBlockchain[]>(
@@ -75,8 +75,10 @@ const ComparePage: NextPage = () => {
 	}, [loading, message, selectedBlockchainIds]);
 
 	useEffect(() => {
-		subscribeTo(ESubscribeType.blockchains);
-	}, [subscribeTo]);
+		if (wsConnected) {
+			subscribeTo(ESubscribeType.blockchains);
+		}
+	}, [wsConnected, subscribeTo]);
 
 	return (
 		<>

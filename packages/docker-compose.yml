@@ -24,8 +24,6 @@ services:
     volumes:
       - ./server:/app
       - /app/node_modules
-    ports:
-      - $SERVER_PORT:$SERVER_PORT
 
   api:
     container_name: api

@@ -601,9 +601,21 @@ async function initWebsocketProvider(chain, con) {
 		keepAliveInterval = null;
 		pingTimeout = null;
 
-		// remove this wsProvider from wsProviders
-		wsProviders = wsProviders.filter((ws) => ws.connection.url !== wsProvider.connection.url.ws);
+		wsProviders.forEach(async (wsP) => {
+			if (wsP.id === chain.id) {
+				wsP.wsProvider.removeAllListeners();
+				wsP.wsProvider._websocket?.removeAllListeners();
 
+				await wsP.wsProvider?._websocket?.terminate();
+				await wsP.wsProvider?.destroy();
+				wsP.wsProvider = null;
+			}
+		});
+
+		// remove this wsProvider from wsProviders
+		wsProviders = wsProviders.filter((ws) => ws.id !== chain.id);
+
+		console.log('WS provider removed from wsProviders', chain.id);
 		// try to reconnect every 30 seconds
 		wsProvider = null;
 
@@ -619,15 +631,19 @@ async function initWebsocketProvider(chain, con) {
 		}
 	});
 
-	wsProviders.push(wsProvider);
+	wsProviders.push({
+		id: chain.id,
+		wsProvider: wsProvider
+	});
 }
 
 // fetch addresses hundred by hundred then check if they are contracts and set the is_contract field in the database
 async function checkIfAddressesAreContracts(con) {
 	try {
-		const addressesToFetchByBlockchain = 10;
+		const addressesToFetchByBlockchain = 20;
 
 		const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
+		//const chainsId = [CHAINS.avalanche.id];
 
 		const accountRowsPromises = chainsId.map(async (chainId) => {
 			if (chainId !== CHAINS.bitcoin.id) {
@@ -646,7 +662,7 @@ async function checkIfAddressesAreContracts(con) {
 
 		// separate addresses by chain
 		const addressesByChain = {};
-		resolvedAccountRows.forEach((row) => {
+		resolvedAccountRows?.forEach((row) => {
 			if (!addressesByChain[row.blockchain_id]) {
 				addressesByChain[row.blockchain_id] = [];
 			}
@@ -654,30 +670,30 @@ async function checkIfAddressesAreContracts(con) {
 			addressesByChain[row.blockchain_id].push(row.address);
 		});
 
-		Object.keys(addressesByChain).forEach(async (chainId) => {
+		Object.keys(addressesByChain)?.forEach(async (chainId) => {
 			// const provider = new ethers.providers.JsonRpcProvider(CHAINS_RPC[chainId].rpc);
-			const provider = new ethers.providers.WebSocketProvider(CHAINS_RPC[chainId].rpcWs);
+			//const provider = new ethers.providers.WebSocketProvider(CHAINS_RPC[chainId].rpcWs);
+			const provider = wsProviders?.find((ws) => ws.id === chainId)?.wsProvider;
 
-			addressesByChain[chainId].map(async (address, i) => {
+			if (!provider) {
+				return;
+			}
+
+			addressesByChain[chainId]?.map(async (address, i) => {
 				const res = await provider.getCode(address);
 				const isContract = res === '0x' ? 0 : 1;
 
 				await new Promise((resolve) => setTimeout(resolve, i * (1000 / addressesToFetchByBlockchain)));
 
 				//console.log('add new contract info for address', address, isContract, chainId);
-				con.query(updateTodayActiveAddressIsContract, [isContract, chainId, address]);
+				return con.query(updateTodayActiveAddressIsContract, [isContract, chainId, address]);
 			});
 		});
 
-		setTimeout(() => {
-			checkIfAddressesAreContracts(con);
-		}, 1000);
+		return 0;
 	} catch (err) {
 		console.error('checkIfAddressesAreContracts', err);
-
-		setTimeout(() => {
-			checkIfAddressesAreContracts(con);
-		}, 10 * 1000);
+		return 1;
 	}
 }
 
@@ -704,7 +720,9 @@ async function startFetchData() {
 
 			console.log('start checkIfAddressesAreContracts');
 			// fetch new used addresses and check if they are contracts or not
-			checkIfAddressesAreContracts(con);
+			setInterval(() => {
+				checkIfAddressesAreContracts(con);
+			}, 1010);
 
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
@@ -798,8 +816,11 @@ async function startFetchData() {
 					]);
 				});
 			});
-
-			checkIfAddressesAreContracts(con);
+			/*
+			 setInterval(() => {
+				checkIfAddressesAreContracts(con);
+			 }, 1010);
+			 */
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
@@ -834,7 +855,7 @@ async function startFetchData() {
 }
 
 async function init() {
-	console.log(`Server running on port ${process.env.SERVER_PORT}`);
+	console.log(`Server running`);
 
 	pool = await createDbPool();
 
@@ -846,7 +867,7 @@ async function init() {
 
 		console.log('Memory usage: ' + mem + ' MB');
 
-		if (mem >= 512) {
+		if (mem >= 1024) {
 			console.log('Restart server ========>');
 
 			if (process.env.NODE_ENV === 'production') {

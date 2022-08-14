@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useCallback, useEffect, useMemo, useReducer, useRef, useState } from 'react';
@@ -14,14 +15,11 @@ import {
 	StyledList,
 	StyledBurgerButton,
 	StyledFace,
-	StyledCube
+	StyledCube,
+	StyledLogoContainer
 } from './Navbar.styles';
 
 export const NAVBAR_LINKS = {
-	home: {
-		label: 'Home',
-		href: '/'
-	},
 	blockchains: {
 		label: 'Blockchains',
 		href: '/blockchains'
@@ -102,7 +100,7 @@ const Navbar = () => {
 	const activeLabel = useMemo<string>(() => {
 		try {
 			if (pathname === '/') {
-				return NAVBAR_LINKS.home.label;
+				return 'Home';
 			}
 
 			const result = Object.values(NAVBAR_LINKS).find(({ href }): boolean => {
@@ -199,7 +197,13 @@ const Navbar = () => {
 	return (
 		<StyledNavbar ref={navbarRef} isHidden={navbarHidden} isBlurred={navbarBlurred}>
 			<Flex fullWidth={isSmallerThanMd} vertical={EFlex.center} mdHorizontal={EFlex.between}>
-				<div className='logo' />
+				<Link href='/'>
+					<a>
+						<StyledLogoContainer>
+							<Image src='/assets/logo.svg' alt='Blockmetrics logo' layout='fill' objectFit='contain' />
+						</StyledLogoContainer>
+					</a>
+				</Link>
 
 				<Spacing size={ESize.xl} />
 

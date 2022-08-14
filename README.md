@@ -1,4 +1,4 @@
-# Blockmetrics mono repo
+# Blockmetrics mono repo :package:
 
 Blockmetrics is a blockchain metrics platform that provides data about the blockchain ecosystem.
 
@@ -15,10 +15,23 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 - [Websocket API](./packages/api/ws/README.md)
 - [Data server](./packages/server/README.md)
 
+## Working configuration :white_check_mark:
+- Docker engine v20.10.17
+- Docker compose v2.6.1
+
+## Setup : hammer:
+
+### 1. Clone the repo
+```
+git clone https://github.com/JeremyTheintz/block-metrics.git
+cd block-metrics
+```
+
 ## Roadmap
 
 - [ ] :sparkles: Integrate blockchains comparison with same transactions count per day
 - [ ] :sparkles: Add comparison with real life data
+- [ ] :sparkles: Add button to add blockchain to MetaMask
 - [ ] :heavy_plus_sign: Add Moonbeam blockchain
 - [ ] :heavy_plus_sign: Add Arbitrum blockchain
 - [ ] :heavy_plus_sign: Add Optimism blockchain
@@ -30,8 +43,8 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 ### Global
 
 - [ ] :white_check_mark: Add Cypress E2E tests
+- [ ] Add wraning when data looks not updated
 - [ ] :construction_worker: setup github actions to run tests before merge to production
-- [ ] :art: Presentation
 
 ### Server
 
