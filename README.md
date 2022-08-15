@@ -53,14 +53,11 @@ docker-compose up --build -V
 > The routine running at 12:00 CEST in production is deactivated in development environnement to prevent fetch data when it is not published on the external API provider
 
 
-### 4. Install frontend dependencies
+### 4. Build and run the frontend
 ```
+cp .env frontend/.env
 cd frontend
 npm install 
-```
-
-### 5. Start frontend
-```
 npm run dev
 ```
 > Once it has started, go to http://localhost:8080
