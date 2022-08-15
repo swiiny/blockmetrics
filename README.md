@@ -55,6 +55,8 @@ docker-compose up --build -V
 
 ### 4. Build and run the frontend
 ```
+// ../blockmetrics/packages
+
 cp .env frontend/.env
 cd frontend
 npm install 
