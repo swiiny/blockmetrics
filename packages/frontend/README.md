@@ -377,4 +377,4 @@ Main container with margin and padding to prevent overflow behind the navbar
 
 ### Enumerations
 
-You can find the enumerations in the [enum.ts](./styles/utils/enum.ts) file
+You can find the enumerations in the [enum.ts](./styles/theme/utils/enum.ts) file
