@@ -20,6 +20,6 @@ This server fill the database with data from the following blockchains:
 
 The service work with:
 
-- Ws ![ws](https://img.shields.io/npm/v/ws?style=flat)
-- Node schedule ![Node schedule](https://img.shields.io/npm/v/node-schedule?style=flat)
-- Ethers ![ethers](https://img.shields.io/npm/v/ethers?style=flat&label=Ethers)
+![ws](https://img.shields.io/npm/v/ws?style=flat&label=Ws)
+![Node schedule](https://img.shields.io/npm/v/node-schedule?style=flat&label=Node%20schedule)
+![ethers](https://img.shields.io/npm/v/ethers?style=flat&label=Ethers)
