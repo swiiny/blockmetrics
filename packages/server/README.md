@@ -1,8 +1,5 @@
 # Blockmetrics Data Server
 
-![ethers](https://img.shields.io/npm/v/ethers?style=plastic)
-![npm](https://img.shields.io/npm/v/node-schedule?style=plastic)
-
 ## Table of Contents
 
 - [Introduction](#introduction)
@@ -23,6 +20,6 @@ This server fill the database with data from the following blockchains:
 
 The service work with:
 
-- Ws: 8.6.0
-- Node schedule: 2.1.0
-- Ethers: 5.6.4
+- Ws ![ws](https://img.shields.io/npm/v/ws?style=plastic)
+- Node schedule ![Node schedule](https://img.shields.io/npm/v/node-schedule?style=plastic)
+- Ethers ![ethers](https://img.shields.io/npm/v/ethers?style=plastic)
