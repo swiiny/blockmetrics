@@ -803,14 +803,17 @@ async function startFetchData() {
 				fetchDailyData(1 / 10);
 			});
 
-			const ruleMidday = new schedule.RecurrenceRule();
-			ruleMidday.minute = [5, 15, 25, 35, 45, 55];
-			ruleMidday.tz = 'Europe/Amsterdam';
+			/*
+				Can't work if run before 12:00
+				const ruleMidday = new schedule.RecurrenceRule();
+				ruleMidday.minute = [5, 15, 25, 35, 45, 55];
+				ruleMidday.tz = 'Europe/Amsterdam';
 
-			middayRoutine = schedule.scheduleJob(ruleMidday, async () => {
-				console.log('run schedule');
-				updatePowerConsumption();
-			});
+				middayRoutine = schedule.scheduleJob(ruleMidday, async () => {
+					console.log('run schedule');
+					updatePowerConsumption();
+				});
+			*/
 
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
 			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
