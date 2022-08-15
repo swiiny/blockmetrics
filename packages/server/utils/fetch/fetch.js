@@ -157,17 +157,7 @@ export async function fetchDailyTransactionFor(chain) {
 export async function fetchDailyAverageBlockTimeFor(chain) {
 	const { id, chartPrefix } = chain;
 	try {
-		if (id === CHAINS.bitcoin.id) {
-			/*
-			// per day => daily active users of bitcoin
-			const url = `${chartPrefix}/n-unique-addresses?timespan=30days&sampled=true&metadata=false&cors=true&format=json`;
-
-			const { data } = await axios.get(url);
-
-			const formattedJson = data.values.map(({ x, y }) => ({ timestamp: x, second: y }));
-			console.log('formattedJson', formattedJson);
-			*/
-		} else {
+		if (id !== CHAINS.bitcoin.id) {
 			const url = `${chartPrefix}/blocktime?output=csv`;
 
 			const { data } = await axios.get(url);
@@ -211,10 +201,10 @@ export async function fetchDailyActiveUsersFor(chain) {
 
 			formattedJson = data.values.map(({ x, y }) => ({ timestamp: x, count: y }));
 		} else if (id === CHAINS.avalanche.id) {
-			console.log('TODO - get this from the Avalanche chain');
+			// console.log('TODO - get this from the Avalanche chain');
 			formattedJson = null;
 		} else if (id === CHAINS.fantom.id) {
-			console.log('TODO - get this from the Fantom chain');
+			// console.log('TODO - get this from the Fantom chain');
 			formattedJson = null;
 		} else {
 			const url = `${chartPrefix}/active-address?output=csv`;

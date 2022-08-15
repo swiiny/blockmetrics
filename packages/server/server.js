@@ -904,5 +904,5 @@ async function init() {
 init();
 
 process.on('uncaughtException', function (err) {
-	console.log('UNCAUGHT EXCEPTION - keeping process alive:', err.message);
+	console.log('keeping process alive:', err.message);
 });
