@@ -7,7 +7,7 @@ export const getBlockchains = async (pool, params) => {
 	try {
 		const { desc, sortBy, limit, offset } = params;
 
-		let queryPrefix = `SELECT id, name, score, node_count, testnet_node_count, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count, total_value_locked FROM blockchain`;
+		let queryPrefix = `SELECT id, name, score, node_count, testnet_node_count, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count, total_value_locked, today_user_count, today_contract_count FROM blockchain`;
 
 		// don't take care of none value
 		// queryPrefix += ` AND ${params.sortByField} IS NOT NULL`;
@@ -31,7 +31,7 @@ export const getBlockchains = async (pool, params) => {
 
 export const getBlockchainById = async (pool, id) => {
 	try {
-		let query = `SELECT id, name, score, node_count, testnet_node_count, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count, total_value_locked FROM blockchain WHERE id = '${id}'`;
+		let query = `SELECT id, name, score, node_count, testnet_node_count, single_node_power_consumption, blockchain_power_consumption, hashrate, difficulty, last_block_timestamp, token_count, transaction_count, gas_price, consensus, today_transaction_count, address_count, today_address_count, total_value_locked, today_user_count, today_contract_count FROM blockchain WHERE id = '${id}'`;
 
 		const res = await pool.query(query);
 

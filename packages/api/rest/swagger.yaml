@@ -37,7 +37,8 @@ paths:
           schema:
             type: string
             enum: [
-                name
+                name,
+                score
                 node_count,
                 testnet_node_count,
                 single_node_power_consumption,
@@ -51,7 +52,9 @@ paths:
                 consensus,
                 today_transaction_count,
                 address_count,
-                today_address_count
+                today_address_count,
+                today_user_count,
+                today_contract_count
               ]
         - in: query
           name: limit
@@ -447,6 +450,9 @@ components:
         name:
           type: string
           example: Ethereum
+        score:
+          type: integer
+          example: 42
         node_count:
           type: integer
           example: 5000
@@ -489,6 +495,12 @@ components:
         today_address_count:
           type: integer
           example: 1928493
+        today_user_count:
+          type: integer
+          example: 19284
+        today_contract_count:
+          type: integer
+          example: 267893
         total_value_locked:
           type: integer
           example: 192849308903

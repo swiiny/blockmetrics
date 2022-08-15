@@ -1,4 +1,4 @@
-import { IMargin, IPadding } from '../../../types/layouts';
+import { IMargin, IPadding } from '../../../types/global';
 
 interface IColumn extends IPadding, IMargin {
 	children?: React.ReactNode;

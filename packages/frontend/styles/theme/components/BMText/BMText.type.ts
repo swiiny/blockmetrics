@@ -1,7 +1,7 @@
 import { CSSProperties } from 'react';
-import { IMargin, IPadding } from '../../../../types/layouts';
+import { IMargin, IPadding } from '../../../../types/global';
 import { ESize, ETextAlign, ETextColor, ETextTransform, ETextType, ETextWeight } from '../../utils/enum';
-import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
+import { ISkeleton } from '../../../../types/global';
 
 interface IBMText extends IPadding, IMargin, ISkeleton {
 	children: React.ReactNode | string;

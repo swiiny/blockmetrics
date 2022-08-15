@@ -1,5 +1,5 @@
 import { ESize, ETextColor, ETextWeight } from '../../utils/enum';
-import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
+import { ISkeleton } from '../../../../types/global';
 
 interface IBMLink extends ISkeleton {
 	href?: string;

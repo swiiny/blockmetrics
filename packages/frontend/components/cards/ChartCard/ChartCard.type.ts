@@ -1,5 +1,5 @@
 import { EChartType, EDailyData, EDailyGlobalData } from '../../../styles/theme/utils/enum';
-import { IPadding } from '../../../types/layouts';
+import { IPadding } from '../../../types/global';
 
 interface IChartCard extends IPadding {
 	label: string;
