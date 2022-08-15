@@ -14,7 +14,7 @@ This Service is used to stream blockchains data to [Blockmetrics](https://block-
 
 The service work with:
 
-- Ws: 8.6.0
+![ws](https://img.shields.io/npm/v/ws?style=flat&label=Ws)
 
 ## Subscriptions
 
