@@ -1,5 +1,8 @@
 # Blockmetrics Data Server
 
+![ethers](https://img.shields.io/npm/v/ethers@5.6.4?style=plastic)
+![npm](https://img.shields.io/npm/v/node-schedule?style=plastic)
+
 ## Table of Contents
 
 - [Introduction](#introduction)
