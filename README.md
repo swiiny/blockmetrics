@@ -2,10 +2,8 @@
 # Blockmetrics mono repo :package:
 
 ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat&logo=github)
-![GitHub contributors](https://img.shields.io/github/contributors/JeremyTheintz/blockmetrics?style=flat&logo=github)
+![GitHub contributors](https://img.shields.io/github/contributors/JeremyTheintz/blockmetrics?style=social&logo=github)
 ![Linters](https://github.com/JeremyTheintz/blockmetrics/actions/workflows/linter.yml/badge.svg)
-![commit activity](https://github.com/JeremyTheintz/blockmetrics/pulse)
-
 
 Blockmetrics is a blockchain metrics platform that provides data on the blockchain ecosystem.
 
