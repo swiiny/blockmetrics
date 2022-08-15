@@ -61,7 +61,7 @@ npm install
 ```
 npm run dev
 ```
-
+> Once it has started, go to http://localhost:8080
 
 ## Roadmap :sparkles:
 
