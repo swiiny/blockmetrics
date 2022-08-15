@@ -268,6 +268,8 @@ Return monthly chart data for the blockchain
 | today_transaction_count       | integer       | _Example:_ `1928493`      | Yes      |
 | address_count                 | integer       | _Example:_ `192849345`    | Yes      |
 | today_address_count           | integer       | _Example:_ `1928493`      | Yes      |
+| today_user_count              | integer       | _Example:_ `28493`        | Yes      |
+| today_contract_count          | integer       | _Example:_ `19283`        | Yes      |
 | total_value_locked            | integer       | _Example:_ `192849308903` | Yes      |
 
 #### Metadata
