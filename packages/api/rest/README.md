@@ -14,9 +14,9 @@ The API can be tested at [here](https://block-metrics.io/documentation/api-rest)
 
 The service work with:
 
-- Express: 4.17.1
-- Cors: 2.8.5
-- Helmet: 5.0.2
+![ws](https://img.shields.io/npm/v/ws?style=flat&label=Ws)
+![cors](https://img.shields.io/npm/v/cors?style=flat&label=Cors)
+![helmet](https://img.shields.io/npm/v/helmet?style=flat&label=Helmet)
 
 ## Generate documentation from swagger.yaml file
 

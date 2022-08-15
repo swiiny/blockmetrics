@@ -4,7 +4,6 @@ const withPWA = require('next-pwa');
 const nextConfig = withPWA({
 	reactStrictMode: true, // process.env.NODE_ENV === 'production',
 	env: {
-		SERVER_URL: process.env.SERVER_URL,
 		API_URL: process.env.API_URL || 'https://api-rest.block-metrics.io',
 		WS_URL: process.env.WS_URL || 'https://api-ws.block-metrics.io'
 	},

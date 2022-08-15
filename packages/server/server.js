@@ -601,7 +601,7 @@ async function initWebsocketProvider(chain, con) {
 		keepAliveInterval = null;
 		pingTimeout = null;
 
-		wsProviders.forEach(async (wsP) => {
+		wsProviders?.forEach(async (wsP) => {
 			if (wsP.id === chain.id) {
 				wsP.wsProvider.removeAllListeners();
 				wsP.wsProvider._websocket?.removeAllListeners();
@@ -613,7 +613,7 @@ async function initWebsocketProvider(chain, con) {
 		});
 
 		// remove this wsProvider from wsProviders
-		wsProviders = wsProviders.filter((ws) => ws.id !== chain.id);
+		wsProviders = wsProviders?.filter((ws) => ws.id !== chain.id) || [];
 
 		console.log('WS provider removed from wsProviders', chain.id);
 		// try to reconnect every 30 seconds
@@ -631,7 +631,7 @@ async function initWebsocketProvider(chain, con) {
 		}
 	});
 
-	wsProviders.push({
+	wsProviders?.push({
 		id: chain.id,
 		wsProvider: wsProvider
 	});
@@ -642,8 +642,12 @@ async function checkIfAddressesAreContracts(con) {
 	try {
 		const addressesToFetchByBlockchain = 20;
 
-		const chainsId = CHAINS_ARRAY.map((chain) => chain.id);
-		//const chainsId = [CHAINS.avalanche.id];
+		let chainsId = CHAINS_ARRAY.map((chain) => chain.id);
+
+		if (process.env.NODE_ENV === 'development') {
+			// avalanche is not fetched in local because of the ankr api not working without delay
+			chainsId.filter((id) => id !== CHAINS.avalanche.id);
+		}
 
 		const accountRowsPromises = chainsId.map(async (chainId) => {
 			if (chainId !== CHAINS.bitcoin.id) {
@@ -663,6 +667,10 @@ async function checkIfAddressesAreContracts(con) {
 		// separate addresses by chain
 		const addressesByChain = {};
 		resolvedAccountRows?.forEach((row) => {
+			if (!row.blockchain_id) {
+				return;
+			}
+
 			if (!addressesByChain[row.blockchain_id]) {
 				addressesByChain[row.blockchain_id] = [];
 			}
@@ -781,13 +789,13 @@ async function startFetchData() {
 					console.error('error connecting to ws provider for', chain.name, err);
 				}
 			});
+
 			// INIT BITCOIN WEBSOCKET PROVIDER
 			fetchBitcoinData(pool);
 
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
-			//rule.hour = 2;
-			rule.minute = [0, 30, 3];
+			rule.minute = [0, 10, 20, 30, 40, 50];
 			rule.tz = 'Europe/Amsterdam';
 
 			dailyRoutine = schedule.scheduleJob(rule, async () => {
@@ -795,9 +803,20 @@ async function startFetchData() {
 				fetchDailyData(1 / 10);
 			});
 
+			/*
+				Can't work if run before 12:00
+				const ruleMidday = new schedule.RecurrenceRule();
+				ruleMidday.minute = [5, 15, 25, 35, 45, 55];
+				ruleMidday.tz = 'Europe/Amsterdam';
+
+				middayRoutine = schedule.scheduleJob(ruleMidday, async () => {
+					console.log('run schedule');
+					updatePowerConsumption();
+				});
+			*/
+
 			const ruleFiveMinutes = new schedule.RecurrenceRule();
 			ruleFiveMinutes.minute = [0, 5, 10, 15, 20, 25, 30, 35, 40, 45, 50, 55];
-			// ruleFiveMinutes.minute = [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38, 40, 42, 44, 46, 48, 50, 52, 54, 56,58];
 
 			fiveMinutesRoutine = schedule.scheduleJob(ruleFiveMinutes, async () => {
 				CHAINS_ARRAY.forEach(async (chain) => {
@@ -816,11 +835,10 @@ async function startFetchData() {
 					]);
 				});
 			});
-			/*
-			 setInterval(() => {
+
+			setInterval(() => {
 				checkIfAddressesAreContracts(con);
-			 }, 1010);
-			 */
+			}, 10 * 1000); // 100 seconds in dev to prevent high api calls
 		}
 	} catch (err) {
 		console.error('catch error in startFetchData', err);
@@ -855,12 +873,13 @@ async function startFetchData() {
 }
 
 async function init() {
-	console.log(`Server running on port ${process.env.SERVER_PORT}`);
+	console.log(`Server running`);
 
 	pool = await createDbPool();
 
 	startFetchData();
 
+	// check memory usage every 5 minutes, used to prevent high cost on jelastic cloud instance
 	setInterval(async () => {
 		const used = process.memoryUsage().heapUsed / 1024 / 1024;
 		const mem = Math.round(used * 100) / 100;
@@ -888,5 +907,5 @@ async function init() {
 init();
 
 process.on('uncaughtException', function (err) {
-	console.log('UNCAUGHT EXCEPTION - keeping process alive:', err.message);
+	console.log('keeping process alive:', err.message);
 });

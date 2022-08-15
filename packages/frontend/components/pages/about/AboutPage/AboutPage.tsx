@@ -45,7 +45,7 @@ const AboutPage: NextPage = () => {
 						<AboutCard
 							icon={EIcon.issue}
 							label='Your favorite blockchain isn’t listed?'
-							link='https://github.com/JeremyTheintz/block-metrics/issues'
+							link='https://github.com/JeremyTheintz/blockmetrics/issues'
 							bottomContent={
 								<BMText size={ESize.m} textAlign={ETextAlign.center} weight={ETextWeight.light}>
 									Create a
