@@ -16,6 +16,8 @@ Project is created with:
 ![npm](https://img.shields.io/npm/v/next?label=Next)
 ![npm](https://img.shields.io/npm/v/typescript?label=TypeScript)
 ![npm](https://img.shields.io/npm/v/styled-components?label=Styled%20Components)
+![npm](https://img.shields.io/npm/v/chart.js?label=Chart.js)
+![npm](https://img.shields.io/npm/v/websocket?label=Websocket)
 
 ## Style
 
