@@ -5,6 +5,9 @@
 ![GitHub contributors](https://img.shields.io/github/contributors/JeremyTheintz/blockmetrics?style=plastic&logo=github)
 ![Linters](https://github.com/JeremyTheintz/blockmetrics/actions/workflows/linter.yml/badge.svg)
 ![Website](https://img.shields.io/website?down_message=down&label=Blockmetrics&style=plastic&up_color=green&up_message=up&url=https%3A%2F%2Fblock-metrics.io)
+![GitHub top language](https://img.shields.io/github/languages/top/JeremyTheintz/blockmetrics)
+![GitHub language count](https://img.shields.io/github/languages/count/JeremyTheintz/blockmetrics?style=plastic)
+![Lines of code](https://img.shields.io/tokei/lines/github/JeremyTheintz/blockmetrics?style=plastic)
 
 Blockmetrics is a blockchain metrics platform that provides data on the blockchain ecosystem.
 
