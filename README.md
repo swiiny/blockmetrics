@@ -42,7 +42,7 @@ docker-compose up --build -V
 ```
 > The routine running at 02:00 CEST in production will run according to the following config in development environnement `rule.minute = [0, 10, 20, 30, 40, 50];`
 
-> The routine running at 12:00 CEST in production will run according to rhw following config in development environnement `rule.minute = [5, 15, 25, 35, 45, 55];`
+> The routine running at 12:00 CEST in production is deactivated in development environnement to prevent fetch data when it is not published on the external API provider
 
 
 ### 4. Install frontend dependencies
