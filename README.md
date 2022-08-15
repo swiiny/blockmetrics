@@ -3,7 +3,7 @@
 
 ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat&logo=github)
 ![Linters](https://github.com/JeremyTheintz/blockmetrics/actions/workflows/linter.yml/badge.svg)
-![Website](https://img.shields.io/website?down_message=down&label=Blockmetrics&style=flat&up_color=green&up_message=up&url=https%3A%2F%2Fblock-metrics.io)
+[![Website](https://img.shields.io/website?down_message=down&label=Blockmetrics&style=flat&up_color=green&up_message=up&url=https%3A%2F%2Fblock-metrics.io)](https://block-metrics.io/)
 ![GitHub](https://img.shields.io/github/license/JeremyTheintz/blockmetrics)
 ![GitHub commit activity](https://img.shields.io/github/commit-activity/m/JeremyTheintz/blockmetrics)
 
@@ -32,7 +32,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 ### 1. Clone the repo 
 ```
-git clone https://github.com/JeremyTheintz/block-metrics.git
+git clone https://github.com/JeremyTheintz/blockmetrics.git
 cd block-metrics/packages
 ```
 
@@ -46,6 +46,8 @@ cp .env.example .env
 ```
 docker-compose up --build -V
 ```
+> During the boot process, the Webscoket API, REST API and server will automatically reboot until the database has started
+
 > The routine running at 02:00 CEST in production will run according to the following config in development environnement `rule.minute = [0, 10, 20, 30, 40, 50];`
 
 > The routine running at 12:00 CEST in production is deactivated in development environnement to prevent fetch data when it is not published on the external API provider
