@@ -3,6 +3,8 @@
 
 ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat&logo=github)
 ![GitHub contributors](https://img.shields.io/github/contributors/JeremyTheintz/blockmetrics?style=flat&logo=github)
+![Linters](https://github.com/JeremyTheintz/blockmetrics/actions/workflows/linter.yml/badge.svg)
+![commit activity](https://github.com/JeremyTheintz/remix-project/pulse)
 
 
 Blockmetrics is a blockchain metrics platform that provides data on the blockchain ecosystem.
