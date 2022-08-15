@@ -1,6 +1,7 @@
 # Blockmetrics frontend
 
 ## Table of Contents
+
 - [Introduction](#introduction)
 - [Technologies](#technologies)
 - [Style](#style)
@@ -8,15 +9,18 @@
 ## Introduction
 
 ## Technologies
-Project is created with:
-- React version: 18.0.0
-- Next version: 12.1.6
-- TypeScript version: 4.6.4
-- Styled Components: 5.3.3
 
+Project is created with:
+
+![npm](https://img.shields.io/npm/v/react?label=React)
+![npm](https://img.shields.io/npm/v/next?label=Next)
+![npm](https://img.shields.io/npm/v/typescript?label=TypeScript)
+![npm](https://img.shields.io/npm/v/styled-components?label=Styled%20Components)
 
 ## Style
+
 ### Theme
+
 - [Components](#components)
 - [Layouts](#layouts)
 - [Global props](#global-props)
@@ -39,12 +43,13 @@ Project is created with:
 #### BMButton
 
 ![bmbutton](doc/assets/bmbutton.png)
+
 ##### Props
 
 | Name      | Type                      | Default  | Description                                                                                                     |
-|-----------|:--------------------------|:---------|:----------------------------------------------------------------------------------------------------------------|
+| --------- | :------------------------ | :------- | :-------------------------------------------------------------------------------------------------------------- |
 | children  | React.ReactNode, string   | null     | label                                                                                                           |
-| isLink    | boolean                   | false    | <a /> element, should receive href from a \<Link href="..." passHref /> component                                |
+| isLink    | boolean                   | false    | <a /> element, should receive href from a \<Link href="..." passHref /> component                               |
 | onClick   | void                      | () => {} | function called when user click on the button                                                                   |
 | secondary | boolean                   | false    | if true background partially transparent                                                                        |
 | disabled  | boolean                   | false    | deactivate button                                                                                               |
@@ -55,16 +60,20 @@ Project is created with:
 ---
 
 ---
+
 ### Layouts
+
 - [Flex](#flex)
 - [Spacing](#spacing)
 - [Main](#main)
 - [Column](#column)
 
 #### Flex
+
 #### props
+
 | Name                                                  | Type                                                              | Default     | Description                  |
-|-------------------------------------------------------|-------------------------------------------------------------------|-------------|:-----------------------------|
+| ----------------------------------------------------- | ----------------------------------------------------------------- | ----------- | :--------------------------- |
 | children                                              | React.ReactNode                                                   | null        | Children                     |
 | fullWidth                                             | boolean                                                           | false       | Set container width to 100%. |
 | fullHeight                                            | boolean                                                           | false       | Set container height to 100% |
@@ -77,14 +86,17 @@ Project is created with:
 | smVertical, mdVertical, lgVertical, xlVertical        | EFlex.start, EFlex.end, EFlex.between, EFlex.around, EFlex.center | null        | Responsive align-items       |
 
 # to remove
-> The props extends [Padding](#padding) 
+
+> The props extends [Padding](#padding)
+
 ---
 
 #### Spacing
+
 ##### props
 
 | Name        | Type       | Default        | Description                                                       |
-|-------------|:-----------|----------------|-------------------------------------------------------------------|
+| ----------- | :--------- | -------------- | ----------------------------------------------------------------- |
 | size        | ESize      | ESize.l        | Size of the space                                                 |
 | smSize      | ESize      | null           | Responsive size of the margin (smaller to sm)                     |
 | mdSize      | ESize      | null           | Responsive size of the margin (smaller to md)                     |
@@ -97,23 +109,28 @@ Project is created with:
 | xlDirection | EDirection | null           | space horizontal, space vertical or space horizontal and vertical |
 
 ---
+
 #### Main
+
 Main container with margin and padding to prevent overflow behind the navbar
 
 ---
 
 #### Column
+
 #### props
-| Name                                                               | Type                | Default | Description                               |
-|--------------------------------------------------------------------|---------------------|---------|:------------------------------------------|
-| children                                                           | React.ReactNode     | null    | Children                                  |
-| columns                                                            | number from 0 to 12 | 12      | width by default including bigger than xl |
-| sm                                                                 | number from 0 to 12 | null    | width for smaller than sm                 |
-| md                                                                 | number from 0 to 12 | null    | width for smaller than md                 |
-| lg                                                                 | number from 0 to 12 | null    | width for smaller than lg                 |
-| xl                                                                 | number from 0 to 12 | null    | width for smaller than xl                 |
+
+| Name     | Type                | Default | Description                               |
+| -------- | ------------------- | ------- | :---------------------------------------- |
+| children | React.ReactNode     | null    | Children                                  |
+| columns  | number from 0 to 12 | 12      | width by default including bigger than xl |
+| sm       | number from 0 to 12 | null    | width for smaller than sm                 |
+| md       | number from 0 to 12 | null    | width for smaller than md                 |
+| lg       | number from 0 to 12 | null    | width for smaller than lg                 |
+| xl       | number from 0 to 12 | null    | width for smaller than xl                 |
 
 > The props extends [Padding](#padding)
+
 ---
 
 ### Functions
@@ -121,13 +138,16 @@ Main container with margin and padding to prevent overflow behind the navbar
 ### Enumerations
 
 ### Global props
+
 - [Padding](#padding)
 - [Margin](#margin)
 
 #### Padding
+
 #### props
+
 | Name                                                               | Type  | Default | Description         |
-|--------------------------------------------------------------------|-------|---------|:--------------------|
+| ------------------------------------------------------------------ | ----- | ------- | :------------------ |
 | padding                                                            | ESize | null    | set padding X and Y |
 | paddingX                                                           | ESize | null    | set padding X       |
 | paddingY                                                           | ESize | null    | set padding Y       |
@@ -146,19 +166,21 @@ Main container with margin and padding to prevent overflow behind the navbar
 ---
 
 #### Margin
+
 #### props
-| Name                                                               | Type  | Default | Description         |
-|--------------------------------------------------------------------|-------|---------|:--------------------|
-| padding                                                            | ESize | null    | set margin X and Y |
-| marginX                                                           | ESize | null    | set margin X       |
-| marginY                                                           | ESize | null    | set margin Y       |
-| marginBottom                                                      | ESize | null    | set margin bottom  |
-| marginTop                                                         | ESize | null    | set margin top     |
-| marginLeft                                                        | ESize | null    | set margin left    |
-| marginRight                                                       | ESize | null    | set margin right   |
+
+| Name                                                           | Type  | Default | Description        |
+| -------------------------------------------------------------- | ----- | ------- | :----------------- |
+| padding                                                        | ESize | null    | set margin X and Y |
+| marginX                                                        | ESize | null    | set margin X       |
+| marginY                                                        | ESize | null    | set margin Y       |
+| marginBottom                                                   | ESize | null    | set margin bottom  |
+| marginTop                                                      | ESize | null    | set margin top     |
+| marginLeft                                                     | ESize | null    | set margin left    |
+| marginRight                                                    | ESize | null    | set margin right   |
 | smMargin, mdMargin, lgMargin, xlMargin                         | ESize | null    | Responsive margin  |
 | smMarginX, mdMarginX, lgMarginX, xlMarginX                     | ESize | null    | Responsive margin  |
-| smPaddYing, mdPaddiYng, lgPaddinYg, xlMarginY                     | ESize | null    | Responsive margin  |
+| smPaddYing, mdPaddiYng, lgPaddinYg, xlMarginY                  | ESize | null    | Responsive margin  |
 | smMarginBottom, mdMarginBottom, lgMarginBottom, xlMarginBottom | ESize | null    | Responsive margin  |
 | smMarginTop, mdMarginTop, lgMarginTop, xlMarginTop             | ESize | null    | Responsive margin  |
 | smMarginLeft, mdMarginLeft, lgMarginLeft, xlMarginLeft         | ESize | null    | Responsive margin  |
