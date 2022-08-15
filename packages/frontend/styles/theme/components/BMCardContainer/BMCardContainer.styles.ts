@@ -101,6 +101,8 @@ export const StyledBMCardContainer = styled.div<any>`
 				display: block;
 				${addPaddingStyles(p)}
 
+				overflow: hidden;
+
 				${p.fullWidth ? `width: 100%;` : ''}
 				${p.fullHeight ? `height: 100%;` : ''}
 			}
