@@ -33,7 +33,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 ### 1. Clone the repo 
 ```
 git clone https://github.com/JeremyTheintz/blockmetrics.git
-cd block-metrics/packages
+cd blockmetrics/packages
 ```
 
 ### 2. Environnement variables
