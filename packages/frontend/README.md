@@ -26,20 +26,21 @@ Project is created with:
 - [Components](#components)
 - [Layouts](#layouts)
 - [Global props](#global-props)
+- [Enumerations](#Enumerations)
 
 ### Components
 
 - [BMButton](#bmbutton)
 - [BMBlockPattern](#bmblockpattern)
+- [BMHivePattern](#bmhivepattern)
 - [BMCardContainer](#bmcardcontainer)
 - [BMLink](#BMLink)
 - [BMGradientSeparator](#bmgradientseparator)
 - [BMHeading](#bmheading)
-- [BMHivePattern](#bmhivepattern)
+- [BMText](#bmtext)
 - [BMIcon](#bmicon)
 - [BMListItem](#bmlistitem)
 - [BMProgressBar](#bmprogressbar)
-- [BMText](#bmtext)
 - [BMSkeleton](#bmskeleton)
 
 #### BMButton
@@ -49,9 +50,8 @@ Project is created with:
 ##### Props
 
 | Name      | Type                      | Default  | Description                                                                                                     |
-| --------- | :------------------------ | :------- | :-------------------------------------------------------------------------------------------------------------- |
+|-----------|:--------------------------|:---------|:----------------------------------------------------------------------------------------------------------------|
 | children  | React.ReactNode, string   | null     | label                                                                                                           |
-| isLink    | boolean                   | false    | <a /> element, should receive href from a \<Link href="..." passHref /> component                               |
 | onClick   | void                      | () => {} | function called when user click on the button                                                                   |
 | secondary | boolean                   | false    | if true background partially transparent                                                                        |
 | disabled  | boolean                   | false    | deactivate button                                                                                               |
@@ -60,6 +60,182 @@ Project is created with:
 | size      | ESize.s, ESize.m, ESize.l | ESize.m  | Size of the button                                                                                              |
 
 ---
+
+#### BMBlockPattern
+
+![bmblockpattern](doc/assets/bmblockpattern.png)
+
+##### Props
+
+| Name | Type  | Default | Description         |
+|------|:------|:--------|:--------------------|
+| size | ESize | ESize.l | Size of the pattern |
+
+---
+#### BMHivePattern
+
+![bmhivepattern](doc/assets/bmhivepattern.png)
+
+##### Props
+
+| Name | Type  | Default | Description         |
+|------|:------|:--------|:--------------------|
+| size | ESize | ESize.l | Size of the pattern |
+---
+
+#### BMCardContainer
+
+![bmcardcontainer](doc/assets/bmcardcontainer.png)
+
+##### props
+
+| Name          | Type            | Default   | Description                              |
+|---------------|:----------------|:----------|:-----------------------------------------|
+| children      | React.ReactNode | null      | null                                     |
+| isHighlighted | boolean         | false     | highlighted borders                      |
+| secondary     | boolean         | false     | Display secondary style                  |
+| tertiary      | boolean         | false     | Display tertiary style                   |
+| fullWidth     | boolean         | false     | Set width to 100%                        |
+| fullHeight    | boolean         | false     | set height to 100%                       |
+| clickable     | boolean         | false     | display a glow effect on container hover |
+| borderRadius  | ESize           | ESize.m   | set the border radius of the card        |
+| as            | string          | undefined | change the html tag of the component     |
+| id            | string          | undefined | set the id of the component              |
+
+> The props extends [IPadding](#ipadding), [IMargin](#imargin) and [ISkeleton](#iskeleton)
+---
+
+#### BMLink
+
+![bmlink](doc/assets/bmlink.png)
+
+##### props
+| Name          | Type            | Default            | Description                                        |
+|---------------|:----------------|:-------------------|:---------------------------------------------------|
+| children      | React.ReactNode | null               | null                                               |
+| href          | string          | null               | link target                                        |
+| size          | ESize           | ESize.l            | size of the text                                   |
+| inheritStyles | boolean         | false              | inherit style from parent                          |
+| weight        | ETextWeight     | ETextWeight.normal | weight of the font                                 |
+| textColor     | ETextColor      | ETextColor.accent  | text color                                         |
+| isInteral     | boolean         | false              | the target will be the same (not _blank, rel, etc) |
+| ariaLabel     | string          | undefined          | set custom aria label                              |
+
+> The props extends [ISkeleton](#iskeleton)
+#### NGGradientSeparator
+
+---
+![bmgradientseparator](doc/assets/bmgradientseparator.png)
+
+#### props
+
+| Name      | Type                                       | Default               | Description                                                         |
+|-----------|:-------------------------------------------|-----------------------|---------------------------------------------------------------------|
+| direction | EDirection.vertical, EDirection.horizontal | EDirection.horizontal | set separator direction                                             |
+| margin    | ESize                                      | undefined             | set the vertical margin or horizontal margin depending on direction |
+| smMargin  | ESize                                      | undefined             | margin for sm and smaller                                           |
+| smMargin  | ESize                                      | undefined             | margin for sm and smaller                                           |
+| mdMargin  | ESize                                      | undefined             | margin for md and smaller                                           |
+| lgMargin  | ESize                                      | undefined             | margin for lg and smaller                                           |
+| xlMargin  | ESize                                      | undefined             | margin for xl and smaller                                           |
+
+---
+
+#### BMHeading
+
+![bmheading](doc/assets/bmheading.png)
+
+##### props
+
+| Name       | Type                                                   | Default            | Description          |
+|------------|:-------------------------------------------------------|--------------------|----------------------|
+| children   | React.ReactNode, string                                | null               | label                |
+| singleLine | boolean                                                | true               | set line-height to 1 |
+| textColor  | ETextColor                                             | ETextColor.default | change text color    |
+| textAlign  | ETextAlign                                             | ETextAlign.left    | Set text alignement  |
+| type       | ETextType.h1, ETextType.h2, ETextType.h3, ETextType.h4 | null               | Set heading tag      |
+| fontWeight | EFontWeight                                            | null               | custom text weight   |
+
+> The props extends [IPadding](#ipadding), [IMargin](#imargin) and [ISkeleton](#iskeleton)
+
+---
+
+#### BMText
+
+![bmtext](doc/assets/bmtext.png)
+
+##### props
+
+| Name         | Type                        | Default             | Description                          |
+|--------------|:----------------------------|---------------------|--------------------------------------|
+| children     | React.ReactNode, string     | null                | label                                |
+| singleLine   | boolean                     | false               | set line-height to 1                 |
+| inheritStyle | boolean                     | true                | inherit style from parent (for span) |
+| textColor    | ETextColor                  | default             | update text color                    |
+| fontWeight   | EFontWeight                 | EFontWeight.regular | Custom font weight                   |
+| textAlign    | ETextAlign                  | ETextAlign.left     | Set text alignement                  |
+| type         | ETextType.p, ETextType.span | ETextType.p         | Set text tag                         |
+
+> The props extends [IPadding](#ipadding), [IMargin](#imargin) and [ISkeleton](#iskeleton)
+
+---
+
+#### BMIcon
+
+![bmicon](doc/assets/bmicon.png)
+| Name              | Type                                | Default | Description                        |
+|-------------------|:------------------------------------|---------|------------------------------------|
+| type              | EIcon                               | null    | set icon used                      |
+| size              | ESize.s, ESize.m, ESize.l, ESize.xl | ESize.l | set the size of the icon           |
+| backgroundVisible | boolean                             | false   | display le background with borders |
+| backgroundRadius  | ESize                               | ESize.s | border radius of the background    |
+| isVisible         | boolean                             | true    | Show/Hide the icon                 |
+
+> The props extends [IPadding](#ipadding), [IMargin](#imargin) and [ISkeleton](#iskeleton)
+
+---
+
+#### BMListItem
+
+![bmlistitem](doc/assets/bmlistitem.png)
+
+##### Props
+
+| Name      | Type                    | Default   | Description           |
+|-----------|:------------------------|:----------|:----------------------|
+| children  | React.ReactNode, string | undefined | the list item content |
+| dotHidden | boolean                 | false     | hide the blue dot     |
+---
+
+#### BMProgressBar
+
+![bmprogressbar](doc/assets/bmprogressbar.png)
+
+##### Props
+
+| Name            | Type    | Default   | Description                                               |
+|-----------------|:--------|:----------|:----------------------------------------------------------|
+| label           | string  | undefined | the label on top of the bar                               |
+| helpText        | string  | undefined | The text on a (?) tooltip                                 |
+| size            | ESize   | ESize.s   | the size of the progress bar                              |
+| value           | number  | 0         | the actual value to display                               |
+| endValueVisible | boolean | false     | display the end value in a box on top of the progress bar |
+| endValue        | string  | undefined | the value to display in the box                           |
+
+--- 
+#### BMSkeleton
+
+![bmlogo](doc/assets/bmskeleton.png)
+
+##### props
+
+| Name   | Type                  | Default | Description                                 |
+|--------|:----------------------|---------|---------------------------------------------|
+| width  | ESize, number, string | 60      | set skeleton width                          |
+| height | ESize, number, string | ESize.s | set skeleton height                         |
+| circle | boolean               | false   | set height with the same value as the width |
+
+> The props extends [IPadding](#ipadding) and [IMargin](#imargin)
 
 ---
 
@@ -87,9 +263,7 @@ Project is created with:
 | smHorizontal, mdHorizontal, gHorizontal, xlHorizontal | EFlex.start, EFlex.end, EFlex.between, EFlex.around, EFlex.center | null        | Responsive justify-content   |
 | smVertical, mdVertical, lgVertical, xlVertical        | EFlex.start, EFlex.end, EFlex.between, EFlex.around, EFlex.center | null        | Responsive align-items       |
 
-# to remove
-
-> The props extends [Padding](#padding)
+> The props extends [Padding](#padding) and [Margin](#margin)
 
 ---
 
@@ -131,20 +305,17 @@ Main container with margin and padding to prevent overflow behind the navbar
 | lg       | number from 0 to 12 | null    | width for smaller than lg                 |
 | xl       | number from 0 to 12 | null    | width for smaller than xl                 |
 
-> The props extends [Padding](#padding)
+> The props extends [IPadding](#ipadding) and [IMargin](#imargin)
 
 ---
 
-### Functions
-
-### Enumerations
-
 ### Global props
 
-- [Padding](#padding)
+- [IPadding](#ipadding)
 - [Margin](#margin)
+- [ISkeleton](#iskeleton)
 
-#### Padding
+#### IPadding
 
 #### props
 
@@ -167,7 +338,7 @@ Main container with margin and padding to prevent overflow behind the navbar
 
 ---
 
-#### Margin
+#### IMargin
 
 #### props
 
@@ -187,3 +358,23 @@ Main container with margin and padding to prevent overflow behind the navbar
 | smMarginTop, mdMarginTop, lgMarginTop, xlMarginTop             | ESize | null    | Responsive margin  |
 | smMarginLeft, mdMarginLeft, lgMarginLeft, xlMarginLeft         | ESize | null    | Responsive margin  |
 | smMarginRight, mdMarginRight, lgMarginRight, xlMarginRight     | ESize | null    | Responsive margin  |
+
+---
+
+#### ISkeleton
+
+#### props
+
+| Name            | Type                  | Default | Description                                 |
+| --------------- | --------------------- | ------- | :------------------------------------------ |
+| loading         | boolean               | null    | set margin X and Y                          |
+| loaderLineCount | ESize                 | null    | set margin X                                |
+| skWidth         | ESize, number, string | 60      | set skeleton width                          |
+| skHeight        | ESize, number, string | ESize.s | set skeleton height                         |
+| circle          | boolean               | null    | set height with the same value as the width |
+
+---
+
+### Enumerations
+
+You can find the enumerations in the [enum.ts](./styles/utils/enum.ts) file
