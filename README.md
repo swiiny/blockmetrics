@@ -1,13 +1,13 @@
 ![blockmetrics](/assets/bm_logo_grand_bleu.png#gh-dark-mode-only)![blockmetrics](/assets/bm_logo_grand_bleu_light.png#gh-light-mode-only)
 # Blockmetrics mono repo :package:
 
-![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=plastic&logo=github)
-![GitHub contributors](https://img.shields.io/github/contributors/JeremyTheintz/blockmetrics?style=plastic&logo=github)
+![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat&logo=github)
+![GitHub contributors](https://img.shields.io/github/contributors/JeremyTheintz/blockmetrics?style=flat&logo=github)
 ![Linters](https://github.com/JeremyTheintz/blockmetrics/actions/workflows/linter.yml/badge.svg)
-![Website](https://img.shields.io/website?down_message=down&label=Blockmetrics&style=plastic&up_color=green&up_message=up&url=https%3A%2F%2Fblock-metrics.io)
+![Website](https://img.shields.io/website?down_message=down&label=Blockmetrics&style=flat&up_color=green&up_message=up&url=https%3A%2F%2Fblock-metrics.io)
 ![GitHub top language](https://img.shields.io/github/languages/top/JeremyTheintz/blockmetrics)
-![GitHub language count](https://img.shields.io/github/languages/count/JeremyTheintz/blockmetrics?style=plastic)
-![Lines of code](https://img.shields.io/tokei/lines/github/JeremyTheintz/blockmetrics?style=plastic)
+![GitHub language count](https://img.shields.io/github/languages/count/JeremyTheintz/blockmetrics?style=flat)
+
 
 Blockmetrics is a blockchain metrics platform that provides data on the blockchain ecosystem.
 
