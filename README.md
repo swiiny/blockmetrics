@@ -1,6 +1,10 @@
 ![blockmetrics](/assets/bm_logo_grand_bleu.png#gh-dark-mode-only)![blockmetrics](/assets/bm_logo_grand_bleu_light.png#gh-light-mode-only)
 # Blockmetrics mono repo :package:
 
+![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat&logo=github)
+![GitHub contributors](https://img.shields.io/github/contributors/JeremyTheintz/blockmetrics?style=flat&logo=github)
+
+
 Blockmetrics is a blockchain metrics platform that provides data on the blockchain ecosystem.
 
 A tool to compare blockchains according to several parameters such as reliability, energy consumption, number of tokens and much more.
