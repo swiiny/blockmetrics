@@ -4,7 +4,7 @@
 
 - [Introduction](#introduction)
 - [Technologies](#technologies)
-- [Style](#style)
+- [Styles](#styles)
 
 ## Introduction
 
@@ -19,7 +19,7 @@ Project is created with:
 ![npm](https://img.shields.io/npm/v/chart.js?label=Chart.js)
 ![npm](https://img.shields.io/npm/v/websocket?label=Websocket)
 
-## Style
+## Styles
 
 ### Theme
 
@@ -224,9 +224,6 @@ Project is created with:
 
 --- 
 #### BMSkeleton
-
-![bmlogo](doc/assets/bmskeleton.png)
-
 ##### props
 
 | Name   | Type                  | Default | Description                                 |
