@@ -1,5 +1,5 @@
+import { ISkeleton } from '../../../../types/global';
 import { EIcon, ESize } from '../../utils/enum';
-import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
 
 interface IBMIcon extends ISkeleton {
 	backgroundVisible?: boolean;

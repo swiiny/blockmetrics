@@ -1,7 +1,7 @@
 import styled from 'styled-components';
 import { EMediaQuery } from '../../../../styles/theme/utils/enum';
 import { addMarginStyles, mq } from '../../../../styles/theme/utils/functions';
-import { IMargin } from '../../../../types/layouts';
+import { IMargin } from '../../../../types/global';
 
 export const StyledChartList = styled.ul<IMargin>`
 	display: flex;

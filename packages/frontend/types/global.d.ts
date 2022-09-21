@@ -1,3 +1,4 @@
+import { IBMSkeleton } from '../styles/theme/components/BMSkeleton/BMSkeleton.type';
 import { ESize } from '../styles/theme/utils/enum';
 
 interface IPadding {
@@ -84,4 +85,12 @@ interface IMargin {
 	xlMarginY?: ESize;
 }
 
-export type { IPadding, IMargin };
+interface ISkeleton {
+	loading?: boolean;
+	loaderLineCount?: number;
+	skWidth?: IBMSkeleton['width'];
+	skHeight?: IBMSkeleton['height'];
+	circle?: IBMSkeleton['circle'];
+}
+
+export type { IPadding, IMargin, ISkeleton };

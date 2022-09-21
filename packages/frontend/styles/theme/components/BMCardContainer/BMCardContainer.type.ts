@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { IMargin, IPadding } from '../../../../types/layouts';
+import { IMargin, IPadding } from '../../../../types/global';
 import { IAnimation } from '../../../../types/styled';
 import { ESize } from '../../utils/enum';
 

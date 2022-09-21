@@ -1,5 +1,5 @@
+import { ISkeleton } from '../../../../types/global';
 import { ESize } from '../../utils/enum';
-import { ISkeleton } from '../BMSkeleton/BMSkeleton.type';
 
 interface IBMButton extends ISkeleton {
 	children: string | React.ReactNode;

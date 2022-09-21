@@ -86,7 +86,7 @@ const Error404: FC = () => {
 
 	return (
 		<>
-			<Meta title='404' description={HeaderData.subtitle} />
+			<Meta title={HeaderData.title} description={HeaderData.subtitle} />
 
 			<Header title={HeaderData.title} subtitle={HeaderData.subtitle} />
 

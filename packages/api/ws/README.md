@@ -69,6 +69,7 @@ The subscribe/unsubscribe messages should be built according to the following st
 | ----------------------------- | ------------- | ------------------------------ |
 | id                            | string (uuid) | _Example:_ `"ethereum"`        |
 | name                          | string        | _Example:_ `"Ethereum"`        |
+| score                         | integer       | _Example:_ `50`                |
 | reliability                   | integer       | _Example:_ `79`                |
 | node_count                    | integer       | _Example:_ `5000`              |
 | testnet_node_count            | integer       | _Example:_ `100`               |
@@ -84,6 +85,8 @@ The subscribe/unsubscribe messages should be built according to the following st
 | today_transaction_count       | integer       | _Example:_ `1928493`           |
 | address_count                 | integer       | _Example:_ `192849345`         |
 | today_address_count           | integer       | _Example:_ `1928493`           |
+| today_user_count              | integer       | _Example:_ `19284`             |
+| today_contract_count          | integer       | _Example:_ `975451`            |
 | total_value_locked            | integer       | _Example:_ `192849308903.3464` |
 
 ---
@@ -118,7 +121,8 @@ The subscribe/unsubscribe messages should be built according to the following st
 | blockchain_power_consumption | number        | _Example:_ `100000`     |
 | token_count                  | integer       | _Example:_ `4890`       |
 | gas_price                    | number        | _Example:_ `250000000`  |
-| rank                         | string        | _Example:_ `"B+"`       |
+| score                        | integer       | _Example:_ `52`         |
+| rank                         | string        | _Example:_ `"C+"`       |
 
 ---
 
@@ -159,6 +163,7 @@ Available blockchains id
 | ----------------------------- | ------------- | ------------------------------ |
 | id                            | string (uuid) | _Example:_ `"ethereum"`        |
 | name                          | string        | _Example:_ `"Ethereum"`        |
+| score                         | integer       | _Example:_ `50`                |
 | reliability                   | integer       | _Example:_ `79`                |
 | node_count                    | integer       | _Example:_ `5000`              |
 | testnet_node_count            | integer       | _Example:_ `100`               |
@@ -174,6 +179,8 @@ Available blockchains id
 | today_transaction_count       | integer       | _Example:_ `1928493`           |
 | address_count                 | integer       | _Example:_ `192849345`         |
 | today_address_count           | integer       | _Example:_ `1928493`           |
+| today_user_count              | integer       | _Example:_ `19284`             |
+| today_contract_count          | integer       | _Example:_ `975451`            |
 | total_value_locked            | integer       | _Example:_ `192849308903.3464` |
 
 ---
