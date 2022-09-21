@@ -1,4 +1,5 @@
 ![blockmetrics](/assets/bm_logo_grand_bleu.png#gh-dark-mode-only)![blockmetrics](/assets/bm_logo_grand_bleu_light.png#gh-light-mode-only)
+
 # Blockmetrics mono repo :package:
 
 ![contributions welcome](https://img.shields.io/badge/contributions-welcome-brightgreen.svg?style=flat&logo=github)
@@ -23,6 +24,7 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 - [Data server](./packages/server/README.md)
 
 ## Working configuration :white_check_mark:
+
 - Docker engine v20.10.17
 - Docker compose v2.6.1
 - Node v16.13.1
@@ -30,38 +32,44 @@ Visit [Blockmetrics](https://block-metrics.io/) to get more information about bl
 
 ## Setup :hammer:
 
-### 1. Clone the repo 
+### 1. Clone the repo
+
 ```
 git clone https://github.com/JeremyTheintz/blockmetrics.git
 cd blockmetrics/packages
 ```
 
 ### 2. Environnement variables
+
 ```
 cp .env.example .env
 ```
+
 > Fill the new .env file with your local variables
 
 ### 3. Build and run the database, the server and the APIs using `docker-compose`
+
 ```
 docker-compose up --build -V
 ```
+
 > During the boot process, the Webscoket API, REST API and server will automatically reboot until the database has started
 
 > The routine running at 02:00 CEST in production will run according to the following config in development environnement `rule.minute = [0, 10, 20, 30, 40, 50];`
 
 > The routine running at 12:00 CEST in production is deactivated in development environnement to prevent fetch data when it is not published on the external API provider
 
-
 ### 4. Build and run the frontend
+
 ```
 // ../blockmetrics/packages
 
 cp .env frontend/.env
 cd frontend
-npm install 
+npm install
 npm run dev
 ```
+
 > Once it has started, go to http://localhost:8080
 
 ## Roadmap :sparkles:

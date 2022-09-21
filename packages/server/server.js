@@ -726,12 +726,13 @@ async function startFetchData() {
 			// INIT BITCOIN WEBSOCKET PROVIDER
 			fetchBitcoinData(pool);
 
+			/*
 			console.log('start checkIfAddressesAreContracts');
 			// fetch new used addresses and check if they are contracts or not
 			setInterval(() => {
 				checkIfAddressesAreContracts(con);
 			}, 1010);
-
+*/
 			// SET DAILY ROUTINE
 			const rule = new schedule.RecurrenceRule();
 			rule.hour = 2;
