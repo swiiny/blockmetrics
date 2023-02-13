@@ -12,7 +12,7 @@
 		"express-rate-limit": "^6.3.0",
 		"helmet": "^5.0.2",
 		"mysql": "^2.18.1",
-		"mysql2": "^2.3.3",
+		"mysql2": "^3.1.2",
 		"request": "^2.88.2",
 		"requests": "^0.3.0"
 	},
